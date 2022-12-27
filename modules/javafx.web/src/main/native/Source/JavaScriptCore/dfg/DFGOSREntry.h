@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,13 +42,13 @@ namespace DFG {
 #if ENABLE(DFG_JIT)
 struct OSREntryReshuffling {
     OSREntryReshuffling() { }
-
+    
     OSREntryReshuffling(int fromOffset, int toOffset)
         : fromOffset(fromOffset)
         , toOffset(toOffset)
     {
     }
-
+    
     int fromOffset;
     int toOffset;
 };
@@ -62,7 +62,7 @@ struct OSREntryData {
     BitVector m_localsForcedAnyInt;
     FixedVector<OSREntryReshuffling> m_reshufflings;
     BitVector m_machineStackUsed;
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
 };
@@ -81,7 +81,7 @@ struct CatchEntrypointData {
 };
 
 // Returns a pointer to a data buffer that the OSR entry thunk will recognize and
-// parse. If this returns null, it means
+// parse. If this returns null, it means 
 void* prepareOSREntry(VM&, CallFrame*, CodeBlock*, BytecodeIndex);
 
 // If null is returned, we can't OSR enter. If it's not null, it's the PC to jump to.

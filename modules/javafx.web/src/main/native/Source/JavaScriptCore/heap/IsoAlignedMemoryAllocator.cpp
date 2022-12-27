@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -60,7 +60,7 @@ void* IsoAlignedMemoryAllocator::tryAllocateAlignedMemory(size_t alignment, size
     return m_debugHeap.memalign(MarkedBlock::blockSize, MarkedBlock::blockSize, true);
 #else
     Locker locker { m_lock };
-
+    
     m_firstUncommitted = m_committed.findBit(m_firstUncommitted, false);
     if (m_firstUncommitted < m_blocks.size()) {
         m_committed.quickSet(m_firstUncommitted);
@@ -68,7 +68,7 @@ void* IsoAlignedMemoryAllocator::tryAllocateAlignedMemory(size_t alignment, size
         WTF::fastCommitAlignedMemory(result, MarkedBlock::blockSize);
         return result;
     }
-
+    
     void* result = tryFastAlignedMalloc(MarkedBlock::blockSize, MarkedBlock::blockSize);
     if (!result)
         return nullptr;
@@ -88,7 +88,7 @@ void IsoAlignedMemoryAllocator::freeAlignedMemory(void* basePtr)
     m_debugHeap.free(basePtr);
 #else
     Locker locker { m_lock };
-
+    
     auto iter = m_blockIndices.find(basePtr);
     RELEASE_ASSERT(iter != m_blockIndices.end());
     unsigned index = iter->value;

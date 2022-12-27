@@ -42,19 +42,19 @@ struct ValueProfileBase {
     static constexpr unsigned numberOfSpecFailBuckets = 1;
     static constexpr unsigned bucketIndexMask = numberOfBuckets - 1;
     static constexpr unsigned totalNumberOfBuckets = numberOfBuckets + numberOfSpecFailBuckets;
-
+    
     ValueProfileBase()
     {
         for (unsigned i = 0; i < totalNumberOfBuckets; ++i)
             m_buckets[i] = JSValue::encode(JSValue());
     }
-
+    
     EncodedJSValue* specFailBucket(unsigned i)
     {
         ASSERT(numberOfBuckets + i < totalNumberOfBuckets);
         return m_buckets + numberOfBuckets + i;
     }
-
+    
     const ClassInfo* classInfo(unsigned bucket) const
     {
         JSValue value = JSValue::decode(m_buckets[bucket]);
@@ -65,7 +65,7 @@ struct ValueProfileBase {
         }
         return nullptr;
     }
-
+    
     unsigned numberOfSamples() const
     {
         unsigned result = 0;
@@ -75,14 +75,14 @@ struct ValueProfileBase {
         }
         return result;
     }
-
+    
     unsigned totalNumberOfSamples() const
     {
         return numberOfSamples() + isSampledBefore();
     }
 
     bool isSampledBefore() const { return m_prediction != SpecNone; }
-
+    
     bool isLive() const
     {
         for (unsigned i = 0; i < totalNumberOfBuckets; ++i) {
@@ -91,16 +91,16 @@ struct ValueProfileBase {
         }
         return false;
     }
-
+    
     CString briefDescription(const ConcurrentJSLocker& locker)
     {
         computeUpdatedPrediction(locker);
-
+        
         StringPrintStream out;
         out.print("predicting ", SpeculationDump(m_prediction));
         return out.toCString();
     }
-
+    
     void dump(PrintStream& out)
     {
         out.print("sampled before = ", isSampledBefore(), " live samples = ", numberOfSamples(), " prediction = ", SpeculationDump(m_prediction));
@@ -117,7 +117,7 @@ struct ValueProfileBase {
             }
         }
     }
-
+    
     // Updates the prediction and returns the new one. Never call this from any thread
     // that isn't executing the code.
     SpeculatedType computeUpdatedPrediction(const ConcurrentJSLocker&)
@@ -126,15 +126,15 @@ struct ValueProfileBase {
             JSValue value = JSValue::decode(m_buckets[i]);
             if (!value)
                 continue;
-
+            
             mergeSpeculation(m_prediction, speculationFromValue(value));
-
+            
             m_buckets[i] = JSValue::encode(JSValue());
         }
-
+        
         return m_prediction;
     }
-
+    
     EncodedJSValue m_buckets[totalNumberOfBuckets];
 
     SpeculatedType m_prediction { SpecNone };
@@ -147,7 +147,7 @@ struct MinimalValueProfile : public ValueProfileBase<0> {
 template<unsigned logNumberOfBucketsArgument>
 struct ValueProfileWithLogNumberOfBuckets : public ValueProfileBase<1 << logNumberOfBucketsArgument> {
     static constexpr unsigned logNumberOfBuckets = logNumberOfBucketsArgument;
-
+    
     ValueProfileWithLogNumberOfBuckets()
         : ValueProfileBase<1 << logNumberOfBucketsArgument>()
     {

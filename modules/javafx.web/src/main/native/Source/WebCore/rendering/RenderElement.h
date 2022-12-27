@@ -271,7 +271,7 @@ protected:
         RenderBlockFlag             = 1 << 4,
         RenderBlockFlowFlag         = 1 << 5,
     };
-
+    
     typedef unsigned BaseTypeFlags;
 
     RenderElement(Element&, RenderStyle&&, BaseTypeFlags);
@@ -358,7 +358,7 @@ private:
     bool getTrailingCorner(FloatPoint& output, bool& insideFixed) const;
 
     void clearSubtreeLayoutRootIfNeeded() const;
-
+    
     bool shouldWillChangeCreateStackingContext() const;
     void issueRepaintForOutlineAuto(float outlineSize);
 

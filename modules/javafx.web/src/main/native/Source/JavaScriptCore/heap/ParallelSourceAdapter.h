@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -38,7 +38,7 @@ public:
         , m_unwrapFunc(unwrapFunc)
     {
     }
-
+    
     InnerType run() final
     {
         Locker locker { m_lock };
@@ -48,7 +48,7 @@ public:
                     return result;
                 m_innerSource = nullptr;
             }
-
+            
             m_innerSource = m_unwrapFunc(m_outerSource->run());
         } while (m_innerSource);
         return InnerType();
@@ -66,6 +66,6 @@ Ref<ParallelSourceAdapter<OuterType, InnerType, UnwrapFunc>> createParallelSourc
 {
     return adoptRef(*new ParallelSourceAdapter<OuterType, InnerType, UnwrapFunc>(outerSource, unwrapFunc));
 }
-
+    
 } // namespace JSC
 

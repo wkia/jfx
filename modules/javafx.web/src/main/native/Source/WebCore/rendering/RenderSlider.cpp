@@ -88,7 +88,7 @@ void RenderSlider::computePreferredLogicalWidths()
 
     RenderBox::computePreferredLogicalWidths(style().minWidth(), style().maxWidth(), horizontalBorderAndPaddingExtent());
 
-    setPreferredLogicalWidthsDirty(false);
+    setPreferredLogicalWidthsDirty(false); 
 }
 
 void RenderSlider::layout()

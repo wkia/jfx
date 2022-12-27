@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -110,7 +110,7 @@ JIT::compileSetupFrame(const Op& bytecode, CallLinkInfo* info)
     Jump notBiggest = branch32(Above, regT0, regT2);
     store32(regT2, info->addressOfMaxArgumentCountIncludingThis());
     notBiggest.link(this);
-
+    
     // Initialize 'this'.
     emitGetVirtualRegister(thisValue, regT0);
     store64(regT0, Address(regT1, CallFrame::thisArgumentOffset() * static_cast<int>(sizeof(Register))));
@@ -195,7 +195,7 @@ bool JIT::compileTailCall(const OpTailCall& bytecode, CallLinkInfo* info, unsign
     addSlowCase(slowPaths);
     auto doneLocation = label();
     m_callCompilationInfo[callLinkInfoIndex].doneLocation = doneLocation;
-
+    
     return true;
 }
 
@@ -347,7 +347,7 @@ void JIT::emitSlow_op_call_eval(const Instruction* currentInstruction, Vector<Sl
 {
     compileCallEvalSlowCase(currentInstruction, iter);
 }
-
+ 
 void JIT::emitSlow_op_call_varargs(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpCallVarargs>(currentInstruction, iter, m_callLinkInfoIndex++);
@@ -362,12 +362,12 @@ void JIT::emitSlow_op_tail_call_forward_arguments(const Instruction* currentInst
 {
     compileOpCallSlowCase<OpTailCallForwardArguments>(currentInstruction, iter, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emitSlow_op_construct_varargs(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpConstructVarargs>(currentInstruction, iter, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emitSlow_op_construct(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpConstruct>(currentInstruction, iter, m_callLinkInfoIndex++);
@@ -394,7 +394,7 @@ void JIT::emit_op_iterator_open(const Instruction* instruction)
     // call result (iterator) is in regT0
 
     const Identifier* ident = &vm().propertyNames->next;
-
+    
     emitJumpSlowCaseIfNotJSCell(regT0);
 
     JITGetByIdGenerator gen(
@@ -429,7 +429,7 @@ void JIT::emitSlow_op_iterator_open(const Instruction* instruction, Vector<SlowC
     UniquedStringImpl* ident = vm().propertyNames->next.impl();
 
     JITGetByIdGenerator& gen = m_getByIds[m_getByIdIndex++];
-
+    
     Label coldPathBegin = label();
 
     Call call;
@@ -538,7 +538,7 @@ void JIT::emitSlow_op_iterator_next(const Instruction* instruction, Vector<SlowC
 
         UniquedStringImpl* ident = vm().propertyNames->done.impl();
         JITGetByIdGenerator& gen = m_getByIds[m_getByIdIndex++];
-
+        
         Label coldPathBegin = label();
 
         notObject.append(branchIfNotObject(iterResultGPR));
@@ -560,7 +560,7 @@ void JIT::emitSlow_op_iterator_next(const Instruction* instruction, Vector<SlowC
         callOperation(operationThrowIteratorResultIsNotObject, TrustedImmPtr(m_codeBlock->globalObject()));
     }
 
-    {
+    {   
         linkAllSlowCases(iter);
         VirtualRegister valueVReg = bytecode.m_value;
         GPRReg iterResultGPR = regT0;

@@ -37,7 +37,7 @@ namespace WebCore {
 
 class RenderBox;
 class RenderObject;
-
+    
 class OrderIterator {
 public:
     friend class OrderIteratorPopulator;

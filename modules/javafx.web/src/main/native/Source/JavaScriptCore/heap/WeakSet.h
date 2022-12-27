@@ -44,7 +44,7 @@ public:
     WeakSet(VM&);
     ~WeakSet();
     void lastChanceToFinalize();
-
+    
     Heap* heap() const;
     VM& vm() const;
 

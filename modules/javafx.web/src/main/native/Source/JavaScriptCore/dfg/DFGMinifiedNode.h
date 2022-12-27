@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -53,39 +53,39 @@ inline bool belongsInMinifiedGraph(NodeType type)
 class MinifiedNode {
 public:
     MinifiedNode() { }
-
+    
     static MinifiedNode fromNode(Node*);
-
+    
     MinifiedID id() const { return m_id; }
-
+    
     bool hasConstant() const { return m_hasConstant; }
-
+    
     JSValue constant() const
     {
         return JSValue::decode(bitwise_cast<EncodedJSValue>(m_info.get()));
     }
-
+    
     bool isPhantomDirectArguments() const { return m_isPhantomDirectArguments; }
     bool isPhantomClonedArguments() const { return m_isPhantomClonedArguments; }
     bool hasInlineCallFrame() const { return m_isPhantomDirectArguments || m_isPhantomClonedArguments; }
-
+    
     InlineCallFrame* inlineCallFrame() const
     {
         return bitwise_cast<InlineCallFrame*>(static_cast<uintptr_t>(m_info.get()));
     }
-
+    
     static MinifiedID getID(MinifiedNode* node) { return node->id(); }
     static bool compareByNodeIndex(const MinifiedNode& a, const MinifiedNode& b)
     {
         return a.m_id < b.m_id;
     }
-
+    
 private:
     static bool hasConstant(NodeType type)
     {
         return type == JSConstant || type == Int52Constant || type == DoubleConstant;
     }
-
+    
     Packed<uint64_t> m_info;
     MinifiedID m_id;
     bool m_hasConstant : 1;

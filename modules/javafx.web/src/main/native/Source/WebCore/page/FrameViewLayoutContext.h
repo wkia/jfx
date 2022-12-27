@@ -48,7 +48,7 @@ class LayoutState;
 class LayoutTree;
 }
 #endif
-
+    
 class FrameViewLayoutContext {
 public:
     FrameViewLayoutContext(FrameView&);
@@ -67,7 +67,7 @@ public:
 
     void startDisallowingLayout() { ++m_layoutDisallowedCount; }
     void endDisallowingLayout() { ASSERT(m_layoutDisallowedCount > 0); --m_layoutDisallowedCount; }
-
+    
     void disableSetNeedsLayout();
     void enableSetNeedsLayout();
 

@@ -45,7 +45,7 @@ void CodeBlock::forEachValueProfile(const Functor& func)
 
 #undef VISIT
 
-        m_metadata->forEach<OpIteratorOpen>([&] (auto& metadata) {
+        m_metadata->forEach<OpIteratorOpen>([&] (auto& metadata) { 
             func(metadata.m_iterableProfile, false);
             func(metadata.m_iteratorProfile, false);
             func(metadata.m_nextProfile, false);
@@ -56,7 +56,7 @@ void CodeBlock::forEachValueProfile(const Functor& func)
             func(metadata.m_doneProfile, false);
             func(metadata.m_valueProfile, false);
         });
-    }
+    }   
 
 }
 

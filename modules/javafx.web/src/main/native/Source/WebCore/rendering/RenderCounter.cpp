@@ -92,7 +92,7 @@ static Element* previousSiblingOrParentElement(const Element& element)
             return hostElement;
         return previousSiblingOrParentElement(*hostElement);
     }
-
+    
     auto* parent = element.parentElement();
     if (parent && !parent->renderer())
         parent = previousSiblingOrParentElement(*parent);
@@ -193,7 +193,7 @@ static std::optional<CounterPlan> planCounter(RenderElement& renderer, const Ato
     return std::nullopt;
 }
 
-// - Finds the insertion point for the counter described by counterOwner, isReset and
+// - Finds the insertion point for the counter described by counterOwner, isReset and 
 // identifier in the CounterNode tree for identifier and sets parent and
 // previousSibling accordingly.
 // - The function returns true if the counter whose insertion point is searched is NOT
@@ -204,7 +204,7 @@ static std::optional<CounterPlan> planCounter(RenderElement& renderer, const Ato
 // children or subsequent siblings of the renderer that owns the root of the tree
 // form the rest of of the nodes of the tree.
 // - The root of the tree is always a reset type reference.
-// - A subtree rooted at any reset node in the tree is equivalent to all counter
+// - A subtree rooted at any reset node in the tree is equivalent to all counter 
 // references that are in the scope of the counter or nested counter defined by that
 // reset node.
 // - Non-reset CounterNodes cannot have descendants.
@@ -259,9 +259,9 @@ static CounterInsertionPoint findPlaceForCounter(RenderElement& counterOwner, co
                             return { };
                         return { currentCounter->parent(), WTFMove(previousSibling) };
                     }
-                } else {
+                } else { 
                     // We are at the potential end of the search, but we had no previous sibling candidate
-                    // In this case we follow pretty much the same logic as above but no ASSERTs about
+                    // In this case we follow pretty much the same logic as above but no ASSERTs about 
                     // previousSibling, and when we are a sibling of the end counter we must set previousSibling
                     // to currentCounter.
                     if (currentCounter->actsAsReset()) {
@@ -285,7 +285,7 @@ static CounterInsertionPoint findPlaceForCounter(RenderElement& counterOwner, co
             if (currentCounter) {
                 // We found a suitable counter.
                 if (previousSibling) {
-                    // Since we had a suitable previous counter before, we should only consider this one as our
+                    // Since we had a suitable previous counter before, we should only consider this one as our 
                     // previousSibling if it is a reset counter and hence the current previousSibling is its child.
                     if (currentCounter->actsAsReset()) {
                         previousSibling = currentCounter;
@@ -301,7 +301,7 @@ static CounterInsertionPoint findPlaceForCounter(RenderElement& counterOwner, co
             }
         }
         // This function is designed so that the same test is not done twice in an iteration, except for this one
-        // which may be done twice in some cases. Rearranging the decision points though, to accommodate this
+        // which may be done twice in some cases. Rearranging the decision points though, to accommodate this 
         // performance improvement would create more code duplication than is worthwhile in my oppinion and may further
         // impede the readability of this already complex algorithm.
         if (previousSibling)
@@ -380,7 +380,7 @@ void RenderCounter::willBeDestroyed()
         m_counterNode->removeRenderer(*this);
         ASSERT(!m_counterNode);
     }
-
+    
     RenderText::willBeDestroyed();
 }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -42,7 +42,7 @@ void PropertyCondition::dumpInContext(PrintStream& out, DumpContext* context) co
         out.print("<invalid>");
         return;
     }
-
+    
     switch (m_header.type()) {
     case Presence:
         out.print(m_header.type(), " of ", m_header.pointer(), " at ", offset(), " with attributes ", attributes());
@@ -77,7 +77,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             "Determining validity of ", *this, " with structure ", pointerDump(structure), " and base ",
             JSValue(base), " assuming impure property watchpoints are set.\n");
     }
-
+    
     if (!*this) {
         if (PropertyConditionInternal::verbose)
             dataLog("Invalid because unset.\n");
@@ -96,7 +96,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             return false;
         }
         break;
-
+        
     case HasPrototype:
         if (!structure->prototypeQueriesAreCacheable()) {
             if (PropertyConditionInternal::verbose)
@@ -105,7 +105,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
         }
         break;
     }
-
+    
     switch (m_header.type()) {
     case Presence: {
         unsigned currentAttributes;
@@ -120,7 +120,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
         }
         return true;
     }
-
+        
     case Absence: {
         if (structure->isDictionary()) {
             if (PropertyConditionInternal::verbose)
@@ -151,17 +151,17 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             }
             return false;
         }
-
+        
         return true;
     }
-
+    
     case AbsenceOfSetEffect: {
         if (structure->isDictionary()) {
             if (PropertyConditionInternal::verbose)
                 dataLog("Invalid because it's a dictionary.\n");
             return false;
         }
-
+        
         unsigned currentAttributes;
         PropertyOffset currentOffset = structure->getConcurrently(uid(), currentAttributes);
         if (currentOffset != invalidOffset) {
@@ -182,7 +182,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             // https://bugs.webkit.org/show_bug.cgi?id=177339
             return false;
         }
-
+        
         if (structure->storedPrototypeObject() != prototype()) {
             if (PropertyConditionInternal::verbose) {
                 dataLog(
@@ -191,10 +191,10 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             }
             return false;
         }
-
+        
         return true;
     }
-
+        
     case HasPrototype: {
         if (structure->hasPolyProto()) {
             // FIXME: I think this is too conservative. We can probably prove this if
@@ -212,10 +212,10 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             }
             return false;
         }
-
+        
         return true;
     }
-
+        
     case Equivalence: {
         if (!base || base->structure() != structure) {
             // Conservatively return false, since we cannot verify this one without having the
@@ -227,10 +227,10 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             }
             return false;
         }
-
+        
         // FIXME: This is somewhat racy, and maybe more risky than we want.
         // https://bugs.webkit.org/show_bug.cgi?id=134641
-
+        
         PropertyOffset currentOffset = structure->getConcurrently(uid());
         if (currentOffset == invalidOffset) {
             if (PropertyConditionInternal::verbose) {
@@ -250,9 +250,9 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
             }
             return false;
         }
-
+        
         return true;
-    }
+    } 
     case HasStaticProperty: {
         if (isValidOffset(structure->getConcurrently(uid())))
             return false;
@@ -261,7 +261,7 @@ bool PropertyCondition::isStillValidAssumingImpurePropertyWatchpoint(
         return !!structure->findPropertyHashEntry(uid());
     }
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return false;
 }
@@ -270,7 +270,7 @@ bool PropertyCondition::validityRequiresImpurePropertyWatchpoint(Structure* stru
 {
     if (!*this)
         return false;
-
+    
     switch (m_header.type()) {
     case Presence:
     case Absence:
@@ -281,7 +281,7 @@ bool PropertyCondition::validityRequiresImpurePropertyWatchpoint(Structure* stru
     case HasPrototype:
         return false;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return false;
 }
@@ -308,7 +308,7 @@ bool PropertyCondition::isStillValid(Structure* structure, JSObject* base) const
     default:
         break;
     }
-
+    
     return true;
 }
 
@@ -317,17 +317,17 @@ bool PropertyCondition::isWatchableWhenValid(
 {
     if (structure->transitionWatchpointSetHasBeenInvalidated())
         return false;
-
+    
     switch (m_header.type()) {
     case Equivalence: {
         PropertyOffset offset = structure->getConcurrently(uid());
-
+        
         // This method should only be called when some variant of isValid returned true, which
         // implies that we already confirmed that the structure knows of the property. We should
         // also have verified that the Structure is a cacheable dictionary, which means we
         // shouldn't have a TOCTOU race either.
         RELEASE_ASSERT(offset != invalidOffset);
-
+        
         WatchpointSet* set = nullptr;
         switch (effort) {
         case MakeNoChanges:
@@ -337,10 +337,10 @@ bool PropertyCondition::isWatchableWhenValid(
             set = structure->ensurePropertyReplacementWatchpointSet(structure->vm(), offset);
             break;
         }
-
+        
         if (!set || !set->isStillValid())
             return false;
-
+        
         break;
     }
 
@@ -358,11 +358,11 @@ bool PropertyCondition::isWatchableWhenValid(
         // in the future.
         break;
     }
-
+        
     default:
         break;
     }
-
+    
     return true;
 }
 
@@ -384,7 +384,7 @@ void PropertyCondition::validateReferences(const TrackedReferences& tracked) con
 {
     if (hasPrototype())
         tracked.check(prototype());
-
+    
     if (hasRequiredValue())
         tracked.check(requiredValue());
 }

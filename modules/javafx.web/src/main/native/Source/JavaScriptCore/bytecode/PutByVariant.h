@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,7 +43,7 @@ public:
         Transition,
         Setter
     };
-
+    
     PutByVariant(CacheableIdentifier identifier)
         : m_kind(NotSet)
         , m_offset(invalidOffset)
@@ -51,65 +51,65 @@ public:
         , m_identifier(WTFMove(identifier))
     {
     }
-
+    
     PutByVariant(const PutByVariant&);
     PutByVariant& operator=(const PutByVariant&);
 
     static PutByVariant replace(CacheableIdentifier, const StructureSet&, PropertyOffset);
-
+    
     static PutByVariant transition(CacheableIdentifier, const StructureSet& oldStructure, Structure* newStructure, const ObjectPropertyConditionSet&, PropertyOffset);
-
+    
     static PutByVariant setter(CacheableIdentifier, const StructureSet&, PropertyOffset, const ObjectPropertyConditionSet&, std::unique_ptr<CallLinkStatus>);
-
+    
     Kind kind() const { return m_kind; }
-
+    
     bool isSet() const { return kind() != NotSet; }
     bool operator!() const { return !isSet(); }
-
+    
     const StructureSet& structure() const
     {
         ASSERT(kind() == Replace || kind() == Setter);
         return m_oldStructure;
     }
-
+    
     const StructureSet& oldStructure() const
     {
         ASSERT(kind() == Transition || kind() == Replace || kind() == Setter);
         return m_oldStructure;
     }
-
+    
     const StructureSet& structureSet() const
     {
         return oldStructure();
     }
-
+    
     StructureSet& oldStructure()
     {
         ASSERT(kind() == Transition || kind() == Replace || kind() == Setter);
         return m_oldStructure;
     }
-
+    
     StructureSet& structureSet()
     {
         return oldStructure();
     }
-
+    
     Structure* oldStructureForTransition() const;
-
+    
     Structure* newStructure() const
     {
         ASSERT(kind() == Transition);
         return m_newStructure;
     }
-
+    
     void fixTransitionToReplaceIfNecessary();
 
     bool writesStructures() const;
     bool reallocatesStorage() const;
     bool makesCalls() const;
-
+    
     const ObjectPropertyConditionSet& conditionSet() const { return m_conditionSet; }
-
+    
     // We don't support intrinsics for Setters (it would be sweet if we did) but we need this for templated helpers.
     Intrinsic intrinsic() const { return NoIntrinsic; }
 
@@ -121,7 +121,7 @@ public:
         ASSERT(isSet());
         return m_offset;
     }
-
+    
     CallLinkStatus* callLinkStatus() const
     {
         ASSERT(kind() == Setter);
@@ -129,11 +129,11 @@ public:
     }
 
     bool attemptToMerge(const PutByVariant& other);
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
     bool finalize(VM&);
-
+    
     void dump(PrintStream&) const;
     void dumpInContext(PrintStream&, DumpContext*) const;
 
@@ -152,7 +152,7 @@ public:
 
 private:
     bool attemptToMergeTransitionWithReplace(const PutByVariant& replace);
-
+    
     Kind m_kind;
     PropertyOffset m_offset;
     StructureSet m_oldStructure;

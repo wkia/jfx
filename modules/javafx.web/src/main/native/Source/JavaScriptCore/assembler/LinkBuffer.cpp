@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -69,11 +69,11 @@ bool shouldDumpDisassemblyFor(Wasm::CompilationMode mode)
 LinkBuffer::CodeRef<LinkBufferPtrTag> LinkBuffer::finalizeCodeWithoutDisassemblyImpl()
 {
     performFinalization();
-
+    
     ASSERT(m_didAllocate);
     if (m_executableMemory)
         return CodeRef<LinkBufferPtrTag>(*m_executableMemory);
-
+    
     return CodeRef<LinkBufferPtrTag>::createSelfManagedCodeRef(m_code);
 }
 
@@ -105,24 +105,24 @@ LinkBuffer::CodeRef<LinkBufferPtrTag> LinkBuffer::finalizeCodeWithDisassemblyImp
 
     uint8_t* executableAddress = result.code().untaggedExecutableAddress<uint8_t*>();
     out.printf("    Code at [%p, %p)%s\n", executableAddress, executableAddress + result.size(), justDumpingHeader ? "." : ":");
-
+    
     CString header = out.toCString();
-
+    
     if (justDumpingHeader) {
         if (Options::logJIT())
             dataLog(header);
         return result;
     }
-
+    
     if (Options::asyncDisassembly()) {
         CodeRef<DisassemblyPtrTag> codeRefForDisassembly = result.retagged<DisassemblyPtrTag>();
         disassembleAsynchronously(header, WTFMove(codeRefForDisassembly), m_size, "    ");
         return result;
     }
-
+    
     dataLog(header);
     disassemble(result.retaggedCode<DisassemblyPtrTag>(), m_size, "    ", WTF::dataFile());
-
+    
     return result;
 }
 
@@ -282,7 +282,7 @@ void LinkBuffer::copyCompactAndLinkCode(MacroAssembler& macroAssembler, JITCompi
         for (unsigned i = 0; i < jumpCount; ++i) {
             int offset = readPtr - writePtr;
             ASSERT(!(offset & 1));
-
+                
             // Copy the instructions from the last jump to the current one.
             size_t regionSize = jumpsToLink[i].from() - readPtr;
             InstructionType* copySource = reinterpret_cast_ptr<InstructionType*>(inData + readPtr);
@@ -298,7 +298,7 @@ void LinkBuffer::copyCompactAndLinkCode(MacroAssembler& macroAssembler, JITCompi
             recordLinkOffsets(m_assemblerStorage, readPtr, jumpsToLink[i].from(), offset);
             readPtr += regionSize;
             writePtr += regionSize;
-
+                
             // Calculate absolute address of the jump target, in the case of backwards
             // branches we need to be precise, forward branches we are pessimistic
             const uint8_t* target;
@@ -311,7 +311,7 @@ void LinkBuffer::copyCompactAndLinkCode(MacroAssembler& macroAssembler, JITCompi
                 target = codeOutData + to - offset; // Compensate for what we have collapsed so far
             else
                 target = codeOutData + to - executableOffsetFor(to);
-
+                
             JumpLinkType jumpLinkType = MacroAssembler::computeJumpType(jumpsToLink[i], codeOutData + writePtr, target);
             // Compact branch if we can...
             if (MacroAssembler::canCompact(jumpsToLink[i].type())) {
@@ -353,7 +353,7 @@ void LinkBuffer::copyCompactAndLinkCode(MacroAssembler& macroAssembler, JITCompi
 
 
     recordLinkOffsets(m_assemblerStorage, readPtr, initialSize, readPtr - writePtr);
-
+        
     for (unsigned i = 0; i < jumpCount; ++i) {
         uint8_t* location = codeOutData + jumpsToLink[i].from();
 #if CPU(ARM64)
@@ -450,13 +450,13 @@ void LinkBuffer::allocate(MacroAssembler& macroAssembler, JITCompilationEffort e
     if (m_code) {
         if (initialSize > m_size)
             return;
-
+        
         size_t nopsToFillInBytes = m_size - initialSize;
         macroAssembler.emitNops(nopsToFillInBytes);
         m_didAllocate = true;
         return;
     }
-
+    
     while (initialSize % jitAllocationGranule) {
         macroAssembler.breakpoint();
         initialSize = macroAssembler.m_assembler.codeSize();
@@ -482,7 +482,7 @@ void LinkBuffer::performFinalization()
     ASSERT(isValid());
     m_completed = true;
 #endif
-
+    
     s_profileCummulativeLinkedSizes[static_cast<unsigned>(m_profile)] += m_size;
     s_profileCummulativeLinkedCounts[static_cast<unsigned>(m_profile)]++;
     MacroAssembler::cacheFlush(code(), m_size);
@@ -504,11 +504,11 @@ void LinkBuffer::dumpLinkStatistics(void* code, size_t initializeSize, size_t fi
     linkCount++;
     totalInitialSize += initialSize;
     totalFinalSize += finalSize;
-    dataLogF("link %p: orig %u, compact %u (delta %u, %.2f%%)\n",
+    dataLogF("link %p: orig %u, compact %u (delta %u, %.2f%%)\n", 
             code, static_cast<unsigned>(initialSize), static_cast<unsigned>(finalSize),
             static_cast<unsigned>(initialSize - finalSize),
             100.0 * (initialSize - finalSize) / initialSize);
-    dataLogF("\ttotal %u: orig %u, compact %u (delta %u, %.2f%%)\n",
+    dataLogF("\ttotal %u: orig %u, compact %u (delta %u, %.2f%%)\n", 
             linkCount, totalInitialSize, totalFinalSize, totalInitialSize - totalFinalSize,
             100.0 * (totalInitialSize - totalFinalSize) / totalInitialSize);
 }
@@ -535,7 +535,7 @@ void LinkBuffer::dumpCode(void* code, size_t size)
             "\t.thumb_func\t%s\n"
             "# %p\n"
             "%s:\n", nameBuf, nameBuf, code, nameBuf);
-
+        
     for (unsigned i = 0; i < tsize; i++)
         dataLogF("\t.short\t0x%x\n", tcode[i]);
 #endif

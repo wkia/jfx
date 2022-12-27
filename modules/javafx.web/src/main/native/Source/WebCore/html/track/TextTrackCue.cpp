@@ -306,7 +306,7 @@ void TextTrackCue::setStartTime(const MediaTime& value)
     m_startTime = value;
     didChange();
 }
-
+    
 void TextTrackCue::setEndTime(double value)
 {
     // TODO(93143): Add spec-compliant behavior for negative time values.
@@ -322,12 +322,12 @@ void TextTrackCue::setEndTime(const MediaTime& value)
     m_endTime = value;
     didChange();
 }
-
+    
 void TextTrackCue::setPauseOnExit(bool value)
 {
     if (m_pauseOnExit == value)
         return;
-
+    
     m_pauseOnExit = value;
 }
 

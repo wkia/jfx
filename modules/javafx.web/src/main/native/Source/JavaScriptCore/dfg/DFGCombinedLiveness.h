@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,9 +42,9 @@ NodeSet liveNodesAtHead(Graph&, BasicBlock*);
 // values if you treat Upsilon as an opaque escape, and all of the clients of CombinedLiveness do so.
 struct CombinedLiveness {
     CombinedLiveness() { }
-
+    
     CombinedLiveness(Graph&);
-
+    
     BlockMap<NodeSet> liveAtHead;
     BlockMap<NodeSet> liveAtTail;
 };

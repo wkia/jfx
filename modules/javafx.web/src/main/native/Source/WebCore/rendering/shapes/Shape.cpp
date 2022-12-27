@@ -12,7 +12,7 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -199,7 +199,7 @@ std::unique_ptr<Shape> Shape::createRasterShape(Image* image, float threshold, c
 
     PixelBufferFormat format { AlphaPremultiplication::Unpremultiplied, PixelFormat::RGBA8, DestinationColorSpace::SRGB() };
     auto pixelBuffer = imageBuffer->getPixelBuffer(format, { IntPoint(), imageRect.size() });
-
+    
     // We could get to a value where PixelBuffer could be nullopt. A case where ImageRect.size() is huge, PixelBuffer::tryCreate
     // can return a nullopt because data size has overflowed. Refer rdar://problem/61793884
     if (!pixelBuffer)

@@ -57,7 +57,7 @@ public:
     bool isHit() const { return offset() != invalidOffset; }
 
     bool attemptToMerge(const InByVariant& other);
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
     bool finalize(VM&);

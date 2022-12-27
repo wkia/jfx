@@ -49,7 +49,7 @@ namespace JSC {
         JSValue jsValue() const;
         JSValue asanUnsafeJSValue() const;
         EncodedJSValue encodedJSValue() const;
-
+        
         ALWAYS_INLINE Register& operator=(CallFrame*);
         ALWAYS_INLINE Register& operator=(CodeBlock*);
         ALWAYS_INLINE Register& operator=(JSScope*);

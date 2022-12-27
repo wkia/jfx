@@ -93,7 +93,7 @@ private:
 
         bool isNull() const { return !m_singleFont && !m_mixedFont; }
         bool isMixedFont() const { return !!m_mixedFont; }
-
+    
     private:
         // Only one of these is non-null.
         RefPtr<GlyphPage> m_singleFont;

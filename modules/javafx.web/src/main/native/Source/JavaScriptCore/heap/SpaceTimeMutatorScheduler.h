@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,28 +42,28 @@ class SpaceTimeMutatorScheduler final : public MutatorScheduler {
 public:
     SpaceTimeMutatorScheduler(Heap&);
     ~SpaceTimeMutatorScheduler() final;
-
+    
     State state() const final;
-
+    
     void beginCollection() final;
-
+    
     void didStop() final;
     void willResume() final;
     void didExecuteConstraints() final;
-
+    
     MonotonicTime timeToStop() final;
     MonotonicTime timeToResume() final;
-
+    
     void log() final;
-
+    
     void endCollection() final;
-
+    
 private:
     class Snapshot;
     friend class Snapshot;
-
+    
     double bytesAllocatedThisCycleImpl();
-
+    
     double bytesSinceBeginningOfCycle(const Snapshot&);
     double maxHeadroom();
     double headroomFullness(const Snapshot&);
@@ -72,11 +72,11 @@ private:
     Seconds elapsedInPeriod(const Snapshot&);
     double phase(const Snapshot&);
     bool shouldBeResumed(const Snapshot&);
-
+    
     Heap& m_heap;
     Seconds m_period;
     State m_state { Normal };
-
+    
     double m_bytesAllocatedThisCycleAtTheBeginning { 0 };
     double m_bytesAllocatedThisCycleAtTheEnd { 0 };
     MonotonicTime m_startTime;

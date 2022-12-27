@@ -141,7 +141,7 @@ bool HTMLAnchorElement::isKeyboardFocusable(KeyboardEvent* event) const
 
     if (!isFocusable())
         return false;
-
+    
     if (!document().frame())
         return false;
 
@@ -221,14 +221,14 @@ void HTMLAnchorElement::setActive(bool down, bool pause, Style::InvalidationScop
             if (down && document().frame() && document().frame()->selection().selection().rootEditableElement() == rootEditableElement())
                 return;
             break;
-
+        
         case EditableLinkBehavior::NeverLive:
         case EditableLinkBehavior::OnlyLiveWithShiftKey:
             return;
 
         }
     }
-
+    
     HTMLElement::setActive(down, pause, invalidationScope);
 }
 
@@ -425,13 +425,13 @@ std::optional<PrivateClickMeasurement> HTMLAnchorElement::parsePrivateClickMeasu
         document().addConsoleMessage(MessageSource::Other, MessageLevel::Warning, "Private Click Measurement is only supported in the main frame."_s);
         return std::nullopt;
     }
-
+    
     auto attributionSourceID = parseHTMLNonNegativeInteger(attributionSourceIDAttr);
     if (!attributionSourceID) {
         document().addConsoleMessage(MessageSource::Other, MessageLevel::Warning, "attributionsourceid is not a non-negative integer which is required for Private Click Measurement."_s);
         return std::nullopt;
     }
-
+    
     if (attributionSourceID.value() > PrivateClickMeasurement::SourceID::MaxEntropy) {
         document().addConsoleMessage(MessageSource::Other, MessageLevel::Warning, makeString("attributionsourceid must have a non-negative value less than or equal to ", PrivateClickMeasurement::SourceID::MaxEntropy, " for Private Click Measurement."));
         return std::nullopt;
@@ -525,7 +525,7 @@ void HTMLAnchorElement::handleClick(Event& event)
     // A matching triggering event needs to happen before an attribution report can be sent.
     // Thus, URLs should be empty for now.
     ASSERT(!privateClickMeasurement || (privateClickMeasurement->attributionReportSourceURL().isNull() && privateClickMeasurement->attributionReportAttributeOnURL().isNull()));
-
+    
     frame->loader().changeLocation(completedURL, effectiveTarget, &event, referrerPolicy, document().shouldOpenExternalURLsPolicyToPropagate(), newFrameOpenerPolicy, downloadAttribute, systemPreviewInfo, WTFMove(privateClickMeasurement));
 
     sendPings(completedURL);

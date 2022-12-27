@@ -147,7 +147,7 @@ EventTrackingRegions ScrollingCoordinator::absoluteEventTrackingRegionsForFrame(
             continue;
         nonFastScrollableRegion.unite(renderWidget->absoluteBoundingBoxRect());
     }
-
+    
     EventTrackingRegions eventTrackingRegions;
 
     // FIXME: if we've already accounted for this subframe as a scrollable area, we can avoid recursing into it here.
@@ -173,7 +173,7 @@ EventTrackingRegions ScrollingCoordinator::absoluteEventTrackingRegionsForFrame(
         LayoutRect inflatedWheelHandlerBounds = frameView->fixedScrollableAreaBoundsInflatedForScrolling(LayoutRect(wheelHandlerRegion.first.bounds()));
         wheelHandlerRegion.first.unite(enclosingIntRect(inflatedWheelHandlerBounds));
     }
-
+    
     nonFastScrollableRegion.unite(wheelHandlerRegion.first);
 #endif
 
@@ -257,7 +257,7 @@ GraphicsLayer* ScrollingCoordinator::contentShadowLayerForFrameView(FrameView& f
 #if ENABLE(RUBBER_BANDING)
     if (auto* renderView = frameView.frame().contentRenderer())
         return renderView->compositor().layerForContentShadow();
-
+    
     return nullptr;
 #else
     UNUSED_PARAM(frameView);
@@ -346,7 +346,7 @@ bool ScrollingCoordinator::shouldUpdateScrollLayerPositionSynchronously(const Fr
 {
     if (&frameView == m_page->mainFrame().view())
         return !synchronousScrollingReasons(frameView.scrollingNodeID()).isEmpty();
-
+    
     return true;
 }
 

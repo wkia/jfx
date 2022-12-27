@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -35,10 +35,10 @@ namespace JSC { namespace DFG {
 void HeapLocation::dump(PrintStream& out) const
 {
     out.print(m_kind, ":", m_heap);
-
+    
     if (!m_base)
         return;
-
+    
     out.print("[", m_base);
     if (m_index)
         out.print(", ", m_index);
@@ -57,11 +57,11 @@ void printInternal(PrintStream& out, LocationKind kind)
     case InvalidLocationKind:
         out.print("InvalidLocationKind");
         return;
-
+        
     case InvalidationPointLoc:
         out.print("InvalidationPointLoc");
         return;
-
+        
     case TypeOfIsObjectLoc:
         out.print("TypeOfIsObjectLoc");
         return;
@@ -73,7 +73,7 @@ void printInternal(PrintStream& out, LocationKind kind)
     case IsCallableLoc:
         out.print("IsCallableLoc");
         return;
-
+        
     case IsConstructorLoc:
         out.print("IsConstructorLoc");
         return;
@@ -81,19 +81,19 @@ void printInternal(PrintStream& out, LocationKind kind)
     case GetterLoc:
         out.print("GetterLoc");
         return;
-
+        
     case SetterLoc:
         out.print("SetterLoc");
         return;
-
+        
     case StackLoc:
         out.print("StackLoc");
         return;
-
+        
     case StackPayloadLoc:
         out.print("StackPayloadLoc");
         return;
-
+        
     case ArrayLengthLoc:
         out.print("ArrayLengthLoc");
         return;
@@ -105,11 +105,11 @@ void printInternal(PrintStream& out, LocationKind kind)
     case VectorLengthLoc:
         out.print("VectorLengthLoc");
         return;
-
+        
     case ButterflyLoc:
         out.print("ButterflyLoc");
         return;
-
+        
     case CheckTypeInfoFlagsLoc:
         out.print("CheckTypeInfoFlagsLoc");
         return;
@@ -117,19 +117,19 @@ void printInternal(PrintStream& out, LocationKind kind)
     case OverridesHasInstanceLoc:
         out.print("OverridesHasInstanceLoc");
         return;
-
+        
     case ClosureVariableLoc:
         out.print("ClosureVariableLoc");
         return;
-
+        
     case DirectArgumentsLoc:
         out.print("DirectArgumentsLoc");
         return;
-
+        
     case GlobalVariableLoc:
         out.print("GlobalVariableLoc");
         return;
-
+        
     case HasIndexedPropertyLoc:
         out.print("HasIndexedPorpertyLoc");
         return;
@@ -173,11 +173,11 @@ void printInternal(PrintStream& out, LocationKind kind)
     case IndexedPropertyStorageLoc:
         out.print("IndexedPropertyStorageLoc");
         return;
-
+        
     case NamedPropertyLoc:
         out.print("NamedPropertyLoc");
         return;
-
+        
     case TypedArrayByteOffsetLoc:
         out.print("TypedArrayByteOffsetLoc");
         return;
@@ -185,7 +185,7 @@ void printInternal(PrintStream& out, LocationKind kind)
     case PrototypeLoc:
         out.print("PrototypeLoc");
         return;
-
+        
     case StructureLoc:
         out.print("StructureLoc");
         return;
@@ -230,7 +230,7 @@ void printInternal(PrintStream& out, LocationKind kind)
         out.print("DOMStateLoc");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

@@ -115,12 +115,12 @@ public:
 
     virtual void invalidate() { }
     WEBCORE_EXPORT virtual void commitTreeState(std::unique_ptr<ScrollingStateTree>&&);
-
+    
     WEBCORE_EXPORT virtual void applyLayerPositions();
     WEBCORE_EXPORT void applyLayerPositionsAfterCommit();
 
     virtual Ref<ScrollingTreeNode> createScrollingTreeNode(ScrollingNodeType, ScrollingNodeID) = 0;
-
+    
     WEBCORE_EXPORT ScrollingTreeNode* nodeForID(ScrollingNodeID) const;
 
     using VisitorFunction = WTF::Function<void (ScrollingNodeID, ScrollingNodeType, std::optional<FloatPoint> scrollPosition, std::optional<FloatPoint> layoutViewportOrigin, bool scrolledSinceLastCommit)>;
@@ -177,7 +177,7 @@ public:
 
     bool isHandlingProgrammaticScroll() const { return m_isHandlingProgrammaticScroll; }
     void setIsHandlingProgrammaticScroll(bool isHandlingProgrammaticScroll) { m_isHandlingProgrammaticScroll = isHandlingProgrammaticScroll; }
-
+    
     void setScrollPinningBehavior(ScrollPinningBehavior);
     WEBCORE_EXPORT ScrollPinningBehavior scrollPinningBehavior();
 
@@ -220,7 +220,7 @@ public:
 
     void windowScreenDidChange(PlatformDisplayID, std::optional<FramesPerSecond> nominalFramesPerSecond);
     PlatformDisplayID displayID();
-
+    
     bool hasProcessedWheelEventsRecently();
     WEBCORE_EXPORT void willProcessWheelEvent();
 
@@ -229,12 +229,12 @@ public:
         FloatPoint scrollPosition;
         std::optional<FloatPoint> layoutViewportOrigin;
         ScrollingLayerPositionAction updateLayerPositionAction { ScrollingLayerPositionAction::Sync };
-
+        
         bool canMerge(const ScrollUpdate& other) const
         {
             return nodeID == other.nodeID && updateLayerPositionAction == other.updateLayerPositionAction;
         }
-
+        
         void merge(ScrollUpdate&& other)
         {
             scrollPosition = other.scrollPosition;
@@ -277,7 +277,7 @@ private:
     OptionSet<WheelEventProcessingSteps> computeWheelProcessingSteps(const PlatformWheelEvent&) WTF_REQUIRES_LOCK(m_treeStateLock);
 
     virtual void receivedWheelEvent(const PlatformWheelEvent&) { }
-
+    
     RefPtr<ScrollingTreeFrameScrollingNode> m_rootNode;
 
     using ScrollingTreeNodeMap = HashMap<ScrollingNodeID, RefPtr<ScrollingTreeNode>>;
@@ -301,7 +301,7 @@ private:
         HashSet<ScrollingNodeID> nodesWithActiveScrollSnap;
         HashSet<ScrollingNodeID> nodesWithActiveUserScrolls;
     };
-
+    
     Lock m_treeStateLock;
     TreeState m_treeState WTF_GUARDED_BY_LOCK(m_treeStateLock);
 
@@ -311,7 +311,7 @@ private:
         bool rubberBandsAtRight { true };
         bool rubberBandsAtTop { true };
         bool rubberBandsAtBottom { true };
-
+        
         RectEdges<bool> canRubberBand  { true, true, true, true };
         RectEdges<bool> mainFramePinnedState { true, true, true, true };
     };

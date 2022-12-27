@@ -85,7 +85,7 @@ const String& Navigator::userAgent() const
         m_userAgent = frame->loader().userAgent(frame->document()->url());
     return m_userAgent;
 }
-
+    
 String Navigator::platform() const
 {
     auto* frame = this->frame();
@@ -94,7 +94,7 @@ String Navigator::platform() const
 
     if (m_platform.isNull())
         m_platform = frame->loader().navigatorPlatform();
-
+    
     if (m_platform.isNull())
         m_platform = NavigatorBase::platform();
     return m_platform;
@@ -169,7 +169,7 @@ void Navigator::share(Document& document, const ShareData& data, Ref<DeferredPro
     if (document.settings().webShareFileAPIEnabled() && !data.files.isEmpty()) {
         if (m_loader)
             m_loader->cancel();
-
+        
         m_loader = ShareDataReader::create([this, promise = WTFMove(promise)] (ExceptionOr<ShareDataWithParsedURL&> readData) mutable {
             showShareData(readData, WTFMove(promise));
         });
@@ -186,7 +186,7 @@ void Navigator::showShareData(ExceptionOr<ShareDataWithParsedURL&> readData, Ref
         promise->reject(readData.releaseException());
         return;
     }
-
+    
     auto* frame = this->frame();
     if (!frame || !frame->page())
         return;
@@ -195,10 +195,10 @@ void Navigator::showShareData(ExceptionOr<ShareDataWithParsedURL&> readData, Ref
         promise->resolve();
         return;
     }
-
+    
     m_hasPendingShare = true;
     auto shareData = readData.returnValue();
-
+    
     frame->page()->chrome().showShareSheet(shareData, [promise = WTFMove(promise), this] (bool completed) {
         m_hasPendingShare = false;
         if (completed) {
@@ -292,7 +292,7 @@ bool Navigator::cookieEnabled() const
     auto* page = frame->page();
     if (!page)
         return false;
-
+    
     if (!page->settings().cookieEnabled())
         return false;
 

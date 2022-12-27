@@ -251,7 +251,7 @@ void MediaControlTextTrackContainerElement::updateTextStrokeStyle()
 
     if (!m_mediaElement)
         return;
-
+    
     String language;
 
     // FIXME: Since it is possible to have more than one text track enabled, the following code may not find the correct language.

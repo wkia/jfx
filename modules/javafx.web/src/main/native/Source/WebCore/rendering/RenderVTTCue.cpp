@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -83,7 +83,7 @@ bool RenderVTTCue::initializeLayoutParameters(LegacyInlineFlowBox*& firstLineBox
     // the <div>'s first child.
     RenderObject& firstChild = *this->firstChild();
     RenderElement& backdropElement = downcast<RenderElement>(firstChild);
-
+    
     firstLineBox = downcast<RenderInline>(*backdropElement.firstChild()).firstLineBox();
     if (!firstLineBox)
         firstLineBox = this->firstRootBox();
@@ -349,7 +349,7 @@ void RenderVTTCue::repositionGenericCue()
     // the <div>'s first child.
     RenderObject& firstChild = *this->firstChild();
     RenderElement& backdropElement = downcast<RenderElement>(firstChild);
-
+    
     LegacyInlineFlowBox* firstLineBox = downcast<RenderInline>(*backdropElement.firstChild()).firstLineBox();
     if (downcast<TextTrackCueGeneric>(*m_cue).useDefaultPosition() && firstLineBox) {
         LayoutUnit parentWidth = containingBlock()->logicalWidth();

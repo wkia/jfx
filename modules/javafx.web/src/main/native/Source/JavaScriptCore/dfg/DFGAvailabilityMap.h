@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -36,13 +36,13 @@ struct AvailabilityMap {
     void pruneHeap();
     void pruneByLiveness(Graph&, CodeOrigin);
     void clear();
-
+    
     void dump(PrintStream& out) const;
-
+    
     bool operator==(const AvailabilityMap& other) const;
-
+    
     void merge(const AvailabilityMap& other);
-
+    
     template<typename Functor>
     void forEachAvailability(const Functor& functor)
     {
@@ -51,7 +51,7 @@ struct AvailabilityMap {
         for (auto pair : m_heap)
             functor(pair.value);
     }
-
+    
     template<typename HasFunctor, typename AddFunctor>
     void closeOverNodes(const HasFunctor& has, const AddFunctor& add)
     {
@@ -64,20 +64,20 @@ struct AvailabilityMap {
             }
         } while (changed);
     }
-
+    
     template<typename HasFunctor, typename AddFunctor>
     void closeStartingWithLocal(Operand op, const HasFunctor& has, const AddFunctor& add)
     {
         Availability availability = m_locals.operand(op);
         if (!availability.hasNode())
             return;
-
+        
         if (!add(availability.node()))
             return;
-
+        
         closeOverNodes(has, add);
     }
-
+    
     Operands<Availability> m_locals;
     HashMap<PromotedHeapLocation, Availability> m_heap;
 };

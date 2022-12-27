@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #ifndef BString_h
@@ -42,7 +42,7 @@ namespace WebCore {
 
     class BString {
     public:
-        BString();
+        WEBCORE_EXPORT BString();
         BString(const wchar_t*);
         BString(const wchar_t*, size_t length);
         BString(const String&);
@@ -51,7 +51,7 @@ namespace WebCore {
 #if USE(CF)
         BString(CFStringRef);
 #endif
-        ~BString();
+        WEBCORE_EXPORT ~BString();
 
         void adoptBSTR(BSTR);
         void clear();

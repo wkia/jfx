@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -36,7 +36,7 @@ void VirtualRegister::dump(PrintStream& out) const
         out.print("<invalid>");
         return;
     }
-
+    
     if (isHeader()) {
         if (m_virtualRegister == CallFrameSlot::codeBlock)
             out.print("codeBlock");
@@ -55,12 +55,12 @@ void VirtualRegister::dump(PrintStream& out) const
 #endif
         return;
     }
-
+    
     if (isConstant()) {
         out.print("const", toConstantIndex());
         return;
     }
-
+    
     if (isArgument()) {
         if (!toArgument())
             out.print("this");
@@ -68,12 +68,12 @@ void VirtualRegister::dump(PrintStream& out) const
             out.print("arg", toArgument());
         return;
     }
-
+    
     if (isLocal()) {
         out.print("loc", toLocal());
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

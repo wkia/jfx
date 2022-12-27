@@ -54,7 +54,7 @@ RenderBox* OrderIterator::next()
         if (!m_currentChild) {
             if (m_orderValuesIterator == m_orderValues.end())
                 return nullptr;
-
+            
             if (!m_isReset) {
                 ++m_orderValuesIterator;
                 if (m_orderValuesIterator == m_orderValues.end())
@@ -66,7 +66,7 @@ RenderBox* OrderIterator::next()
             m_currentChild = m_currentChild->nextSiblingBox();
         }
     } while (!m_currentChild || m_currentChild->style().order() != *m_orderValuesIterator);
-
+    
     return m_currentChild;
 }
 

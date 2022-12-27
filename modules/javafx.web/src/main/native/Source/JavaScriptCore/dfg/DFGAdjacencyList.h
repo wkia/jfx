@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,11 +37,11 @@ public:
         Fixed,
         Variable
     };
-
+    
     enum { Size = 3 };
-
+    
     AdjacencyList() { }
-
+    
     AdjacencyList(Kind kind)
     {
         if (kind == Variable) {
@@ -49,13 +49,13 @@ public:
             m_words[1].m_encodedWord = UINT_MAX;
         }
     }
-
+    
     AdjacencyList(Kind kind, Edge child1, Edge child2 = Edge(), Edge child3 = Edge())
     {
         ASSERT_UNUSED(kind, kind == Fixed);
         initialize(child1, child2, child3);
     }
-
+    
     AdjacencyList(Kind kind, unsigned firstChild, unsigned numChildren)
     {
         ASSERT_UNUSED(kind, kind == Variable);
@@ -63,29 +63,29 @@ public:
         setNumChildren(numChildren);
         // We need to make sure this is the empty value so equivalent adjacency
         // lists produce identical hashes.
-        m_words[2] = Edge();
+        m_words[2] = Edge(); 
     }
-
+    
     bool isEmpty() const { return !child1(); }
-
+    
     const Edge& child(unsigned i) const
     {
         ASSERT(i < Size);
         return m_words[i];
-    }
-
+    }    
+    
     Edge& child(unsigned i)
     {
         ASSERT(i < Size);
         return m_words[i];
     }
-
+    
     void setChild(unsigned i, Edge nodeUse)
     {
         ASSERT(i < Size);
         m_words[i] = nodeUse;
     }
-
+    
     Edge child1() const { return child(0); }
     Edge child2() const { return child(1); }
     Edge child3() const { return child(2); }
@@ -93,30 +93,30 @@ public:
     Edge& child1() { return child(0); }
     Edge& child2() { return child(1); }
     Edge& child3() { return child(2); }
-
+    
     void setChild1(Edge nodeUse) { setChild(0, nodeUse); }
     void setChild2(Edge nodeUse) { setChild(1, nodeUse); }
     void setChild3(Edge nodeUse) { setChild(2, nodeUse); }
-
+    
     Edge child1Unchecked() const { return m_words[0]; }
-
+    
     void initialize(Edge child1, Edge child2, Edge child3)
     {
         child(0) = child1;
         child(1) = child2;
         child(2) = child3;
     }
-
+    
     void initialize(Node* child1 = nullptr, Node* child2 = nullptr, Node* child3 = nullptr)
     {
         initialize(Edge(child1), Edge(child2), Edge(child3));
     }
-
+    
     void reset()
     {
         initialize();
     }
-
+    
     // Call this if you wish to remove an edge and the node treats the list of children.
     void removeEdge(unsigned edgeIndex)
     {
@@ -124,7 +124,7 @@ public:
             setChild(i, child(i + 1));
         setChild(Size - 1, Edge());
     }
-
+    
     unsigned firstChild() const
     {
         return m_words[0].m_encodedWord;
@@ -133,7 +133,7 @@ public:
     {
         m_words[0].m_encodedWord = firstChild;
     }
-
+    
     unsigned numChildren() const
     {
         return m_words[1].m_encodedWord;
@@ -142,12 +142,12 @@ public:
     {
         m_words[1].m_encodedWord = numChildren;
     }
-
+    
     AdjacencyList sanitized() const
     {
         return AdjacencyList(Fixed, child1().sanitized(), child2().sanitized(), child3().sanitized());
     }
-
+    
     AdjacencyList justChecks() const
     {
         AdjacencyList result(Fixed);
@@ -162,37 +162,37 @@ public:
         }
         return result;
     }
-
+    
     unsigned hash() const
     {
         unsigned result = 0;
         if (!child1())
             return result;
-
+        
         result += child1().hash();
-
+        
         if (!child2())
             return result;
-
+        
         result *= 3;
         result += child2().hash();
-
+        
         if (!child3())
             return result;
-
+        
         result *= 3;
         result += child3().hash();
-
+        
         return result;
     }
-
+    
     bool operator==(const AdjacencyList& other) const
     {
         return child1() == other.child1()
             && child2() == other.child2()
             && child3() == other.child3();
     }
-
+    
 private:
     Edge m_words[Size];
 };

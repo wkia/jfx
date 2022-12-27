@@ -42,7 +42,7 @@ TextStream& operator<<(TextStream& ts, OptionSet<ActivityState::Flag> flags)
         ts << message;
         didAppend = true;
     };
-
+    
     appendIf(ActivityState::WindowIsActive, "active window");
     appendIf(ActivityState::IsFocused, "focused");
     appendIf(ActivityState::IsVisible, "visible");

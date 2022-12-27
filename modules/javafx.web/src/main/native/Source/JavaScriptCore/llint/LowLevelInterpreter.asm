@@ -264,7 +264,7 @@ const ExceptionHandlerPtrTag = constexpr ExceptionHandlerPtrTag
 const YarrEntryPtrTag = constexpr YarrEntryPtrTag
 const CSSSelectorPtrTag = constexpr CSSSelectorPtrTag
 const NoPtrTag = constexpr NoPtrTag
-
+ 
 # VMTraps data
 const VMTrapsAsyncEvents = constexpr VMTraps::AsyncEvents
 
@@ -1297,7 +1297,7 @@ macro getByValTypedArray(base, index, finishIntGetByVal, finishDoubleGetByVal, s
     loadb JSCell::m_type[base], t2
     subi FirstTypedArrayType, t2
     biaeq t2, NumberOfTypedArrayTypesExcludingBigIntArraysAndDataView, slowPath
-
+    
     # Sweet, now we know that we have a typed array. Do some basic things now.
 
     if ARM64E
@@ -2131,11 +2131,11 @@ equalityComparisonOp(neq, OpNeq,
 
 
 compareUnsignedOp(below, OpBelow,
-        macro (left, right, result) cib left, right, result end)
+    macro (left, right, result) cib left, right, result end)
 
 
 compareUnsignedOp(beloweq, OpBeloweq,
-        macro (left, right, result) cibeq left, right, result end)
+    macro (left, right, result) cibeq left, right, result end)
 
 
 llintOpWithJump(op_jmp, OpJmp, macro (size, get, jump, dispatch)
@@ -2143,7 +2143,7 @@ llintOpWithJump(op_jmp, OpJmp, macro (size, get, jump, dispatch)
 end)
 
 
-llintJumpTrueOrFalseOp(jtrue, OpJtrue,
+llintJumpTrueOrFalseOp(jtrue, OpJtrue, 
     # Misc primitive
     macro (value, target) btinz value, 1, target end,
     # Truthy Cell
@@ -2313,7 +2313,7 @@ macro branchIfException(exceptionTarget)
     loadp CodeBlock::m_vm[t3], t3
     btpz VM::m_exception[t3], .noException
     jmp exceptionTarget
-.noException:
+.noException:    
 end
 
 macro doCallVarargs(opcodeName, size, opcodeStruct, dispatch, frameSlowPath, slowPath, prepareCall)
@@ -2511,7 +2511,7 @@ op(checkpoint_osr_exit_from_inlined_call_trampoline, macro ()
 end)
 
 op(checkpoint_osr_exit_trampoline, macro ()
-    # FIXME: We can probably dispatch to the checkpoint handler directly but this was easier
+    # FIXME: We can probably dispatch to the checkpoint handler directly but this was easier 
     # and probably doesn't matter for performance.
     if (JSVALUE64 and not (C_LOOP or C_LOOP_WIN)) or ARMv7 or MIPS
         restoreStackPointerAfterCall()

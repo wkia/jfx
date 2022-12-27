@@ -154,7 +154,7 @@ void WebVTTParser::flush()
 }
 
 void WebVTTParser::parse()
-{
+{    
     // WebVTT parser algorithm. (5.1 WebVTT file parsing.)
     // Steps 1 - 3 - Initial setup.
     while (auto line = m_lineReader.nextLine()) {
@@ -255,7 +255,7 @@ WebVTTParser::ParseState WebVTTParser::collectRegionSettings(const String& line)
     // End of region block
     if (checkAndStoreRegion(line))
         return checkAndRecoverCue(line);
-
+    
     m_currentRegion->setRegionSettings(line);
     return Region;
 }
@@ -263,10 +263,10 @@ WebVTTParser::ParseState WebVTTParser::collectRegionSettings(const String& line)
 WebVTTParser::ParseState WebVTTParser::collectWebVTTBlock(const String& line)
 {
     // collect a WebVTT block parsing. (WebVTT parser algorithm step 14)
-
+    
     if (checkAndCreateRegion(line))
         return Region;
-
+    
     if (checkStyleSheet(line))
         return Style;
 
@@ -279,10 +279,10 @@ WebVTTParser::ParseState WebVTTParser::collectWebVTTBlock(const String& line)
             m_client.newStyleSheetsParsed();
         if (!m_previousLine.isEmpty() && !m_previousLine.contains("-->"))
             m_currentId = m_previousLine;
-
+        
         return state;
     }
-
+    
     // store previous line for cue id.
     // length is more than 1 line clear m_previousLine and ignore line.
     if (m_previousLine.isEmpty())
@@ -360,7 +360,7 @@ bool WebVTTParser::checkAndStoreStyleSheet(const String& line)
 {
     if (!line.isEmpty() && !line.contains("-->"))
         return false;
-
+    
     auto styleSheetText = WTFMove(m_currentSourceStyleSheet);
 
     // WebVTTMode disallows non-data URLs.
@@ -381,7 +381,7 @@ bool WebVTTParser::checkAndStoreStyleSheet(const String& line)
         return true;
 
     StringBuilder sanitizedStyleSheetBuilder;
-
+    
     for (const auto& rule : childRules) {
         if (!rule->isStyleRule())
             return true;
@@ -392,7 +392,7 @@ bool WebVTTParser::checkAndStoreStyleSheet(const String& line)
             return true;
         auto selector = selectorList.selectorAt(0);
         auto selectorText = selector->selectorText();
-
+        
         bool isCue = selectorText == "::cue" || selectorText.startsWith("::cue(");
         if (!isCue)
             return true;
@@ -432,13 +432,13 @@ WebVTTParser::ParseState WebVTTParser::collectTimingsAndSettings(const String& l
     // Steps 4 - 5 - Collect a WebVTT timestamp. If that fails, then abort and return failure. Otherwise, let cue's text track cue start time be the collected time.
     if (!collectTimeStamp(input, m_currentStartTime))
         return BadCue;
-
+    
     input.skipWhile<isHTMLSpace<UChar>>();
 
     // Steps 6 - 9 - If the next three characters are not "-->", abort and return failure.
     if (!input.scan("-->"))
         return BadCue;
-
+    
     input.skipWhile<isHTMLSpace<UChar>>();
 
     // Steps 10 - 11 - Collect a WebVTT timestamp. If that fails, then abort and return failure. Otherwise, let cue's text track cue end time be the collected time.
@@ -528,7 +528,7 @@ Ref<DocumentFragment> WebVTTTreeBuilder::buildFromString(const String& cueText)
 
     while (tokenizer.nextToken(m_token))
         constructTreeFromToken(m_document);
-
+    
     return fragment;
 }
 
@@ -681,7 +681,7 @@ void WebVTTTreeBuilder::constructTreeFromToken(Document& document)
         WebVTTNodeType nodeType = tokenToNodeType(m_token);
         if (nodeType == WebVTTNodeTypeNone)
             break;
-
+        
         // The only non-VTTElement would be the DocumentFragment root. (Text
         // nodes and PIs will never appear as m_currentNode.)
         if (!is<WebVTTElement>(*m_currentNode))

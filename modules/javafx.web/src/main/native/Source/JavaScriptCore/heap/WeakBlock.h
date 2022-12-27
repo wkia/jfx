@@ -78,7 +78,7 @@ private:
     template<typename Visitor> void visitImpl(Visitor&);
 
     static FreeCell* asFreeCell(WeakImpl*);
-
+    
     template<typename ContainerType, typename Visitor>
     void specializedVisit(ContainerType&, Visitor&);
 

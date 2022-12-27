@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006, 2007 Apple Inc. All rights reserved.
- *           (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ *           (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/) 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,7 +76,7 @@ private:
     void computePreferredLogicalWidths() override;
     bool avoidsFloats() const override { return true; }
     bool canHaveGeneratedChildren() const override { return false; }
-
+    
     void addFocusRingRects(Vector<LayoutRect>&, const LayoutPoint& additionalOffset, const RenderLayerModelObject* paintContainer = 0) override;
 
     bool canBeProgramaticallyScrolled() const override { return true; }

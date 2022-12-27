@@ -438,7 +438,7 @@ bool RenderSVGText::nodeAtFloatPoint(const HitTestRequest& request, HitTestResul
             FloatPoint localPoint = localToParentTransform().inverse().value_or(AffineTransform()).mapPoint(pointInParent);
 
             if (!SVGRenderSupport::pointInClippingArea(*this, localPoint))
-                return false;
+                return false;       
 
             SVGHitTestCycleDetectionScope hitTestScope(*this);
 

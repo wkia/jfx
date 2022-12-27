@@ -97,22 +97,6 @@ void ScrollingTreeFrameScrollingNodeNicosia::commitStateAfterChildren(const Scro
         scrollTo(requestedScrollData.scrollPosition, requestedScrollData.scrollType, requestedScrollData.clamping);
         m_delegate.resetCurrentPosition();
     }
-<<<<<<< HEAD
-    m_smoothAnimation = makeUnique<ScrollAnimationSmooth>(
-        [this]() -> ScrollExtents {
-            return { IntPoint(minimumScrollPosition()), IntPoint(maximumScrollPosition()), IntSize(scrollableAreaSize()) };
-        },
-        currentScrollPosition(),
-        [this](FloatPoint&& position) {
-            auto* scrollLayer = static_cast<Nicosia::PlatformLayer*>(scrolledContentsLayer());
-            ASSERT(scrollLayer);
-            auto& compositionLayer = downcast<Nicosia::CompositionLayer>(*scrollLayer);
-
-            auto updateScope = compositionLayer.createUpdateScope();
-            scrollTo(position);
-        },
-        [] { });
-}
 }
 
 WheelEventHandlingResult ScrollingTreeFrameScrollingNodeNicosia::handleWheelEvent(const PlatformWheelEvent& wheelEvent, EventTargeting eventTargeting)

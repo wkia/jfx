@@ -43,7 +43,7 @@ public:
     }
 
     RenderingUpdateScheduler(Page&);
-
+    
     void adjustRenderingUpdateFrequency();
     void scheduleRenderingUpdate();
 

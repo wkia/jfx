@@ -55,7 +55,7 @@ public:
     {
         return WTF::adoptRef(*new IntersectionObserverEntry(init));
     }
-
+    
     double time() const { return m_time; }
     DOMRectReadOnly* rootBounds() const { return m_rootBounds.get(); }
     DOMRectReadOnly* boundingClientRect() const { return m_boundingClientRect.get(); }

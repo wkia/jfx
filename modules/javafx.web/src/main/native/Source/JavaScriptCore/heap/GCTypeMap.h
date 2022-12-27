@@ -34,7 +34,7 @@ template<typename T>
 struct GCTypeMap {
     T eden;
     T full;
-
+    
     T& operator[](CollectionScope scope)
     {
         switch (scope) {
@@ -46,7 +46,7 @@ struct GCTypeMap {
         ASSERT_NOT_REACHED();
         return full;
     }
-
+    
     const T& operator[](CollectionScope scope) const
     {
         switch (scope) {

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -80,7 +80,7 @@ public:
         : m_technique(DontKnow)
     {
     }
-
+    
     bool isSet() const { return m_technique != DontKnow; }
     bool operator!() const { return !isSet(); }
 
@@ -96,7 +96,7 @@ public:
 #endif
 
     explicit operator bool() const { return isSet(); }
-
+    
     static ValueRecovery inGPR(MacroAssembler::RegisterID gpr, DataFormat dataFormat)
     {
         ASSERT(dataFormat != DataFormatNone);
@@ -121,7 +121,7 @@ public:
         result.m_source = WTFMove(u);
         return result;
     }
-
+    
 #if USE(JSVALUE32_64)
     static ValueRecovery inPair(MacroAssembler::RegisterID tagGPR, MacroAssembler::RegisterID payloadGPR)
     {
@@ -148,7 +148,7 @@ public:
         result.m_source = WTFMove(u);
         return result;
     }
-
+    
     static ValueRecovery displacedInJSStack(VirtualRegister virtualReg, DataFormat dataFormat)
     {
         ValueRecovery result;
@@ -156,15 +156,15 @@ public:
         case DataFormatInt32:
             result.m_technique = Int32DisplacedInJSStack;
             break;
-
+            
         case DataFormatInt52:
             result.m_technique = Int52DisplacedInJSStack;
             break;
-
+            
         case DataFormatStrictInt52:
             result.m_technique = StrictInt52DisplacedInJSStack;
             break;
-
+            
         case DataFormatDouble:
             result.m_technique = DoubleDisplacedInJSStack;
             break;
@@ -172,11 +172,11 @@ public:
         case DataFormatCell:
             result.m_technique = CellDisplacedInJSStack;
             break;
-
+            
         case DataFormatBoolean:
             result.m_technique = BooleanDisplacedInJSStack;
             break;
-
+            
         default:
             ASSERT(dataFormat != DataFormatNone && dataFormat != DataFormatStorage);
             result.m_technique = DisplacedInJSStack;
@@ -187,7 +187,7 @@ public:
         result.m_source = WTFMove(u);
         return result;
     }
-
+    
     static ValueRecovery constant(JSValue value)
     {
         ValueRecovery result;
@@ -197,7 +197,7 @@ public:
         result.m_source = WTFMove(u);
         return result;
     }
-
+    
     static ValueRecovery directArgumentsThatWereNotCreated(DFG::MinifiedID id)
     {
         ValueRecovery result;
@@ -207,7 +207,7 @@ public:
         result.m_source = WTFMove(u);
         return result;
     }
-
+    
     static ValueRecovery clonedArgumentsThatWereNotCreated(DFG::MinifiedID id)
     {
         ValueRecovery result;
@@ -219,7 +219,7 @@ public:
     }
 
     ValueRecoveryTechnique technique() const { return m_technique; }
-
+    
     bool isConstant() const { return m_technique == Constant; }
 
     bool isInGPR() const
@@ -302,20 +302,20 @@ public:
             return DataFormatNone;
         }
     }
-
+    
     MacroAssembler::RegisterID gpr() const
     {
         ASSERT(isInGPR());
         return m_source.get().gpr;
     }
-
+    
 #if USE(JSVALUE32_64)
     MacroAssembler::RegisterID tagGPR() const
     {
         ASSERT(m_technique == InPair);
         return m_source.get().pair.tagGPR;
     }
-
+    
     MacroAssembler::RegisterID payloadGPR() const
     {
         ASSERT(m_technique == InPair);
@@ -340,19 +340,19 @@ public:
         return isInGPR();
     }
 #endif // USE(JSVALUE32_64)
-
+    
     MacroAssembler::FPRegisterID fpr() const
     {
         ASSERT(isInFPR());
         return m_source.get().fpr;
     }
-
+    
     VirtualRegister virtualRegister() const
     {
         ASSERT(isInJSStack());
         return VirtualRegister(m_source.get().virtualReg);
     }
-
+    
     ValueRecovery withLocalsOffset(int offset) const
     {
         switch (m_technique) {
@@ -370,26 +370,26 @@ public:
             result.m_source = WTFMove(u);
             return result;
         }
-
+            
         default:
             return *this;
         }
     }
-
+    
     JSValue constant() const
     {
         ASSERT(isConstant());
         return JSValue::decode(m_source.get().constant);
     }
-
+    
     DFG::MinifiedID nodeID() const
     {
         ASSERT(m_technique == DirectArgumentsThatWereNotCreated || m_technique == ClonedArgumentsThatWereNotCreated);
         return DFG::MinifiedID::fromBits(m_source.get().nodeID);
     }
-
+    
     JSValue recover(CallFrame*) const;
-
+    
 #if ENABLE(JIT)
     template<typename Func>
     void forEachReg(const Func& func)
@@ -417,7 +417,7 @@ public:
             return;
         }
     }
-
+    
     void dumpInContext(PrintStream& out, DumpContext* context) const;
     void dump(PrintStream& out) const;
 #endif

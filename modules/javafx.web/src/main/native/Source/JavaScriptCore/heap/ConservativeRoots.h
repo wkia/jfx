@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,19 +40,19 @@ public:
 
     void add(void* begin, void* end);
     void add(void* begin, void* end, JITStubRoutineSet&, CodeBlockSet&);
-
+    
     size_t size() const;
     HeapCell** roots() const;
 
 private:
     static constexpr size_t inlineCapacity = 2048;
-
+    
     template<typename MarkHook>
     void genericAddPointer(void*, HeapVersion markingVersion, HeapVersion newlyAllocatedVersion, TinyBloomFilter, MarkHook&);
 
     template<typename MarkHook>
     void genericAddSpan(void*, void* end, MarkHook&);
-
+    
     void grow();
 
     HeapCell** m_roots;

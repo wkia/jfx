@@ -125,7 +125,7 @@ static bool compareTuples(std::pair<float, float> l, std::pair<float, float> r)
 static DashArray translateIntersectionPointsToSkipInkBoundaries(const DashArray& intersections, float dilationAmount, float totalWidth)
 {
     ASSERT(!(intersections.size() % 2));
-
+    
     // Step 1: Make pairs so we can sort based on range starting-point. We dilate the ranges in this step as well.
     Vector<std::pair<float, float>> tuples;
     for (auto i = intersections.begin(); i != intersections.end(); i++, i++)
@@ -164,7 +164,7 @@ static DashArray translateIntersectionPointsToSkipInkBoundaries(const DashArray&
         result.append(previous);
         result.append(totalWidth);
     }
-
+    
     return result;
 }
 
@@ -276,7 +276,7 @@ void TextDecorationPainter::paintTextDecoration(const TextRun& textRun, const Fl
             }
             int shadowX = m_isHorizontal ? shadow->x() : shadow->y();
             int shadowY = m_isHorizontal ? shadow->y() : -shadow->x();
-
+            
             Color shadowColor = shadow->color();
             if (m_shadowColorFilter)
                 m_shadowColorFilter->transformColor(shadowColor);

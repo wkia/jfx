@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -41,11 +41,11 @@ public:
         : Phase(graph, "static execution count estimation")
     {
     }
-
+    
     bool run()
     {
         m_graph.ensureCPSNaturalLoops();
-
+        
         // Estimate basic block execution counts based on loop depth.
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
@@ -54,7 +54,7 @@ public:
 
             block->executionCount = pow(10, m_graph.m_cpsNaturalLoops->loopDepth(block));
         }
-
+        
         // Estimate branch weights based on execution counts. This isn't quite correct. It'll
         // assume that each block's conditional successor only has that block as its
         // predecessor.
@@ -62,7 +62,7 @@ public:
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             Node* terminal = block->terminal();
             switch (terminal->op()) {
             case Branch: {
@@ -71,7 +71,7 @@ public:
                 applyCounts(data->notTaken);
                 break;
             }
-
+                
             case Switch: {
                 SwitchData* data = terminal->switchData();
                 for (unsigned i = data->cases.size(); i--;)
@@ -79,7 +79,7 @@ public:
                 applyCounts(data->fallThrough);
                 break;
             }
-
+            
             case EntrySwitch: {
                 DFG_CRASH(m_graph, terminal, "Unexpected EntrySwitch in CPS form.");
                 break;
@@ -89,7 +89,7 @@ public:
                 break;
             }
         }
-
+        
         return true;
     }
 

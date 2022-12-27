@@ -91,7 +91,7 @@ public:
     FilterEffect* inputEffect(unsigned) const;
     unsigned numberOfEffectInputs() const { return m_inputEffects.size(); }
     unsigned totalNumberOfEffectInputs() const;
-
+    
     inline bool hasResult() const
     {
         // This function needs platform specific checks, if the memory managment is not done by FilterEffect.
@@ -102,7 +102,7 @@ public:
 
     FloatRect drawingRegionOfInputImage(const IntRect&) const;
     IntRect requestedRegionOfInputPixelBuffer(const IntRect&) const;
-
+    
     // Recurses on inputs.
     FloatRect determineFilterPrimitiveSubregion();
 
@@ -114,7 +114,7 @@ public:
     void setAbsolutePaintRect(const IntRect& absolutePaintRect) { m_absolutePaintRect = absolutePaintRect; }
 
     FloatRect maxEffectRect() const { return m_maxEffectRect; }
-    void setMaxEffectRect(const FloatRect& maxEffectRect) { m_maxEffectRect = maxEffectRect; }
+    void setMaxEffectRect(const FloatRect& maxEffectRect) { m_maxEffectRect = maxEffectRect; } 
 
     void apply();
 
@@ -151,11 +151,11 @@ public:
 
     FloatRect effectBoundaries() const { return m_effectBoundaries; }
     void setEffectBoundaries(const FloatRect& effectBoundaries) { m_effectBoundaries = effectBoundaries; }
-
+    
     void setUnclippedAbsoluteSubregion(const FloatRect& r) { m_absoluteUnclippedSubregion = r; }
-
+    
     FloatPoint mapPointFromUserSpaceToBuffer(FloatPoint) const;
-
+    
     Type filterEffectClassType() const { return m_filterEffectClassType; }
 
     Filter& filter() { return m_filter; }
@@ -171,7 +171,7 @@ public:
 
     virtual void transformResultColorSpace(FilterEffect* in, const int) { in->transformResultColorSpace(m_operatingColorSpace); }
     void transformResultColorSpace(const DestinationColorSpace&);
-
+    
     static Vector<float> normalizedFloats(const Vector<float>& values)
     {
         Vector<float> normalizedValues(values.size());
@@ -182,7 +182,7 @@ public:
 
 protected:
     FilterEffect(Filter&, Type);
-
+    
     virtual const char* filterName() const = 0;
 
     ImageBuffer* createImageBufferResult();
@@ -207,7 +207,7 @@ private:
     bool requiresPixelBufferColorSpaceConversion(std::optional<DestinationColorSpace>);
     std::optional<PixelBuffer> convertImageBufferToColorSpace(const DestinationColorSpace&, ImageBuffer&, const IntRect&, AlphaPremultiplication);
     std::optional<PixelBuffer> convertPixelBufferToColorSpace(const DestinationColorSpace&, PixelBuffer&);
-
+    
 
     Filter& m_filter;
     FilterEffectVector m_inputEffects;
@@ -217,11 +217,11 @@ private:
     std::optional<PixelBuffer> m_premultipliedImageResult;
 
     IntRect m_absolutePaintRect;
-
+    
     // The maximum size of a filter primitive. In SVG this is the primitive subregion in absolute coordinate space.
     // The absolute paint rect should never be bigger than m_maxEffectRect.
     FloatRect m_maxEffectRect;
-
+    
     // The subregion of a filter primitive according to the SVG Filter specification in local coordinates.
     // This is SVG specific and needs to move to RenderSVGResourceFilterPrimitive.
     FloatRect m_filterPrimitiveSubregion;
@@ -229,7 +229,7 @@ private:
     // x, y, width and height of the actual SVGFE*Element. Is needed to determine the subregion of the
     // filter primitive on a later step.
     FloatRect m_effectBoundaries;
-
+    
     // filterPrimitiveSubregion mapped to absolute coordinates before clipping.
     FloatRect m_absoluteUnclippedSubregion;
 
@@ -248,7 +248,7 @@ private:
     DestinationColorSpace m_operatingColorSpace { DestinationColorSpace::SRGB() };
 #endif
     DestinationColorSpace m_resultColorSpace { DestinationColorSpace::SRGB() };
-
+    
     const Type m_filterEffectClassType;
 };
 

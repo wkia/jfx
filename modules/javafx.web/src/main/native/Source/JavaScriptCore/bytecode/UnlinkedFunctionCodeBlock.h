@@ -60,7 +60,7 @@ private:
     }
 
     UnlinkedFunctionCodeBlock(Decoder&, const CachedFunctionCodeBlock&);
-
+    
 public:
     static Structure* createStructure(VM& vm, JSGlobalObject* globalObject, JSValue proto)
     {

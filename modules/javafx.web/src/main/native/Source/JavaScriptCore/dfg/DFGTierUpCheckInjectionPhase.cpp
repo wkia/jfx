@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -58,14 +58,14 @@ public:
         : Phase(graph, "tier-up check injection")
     {
     }
-
+    
     bool run()
     {
         RELEASE_ASSERT(m_graph.m_plan.mode() == JITCompilationMode::DFG);
 
         if (!Options::useFTLJIT())
             return false;
-
+        
         if (m_graph.m_profiledBlock->m_didFailFTLCompilation)
             return false;
 
@@ -74,15 +74,15 @@ public:
 
         if (!ensureGlobalFTLAllowlist().contains(m_graph.m_profiledBlock))
             return false;
-
+        
 #if ENABLE(FTL_JIT)
         FTL::CapabilityLevel level = FTL::canCompile(m_graph);
         if (level == FTL::CannotCompile)
             return false;
-
+        
         if (!Options::useOSREntryToFTL())
             level = FTL::CanCompile;
-
+        
         m_graph.ensureCPSNaturalLoops();
         CPSNaturalLoops& naturalLoops = *m_graph.m_cpsNaturalLoops;
         HashMap<const NaturalLoop*, BytecodeIndex> naturalLoopToLoopHint = buildNaturalLoopToLoopHintMap(naturalLoops);

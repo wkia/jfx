@@ -77,7 +77,7 @@ bool RenderSVGResourceMasker::applyResource(RenderElement& renderer, const Rende
         if (svgStyle.colorInterpolation() == ColorInterpolation::LinearRGB) {
 #if USE(CG)
             maskColorSpace = DestinationColorSpace::LinearSRGB();
-#endif
+#endif      
             drawColorSpace = DestinationColorSpace::LinearSRGB();
         }
 #endif

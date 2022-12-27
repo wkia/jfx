@@ -49,17 +49,17 @@ struct QuadraticBezier {
             && control == rhs.control
             && end == rhs.end;
     }
-
+    
     float approximateDistance() const
     {
         return distanceLine(start, control) + distanceLine(control, end);
     }
-
+    
     bool split(QuadraticBezier& left, QuadraticBezier& right) const
     {
         left.control = midPoint(start, control);
         right.control = midPoint(control, end);
-
+        
         FloatPoint leftControlToRightControl = midPoint(left.control, right.control);
         left.end = leftControlToRightControl;
         right.start = leftControlToRightControl;
@@ -69,7 +69,7 @@ struct QuadraticBezier {
 
         return !(left == *this) && !(right == *this);
     }
-
+    
     FloatPoint start;
     FloatPoint control;
     FloatPoint end;
@@ -97,26 +97,26 @@ struct CubicBezier {
     {
         return distanceLine(start, control1) + distanceLine(control1, control2) + distanceLine(control2, end);
     }
-
+        
     bool split(CubicBezier& left, CubicBezier& right) const
-    {
+    {    
         FloatPoint startToControl1 = midPoint(control1, control2);
-
+        
         left.start = start;
         left.control1 = midPoint(start, control1);
         left.control2 = midPoint(left.control1, startToControl1);
-
+        
         right.control2 = midPoint(control2, end);
         right.control1 = midPoint(right.control2, startToControl1);
         right.end = end;
-
+        
         FloatPoint leftControl2ToRightControl1 = midPoint(left.control2, right.control1);
         left.end = leftControl2ToRightControl1;
         right.start = leftControl2ToRightControl1;
 
         return !(left == *this) && !(right == *this);
     }
-
+    
     FloatPoint start;
     FloatPoint control1;
     FloatPoint control2;
@@ -256,7 +256,7 @@ bool PathTraversalState::appendPathElement(PathElement::Type type, const FloatPo
         closeSubpath();
         break;
     }
-
+    
     return finalizeAppendPathElement();
 }
 

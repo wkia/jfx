@@ -43,7 +43,7 @@ static Vector<size_t> sizeClasses()
         dataLog("Block size: ", MarkedBlock::blockSize, "\n");
         dataLog("Footer size: ", sizeof(MarkedBlock::Footer), "\n");
     }
-
+    
     auto add = [&] (size_t sizeClass) {
         sizeClass = WTF::roundUpToMultipleOf<MarkedBlock::atomSize>(sizeClass);
         dataLogLnIf(Options::dumpSizeClasses(), "Adding JSC MarkedSpace size class: ", sizeClass);
@@ -53,7 +53,7 @@ static Vector<size_t> sizeClasses()
             RELEASE_ASSERT(sizeClass == MarkedSpace::sizeStep);
         result.append(sizeClass);
     };
-
+    
     // This is a definition of the size classes in our GC. It must define all of the
     // size classes from sizeStep up to largeCutoff.
 
@@ -61,13 +61,13 @@ static Vector<size_t> sizeClasses()
     // atomSize.
     for (size_t size = MarkedSpace::sizeStep; size < MarkedSpace::preciseCutoff; size += MarkedSpace::sizeStep)
         add(size);
-
+    
     // We want to make sure that the remaining size classes minimize internal fragmentation (i.e.
     // the wasted space at the tail end of a MarkedBlock) while proceeding roughly in an exponential
     // way starting at just above the precise size classes to four cells per block.
-
+    
     dataLogLnIf(Options::dumpSizeClasses(), "    Marked block payload size: ", static_cast<size_t>(MarkedSpace::blockPayload));
-
+    
     for (unsigned i = 0; ; ++i) {
         double approximateSize = MarkedSpace::preciseCutoff * pow(Options::sizeClassProgression(), i);
         dataLogLnIf(Options::dumpSizeClasses(), "    Next size class as a double: ", approximateSize);
@@ -77,14 +77,14 @@ static Vector<size_t> sizeClasses()
 
         // Make sure that the computer did the math correctly.
         RELEASE_ASSERT(approximateSizeInBytes >= MarkedSpace::preciseCutoff);
-
+        
         if (approximateSizeInBytes > MarkedSpace::largeCutoff)
             break;
-
+        
         size_t sizeClass =
             WTF::roundUpToMultipleOf<MarkedSpace::sizeStep>(approximateSizeInBytes);
         dataLogLnIf(Options::dumpSizeClasses(), "    Size class: ", sizeClass);
-
+        
         // Optimize the size class so that there isn't any slop at the end of the block's
         // payload.
         unsigned cellsPerBlock = MarkedSpace::blockPayload / sizeClass;
@@ -96,25 +96,25 @@ static Vector<size_t> sizeClasses()
         size_t originalWastage = MarkedSpace::blockPayload - cellsPerBlock * sizeClass;
         size_t newWastage = (possiblyBetterSizeClass - sizeClass) * cellsPerBlock;
         dataLogLnIf(Options::dumpSizeClasses(), "    Original wastage: ", originalWastage, ", new wastage: ", newWastage);
-
+        
         size_t betterSizeClass;
         if (newWastage > originalWastage)
             betterSizeClass = sizeClass;
         else
             betterSizeClass = possiblyBetterSizeClass;
-
+        
         dataLogLnIf(Options::dumpSizeClasses(), "    Choosing size class: ", betterSizeClass);
-
+        
         if (betterSizeClass == result.last()) {
             // Defense for when expStep is small.
             continue;
         }
-
+        
         // This is usually how we get out of the loop.
         if (betterSizeClass > MarkedSpace::largeCutoff
             || betterSizeClass > Options::preciseAllocationCutoff())
             break;
-
+        
         add(betterSizeClass);
     }
 
@@ -258,7 +258,7 @@ void MarkedSpace::prepareForAllocation()
         subspace->prepareForAllocation();
 
     m_activeWeakSets.takeFrom(m_newActiveWeakSets);
-
+    
     if (heap().collectionScope() == CollectionScope::Eden)
         m_preciseAllocationsNurseryOffsetForSweep = m_preciseAllocationsNurseryOffset;
     else
@@ -279,9 +279,9 @@ void MarkedSpace::visitWeakSets(Visitor& visitor)
     auto visit = [&] (WeakSet* weakSet) {
         weakSet->visit(visitor);
     };
-
+    
     m_newActiveWeakSets.forEach(visit);
-
+    
     if (heap().collectionScope() == CollectionScope::Full)
         m_activeWeakSets.forEach(visit);
 }
@@ -294,9 +294,9 @@ void MarkedSpace::reapWeakSets()
     auto visit = [&] (WeakSet* weakSet) {
         weakSet->reap();
     };
-
+    
     m_newActiveWeakSets.forEach(visit);
-
+    
     if (heap().collectionScope() == CollectionScope::Full)
         m_activeWeakSets.forEach(visit);
 }
@@ -327,7 +327,7 @@ void MarkedSpace::prepareForConservativeScan()
     m_preciseAllocationsForThisCollectionSize = m_preciseAllocations.size() - m_preciseAllocationsOffsetForThisCollection;
     m_preciseAllocationsForThisCollectionEnd = m_preciseAllocations.end();
     RELEASE_ASSERT(m_preciseAllocationsForThisCollectionEnd == m_preciseAllocationsForThisCollectionBegin + m_preciseAllocationsForThisCollectionSize);
-
+    
     std::sort(
         m_preciseAllocationsForThisCollectionBegin, m_preciseAllocationsForThisCollectionEnd,
         [&] (PreciseAllocation* a, PreciseAllocation* b) {
@@ -415,9 +415,9 @@ void MarkedSpace::beginMarking()
                     handle->block().resetMarks();
                 });
         }
-
+        
         m_markingVersion = nextVersion(m_markingVersion);
-
+        
         for (PreciseAllocation* allocation : m_preciseAllocations)
             allocation->flip();
     }
@@ -430,7 +430,7 @@ void MarkedSpace::beginMarking()
                 ASSERT(!block->isFreeListed());
             });
     }
-
+    
     m_isMarking = true;
 }
 
@@ -442,9 +442,9 @@ void MarkedSpace::endMarking()
                 handle->block().resetAllocated();
             });
     }
-
+    
     m_newlyAllocatedVersion = nextVersion(m_newlyAllocatedVersion);
-
+    
     for (unsigned i = m_preciseAllocationsOffsetForThisCollection; i < m_preciseAllocations.size(); ++i)
         m_preciseAllocations[i]->clearNewlyAllocated();
 
@@ -458,7 +458,7 @@ void MarkedSpace::endMarking()
             directory.endMarking();
             return IterationStatus::Continue;
         });
-
+    
     m_isMarking = false;
 }
 
@@ -576,7 +576,7 @@ void MarkedSpace::dumpBits(PrintStream& out)
 void MarkedSpace::addBlockDirectory(const AbstractLocker&, BlockDirectory* directory)
 {
     directory->setNextDirectory(nullptr);
-
+    
     WTF::storeStoreFence();
 
     m_directories.append(std::mem_fn(&BlockDirectory::setNextDirectory), directory);

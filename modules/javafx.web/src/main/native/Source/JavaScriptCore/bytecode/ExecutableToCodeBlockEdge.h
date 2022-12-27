@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -49,7 +49,7 @@ public:
     static Structure* createStructure(VM&, JSGlobalObject*, JSValue prototype);
 
     static ExecutableToCodeBlockEdge* create(VM&, CodeBlock*);
-
+    
     DECLARE_INFO;
 
     CodeBlock* codeBlock() const { return m_codeBlock.get(); }
@@ -57,20 +57,20 @@ public:
     DECLARE_VISIT_CHILDREN;
     DECLARE_VISIT_OUTPUT_CONSTRAINTS;
     void finalizeUnconditionally(VM&);
-
+    
     static CodeBlock* unwrap(ExecutableToCodeBlockEdge* edge)
     {
         if (!edge)
             return nullptr;
         return edge->codeBlock();
     }
-
+    
     static CodeBlock* deactivateAndUnwrap(ExecutableToCodeBlockEdge* edge);
-
+    
     static ExecutableToCodeBlockEdge* wrap(CodeBlock* codeBlock);
-
+    
     static ExecutableToCodeBlockEdge* wrapAndActivate(CodeBlock* codeBlock);
-
+    
 private:
     friend class LLIntOffsetsExtractor;
 

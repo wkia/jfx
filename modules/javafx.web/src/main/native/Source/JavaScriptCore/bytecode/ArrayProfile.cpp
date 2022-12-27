@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -54,12 +54,12 @@ void dumpArrayModes(PrintStream& out, ArrayModes arrayModes)
         out.print("<empty>");
         return;
     }
-
+    
     if (arrayModes == ALL_ARRAY_MODES) {
         out.print("TOP");
         return;
     }
-
+    
     CommaPrinter comma("|");
     if (arrayModes & asArrayModesIgnoringTypedArrays(NonArray))
         out.print(comma, "NonArray");
@@ -122,7 +122,7 @@ void ArrayProfile::computeUpdatedPrediction(const ConcurrentJSLocker& locker, Co
 {
     if (!m_lastSeenStructureID)
         return;
-
+    
     Structure* lastSeenStructure = codeBlock->heap()->structureIDTable().get(m_lastSeenStructureID);
     computeUpdatedPrediction(locker, codeBlock, lastSeenStructure);
     m_lastSeenStructureID = 0;
@@ -131,13 +131,13 @@ void ArrayProfile::computeUpdatedPrediction(const ConcurrentJSLocker& locker, Co
 void ArrayProfile::computeUpdatedPrediction(const ConcurrentJSLocker&, CodeBlock* codeBlock, Structure* lastSeenStructure)
 {
     m_observedArrayModes |= arrayModesFromStructure(lastSeenStructure);
-
+    
     if (!m_didPerformFirstRunPruning
         && hasTwoOrMoreBitsSet(m_observedArrayModes)) {
         m_observedArrayModes = arrayModesFromStructure(lastSeenStructure);
         m_didPerformFirstRunPruning = true;
     }
-
+    
     m_mayInterceptIndexedAccesses |=
         lastSeenStructure->typeInfo().interceptsGetOwnPropertySlotByIndexEvenWhenLengthIsNotZero();
     JSGlobalObject* globalObject = codeBlock->globalObject();

@@ -190,7 +190,7 @@ void FilterEffect::apply()
         for (unsigned i = 0; i < size; ++i)
             inputEffect(i)->correctFilterResultIfNeeded();
     }
-
+    
     // Add platform specific apply functions here and return earlier.
     platformApplySoftware();
 }
@@ -467,7 +467,7 @@ std::optional<PixelBuffer> FilterEffect::convertImageBufferToColorSpace(const De
 
     // Color space conversion happens internally when drawing from one image buffer to another
     convertedBuffer->context().drawImageBuffer(inputBuffer, rect);
-
+    
     PixelBufferFormat format { outputAlphaFormat, PixelFormat::RGBA8, targetColorSpace };
     return convertedBuffer->getPixelBuffer(format, rect);
 }
@@ -494,7 +494,7 @@ void FilterEffect::copyConvertedPixelBufferToDestination(Uint8ClampedArray& dest
 void FilterEffect::copyUnmultipliedResult(Uint8ClampedArray& destination, const IntRect& rect, std::optional<DestinationColorSpace> colorSpace)
 {
     ASSERT(hasResult());
-
+    
     LOG_WITH_STREAM(Filters, stream << "FilterEffect " << filterName() << " " << this << " copyUnmultipliedResult(). Existing image buffer " << m_imageBufferResult.get() <<  " m_premultipliedImageResult " << m_premultipliedImageResult << " m_unmultipliedImageResult " << m_unmultipliedImageResult);
 
     if (!m_unmultipliedImageResult) {
@@ -514,7 +514,7 @@ void FilterEffect::copyUnmultipliedResult(Uint8ClampedArray& destination, const 
             IntSize inputSize(m_absolutePaintRect.size());
             ASSERT(!ImageBuffer::sizeNeedsClamping(inputSize));
             inputSize.scale(m_filter.filterScale());
-
+            
             ASSERT(m_premultipliedImageResult->format().colorSpace == m_resultColorSpace);
             PixelBufferFormat format { AlphaPremultiplication::Unpremultiplied, PixelFormat::RGBA8, m_resultColorSpace };
             m_unmultipliedImageResult = PixelBuffer::tryCreate(format, inputSize);
@@ -660,7 +660,7 @@ TextStream& FilterEffect::externalRepresentation(TextStream& ts, RepresentationT
 {
     // FIXME: We should dump the subRegions of the filter primitives here later. This isn't
     // possible at the moment, because we need more detailed informations from the target object.
-
+    
     if (representationType == RepresentationType::Debugging) {
         TextStream::IndentScope indentScope(ts);
         ts.dumpProperty("alpha image", m_alphaImage);
@@ -676,7 +676,7 @@ TextStream& operator<<(TextStream& ts, const FilterEffect& filter)
     // Use a new stream because we want multiline mode for logging filters.
     TextStream filterStream;
     filter.externalRepresentation(filterStream, FilterEffect::RepresentationType::Debugging);
-
+    
     return ts << filterStream.release();
 }
 

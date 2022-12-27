@@ -38,7 +38,7 @@ public:
     {
         return adoptRef(*new WillChangeData);
     }
-
+    
     bool operator==(const WillChangeData&) const;
     bool operator!=(const WillChangeData& o) const
     {
@@ -66,7 +66,7 @@ public:
     };
 
     void addFeature(Feature, CSSPropertyID = CSSPropertyInvalid);
-
+    
     typedef std::pair<Feature, CSSPropertyID> FeaturePropertyPair;
     FeaturePropertyPair featureAt(size_t) const;
 
@@ -93,7 +93,7 @@ private:
         {
             return feature() == Property ? static_cast<CSSPropertyID>(m_cssPropertyID) : CSSPropertyInvalid;
         }
-
+        
         FeaturePropertyPair featurePropertyPair() const
         {
             return FeaturePropertyPair(feature(), property());
@@ -115,7 +115,7 @@ private:
                 break;
             }
         }
-
+        
         bool operator==(const AnimatableFeature& other) const
         {
             return m_feature == other.m_feature && m_cssPropertyID == other.m_cssPropertyID;

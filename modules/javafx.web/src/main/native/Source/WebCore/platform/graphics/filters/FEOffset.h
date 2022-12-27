@@ -42,7 +42,7 @@ private:
     const char* filterName() const final { return "FEOffset"; }
 
     void platformApplySoftware() override;
-
+    
     void determineAbsolutePaintRect() override;
 
     WTF::TextStream& externalRepresentation(WTF::TextStream&, RepresentationType) const override;

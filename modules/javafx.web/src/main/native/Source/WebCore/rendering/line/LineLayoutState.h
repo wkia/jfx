@@ -46,7 +46,7 @@ public:
     {
         return adoptRef(*new FloatWithRect(renderer));
     }
-
+    
     RenderBox& renderer() const { return m_renderer; }
     LayoutRect rect() const { return m_rect; }
     bool everHadLayout() const { return m_everHadLayout; }
@@ -60,7 +60,7 @@ private:
         , m_everHadLayout(renderer.everHadLayout())
     {
     }
-
+    
     RenderBox& m_renderer;
     LayoutRect m_rect;
     bool m_everHadLayout { false };

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -37,22 +37,22 @@ namespace JSC { namespace DFG {
 
 class StackLayoutPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     StackLayoutPhase(Graph& graph)
         : Phase(graph, "stack layout")
     {
     }
-
+    
     bool run()
     {
         // This enumerates the locals that we actually care about and packs them. So for example
         // if we use local 1, 3, 4, 5, 7, then we remap them: 1->0, 3->1, 4->2, 5->3, 7->4. We
         // treat a variable as being "used" if there exists an access to it (SetLocal, GetLocal,
         // Flush, PhantomLocal).
-
+        
         Operands<bool> usedOperands(0, graph().m_localVars, graph().m_tmps, false);
-
+        
         // Collect those variables that are used from IR.
         bool hasNodesThatNeedFixup = false;
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
@@ -72,7 +72,7 @@ public:
                     usedOperands.setOperand(variable->operand(), true);
                     break;
                 }
-
+                    
                 case LoadVarargs:
                 case ForwardVarargs: {
                     LoadVarargsData* data = node->loadVarargsData();
@@ -81,13 +81,13 @@ public:
                         // This part really relies on the contiguity of stack layout
                         // assignments.
                         ASSERT(VirtualRegister(data->start.offset() + data->limit - 1).isLocal());
-                        for (unsigned i = data->limit; i--;)
+                        for (unsigned i = data->limit; i--;) 
                             usedOperands.setOperand(VirtualRegister(data->start.offset() + i), true);
                     } // the else case shouldn't happen.
                     hasNodesThatNeedFixup = true;
                     break;
                 }
-
+                    
                 case PutStack:
                 case GetStack: {
                     StackAccessData* stack = node->stackAccessData();
@@ -96,7 +96,7 @@ public:
                     usedOperands.setOperand(stack->operand, true);
                     break;
                 }
-
+                    
                 default:
                     break;
                 }
@@ -105,19 +105,19 @@ public:
 
         for (InlineCallFrameSet::iterator iter = m_graph.m_plan.inlineCallFrames()->begin(); !!iter; ++iter) {
             InlineCallFrame* inlineCallFrame = *iter;
-
+            
             if (inlineCallFrame->isVarargs()) {
                 usedOperands.setOperand(VirtualRegister(
                     CallFrameSlot::argumentCountIncludingThis + inlineCallFrame->stackOffset), true);
             }
-
+            
             for (unsigned argument = inlineCallFrame->m_argumentsWithFixup.size(); argument--;) {
                 usedOperands.setOperand(VirtualRegister(
                     virtualRegisterForArgumentIncludingThis(argument).offset() +
                     inlineCallFrame->stackOffset), true);
             }
         }
-
+        
         Vector<unsigned> allocation(usedOperands.size());
         m_graph.m_nextMachineLocal = codeBlock()->calleeSaveSpaceAsVirtualRegisters();
         for (unsigned i = 0; i < usedOperands.size(); ++i) {
@@ -125,47 +125,47 @@ public:
                 allocation[i] = UINT_MAX;
                 continue;
             }
-
+            
             allocation[i] = m_graph.m_nextMachineLocal++;
         }
-
+        
         for (unsigned i = m_graph.m_variableAccessData.size(); i--;) {
             VariableAccessData* variable = &m_graph.m_variableAccessData[i];
             if (!variable->isRoot())
                 continue;
-
+            
             if (variable->operand().isArgument()) {
                 variable->machineLocal() = variable->operand().virtualRegister();
                 continue;
             }
-
+            
             Operand operand = variable->operand();
             size_t index = usedOperands.operandIndex(operand);
             if (index >= allocation.size())
                 continue;
-
+            
             if (allocation[index] == UINT_MAX)
                 continue;
-
+            
             variable->machineLocal() = assign(usedOperands, allocation, variable->operand());
         }
-
+        
         for (StackAccessData* data : m_graph.m_stackAccessData) {
             if (data->operand.isArgument()) {
                 data->machineLocal = data->operand.virtualRegister();
                 continue;
             }
-
+            
             if (data->operand.isLocal()) {
                 if (static_cast<size_t>(data->operand.toLocal()) >= allocation.size())
                     continue;
                 if (allocation[data->operand.toLocal()] == UINT_MAX)
                     continue;
             }
-
+            
             data->machineLocal = assign(usedOperands, allocation, data->operand);
         }
-
+        
         if (!m_graph.needsScopeRegister())
             codeBlock()->setScopeRegister(VirtualRegister());
         else
@@ -174,7 +174,7 @@ public:
         for (unsigned i = m_graph.m_inlineVariableData.size(); i--;) {
             InlineVariableData data = m_graph.m_inlineVariableData[i];
             InlineCallFrame* inlineCallFrame = data.inlineCallFrame;
-
+            
             if (inlineCallFrame->isVarargs())
                 inlineCallFrame->argumentCountRegister = assign(usedOperands, allocation, VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::argumentCountIncludingThis));
 
@@ -191,7 +191,7 @@ public:
                 }
                 inlineCallFrame->m_argumentsWithFixup[argument] = source.valueRecovery();
             }
-
+            
             RELEASE_ASSERT(inlineCallFrame->isClosureCall == !!data.calleeVariable);
             if (inlineCallFrame->isClosureCall) {
                 VariableAccessData* variable = data.calleeVariable->find();
@@ -202,7 +202,7 @@ public:
             } else
                 RELEASE_ASSERT(inlineCallFrame->calleeRecovery.isConstant());
         }
-
+        
         // Fix Varargs' variable references.
         if (hasNodesThatNeedFixup) {
             for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
@@ -219,14 +219,14 @@ public:
                         data->machineStart = assign(usedOperands, allocation, data->start);
                         break;
                     }
-
+                        
                     default:
                         break;
                     }
                 }
             }
         }
-
+        
         return true;
     }
 

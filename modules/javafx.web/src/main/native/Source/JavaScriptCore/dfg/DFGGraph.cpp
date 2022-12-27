@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -83,9 +83,9 @@ Graph::Graph(VM& vm, Plan& plan)
     , m_refCountState(EverythingIsLive)
 {
     ASSERT(m_profiledBlock);
-
+    
     m_hasDebuggerEnabled = m_profiledBlock->wasCompiledWithDebuggingOpcodes() || Options::forceDebuggerBytecodeGeneration();
-
+    
     m_indexingCache = makeUnique<FlowIndexing>(*this);
     m_abstractValuesCache = makeUnique<FlowMap<AbstractValue>>(*this);
 
@@ -116,16 +116,16 @@ bool Graph::dumpCodeOrigin(PrintStream& out, const char* prefixStr, Node*& previ
 
     if (!currentNode->origin.semantic)
         return false;
-
+    
     Node* previousNode = previousNodeRef;
     previousNodeRef = currentNode;
 
     if (!previousNode)
         return false;
-
+    
     if (previousNode->origin.semantic.inlineCallFrame() == currentNode->origin.semantic.inlineCallFrame())
         return false;
-
+    
     Vector<CodeOrigin> previousInlineStack = previousNode->origin.semantic.inlineStack();
     Vector<CodeOrigin> currentInlineStack = currentNode->origin.semantic.inlineStack();
     unsigned commonSize = std::min(previousInlineStack.size(), currentInlineStack.size());
@@ -136,9 +136,9 @@ bool Graph::dumpCodeOrigin(PrintStream& out, const char* prefixStr, Node*& previ
             break;
         }
     }
-
+    
     bool hasPrinted = false;
-
+    
     // Print the pops.
     for (unsigned i = previousInlineStack.size(); i-- > indexOfDivergence;) {
         out.print(prefix);
@@ -146,7 +146,7 @@ bool Graph::dumpCodeOrigin(PrintStream& out, const char* prefixStr, Node*& previ
         out.print("<-- ", inContext(*previousInlineStack[i].inlineCallFrame(), context), "\n");
         hasPrinted = true;
     }
-
+    
     // Print the pushes.
     for (unsigned i = indexOfDivergence; i < currentInlineStack.size(); ++i) {
         out.print(prefix);
@@ -154,7 +154,7 @@ bool Graph::dumpCodeOrigin(PrintStream& out, const char* prefixStr, Node*& previ
         out.print("--> ", inContext(*currentInlineStack[i].inlineCallFrame(), context), "\n");
         hasPrinted = true;
     }
-
+    
     return hasPrinted;
 }
 
@@ -431,7 +431,7 @@ void Graph::dump(PrintStream& out, const char* prefixStr, Node* node, DumpContex
         out.print("  predicting ", SpeculationDump(node->tryGetVariableAccessData()->prediction()));
     else if (node->hasHeapPrediction())
         out.print("  predicting ", SpeculationDump(node->getHeapPrediction()));
-
+    
     out.print("\n");
 }
 
@@ -508,7 +508,7 @@ void Graph::dumpBlockHeader(PrintStream& out, const char* prefixStr, BasicBlock*
                 out.print(" #", sortedBlockList[i]);
             out.print("\n");
         }
-
+        
         auto containingLoops = naturalLoops->loopsOf(block);
         if (!containingLoops.isEmpty()) {
             out.print(prefix, "  Containing loop headers:");
@@ -552,7 +552,7 @@ void Graph::dump(PrintStream& out, DumpContext* context)
     myContext.graph = this;
     if (!context)
         context = &myContext;
-
+    
     out.print("\n");
     out.print(prefix, "DFG for ", CodeBlockWithJITType(m_codeBlock, JITType::DFGJIT), ":\n");
     out.print(prefix, "  Fixpoint state: ", m_fixpointState, "; Form: ", m_form, "; Unification state: ", m_unificationState, "; Ref count state: ", m_refCountState, "\n");
@@ -565,7 +565,7 @@ void Graph::dump(PrintStream& out, DumpContext* context)
             out.print(prefix, "  Arguments for block#", pair.key->index, ": ", listDump(pair.value), "\n");
     }
     out.print("\n");
-
+    
     Node* lastNode = nullptr;
     for (size_t b = 0; b < m_blocks.size(); ++b) {
         BasicBlock* block = m_blocks[b].get();
@@ -597,7 +597,7 @@ void Graph::dump(PrintStream& out, DumpContext* context)
             out.print(prefix, "  Var Links: ", block->variablesAtHead, "\n");
             break;
         }
-
+            
         case SSA: {
             RELEASE_ASSERT(block->ssa);
             if (dumpOSRAvailabilityData)
@@ -629,7 +629,7 @@ void Graph::dump(PrintStream& out, DumpContext* context)
             out.print(prefix, "  Var Links: ", block->variablesAtTail, "\n");
             break;
         }
-
+            
         case SSA: {
             RELEASE_ASSERT(block->ssa);
             if (dumpOSRAvailabilityData)
@@ -649,7 +649,7 @@ void Graph::dump(PrintStream& out, DumpContext* context)
     }
 
     out.print(inContext(watchpoints(), &myContext));
-
+    
     if (!myContext.isEmpty()) {
         StringPrintStream prefixStr;
         prefixStr.print(prefix);
@@ -679,10 +679,10 @@ void Graph::dethread()
 {
     if (m_form == LoadStore || m_form == SSA)
         return;
-
+    
     if (logCompilationChanges())
         dataLog("Dethreading DFG graph.\n");
-
+    
     for (BlockIndex blockIndex = m_blocks.size(); blockIndex--;) {
         BasicBlock* block = m_blocks[blockIndex].get();
         if (!block)
@@ -692,7 +692,7 @@ void Graph::dethread()
             phi->children.reset();
         }
     }
-
+    
     m_form = LoadStore;
 }
 
@@ -702,7 +702,7 @@ void Graph::handleSuccessor(Vector<BasicBlock*, 16>& worklist, BasicBlock* block
         successor->isReachable = true;
         worklist.append(successor);
     }
-
+    
     if (!successor->predecessors.contains(block))
         successor->predecessors.append(block);
 }
@@ -730,7 +730,7 @@ void Graph::resetReachability()
         block->isReachable = false;
         block->predecessors.clear();
     }
-
+    
     determineReachability();
 }
 
@@ -742,7 +742,7 @@ public:
         : m_graph(graph)
     {
     }
-
+    
     void calculate()
     {
         // First reset the counts to 0 for all nodes.
@@ -755,7 +755,7 @@ public:
             for (unsigned phiIndex = block->phis.size(); phiIndex--;)
                 block->phis[phiIndex]->setRefCount(0);
         }
-
+    
         // Now find the roots:
         // - Nodes that are must-generate.
         // - Nodes that are reachable from type checks.
@@ -773,7 +773,7 @@ public:
                     m_worklist.append(node);
             }
         }
-
+        
         while (!m_worklist.isEmpty()) {
             while (!m_worklist.isEmpty()) {
                 Node* node = m_worklist.last();
@@ -781,7 +781,7 @@ public:
                 ASSERT(node->shouldGenerate()); // It should not be on the worklist unless it's ref'ed.
                 DFG_NODE_DO_TO_CHILDREN(m_graph, node, countEdge);
             }
-
+            
             if (m_graph.m_form == SSA) {
                 // Find Phi->Upsilon edges, which are represented as meta-data in the
                 // Upsilon.
@@ -802,7 +802,7 @@ public:
             }
         }
     }
-
+    
 private:
     void findTypeCheckRoot(Node*, Edge edge)
     {
@@ -813,14 +813,14 @@ private:
         if (!edge->postfixRef())
             m_worklist.append(edge.node());
     }
-
+    
     void countNode(Node* node)
     {
         if (node->postfixRef())
             return;
         m_worklist.append(node);
     }
-
+    
     void countEdge(Node*, Edge edge)
     {
         // Don't count edges that are already counted for their type checks.
@@ -828,7 +828,7 @@ private:
             return;
         countNode(edge.node());
     }
-
+    
     Graph& m_graph;
     Vector<Node*, 128> m_worklist;
 };
@@ -849,7 +849,7 @@ void Graph::killBlockAndItsContents(BasicBlock* block)
         deleteNode(block->phis[phiIndex]);
     for (Node* node : *block)
         deleteNode(node);
-
+    
     killBlock(block);
 }
 
@@ -901,7 +901,7 @@ void Graph::substituteGetLocal(BasicBlock& block, unsigned startIndexInBlock, Va
                 shouldContinue = false;
             break;
         }
-
+                
         case GetLocal: {
             if (node->variableAccessData() != variableAccessData)
                 continue;
@@ -912,7 +912,7 @@ void Graph::substituteGetLocal(BasicBlock& block, unsigned startIndexInBlock, Va
             shouldContinue = false;
             break;
         }
-
+                
         default:
             break;
         }
@@ -1075,7 +1075,7 @@ bool Graph::watchCondition(const ObjectPropertyCondition& key)
 
     if (key.kind() == PropertyCondition::Presence)
         m_safeToLoad.add(std::make_pair(key.object(), key.offset()));
-
+    
     return true;
 }
 
@@ -1115,7 +1115,7 @@ FullBytecodeLiveness& Graph::livenessFor(CodeBlock* codeBlock)
     HashMap<CodeBlock*, std::unique_ptr<FullBytecodeLiveness>>::iterator iter = m_bytecodeLiveness.find(codeBlock);
     if (iter != m_bytecodeLiveness.end())
         return *iter->value;
-
+    
     std::unique_ptr<FullBytecodeLiveness> liveness = codeBlock->livenessAnalysis().computeFullLiveness(codeBlock);
     FullBytecodeLiveness& result = *liveness;
     m_bytecodeLiveness.add(codeBlock, WTFMove(liveness));
@@ -1130,7 +1130,7 @@ FullBytecodeLiveness& Graph::livenessFor(InlineCallFrame* inlineCallFrame)
 bool Graph::isLiveInBytecode(Operand operand, CodeOrigin codeOrigin)
 {
     static constexpr bool verbose = false;
-
+    
     if (verbose)
         dataLog("Checking of operand is live: ", operand, "\n");
     bool isCallerOrigin = false;
@@ -1159,7 +1159,7 @@ bool Graph::isLiveInBytecode(Operand operand, CodeOrigin codeOrigin)
         }
 
         VirtualRegister reg = operand.virtualRegister() - codeOriginPtr->stackOffset();
-
+        
         if (verbose)
             dataLog("reg = ", reg, "\n");
 
@@ -1174,14 +1174,14 @@ bool Graph::isLiveInBytecode(Operand operand, CodeOrigin codeOrigin)
                         dataLog("Looks like a callee.\n");
                     return true;
                 }
-
+                
                 if (inlineCallFrame->isVarargs()
                     && reg == CallFrameSlot::argumentCountIncludingThis) {
                     if (verbose)
                         dataLog("Looks like the argument count.\n");
                     return true;
                 }
-
+                
                 return false;
             }
 
@@ -1210,7 +1210,7 @@ bool Graph::isLiveInBytecode(Operand operand, CodeOrigin codeOrigin)
 
     if (verbose)
         dataLog("Ran out of stack, returning true.\n");
-    return true;
+    return true;    
 }
 
 BitVector Graph::localsAndTmpsLiveInBytecode(CodeOrigin codeOrigin)
@@ -1269,22 +1269,22 @@ JSValue Graph::tryGetConstantProperty(
 {
     if (!base || !base.isObject())
         return JSValue();
-
+    
     JSObject* object = asObject(base);
-
+    
     for (unsigned i = structureSet.size(); i--;) {
         RegisteredStructure structure = structureSet[i];
 
         WatchpointSet* set = structure->propertyReplacementWatchpointSet(offset);
         if (!set || !set->isStillValid())
             return JSValue();
-
+        
         ASSERT(structure->isValidOffset(offset));
         ASSERT(!structure->isUncacheableDictionary());
-
+        
         watchpoints().addLazily(set);
     }
-
+    
     // What follows may require some extra thought. We need this load to load a valid JSValue. If
     // our profiling makes sense and we're still on track to generate code that won't be
     // invalidated, then we have nothing to worry about. We do, however, have to worry about
@@ -1327,7 +1327,7 @@ JSValue Graph::tryGetConstantProperty(
         // https://bugs.webkit.org/show_bug.cgi?id=147271
         return JSValue();
     }
-
+    
     return tryGetConstantProperty(base, structure.set(), offset);
 }
 
@@ -1352,39 +1352,39 @@ AbstractValue Graph::inferredValueForProperty(
 JSValue Graph::tryGetConstantClosureVar(JSValue base, ScopeOffset offset)
 {
     // This has an awesome concurrency story. See comment for GetGlobalVar in ByteCodeParser.
-
+    
     if (!base)
         return JSValue();
-
+    
     JSLexicalEnvironment* activation = jsDynamicCast<JSLexicalEnvironment*>(m_vm, base);
     if (!activation)
         return JSValue();
-
+    
     SymbolTable* symbolTable = activation->symbolTable();
     JSValue value;
     WatchpointSet* set;
     {
         ConcurrentJSLocker locker(symbolTable->m_lock);
-
+        
         SymbolTableEntry* entry = symbolTable->entryFor(locker, offset);
         if (!entry)
             return JSValue();
-
+        
         set = entry->watchpointSet();
         if (!set)
             return JSValue();
-
+        
         if (set->state() != IsWatched)
             return JSValue();
-
+        
         ASSERT(entry->scopeOffset() == offset);
         value = activation->variableAt(offset).get();
         if (!value)
             return JSValue();
     }
-
+    
     watchpoints().addLazily(set);
-
+    
     return value;
 }
 
@@ -1429,7 +1429,7 @@ void Graph::registerFrozenValues()
     for (FrozenValue* value : m_frozenValues) {
         if (!value->pointsToHeap())
             continue;
-
+        
         ASSERT(value->structure());
         ASSERT(m_plan.weakReferences().contains(value->structure()));
 
@@ -1470,18 +1470,18 @@ FrozenValue* Graph::freeze(JSValue value)
     // part of the weak pointer set. For example, an optimized CodeBlock
     // having a weak pointer to itself will cause it to get collected.
     RELEASE_ASSERT(!jsDynamicCast<CodeBlock*>(m_vm, value));
-
+    
     auto result = m_frozenValueMap.add(JSValue::encode(value), nullptr);
     if (LIKELY(!result.isNewEntry))
         return result.iterator->value;
 
     if (value.isUInt32())
         m_uint32ValuesInUse.append(value.asUInt32());
-
+    
     FrozenValue frozenValue = FrozenValue::freeze(value);
     if (Structure* structure = frozenValue.structure())
         registerStructure(structure);
-
+    
     return result.iterator->value = m_frozenValues.add(frozenValue);
 }
 
@@ -1565,7 +1565,7 @@ void Graph::assertIsRegistered(Structure* structure)
         return;
     if (watchpoints().isWatched(structure->transitionWatchpointSet()))
         return;
-
+    
     DFG_CRASH(*this, nullptr, toCString("Structure ", pointerDump(structure), " is watchable but isn't being watched.").data());
 }
 
@@ -1648,7 +1648,7 @@ SSANaturalLoops& Graph::ensureSSANaturalLoops()
 BackwardsCFG& Graph::ensureBackwardsCFG()
 {
     // We could easily relax this in the future to work over CPS, but today, it's only used in SSA.
-    RELEASE_ASSERT(m_form == SSA);
+    RELEASE_ASSERT(m_form == SSA); 
     if (!m_backwardsCFG)
         m_backwardsCFG = makeUnique<BackwardsCFG>(*this);
     return *m_backwardsCFG;
@@ -1724,7 +1724,7 @@ MethodOfGettingAValueProfile Graph::methodOfGettingAValueProfileFor(Node* curren
             node = nullptr;
         }
     }
-
+    
     return MethodOfGettingAValueProfile();
 }
 
@@ -1770,7 +1770,7 @@ bool Graph::isStringPrototypeMethodSane(JSGlobalObject* globalObject, UniquedStr
 
     if (function->executable()->intrinsicFor(CodeForCall) != StringPrototypeValueOfIntrinsic)
         return false;
-
+    
     return watchConditions(conditions);
 }
 

@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -57,7 +57,7 @@ public:
     virtual ~EditorClient() = default;
 
     virtual bool shouldDeleteRange(const std::optional<SimpleRange>&) = 0;
-    virtual bool smartInsertDeleteEnabled() = 0;
+    virtual bool smartInsertDeleteEnabled() = 0; 
     virtual bool isSelectTrailingWhitespaceEnabled() const = 0;
     virtual bool isContinuousSpellCheckingEnabled() = 0;
     virtual void toggleContinuousSpellChecking() = 0;
@@ -72,7 +72,7 @@ public:
     virtual bool shouldChangeSelectedRange(const std::optional<SimpleRange>& fromRange, const std::optional<SimpleRange>& toRange, Affinity, bool stillSelecting) = 0;
     virtual bool shouldRevealCurrentSelectionAfterInsertion() const { return true; };
     virtual bool shouldSuppressPasswordEcho() const { return false; };
-
+    
     virtual bool shouldApplyStyle(const StyleProperties&, const std::optional<SimpleRange>&) = 0;
     virtual void didApplyStyle() = 0;
     virtual bool shouldMoveRangeAfterDelete(const SimpleRange&, const SimpleRange&) = 0;
@@ -117,14 +117,14 @@ public:
     virtual bool canPaste(Frame*, bool defaultValue) const = 0;
     virtual bool canUndo() const = 0;
     virtual bool canRedo() const = 0;
-
+    
     virtual void undo() = 0;
     virtual void redo() = 0;
 
     virtual void handleKeyboardEvent(KeyboardEvent&) = 0;
     virtual void handleInputMethodKeydown(KeyboardEvent&) = 0;
     virtual void didDispatchInputMethodKeydown(KeyboardEvent&) { }
-
+    
     virtual void textFieldDidBeginEditing(Element*) = 0;
     virtual void textFieldDidEndEditing(Element*) = 0;
     virtual void textDidChangeInTextField(Element*) = 0;
@@ -169,7 +169,7 @@ public:
     virtual bool isAutomaticSpellingCorrectionEnabled() = 0;
     virtual void toggleAutomaticSpellingCorrection() = 0;
 #endif
-
+    
 #if PLATFORM(GTK)
     virtual bool shouldShowUnicodeMenu() = 0;
 #endif

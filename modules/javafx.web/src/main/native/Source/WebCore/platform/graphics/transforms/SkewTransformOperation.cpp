@@ -39,10 +39,10 @@ Ref<TransformOperation> SkewTransformOperation::blend(const TransformOperation* 
 {
     if (from && !from->isSameType(*this))
         return *this;
-
+    
     if (blendToIdentity)
         return SkewTransformOperation::create(WebCore::blend(m_angleX, 0.0, context), WebCore::blend(m_angleY, 0.0, context), type());
-
+    
     const SkewTransformOperation* fromOp = downcast<SkewTransformOperation>(from);
     double fromAngleX = fromOp ? fromOp->m_angleX : 0;
     double fromAngleY = fromOp ? fromOp->m_angleY : 0;

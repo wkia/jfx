@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -59,7 +59,7 @@ public:
         if (prepare)
             prepareForRendering();
     }
-
+    
     virtual void prepareToPlay() { }
     virtual PlatformLayer* platformLayer() const { return nullptr; }
 
@@ -81,7 +81,7 @@ public:
     virtual long platformErrorCode() const { return 0; }
 
     virtual void play() = 0;
-    virtual void pause() = 0;
+    virtual void pause() = 0;    
     virtual void setBufferingPolicy(MediaPlayer::BufferingPolicy) { }
 
     virtual bool supportsPictureInPicture() const { return false; }
@@ -140,7 +140,7 @@ public:
 
     virtual void setMuted(bool) { }
 
-    virtual bool hasClosedCaptions() const { return false; }
+    virtual bool hasClosedCaptions() const { return false; }    
     virtual void setClosedCaptionsVisible(bool) { }
 
     virtual double maxFastForwardRate() const { return std::numeric_limits<double>::infinity(); }

@@ -108,10 +108,10 @@ public:
     ALWAYS_INLINE void appendUnbarriered(JSValue);
     ALWAYS_INLINE void appendUnbarriered(JSValue*, size_t);
     void appendUnbarriered(JSCell*) final;
-
+    
     template<typename T>
     void append(const Weak<T>& weak);
-
+    
     ALWAYS_INLINE void appendHiddenUnbarriered(JSValue);
     void appendHiddenUnbarriered(JSCell*) final;
 
@@ -130,14 +130,14 @@ public:
     void donate();
     void drain(MonotonicTime timeout = MonotonicTime::infinity());
     void donateAndDrain(MonotonicTime timeout = MonotonicTime::infinity());
-
+    
     enum SharedDrainMode { HelperDrain, MainDrain };
     enum class SharedDrainResult { Done, TimedOut };
     SharedDrainResult drainFromShared(SharedDrainMode, MonotonicTime timeout = MonotonicTime::infinity());
 
     SharedDrainResult drainInParallel(MonotonicTime timeout = MonotonicTime::infinity());
     SharedDrainResult drainInParallelPassively(MonotonicTime timeout = MonotonicTime::infinity());
-
+    
     SharedDrainResult waitForTermination(MonotonicTime timeout = MonotonicTime::infinity());
 
     // Attempts to perform an increment of draining that involves only walking `bytes` worth of data. This
@@ -145,7 +145,7 @@ public:
     // mark less than bytes if we're reaching termination or if the global worklist is empty (which may in
     // rare cases happen temporarily even if we're not reaching termination).
     size_t performIncrementOfDraining(size_t bytes);
-
+    
     // This informs the GC about auxiliary of some size that we are keeping alive. If you don't do
     // this then the space will be freed at end of GC.
     void markAuxiliary(const void* base) final;
@@ -154,30 +154,30 @@ public:
 #if ENABLE(RESOURCE_USAGE)
     void reportExternalMemoryVisited(size_t) final;
 #endif
-
+    
     void dump(PrintStream&) const final;
 
     HeapVersion markingVersion() const { return m_markingVersion; }
 
     bool mutatorIsStopped() const final { return m_mutatorIsStopped; }
-
+    
     Lock& rightToRun() WTF_RETURNS_LOCK(m_rightToRun) { return m_rightToRun; }
-
+    
     void updateMutatorIsStopped(const AbstractLocker&);
     void updateMutatorIsStopped();
-
+    
     bool hasAcknowledgedThatTheMutatorIsResumed() const;
     bool mutatorIsStoppedIsUpToDate() const;
-
+    
     void optimizeForStoppedMutator();
-
+    
     void didRace(const VisitRaceKey&) final;
     void didRace(JSCell* cell, const char* reason) { didRace(VisitRaceKey(cell, reason)); }
-
+    
     void visitAsConstraint(const JSCell*) final;
-
+    
     bool didReachTermination();
-
+    
     void donateAll();
 
     NO_RETURN_DUE_TO_CRASH void addParallelConstraintTask(RefPtr<SharedTask<void(AbstractSlotVisitor&)>>) final;
@@ -186,27 +186,27 @@ public:
 private:
     friend class ParallelModeEnabler;
     friend class MarkingConstraintSolver;
-
+    
     void appendJSCellOrAuxiliary(HeapCell*);
 
     JS_EXPORT_PRIVATE void appendSlow(JSCell*, Dependency);
     JS_EXPORT_PRIVATE void appendHiddenSlow(JSCell*, Dependency);
     void appendHiddenSlowImpl(JSCell*, Dependency);
-
+    
     template<typename ContainerType>
     void setMarkedAndAppendToMarkStack(ContainerType&, JSCell*, Dependency);
-
+    
     void appendToMarkStack(JSCell*);
-
+    
     template<typename ContainerType>
     void appendToMarkStack(ContainerType&, JSCell*);
-
+    
     void noteLiveAuxiliaryCell(HeapCell*);
-
+    
     void visitChildren(const JSCell*);
 
     void propagateExternalMemoryVisitedIfNecessary();
-
+    
     void donateKnownParallel();
     void donateKnownParallel(MarkStackArray& from, MarkStackArray& to);
 
@@ -233,7 +233,7 @@ private:
     bool m_canOptimizeForStoppedMutator { false };
     bool m_isInParallelMode { false };
     Lock m_rightToRun;
-
+    
     // Put padding here to mitigate false sharing between multiple SlotVisitors.
     char padding[64];
 #if ASSERT_ENABLED
@@ -249,13 +249,13 @@ public:
         ASSERT(!m_stack.m_isInParallelMode);
         m_stack.m_isInParallelMode = true;
     }
-
+    
     ~ParallelModeEnabler()
     {
         ASSERT(m_stack.m_isInParallelMode);
         m_stack.m_isInParallelMode = false;
     }
-
+    
 private:
     SlotVisitor& m_stack;
 };

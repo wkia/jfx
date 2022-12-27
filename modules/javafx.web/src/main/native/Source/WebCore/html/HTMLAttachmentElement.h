@@ -87,7 +87,7 @@ private:
     }
     bool canContainRangeEndPoint() const final { return false; }
     void parseAttribute(const QualifiedName&, const AtomString&) final;
-
+    
     RefPtr<File> m_file;
     String m_uniqueIdentifier;
     RefPtr<Image> m_thumbnail;

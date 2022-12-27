@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -39,7 +39,7 @@ public:
         , m_info(0)
     {
     }
-
+    
     PureValue(NodeType op, const AdjacencyList& children, uintptr_t info)
         : m_op(op)
         , m_children(children.sanitized())
@@ -47,27 +47,27 @@ public:
     {
         ASSERT(!(defaultFlags(op) & NodeHasVarArgs));
     }
-
+    
     PureValue(NodeType op, const AdjacencyList& children, const void* ptr)
         : PureValue(op, children, bitwise_cast<uintptr_t>(ptr))
     {
     }
-
+    
     PureValue(NodeType op, const AdjacencyList& children)
         : PureValue(op, children, static_cast<uintptr_t>(0))
     {
     }
-
+    
     PureValue(Node* node, uintptr_t info)
         : PureValue(node->op(), node->children, info)
     {
     }
-
+    
     PureValue(Node* node, const void* ptr)
         : PureValue(node->op(), node->children, ptr)
     {
     }
-
+    
     PureValue(Node* node)
         : PureValue(node->op(), node->children)
     {
@@ -93,9 +93,9 @@ public:
         , m_info(1)
     {
     }
-
+    
     bool operator!() const { return m_op == LastNodeType && !m_info; }
-
+    
     NodeType op() const { return m_op; }
     uintptr_t info() const { return m_info; }
 
@@ -108,7 +108,7 @@ public:
             hash ^= m_graph->m_varArgChildren[m_children.firstChild() + i].sanitized().hash();
         return hash;
     }
-
+    
     bool operator==(const PureValue& other) const
     {
         if (isVarargs() != other.isVarargs() || m_op != other.m_op || m_info != other.m_info)
@@ -125,14 +125,14 @@ public:
         }
         return true;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return m_op == LastNodeType && m_info;
     }
-
+    
     void dump(PrintStream& out) const;
-
+    
 private:
     bool isVarargs() const { return !!m_graph; }
 

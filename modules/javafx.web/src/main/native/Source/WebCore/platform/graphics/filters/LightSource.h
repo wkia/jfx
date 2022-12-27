@@ -73,7 +73,7 @@ public:
 
     virtual bool setAzimuth(float) { return false; }
     virtual bool setElevation(float) { return false; }
-
+    
     // These are in user space coordinates.
     virtual bool setX(float) { return false; }
     virtual bool setY(float) { return false; }
@@ -81,7 +81,7 @@ public:
     virtual bool setPointsAtX(float) { return false; }
     virtual bool setPointsAtY(float) { return false; }
     virtual bool setPointsAtZ(float) { return false; }
-
+    
     virtual bool setSpecularExponent(float) { return false; }
     virtual bool setLimitingConeAngle(float) { return false; }
 

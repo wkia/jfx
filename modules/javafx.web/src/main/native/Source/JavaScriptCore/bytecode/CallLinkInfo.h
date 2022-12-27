@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -57,7 +57,7 @@ public:
         DirectConstruct,
         DirectTailCall
     };
-
+    
     static CallType callTypeFor(OpcodeID opcodeID);
 
     static bool isVarargsCallType(CallType callType)
@@ -74,9 +74,9 @@ public:
     }
 
     CallLinkInfo(CodeOrigin);
-
+        
     ~CallLinkInfo();
-
+    
     static CodeSpecializationKind specializationKindFor(CallType callType)
     {
         return specializationFromIsConstruct(callType == Construct || callType == ConstructVarargs || callType == DirectConstruct);
@@ -85,7 +85,7 @@ public:
     {
         return specializationKindFor(static_cast<CallType>(m_callType));
     }
-
+    
     static CallMode callModeFor(CallType callType)
     {
         switch (callType) {
@@ -107,7 +107,7 @@ public:
 
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static bool isDirect(CallType callType)
     {
         switch (callType) {
@@ -130,7 +130,7 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return false;
     }
-
+    
     CallMode callMode() const
     {
         return callModeFor(static_cast<CallType>(m_callType));
@@ -145,7 +145,7 @@ public:
     {
         return callMode() == CallMode::Tail;
     }
-
+    
     NearCallMode nearCallMode() const
     {
         return isTailCall() ? NearCallMode::Tail : NearCallMode::Regular;
@@ -166,7 +166,7 @@ public:
     }
 
     GPRReg calleeGPR() const { return m_calleeGPR; }
-
+    
     enum class UseDataIC : uint8_t {
         Yes,
         No
@@ -221,10 +221,10 @@ public:
     void clearLastSeenCallee();
     JSObject* lastSeenCallee() const;
     bool haveLastSeenCallee() const;
-
+    
     void setExecutableDuringCompilation(ExecutableBase*);
     ExecutableBase* executable();
-
+    
     void setStub(Ref<PolymorphicCallStubRoutine>&&);
     void clearStub();
 
@@ -277,7 +277,7 @@ public:
     {
         return m_clearedByGC;
     }
-
+    
     bool clearedByVirtual()
     {
         return m_clearedByVirtual;
@@ -297,7 +297,7 @@ public:
     {
         m_clearedByJettison = true;
     }
-
+    
     void setCallType(CallType callType)
     {
         m_callType = callType;
@@ -317,7 +317,7 @@ public:
     {
         return m_maxArgumentCountIncludingThis;
     }
-
+    
     void setMaxArgumentCountIncludingThis(unsigned);
 
     static ptrdiff_t offsetOfSlowPathCount()
@@ -385,7 +385,7 @@ private:
     CodeLocationLabel<JSInternalPtrTag> m_doneLocation;
     MacroAssemblerCodePtr<JSEntryPtrTag> m_slowPathCallDestination;
     union UnionType {
-        UnionType()
+        UnionType() 
             : dataIC { nullptr, InvalidGPRReg }
         { }
         struct DataIC {

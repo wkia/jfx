@@ -66,7 +66,7 @@ private:
     float getAverageCharWidth() override;
     LayoutUnit preferredContentLogicalWidth(float charWidth) const override;
     LayoutUnit computeControlLogicalHeight(LayoutUnit lineHeight, LayoutUnit nonContentHeight) const override;
-
+    
     void styleDidChange(StyleDifference, const RenderStyle* oldStyle) override;
 
     HTMLElement* innerSpinButtonElement() const;

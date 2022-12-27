@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -191,7 +191,7 @@ typedef enum : int8_t {
 typedef enum : int8_t {
 #define REGISTER_ID(id, name, r, cs) id,
     FOR_EACH_FP_REGISTER(REGISTER_ID)
-#undef REGISTER_ID
+#undef REGISTER_ID                       
     InvalidFPRReg = -1,
 } FPRegisterID;
 
@@ -207,7 +207,7 @@ public:
     typedef ARM64Registers::RegisterID RegisterID;
     typedef ARM64Registers::SPRegisterID SPRegisterID;
     typedef ARM64Registers::FPRegisterID FPRegisterID;
-
+    
     static constexpr RegisterID firstRegister() { return ARM64Registers::x0; }
     static constexpr RegisterID lastRegister() { return ARM64Registers::sp; }
     static constexpr unsigned numberOfRegisters() { return lastRegister() - firstRegister() + 1; }
@@ -263,7 +263,7 @@ public:
         , m_indexOfTailOfLastWatchpoint(INT_MIN)
     {
     }
-
+    
     AssemblerBuffer& buffer() { return m_buffer; }
 
     // (HS, LO, HI, LS) -> (AE, B, A, BE)
@@ -672,7 +672,7 @@ protected:
     enum MemOp {
         MemOp_STORE,
         MemOp_LOAD,
-        MemOp_STORE_V128,
+        MemOp_STORE_V128, 
         MemOp_LOAD_V128,
         MemOp_PREFETCH = 2, // size must be 3
         MemOp_LOAD_signed64 = 2, // size may be 0, 1 or 2
@@ -692,7 +692,7 @@ protected:
     enum MoveWideOp {
         MoveWideOp_N = 0,
         MoveWideOp_Z = 2,
-        MoveWideOp_K = 3
+        MoveWideOp_K = 3 
     };
 
     enum LdrLiteralOp {
@@ -701,12 +701,12 @@ protected:
         LdrLiteralOp_LDRSW = 2,
         LdrLiteralOp_128BIT = 2
     };
-
+    
     enum ExoticLoadFence {
         ExoticLoadFence_None,
         ExoticLoadFence_Acquire
     };
-
+    
     enum ExoticLoadAtomic {
         ExoticLoadAtomic_Link,
         ExoticLoadAtomic_None
@@ -889,7 +889,7 @@ public:
     {
         insn(excepnGeneration(ExcepnOp_BREAKPOINT, imm, 0));
     }
-
+    
     ALWAYS_INLINE static bool isBrk(void* address)
     {
         int expected = excepnGeneration(ExcepnOp_BREAKPOINT, 0, 0);
@@ -1089,7 +1089,7 @@ public:
         CHECK_DATASIZE();
         insn(logicalShiftedRegister(DATASIZE, LogicalOp_EOR, shift, false, rm, amount, rn, rd));
     }
-
+    
     template<int datasize>
     ALWAYS_INLINE void eor(RegisterID rd, RegisterID rn, LogicalImmediate imm)
     {
@@ -1570,7 +1570,7 @@ public:
     {
         insn(nopPseudo());
     }
-
+    
     enum BranchTargetType { DirectBranch, IndirectBranch  };
     using CopyFunction = void*(&)(void*, const void*, size_t);
 
@@ -1585,7 +1585,7 @@ public:
             copy(ptr++, &insn, sizeof(int));
         }
     }
-
+    
     ALWAYS_INLINE void dmbISH()
     {
         insn(0xd5033bbf);
@@ -1595,7 +1595,7 @@ public:
     {
         insn(0xd5033abf);
     }
-
+    
     template<int datasize>
     void ldar(RegisterID dst, RegisterID src)
     {
@@ -1616,7 +1616,7 @@ public:
         CHECK_MEMOPSIZE();
         insn(exoticLoad(MEMOPSIZE, ExoticLoadFence_Acquire, ExoticLoadAtomic_Link, dst, src));
     }
-
+    
     template<int datasize>
     void stxr(RegisterID result, RegisterID src, RegisterID dst)
     {
@@ -1637,7 +1637,7 @@ public:
         CHECK_MEMOPSIZE();
         insn(exoticStore(MEMOPSIZE, ExoticStoreFence_Release, result, src, dst));
     }
-
+    
 #if ENABLE(FAST_TLS_JIT)
     void mrs_TPIDRRO_EL0(RegisterID dst)
     {
@@ -2616,13 +2616,13 @@ public:
             brk(0);
         return label();
     }
-
+    
     static void* getRelocatedAddress(void* code, AssemblerLabel label)
     {
         ASSERT(label.isSet());
         return reinterpret_cast<void*>(reinterpret_cast<ptrdiff_t>(code) + label.offset());
     }
-
+    
     static int getDifferenceBetweenLabels(AssemblerLabel a, AssemblerLabel b)
     {
         return b.offset() - a.offset();
@@ -2709,7 +2709,7 @@ public:
         performJITMemcpy(where, &insn, sizeof(int));
         cacheFlush(where, sizeof(int));
     }
-
+    
     static ptrdiff_t maxJumpReplacementSize()
     {
         return 4;
@@ -2719,7 +2719,7 @@ public:
     {
         return 4;
     }
-
+    
     static void replaceWithLoad(void* where)
     {
         Datasize sf;
@@ -2882,12 +2882,12 @@ public:
         relinkJumpOrCall<BranchType_JMP>(reinterpret_cast<int*>(from), reinterpret_cast<const int*>(from), to);
         cacheFlush(from, sizeof(int));
     }
-
+    
     static void relinkJumpToNop(void* from)
     {
         relinkJump(from, static_cast<char*>(from) + 4);
     }
-
+    
     static void relinkCall(void* from, void* to)
     {
         relinkJumpOrCall<BranchType_CALL>(reinterpret_cast<int*>(from) - 1, reinterpret_cast<const int*>(from) - 1, to);
@@ -2912,7 +2912,7 @@ public:
         return prepareForAtomicRelinkJumpConcurrently(from, to);
     }
 #endif
-
+    
     static void repatchCompact(void* where, int32_t value)
     {
         ASSERT(!(value & ~0x3ff8));
@@ -3351,7 +3351,7 @@ protected:
         imm19 = (insn << 8) >> 13;
         rt = static_cast<RegisterID>(insn & 0x1f);
         return (insn & 0x7e000000) == 0x34000000;
-
+        
     }
 
     static bool disassembleConditionalBranchImmediate(void* address, unsigned& op01, int& imm19, Condition &condition)
@@ -3371,7 +3371,7 @@ protected:
         bitNumber = static_cast<unsigned>((((insn >> 26) & 0x20)) | ((insn >> 19) & 0x1f));
         rt = static_cast<RegisterID>(insn & 0x1f);
         return (insn & 0x7e000000) == 0x36000000;
-
+        
     }
 
     static bool disassembleUnconditionalBranchImmediate(void* address, bool& op, int& imm26)
@@ -3810,7 +3810,7 @@ protected:
     {
         return system(0, 1, 0x3, 0x7, 0x4, 0x1, rt);
     }
-
+    
     // 'op' means negate
     ALWAYS_INLINE static int testAndBranchImmediate(bool op, int b50, int imm14, RegisterID rt)
     {
@@ -3829,17 +3829,17 @@ protected:
         const int op4 = 0;
         return (0xd6000000 | opc << 21 | op2 << 16 | op3 << 10 | xOrZr(rn) << 5 | op4);
     }
-
+    
     static int exoticLoad(MemOpSize size, ExoticLoadFence fence, ExoticLoadAtomic atomic, RegisterID dst, RegisterID src)
     {
         return 0x085f7c00 | size << 30 | fence << 15 | atomic << 23 | src << 5 | dst;
     }
-
+    
     static int storeRelease(MemOpSize size, RegisterID src, RegisterID dst)
     {
         return 0x089ffc00 | size << 30 | dst << 5 | src;
     }
-
+    
     static int exoticStore(MemOpSize size, ExoticStoreFence fence, RegisterID result, RegisterID src, RegisterID dst)
     {
         return 0x08007c00 | size << 30 | result << 16 | fence << 15 | dst << 5 | src;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,22 +43,22 @@ public:
         : Phase(graph, "constant hoisting")
     {
     }
-
+    
     bool run()
     {
         DFG_ASSERT(m_graph, nullptr, m_graph.m_form == SSA);
-
+        
         m_graph.clearReplacements();
-
+        
         HashMap<FrozenValue*, Node*> jsValues;
         HashMap<FrozenValue*, Node*> doubleValues;
         HashMap<FrozenValue*, Node*> int52Values;
-
+        
         auto valuesFor = [&] (NodeType op) -> HashMap<FrozenValue*, Node*>& {
             // Use a roundabout approach because clang thinks that this closure returning a
             // reference to a stack-allocated value in outer scope is a bug. It's not.
             HashMap<FrozenValue*, Node*>* result;
-
+            
             switch (op) {
             case JSConstant:
                 result = &jsValues;
@@ -74,12 +74,12 @@ public:
                 result = nullptr;
                 break;
             }
-
+            
             return *result;
         };
-
+        
         Vector<Node*> toFree;
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             unsigned sourceIndex = 0;
             unsigned targetIndex = 0;
@@ -106,7 +106,7 @@ public:
             }
             block->resize(targetIndex);
         }
-
+        
         // Insert the constants into the root block.
         InsertionSet insertionSet(m_graph);
         auto insertConstants = [&] (const HashMap<FrozenValue*, Node*>& values) {
@@ -117,25 +117,25 @@ public:
         insertConstants(doubleValues);
         insertConstants(int52Values);
         insertionSet.execute(m_graph.block(0));
-
+        
         // Perform all of the substitutions. We want all instances of the removed constants to
         // point at their replacements.
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             for (Node* node : *block)
                 m_graph.performSubstitution(node);
         }
-
+        
         // And finally free the constants that we removed.
         m_graph.invalidateNodeLiveness();
         for (Node* node : toFree)
             m_graph.deleteNode(node);
-
+        
         return true;
     }
 };
 
 } // anonymous namespace
-
+    
 bool performConstantHoisting(Graph& graph)
 {
     return runPhase<ConstantHoistingPhase>(graph);

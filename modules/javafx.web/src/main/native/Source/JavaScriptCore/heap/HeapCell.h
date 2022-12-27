@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,9 +45,9 @@ public:
         JSCellWithIndexingHeader,
         Auxiliary
     };
-
+    
     HeapCell() { }
-
+    
     // We're intentionally only zapping the bits for the structureID and leaving
     // the rest of the cell header bits intact for crash analysis uses.
     enum ZapReason : int8_t { Unspecified, Destruction, StopAllocating };
@@ -75,13 +75,13 @@ public:
     // a runtime option and its default value is small (400 bytes).
     Heap* heap() const;
     VM& vm() const;
-
+    
     size_t cellSize() const;
     CellAttributes cellAttributes() const;
     DestructionMode destructionMode() const;
     Kind cellKind() const;
     Subspace* subspace() const;
-
+    
     // Call use() after the last point where you need `this` pointer to be kept alive. You usually don't
     // need to use this, but it might be necessary if you're otherwise referring to an object's innards
     // but not the object itself.

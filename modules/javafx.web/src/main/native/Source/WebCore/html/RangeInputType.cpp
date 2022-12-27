@@ -270,7 +270,7 @@ HTMLElement* RangeInputType::sliderTrackElement() const
     RefPtr<ShadowRoot> root = element()->userAgentShadowRoot();
     if (!root)
         return nullptr;
-
+    
     auto* container = childrenOfType<SliderContainerElement>(*root).first();
     if (!container)
         return nullptr;

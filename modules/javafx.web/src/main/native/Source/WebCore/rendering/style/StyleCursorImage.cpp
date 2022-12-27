@@ -34,8 +34,8 @@
 namespace WebCore {
 
 Ref<StyleCursorImage> StyleCursorImage::create(CSSCursorImageValue& cssValue)
-{
-    return adoptRef(*new StyleCursorImage(cssValue));
+{ 
+    return adoptRef(*new StyleCursorImage(cssValue)); 
 }
 
 bool StyleCursorImage::operator==(const StyleImage& other) const
@@ -44,8 +44,8 @@ bool StyleCursorImage::operator==(const StyleImage& other) const
 }
 
 Ref<CSSValue> StyleCursorImage::cssValue() const
-{
-    return m_cssValue.copyRef();
+{ 
+    return m_cssValue.copyRef(); 
 }
 
 StyleCursorImage::StyleCursorImage(CSSCursorImageValue& cssValue)

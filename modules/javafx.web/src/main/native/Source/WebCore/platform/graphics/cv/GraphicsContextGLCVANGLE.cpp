@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2016 Apple Inc. All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -611,7 +611,7 @@ bool GraphicsContextGLCVANGLE::copyPixelBufferToTexture(CVPixelBufferRef image, 
 
     auto newSurfaceSeed = IOSurfaceGetSeed(surface);
     if (flipY == m_lastFlipY
-        && surface == m_lastSurface
+        && surface == m_lastSurface 
         && newSurfaceSeed == m_lastSurfaceSeed
         && lastTextureSeed(outputTexture) == m_context->textureSeed(outputTexture)) {
         // If the texture hasn't been modified since the last time we copied to it, and the

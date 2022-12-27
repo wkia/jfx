@@ -109,7 +109,7 @@ private:
     void linkLoadingErrored() final;
 
     bool isAlternate() const { return m_disabledState == Unset && m_relAttribute.isAlternate; }
-
+    
     void setDisabledState(bool);
 
     bool isURLAttribute(const Attribute&) const final;

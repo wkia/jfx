@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,39 +40,39 @@ public:
     BlockMap()
     {
     }
-
+    
     BlockMap(Graph&);
-
+    
     BlockIndex size() const
     {
         return m_vector.size();
     }
-
+    
     T& atIndex(BlockIndex blockIndex)
     {
         return m_vector[blockIndex];
     }
-
+    
     const T& atIndex(BlockIndex blockIndex) const
     {
         return m_vector[blockIndex];
     }
-
+    
     T& at(BlockIndex blockIndex)
     {
         return m_vector[blockIndex];
     }
-
+    
     const T& at(BlockIndex blockIndex) const
     {
         return m_vector[blockIndex];
     }
-
+    
     T& at(BasicBlock* block)
     {
         return m_vector[block->index];
     }
-
+    
     const T& at(BasicBlock* block) const
     {
         return m_vector[block->index];
@@ -82,17 +82,17 @@ public:
     {
         return m_vector[blockIndex];
     }
-
+    
     const T& operator[](BlockIndex blockIndex) const
     {
         return m_vector[blockIndex];
     }
-
+    
     T& operator[](BasicBlock* block)
     {
         return m_vector[block->index];
     }
-
+    
     const T& operator[](BasicBlock* block) const
     {
         return m_vector[block->index];

@@ -684,7 +684,7 @@ void WebGL2RenderingContext::getBufferSubData(GCGLenum target, long long srcByte
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, "getBufferSubData", "Parameters would read outside the bounds of the source buffer");
         return;
     }
-
+    
     if (!copyLength)
         return;
 
@@ -1694,7 +1694,7 @@ void WebGL2RenderingContext::vertexAttribI4uiv(GCGLuint index, Uint32List&& list
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, "vertexAttribI4uiv", "no array");
         return;
     }
-
+    
     int size = list.length();
     if (size < 4) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, "vertexAttribI4uiv", "array too small");
@@ -2071,7 +2071,7 @@ void WebGL2RenderingContext::bindSampler(GCGLuint unit, WebGLSampler* sampler)
 
     if (isContextLostOrPending())
         return;
-
+    
     if (unit >= m_boundSamplers.size()) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, "bindSampler", "invalid texture unit");
         return;
@@ -2173,7 +2173,7 @@ GCGLenum WebGL2RenderingContext::clientWaitSync(WebGLSync& sync, GCGLbitfield fl
         synthesizeGLError(GraphicsContextGL::INVALID_OPERATION, "clientWaitSync", "timeout > MAX_CLIENT_WAIT_TIMEOUT_WEBGL");
         return GraphicsContextGL::WAIT_FAILED_WEBGL;
     }
-
+    
     if (flags && flags != GraphicsContextGL::SYNC_FLUSH_COMMANDS_BIT) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, "clientWaitSync", "invalid flags");
         return GraphicsContextGL::WAIT_FAILED_WEBGL;
@@ -2303,7 +2303,7 @@ void WebGL2RenderingContext::beginTransformFeedback(GCGLenum primitiveMode)
 {
     if (isContextLostOrPending())
         return;
-
+    
     if (!ValidateTransformFeedbackPrimitiveMode(primitiveMode)) {
         synthesizeGLError(GraphicsContextGL::INVALID_ENUM, "beginTransformFeedback", "invalid transform feedback primitive mode");
         return;
@@ -2343,7 +2343,7 @@ void WebGL2RenderingContext::endTransformFeedback()
         synthesizeGLError(GraphicsContextGL::INVALID_OPERATION, "endTransformFeedback", "transform feedback is not active");
         return;
     }
-
+    
     m_context->endTransformFeedback();
 
     m_boundTransformFeedback->setPaused(false);
@@ -2354,7 +2354,7 @@ void WebGL2RenderingContext::transformFeedbackVaryings(WebGLProgram& program, co
 {
     if (!validateWebGLProgramOrShader("transformFeedbackVaryings", &program))
         return;
-
+    
     switch (bufferMode) {
     case GraphicsContextGL::SEPARATE_ATTRIBS:
         if (varyings.size() > m_maxTransformFeedbackSeparateAttribs) {

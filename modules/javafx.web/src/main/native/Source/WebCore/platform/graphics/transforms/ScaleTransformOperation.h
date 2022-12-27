@@ -79,7 +79,7 @@ private:
     {
         ASSERT(isScaleTransformOperationType());
     }
-
+        
     double m_x;
     double m_y;
     double m_z;

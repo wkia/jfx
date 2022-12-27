@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,10 +43,10 @@ class IntegerCheckCombiningPhase : public Phase {
 public:
     enum RangeKind {
         InvalidRangeKind,
-
+        
         // This means we did ArithAdd with CheckOverflow.
         Addition,
-
+        
         // This means we did CheckInBounds on some length.
         ArrayBounds
     };
@@ -60,7 +60,7 @@ public:
             result.m_key = nullptr;
             return result;
         }
-
+        
         static RangeKey arrayBounds(Edge edge, Node* key)
         {
             RangeKey result;
@@ -69,21 +69,21 @@ public:
             result.m_key = key;
             return result;
         }
-
+        
         bool operator!() const { return m_kind == InvalidRangeKind; }
-
+        
         unsigned hash() const
         {
             return m_kind + m_source.hash() + PtrHash<Node*>::hash(m_key);
         }
-
+        
         bool operator==(const RangeKey& other) const
         {
             return m_kind == other.m_kind
                 && m_source == other.m_source
                 && m_key == other.m_key;
         }
-
+        
         void dump(PrintStream& out) const
         {
             switch (m_kind) {
@@ -108,7 +108,7 @@ public:
                 out.print("null");
             out.print(")");
         }
-
+        
         RangeKind m_kind { InvalidRangeKind };
         Edge m_source;
         Node* m_key { nullptr };
@@ -116,20 +116,20 @@ public:
 
     struct RangeKeyAndAddend {
         RangeKeyAndAddend() = default;
-
+        
         RangeKeyAndAddend(RangeKey key, int32_t addend)
             : m_key(key)
             , m_addend(addend)
         {
         }
-
+        
         bool operator!() const { return !m_key && !m_addend; }
-
+        
         void dump(PrintStream& out) const
         {
             out.print(m_key, " + ", m_addend);
         }
-
+        
         RangeKey m_key;
         int32_t m_addend { 0 };
     };
@@ -139,7 +139,7 @@ public:
         {
             out.print("(", m_minBound, " @", m_minOrigin, ") .. (", m_maxBound, " @", m_maxOrigin, "), count = ", m_count, ", hoisted = ", m_hoisted);
         }
-
+        
         int32_t m_minBound { 0 };
         int32_t m_maxBound { 0 };
         CodeOrigin m_minOrigin;
@@ -154,16 +154,16 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == SSA);
-
+        
         m_changed = false;
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;)
             handleBlock(blockIndex);
-
+        
         return m_changed;
     }
 
@@ -173,19 +173,19 @@ private:
         BasicBlock* block = m_graph.block(blockIndex);
         if (!block)
             return;
-
+        
         m_map.clear();
-
+        
         // First we collect Ranges. If operations within the range have enough redundancy,
         // we hoist. And then we remove additions and checks that fall within the max range.
-
+        
         for (auto* node : *block) {
             RangeKeyAndAddend data = rangeKeyAndAddend(node);
             if (DFGIntegerCheckCombiningPhaseInternal::verbose)
                 dataLog("For ", node, ": ", data, "\n");
             if (!data)
                 continue;
-
+            
             Range& range = m_map[data.m_key];
             if (DFGIntegerCheckCombiningPhaseInternal::verbose)
                 dataLog("    Range: ", range, "\n");
@@ -207,7 +207,7 @@ private:
             if (DFGIntegerCheckCombiningPhaseInternal::verbose)
                 dataLog("    New range: ", range, "\n");
         }
-
+        
         for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
             Node* node = block->at(nodeIndex);
             RangeKeyAndAddend data = rangeKeyAndAddend(node);
@@ -216,12 +216,12 @@ private:
             Range range = m_map[data.m_key];
             if (!isValid(data.m_key, range))
                 continue;
-
+            
             // Do the hoisting.
             if (!range.m_hoisted) {
                 NodeOrigin minOrigin = node->origin.withSemantic(range.m_minOrigin);
                 NodeOrigin maxOrigin = node->origin.withSemantic(range.m_maxOrigin);
-
+                
                 switch (data.m_key.m_kind) {
                 case Addition: {
                     if (range.m_minBound < 0)
@@ -230,11 +230,11 @@ private:
                         insertAdd(nodeIndex, maxOrigin, data.m_key.m_source, range.m_maxBound);
                     break;
                 }
-
+                
                 case ArrayBounds: {
                     Node* minNode;
                     Node* maxNode;
-
+                    
                     if (!data.m_key.m_source) {
                         // data.m_key.m_source being null means that we're comparing against int32 constants (see rangeKeyAndAddend()).
                         // Since CheckInBounds does an unsigned comparison, if the minBound >= 0, it is also covered by the
@@ -253,7 +253,7 @@ private:
                             nodeIndex, maxOrigin, data.m_key.m_source, range.m_maxBound,
                             Arith::Unchecked);
                     }
-
+                    
                     Node* minCheck = nullptr;
                     if (minNode) {
                         minCheck = m_insertionSet.insertNode(
@@ -265,22 +265,22 @@ private:
                         Edge(maxNode, Int32Use), Edge(data.m_key.m_key, Int32Use), Edge(minCheck, UntypedUse));
                     break;
                 }
-
+                
                 default:
                     RELEASE_ASSERT_NOT_REACHED();
                 }
-
+                
                 m_changed = true;
                 m_map[data.m_key].m_hoisted = true;
             }
-
+            
             // Do the elimination.
             switch (data.m_key.m_kind) {
             case Addition:
                 node->setArithMode(Arith::Unchecked);
                 m_changed = true;
                 break;
-
+                
             case ArrayBounds:
                 ASSERT(node->op() == CheckInBounds);
                 if (UNLIKELY(Options::validateBoundsCheckElimination()))
@@ -288,15 +288,15 @@ private:
                 node->convertToIdentityOn(m_map[data.m_key].m_dependency);
                 m_changed = true;
                 break;
-
+                
             default:
                 RELEASE_ASSERT_NOT_REACHED();
             }
         }
-
+        
         m_insertionSet.execute(block);
     }
-
+    
     RangeKeyAndAddend rangeKeyAndAddend(Node* node)
     {
         switch (node->op()) {
@@ -310,14 +310,14 @@ private:
                 RangeKey::addition(node->child1()),
                 node->child2()->asInt32());
         }
-
+                
         case CheckInBounds: {
             Edge source;
             int32_t addend;
             Node* key = node->child2().node();
-
+            
             Edge index = node->child1();
-
+            
             if (index->isInt32Constant()) {
                 source = Edge();
                 addend = index->asInt32();
@@ -331,22 +331,22 @@ private:
                 source = index;
                 addend = 0;
             }
-
+            
             return RangeKeyAndAddend(RangeKey::arrayBounds(source, key), addend);
         }
-
+            
         default:
             break;
         }
-
+        
         return RangeKeyAndAddend();
     }
-
+    
     bool isValid(const RangeKey& key, const Range& range)
     {
         if (range.m_count < 2)
             return false;
-
+        
         switch (key.m_kind) {
         case ArrayBounds: {
             // Have to do this carefully because C++ compilers are too smart. But all we're really doing is detecting if
@@ -359,12 +359,12 @@ private:
             uint32_t unsignedDifference = maxBound - minBound;
             return !(unsignedDifference >> 31);
         }
-
+            
         default:
             return true;
         }
     }
-
+    
     Node* insertAdd(
         unsigned nodeIndex, NodeOrigin origin, Edge source, int32_t addend,
         Arith::Mode arithMode = Arith::CheckOverflow)
@@ -377,14 +377,14 @@ private:
             m_insertionSet.insertConstantForUse(
                 nodeIndex, origin, jsNumber(addend), source.useKind()));
     }
-
+    
     using RangeMap = StdUnorderedMap<RangeKey, Range, HashMethod<RangeKey>>;
     RangeMap m_map;
-
+    
     InsertionSet m_insertionSet;
     bool m_changed;
 };
-
+    
 bool performIntegerCheckCombining(Graph& graph)
 {
     return runPhase<IntegerCheckCombiningPhase>(graph);

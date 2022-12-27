@@ -211,7 +211,7 @@ class EmptyChromeClient : public ChromeClient {
 #endif
 
     void wheelEventHandlersChanged(bool) final { }
-
+    
     bool isEmptyChromeClient() const final { return true; }
 
     void didAssociateFormControls(const Vector<RefPtr<Element>>&, Frame&) final { }

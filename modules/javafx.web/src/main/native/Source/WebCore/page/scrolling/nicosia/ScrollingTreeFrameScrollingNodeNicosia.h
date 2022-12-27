@@ -57,8 +57,6 @@ private:
 
 
     WheelEventHandlingResult handleWheelEvent(const PlatformWheelEvent&, EventTargeting) override;
-    void stopScrollAnimations() override;
-
     FloatPoint adjustedScrollPosition(const FloatPoint&, ScrollClamping) const override;
     void currentScrollPositionChanged(ScrollType, ScrollingLayerPositionAction) override;
     void stopScrollAnimations() override;

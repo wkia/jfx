@@ -42,13 +42,13 @@ public:
     }
 
     bool operator!=(const AbsolutePositionConstraints& other) const { return !(*this == other); }
-
+    
     FloatSize alignmentOffset() const { return m_alignmentOffset; }
     void setAlignmentOffset(FloatSize offset) { m_alignmentOffset = offset; }
 
     FloatPoint layerPositionAtLastLayout() const { return m_layerPositionAtLastLayout; }
     void setLayerPositionAtLastLayout(FloatPoint position) { m_layerPositionAtLastLayout = position; }
-
+    
 private:
     FloatSize m_alignmentOffset;
     FloatPoint m_layerPositionAtLastLayout;
@@ -71,16 +71,16 @@ public:
         AnchorEdgeBottom = 1 << 3
     };
     typedef unsigned AnchorEdges;
-
+    
     virtual ~ViewportConstraints() = default;
-
+    
     virtual ConstraintType constraintType() const = 0;
-
+    
     AnchorEdges anchorEdges() const { return m_anchorEdges; }
     bool hasAnchorEdge(AnchorEdgeFlags flag) const { return m_anchorEdges & flag; }
     void addAnchorEdge(AnchorEdgeFlags edgeFlag) { m_anchorEdges |= edgeFlag; }
     void setAnchorEdges(AnchorEdges edges) { m_anchorEdges = edges; }
-
+    
     FloatSize alignmentOffset() const { return m_alignmentOffset; }
     void setAlignmentOffset(FloatSize offset) { m_alignmentOffset = offset; }
 
@@ -98,7 +98,7 @@ public:
     FixedPositionViewportConstraints()
         : ViewportConstraints()
     { }
-
+    
     WEBCORE_EXPORT FloatPoint layerPositionForViewportRect(const FloatRect& viewportRect) const;
 
     const FloatRect& viewportRectAtLastLayout() const { return m_viewportRectAtLastLayout; }

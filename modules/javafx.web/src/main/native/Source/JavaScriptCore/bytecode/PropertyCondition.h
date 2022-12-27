@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,19 +45,19 @@ public:
     };
 
     using Header = CompactPointerTuple<UniquedStringImpl*, Kind>;
-
+    
     PropertyCondition()
         : m_header(nullptr, Presence)
     {
         memset(&u, 0, sizeof(u));
     }
-
+    
     PropertyCondition(WTF::HashTableDeletedValueType)
         : m_header(nullptr, Absence)
     {
         memset(&u, 0, sizeof(u));
     }
-
+    
     static PropertyCondition presenceWithoutBarrier(UniquedStringImpl* uid, PropertyOffset offset, unsigned attributes)
     {
         PropertyCondition result;
@@ -66,7 +66,7 @@ public:
         result.u.presence.attributes = attributes;
         return result;
     }
-
+    
     static PropertyCondition presence(
         VM&, JSCell*, UniquedStringImpl* uid, PropertyOffset offset, unsigned attributes)
     {
@@ -81,7 +81,7 @@ public:
         result.u.prototype.prototype = prototype;
         return result;
     }
-
+    
     static PropertyCondition absence(
         VM& vm, JSCell* owner, UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -89,7 +89,7 @@ public:
             vm.heap.writeBarrier(owner);
         return absenceWithoutBarrier(uid, prototype);
     }
-
+    
     static PropertyCondition absenceOfSetEffectWithoutBarrier(
         UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -98,7 +98,7 @@ public:
         result.u.prototype.prototype = prototype;
         return result;
     }
-
+    
     static PropertyCondition absenceOfSetEffect(
         VM& vm, JSCell* owner, UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -106,7 +106,7 @@ public:
             vm.heap.writeBarrier(owner);
         return absenceOfSetEffectWithoutBarrier(uid, prototype);
     }
-
+    
     static PropertyCondition equivalenceWithoutBarrier(
         UniquedStringImpl* uid, JSValue value)
     {
@@ -115,7 +115,7 @@ public:
         result.u.equivalence.value = JSValue::encode(value);
         return result;
     }
-
+        
     static PropertyCondition equivalence(
         VM& vm, JSCell* owner, UniquedStringImpl* uid, JSValue value)
     {
@@ -130,7 +130,7 @@ public:
         result.m_header = Header(uid, HasStaticProperty);
         return result;
     }
-
+    
     static PropertyCondition hasPrototypeWithoutBarrier(JSObject* prototype)
     {
         PropertyCondition result;
@@ -138,19 +138,19 @@ public:
         result.u.prototype.prototype = prototype;
         return result;
     }
-
+    
     static PropertyCondition hasPrototype(VM& vm, JSCell* owner, JSObject* prototype)
     {
         if (owner)
             vm.heap.writeBarrier(owner);
         return hasPrototypeWithoutBarrier(prototype);
     }
-
+    
     explicit operator bool() const { return m_header.pointer() || m_header.type() != Presence; }
-
+    
     Kind kind() const { return m_header.type(); }
     UniquedStringImpl* uid() const { return m_header.pointer(); }
-
+    
     bool hasOffset() const { return !!*this && m_header.type() == Presence; };
     PropertyOffset offset() const
     {
@@ -163,7 +163,7 @@ public:
         ASSERT(hasAttributes());
         return u.presence.attributes;
     }
-
+    
     bool hasPrototype() const
     {
         return !!*this
@@ -174,17 +174,17 @@ public:
         ASSERT(hasPrototype());
         return u.prototype.prototype;
     }
-
+    
     bool hasRequiredValue() const { return !!*this && m_header.type() == Equivalence; }
     JSValue requiredValue() const
     {
         ASSERT(hasRequiredValue());
         return JSValue::decode(u.equivalence.value);
     }
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
     unsigned hash() const
     {
         unsigned result = WTF::PtrHash<UniquedStringImpl*>::hash(m_header.pointer()) + static_cast<unsigned>(m_header.type());
@@ -206,7 +206,7 @@ public:
         }
         return result;
     }
-
+    
     bool operator==(const PropertyCondition& other) const
     {
         if (m_header.pointer() != other.m_header.pointer())
@@ -229,12 +229,12 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return false;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return !m_header.pointer() && m_header.type() == Absence;
     }
-
+    
     // Two conditions are compatible if they are identical or if they speak of different uids. If
     // false is returned, you have to decide how to resolve the conflict - for example if there is
     // a Presence and an Equivalence then in some cases you'll want the more general of the two
@@ -247,14 +247,14 @@ public:
             return false;
         return *this == other || uid() != other.uid();
     }
-
+    
     // Checks if the object's structure claims that the property won't be intercepted.
     bool isStillValidAssumingImpurePropertyWatchpoint(Structure*, JSObject* base = nullptr) const;
-
+    
     // Returns true if we need an impure property watchpoint to ensure validity even if
     // isStillValidAccordingToStructure() returned true.
     bool validityRequiresImpurePropertyWatchpoint(Structure*) const;
-
+    
     // Checks if the condition is still valid right now for the given object and structure.
     // May conservatively return false, if the object and structure alone don't guarantee the
     // condition. This happens for an Absence condition on an object that may have impure
@@ -263,7 +263,7 @@ public:
     // supplied, then you may need to use some other watchpoints on the object to guarantee the
     // condition in addition to the structure check.
     bool isStillValid(Structure*, JSObject* base = nullptr) const;
-
+    
     // In some cases, the condition is not watchable, but could be made watchable by enabling the
     // appropriate watchpoint. For example, replacement watchpoints are enabled only when some
     // access is cached on the property in some structure. This is mainly to save space for
@@ -280,24 +280,24 @@ public:
         // stabilized yet. We prefer to only assume that a condition will hold if it has been
         // known to hold for a while already.
         MakeNoChanges,
-
+        
         // Do what it takes to ensure that the property can be watched, if doing so has no
         // user-observable effect. For now this just means that we will ensure that a property
         // replacement watchpoint is enabled if it hadn't been enabled already. Do not use this
         // from JIT threads, since the act of enabling watchpoints is not thread-safe.
         EnsureWatchability
     };
-
+    
     // This means that it's still valid and we could enforce validity by setting a transition
     // watchpoint on the structure and possibly an impure property watchpoint.
     bool isWatchableAssumingImpurePropertyWatchpoint(
         Structure*, JSObject* base, WatchabilityEffort = MakeNoChanges) const;
-
+    
     // This means that it's still valid and we could enforce validity by setting a transition
     // watchpoint on the structure.
     bool isWatchable(
         Structure*, JSObject*, WatchabilityEffort = MakeNoChanges) const;
-
+    
     bool watchingRequiresStructureTransitionWatchpoint() const
     {
         // Currently, this is required for all of our conditions.
@@ -317,7 +317,7 @@ public:
         if (hasRequiredValue() && requiredValue() && requiredValue().isCell())
             functor(requiredValue().asCell());
     }
-
+    
     void validateReferences(const TrackedReferences&) const;
 
     static bool isValidValueForAttributes(VM&, JSValue, unsigned attributes);

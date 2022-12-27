@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,7 +50,7 @@ void ToFTLDeferredCompilationCallback::compilationDidBecomeReadyAsynchronously(
     dataLogLnIf(Options::verboseOSR(),
         "Optimizing compilation of ", codeBlock, " (for ", profiledDFGCodeBlock,
         ") did become ready.");
-
+    
     profiledDFGCodeBlock->jitCode()->dfg()->forceOptimizationSlowPathConcurrently(
         profiledDFGCodeBlock);
 }
@@ -61,17 +61,17 @@ void ToFTLDeferredCompilationCallback::compilationDidComplete(
     dataLogLnIf(Options::verboseOSR(),
         "Optimizing compilation of ", codeBlock, " (for ", profiledDFGCodeBlock,
         ") result: ", result);
-
+    
     if (profiledDFGCodeBlock->replacement() != profiledDFGCodeBlock) {
         dataLogLnIf(Options::verboseOSR(),
             "Dropping FTL code block ", codeBlock, " on the floor because the "
             "DFG code block ", profiledDFGCodeBlock, " was jettisoned.");
         return;
     }
-
+    
     if (result == CompilationSuccessful)
         codeBlock->ownerExecutable()->installCode(codeBlock);
-
+    
     profiledDFGCodeBlock->jitCode()->dfg()->setOptimizationThresholdBasedOnCompilationResult(
         profiledDFGCodeBlock, result);
 

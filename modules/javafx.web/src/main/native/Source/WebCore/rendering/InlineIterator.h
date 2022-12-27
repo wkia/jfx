@@ -101,7 +101,7 @@ public:
     {
         return is<RenderText>(m_renderer) && m_renderer->preservesNewline() && downcast<RenderText>(*m_renderer).characterAt(m_pos) == '\n';
     }
-
+    
     bool atParagraphSeparator() const
     {
         return (m_renderer && m_renderer->isBR()) || atTextParagraphSeparator();

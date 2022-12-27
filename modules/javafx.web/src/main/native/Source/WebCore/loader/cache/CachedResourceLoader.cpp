@@ -1298,7 +1298,7 @@ CachedResourceLoader::RevalidationPolicy CachedResourceLoader::determineRevalida
         logMemoryCacheResourceRequest(frame(), DiagnosticLoggingKeys::inMemoryCacheKey(), DiagnosticLoggingKeys::unusedReasonReloadKey());
         return Reload;
     }
-
+    
     // We'll try to reload the resource if it failed last time.
     if (existingResource->errorOccurred()) {
         LOG(ResourceLoading, "CachedResourceLoader::determineRevalidationPolicye reloading due to resource being in the error state");
@@ -1325,7 +1325,7 @@ CachedResourceLoader::RevalidationPolicy CachedResourceLoader::determineRevalida
         // See if the resource has usable ETag or Last-modified headers.
         if (existingResource->canUseCacheValidator())
             return Revalidate;
-
+        
         // No, must reload.
         LOG(ResourceLoading, "CachedResourceLoader::determineRevalidationPolicy reloading due to missing cache validators.");
         logMemoryCacheResourceRequest(frame(), DiagnosticLoggingKeys::inMemoryCacheKey(), DiagnosticLoggingKeys::unusedReasonMustRevalidateNoValidatorKey());
@@ -1510,7 +1510,7 @@ Vector<Ref<SVGImage>> CachedResourceLoader::allCachedSVGImages() const
         if (auto* image = cachedResourceSVGImage(resource))
             allCachedSVGImages.append(*image);
     }
-
+        
     return allCachedSVGImages;
 }
 

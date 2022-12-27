@@ -35,7 +35,7 @@ WeakSet::~WeakSet()
 {
     if (isOnList())
         remove();
-
+    
     Heap& heap = *this->heap();
     WeakBlock* next = nullptr;
     for (WeakBlock* block = m_blocks.head(); block; block = next) {
@@ -77,7 +77,7 @@ void WeakSet::shrink()
     }
 
     resetAllocator();
-
+    
     if (m_blocks.isEmpty() && isOnList())
         remove();
 }
@@ -108,7 +108,7 @@ WeakBlock::FreeCell* WeakSet::addAllocator(CellContainer container)
 {
     if (!isOnList())
         heap()->objectSpace().addActiveWeakSet(this);
-
+    
     WeakBlock* block = WeakBlock::create(*heap(), container);
     heap()->didAllocate(WeakBlock::blockSize);
     m_blocks.append(block);

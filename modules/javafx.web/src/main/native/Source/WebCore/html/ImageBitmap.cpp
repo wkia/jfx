@@ -253,7 +253,7 @@ void ImageBitmap::resolveWithBlankImageBuffer(ScriptExecutionContext& scriptExec
     OptionSet<SerializationState> serializationState;
     if (originClean)
         serializationState.add(SerializationState::OriginClean);
-
+    
     // 7. Create a new ImageBitmap object.
     auto imageBitmap = create(ImageBitmapBacking(WTFMove(bitmapData), serializationState));
 
@@ -807,7 +807,7 @@ void ImageBitmap::createPromise(ScriptExecutionContext& scriptExecutionContext, 
     auto alphaPremultiplication = alphaPremultiplicationForPremultiplyAlpha(options.premultiplyAlpha);
     if (sourceRectangle.returnValue().location().isZero() && sourceRectangle.returnValue().size() == imageData->size() && sourceRectangle.returnValue().size() == outputSize && options.imageOrientation == ImageBitmapOptions::Orientation::None) {
         bitmapData->putPixelBuffer(imageData->pixelBuffer(), sourceRectangle.releaseReturnValue(), { }, alphaPremultiplication);
-
+        
         auto imageBitmap = create(ImageBitmapBacking(WTFMove(bitmapData)));
         // The result is implicitly origin-clean, and alpha premultiplication has already been handled.
         promise.resolve(WTFMove(imageBitmap));

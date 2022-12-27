@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -163,7 +163,7 @@ void ApplicationCacheHost::failedLoadingMainResource()
         }
         group = m_applicationCache->group();
     }
-
+    
     if (group)
         group->failedLoadingMainResource(m_documentLoader);
 }
@@ -173,7 +173,7 @@ void ApplicationCacheHost::finishedLoadingMainResource()
     auto* group = candidateApplicationCacheGroup();
     if (!group && applicationCache() && !mainResourceApplicationCache())
         group = applicationCache()->group();
-
+    
     if (group)
         group->finishedLoadingMainResource(m_documentLoader);
 }
@@ -185,7 +185,7 @@ bool ApplicationCacheHost::maybeLoadResource(ResourceLoader& loader, const Resou
 
     if (!isApplicationCacheEnabled() && !isApplicationCacheBlockedForRequest(request))
         return false;
-
+    
     if (request.url() != originalURL)
         return false;
 
@@ -399,7 +399,7 @@ void ApplicationCacheHost::setCandidateApplicationCacheGroup(ApplicationCacheGro
     ASSERT(!m_applicationCache);
     m_candidateApplicationCacheGroup = makeWeakPtr(group);
 }
-
+    
 void ApplicationCacheHost::setApplicationCache(RefPtr<ApplicationCache>&& applicationCache)
 {
     if (m_candidateApplicationCacheGroup) {
@@ -420,7 +420,7 @@ bool ApplicationCacheHost::shouldLoadResourceFromApplicationCache(const Resource
         if (auto* document = loaderFrame->document())
             document->contentSecurityPolicy()->upgradeInsecureRequestIfNeeded(request, ContentSecurityPolicy::InsecureRequestType::Load);
     }
-
+    
     // If the resource is not to be fetched using the HTTP GET mechanism or equivalent, or if its URL has a different
     // <scheme> component than the application cache's manifest, then fetch the resource normally.
     if (!ApplicationCache::requestIsHTTPOrHTTPSGet(request) || !equalIgnoringASCIICase(request.url().protocol(), cache->manifestResource()->url().protocol()))
@@ -449,7 +449,7 @@ bool ApplicationCacheHost::getApplicationCacheFallbackResource(const ResourceReq
     }
     if (!cache->isComplete())
         return false;
-
+    
     // If the resource is not a HTTP/HTTPS GET, then abort
     if (!ApplicationCache::requestIsHTTPOrHTTPSGet(request))
         return false;
@@ -527,7 +527,7 @@ bool ApplicationCacheHost::swapCache()
     auto* cache = applicationCache();
     if (!cache)
         return false;
-
+    
     auto* group = cache->group();
     if (!group)
         return false;
@@ -542,7 +542,7 @@ bool ApplicationCacheHost::swapCache()
     auto* newestCache = group->newestCache();
     if (!newestCache || cache == newestCache)
         return false;
-
+    
     ASSERT(group == newestCache->group());
     setApplicationCache(newestCache);
     InspectorInstrumentation::updateApplicationCacheStatus(m_documentLoader.frame());

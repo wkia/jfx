@@ -29,7 +29,7 @@
 #include <wtf/StackStats.h>
 
 namespace WebCore {
-
+    
 using namespace SVGNames;
 
 WTF_MAKE_ISO_ALLOCATED_IMPL(RenderSVGGradientStop);

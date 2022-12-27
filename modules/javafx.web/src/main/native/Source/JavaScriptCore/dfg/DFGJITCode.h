@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -50,10 +50,10 @@ class JITCode final : public DirectJITCode {
 public:
     JITCode();
     ~JITCode() final;
-
+    
     CommonData* dfgCommon() final;
     JITCode* dfg() final;
-
+    
     OSREntryData* osrEntryDataForBytecodeIndex(BytecodeIndex bytecodeIndex)
     {
         return tryBinarySearch<OSREntryData, BytecodeIndex>(
@@ -62,10 +62,10 @@ public:
     }
 
     void finalizeOSREntrypoints(Vector<DFG::OSREntryData>&&);
-
+    
     void reconstruct(
         CodeBlock*, CodeOrigin, unsigned streamIndex, Operands<ValueRecovery>& result);
-
+    
     // This is only applicable if we're at a point where all values are spilled to the
     // stack. Currently, it also has the restriction that the values must be in their
     // bytecode-designated stack slots.
@@ -75,7 +75,7 @@ public:
 #if ENABLE(FTL_JIT)
     // NB. All of these methods take CodeBlock* because they may want to use
     // CodeBlock's logic about scaling thresholds. It should be a DFG CodeBlock.
-
+    
     bool checkIfOptimizationThresholdReached(CodeBlock*);
     void optimizeNextInvocation(CodeBlock*);
     void dontOptimizeAnytimeSoon(CodeBlock*);
@@ -84,9 +84,9 @@ public:
     void forceOptimizationSlowPathConcurrently(CodeBlock*);
     void setOptimizationThresholdBasedOnCompilationResult(CodeBlock*, CompilationResult);
 #endif // ENABLE(FTL_JIT)
-
+    
     void validateReferences(const TrackedReferences&) final;
-
+    
     void shrinkToFit(const ConcurrentJSLocker&) final;
 
     RegisterSet liveRegistersToPreserveAtExceptionHandlingCallSite(CodeBlock*, CallSiteIndex) final;
@@ -101,7 +101,7 @@ public:
     std::optional<CodeOrigin> findPC(CodeBlock*, void* pc) final;
 
     using DirectJITCode::initializeCodeRefForDFG;
-
+    
 private:
     friend class JITCompiler; // Allow JITCompiler to call setCodeRef().
 

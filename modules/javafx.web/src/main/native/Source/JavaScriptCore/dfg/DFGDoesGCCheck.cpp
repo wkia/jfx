@@ -82,3 +82,4 @@ void DoesGCCheck::verifyCanGC(VM& vm)
 
 } // namespace DFG
 } // namespace JSC
+

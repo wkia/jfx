@@ -371,7 +371,7 @@ JSValue JSInjectedScriptHost::getInternalProperties(JSGlobalObject* globalObject
             }
             return jsNontrivialString(vm, ""_s);
         };
-
+        
         if (auto* arrayIterator = jsDynamicCast<JSArrayIterator*>(vm, iteratorObject)) {
             JSValue iteratedValue = arrayIterator->iteratedObject();
             IterationKind kind = arrayIterator->kind();

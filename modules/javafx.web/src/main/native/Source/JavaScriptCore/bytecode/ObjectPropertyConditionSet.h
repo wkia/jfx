@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,25 +44,25 @@ namespace JSC {
 class ObjectPropertyConditionSet {
 public:
     ObjectPropertyConditionSet() { }
-
+    
     static ObjectPropertyConditionSet invalid()
     {
         ObjectPropertyConditionSet result;
         result.m_data = adoptRef(new Data());
         return result;
     }
-
+    
     static ObjectPropertyConditionSet create(Vector<ObjectPropertyCondition>&& vector)
     {
         if (vector.isEmpty())
             return ObjectPropertyConditionSet();
-
+        
         ObjectPropertyConditionSet result;
         result.m_data = adoptRef(new Data());
         result.m_data->m_vector = FixedVector<ObjectPropertyCondition>(WTFMove(vector));
         return result;
     }
-
+    
     bool isValid() const
     {
         return !m_data || !m_data->m_vector.isEmpty();
@@ -75,9 +75,9 @@ public:
     {
         return !m_data;
     }
-
+    
     typedef const ObjectPropertyCondition* iterator;
-
+    
     iterator begin() const
     {
         if (!m_data)
@@ -116,28 +116,28 @@ public:
     {
         return !(lhs == rhs);
     }
-
+    
     ObjectPropertyCondition forObject(JSObject*) const;
     ObjectPropertyCondition forConditionKind(PropertyCondition::Kind) const;
 
     unsigned numberOfConditionsWithKind(PropertyCondition::Kind) const;
 
     bool hasOneSlotBaseCondition() const;
-
+    
     // If this is a condition set for a prototype hit, then this is guaranteed to return the
     // condition on the prototype itself. This allows you to get the object, offset, and
     // attributes for the prototype. This will RELEASE_ASSERT that there is exactly one Presence
     // in the set, and it will return that presence.
     ObjectPropertyCondition slotBaseCondition() const;
-
+    
     // Attempt to create a new condition set by merging this one with the other one. This will
     // fail if any of the conditions are incompatible with each other. When if fails, it returns
     // invalid().
     ObjectPropertyConditionSet mergedWith(const ObjectPropertyConditionSet& other) const;
-
+    
     bool structuresEnsureValidity() const;
     bool structuresEnsureValidityAssumingImpurePropertyWatchpoint() const;
-
+    
     bool needImpurePropertyWatchpoint() const;
 
     template<typename Functor>
@@ -148,10 +148,10 @@ public:
     }
 
     bool areStillLive(VM&) const;
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
     // Helpers for using this in a union.
     void* releaseRawPointer()
     {
@@ -171,23 +171,23 @@ public:
     }
 
     // FIXME: Everything below here should be private, but cannot be because of a bug in VS.
-
+    
     // Internally, this represents Invalid using a pointer to a Data that has an empty vector.
-
+    
     // FIXME: This could be made more compact by having it internally use a vector that just has
     // the non-uid portion of ObjectPropertyCondition, and then requiring that the callers of all
     // of the APIs supply the uid.
-
+    
     class Data : public ThreadSafeRefCounted<Data> {
         WTF_MAKE_NONCOPYABLE(Data);
         WTF_MAKE_FAST_ALLOCATED;
-
+        
     public:
         Data() { }
-
+        
         FixedVector<ObjectPropertyCondition> m_vector;
     };
-
+    
 private:
     RefPtr<Data> m_data;
 };

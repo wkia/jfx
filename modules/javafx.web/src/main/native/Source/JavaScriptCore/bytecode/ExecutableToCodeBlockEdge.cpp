@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -69,26 +69,26 @@ void ExecutableToCodeBlockEdge::visitChildrenImpl(JSCell* cell, Visitor& visitor
     // m_codeBlock.
     if (!codeBlock)
         return;
-
+    
     if (!edge->isActive()) {
         visitor.appendUnbarriered(codeBlock);
         return;
     }
-
+    
     ConcurrentJSLocker locker(codeBlock->m_lock);
 
     if (codeBlock->shouldVisitStrongly(locker, visitor))
         visitor.appendUnbarriered(codeBlock);
-
+    
     if (!visitor.isMarked(codeBlock))
         vm.executableToCodeBlockEdgesWithFinalizers.add(edge);
-
+    
     if (JITCode::isOptimizingJIT(codeBlock->jitType())) {
         // If we jettison ourselves we'll install our alternative, so make sure that it
         // survives GC even if we don't.
         visitor.append(codeBlock->m_alternative);
     }
-
+    
     // NOTE: There are two sides to this constraint, with different requirements for correctness.
     // Because everything is ultimately protected with weak references and jettisoning, it's
     // always "OK" to claim that something is dead prematurely and it's "OK" to keep things alive.
@@ -125,7 +125,7 @@ void ExecutableToCodeBlockEdge::visitOutputConstraintsImpl(JSCell* cell, Visitor
 {
     VM& vm = visitor.vm();
     ExecutableToCodeBlockEdge* edge = jsCast<ExecutableToCodeBlockEdge*>(cell);
-
+    
     edge->runConstraint(NoLockingNecessary, vm, visitor);
 }
 
@@ -134,7 +134,7 @@ DEFINE_VISIT_OUTPUT_CONSTRAINTS(ExecutableToCodeBlockEdge);
 void ExecutableToCodeBlockEdge::finalizeUnconditionally(VM& vm)
 {
     CodeBlock* codeBlock = m_codeBlock.get();
-
+    
     if (!vm.heap.isMarked(codeBlock)) {
         if (codeBlock->shouldJettisonDueToWeakReference(vm))
             codeBlock->jettison(Profiler::JettisonDueToWeakReference);
@@ -142,7 +142,7 @@ void ExecutableToCodeBlockEdge::finalizeUnconditionally(VM& vm)
             codeBlock->jettison(Profiler::JettisonDueToOldAge);
         m_codeBlock.clear();
     }
-
+    
     vm.executableToCodeBlockEdgesWithFinalizers.remove(this);
     vm.executableToCodeBlockEdgesWithConstraints.remove(this);
 }
@@ -176,7 +176,7 @@ ExecutableToCodeBlockEdge* ExecutableToCodeBlockEdge::wrap(CodeBlock* codeBlock)
         return nullptr;
     return codeBlock->ownerEdge();
 }
-
+    
 ExecutableToCodeBlockEdge* ExecutableToCodeBlockEdge::wrapAndActivate(CodeBlock* codeBlock)
 {
     if (!codeBlock)
@@ -196,7 +196,7 @@ template<typename Visitor>
 void ExecutableToCodeBlockEdge::runConstraint(const ConcurrentJSLocker& locker, VM& vm, Visitor& visitor)
 {
     CodeBlock* codeBlock = m_codeBlock.get();
-
+    
     codeBlock->propagateTransitions(locker, visitor);
     codeBlock->determineLiveness(locker, visitor);
 

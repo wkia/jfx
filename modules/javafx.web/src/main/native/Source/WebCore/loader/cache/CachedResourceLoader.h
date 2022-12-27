@@ -69,7 +69,7 @@ enum class ImageLoading : uint8_t { Immediate, DeferredUntilVisible };
 // and enforces a bunch of security checks and rules for resource revalidation.
 // Its lifetime is roughly per-DocumentLoader, in that it is generally created
 // in the DocumentLoader constructor and loses its ability to generate network
-// requests when the DocumentLoader is destroyed. Documents also hold a
+// requests when the DocumentLoader is destroyed. Documents also hold a 
 // RefPtr<CachedResourceLoader> for their lifetime (and will create one if they
 // are initialized without a Frame), so a Document can keep a CachedResourceLoader
 // alive past detach if scripts still reference the Document.
@@ -131,13 +131,12 @@ public:
 
     bool shouldDeferImageLoad(const URL&) const;
     bool shouldPerformImageLoad(const URL&) const;
-
+    
     CachePolicy cachePolicy(CachedResource::Type, const URL&) const;
-
+    
     Frame* frame() const; // Can be null
     Document* document() const { return m_document.get(); } // Can be null
     void setDocument(Document* document) { m_document = makeWeakPtr(document); }
-    DocumentLoader* documentLoader() const { return m_documentLoader; }
     void clearDocumentLoader() { m_documentLoader = nullptr; }
 
     void loadDone(LoadCompletionType, bool shouldPerformPostLoadActions = true);

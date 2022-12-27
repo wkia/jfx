@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,18 +38,18 @@ ComplexGetStatus ComplexGetStatus::computeFor(
     // newImpurePropertyFiresWatchpoints(). We're not at a point where we can do
     // that, yet.
     // https://bugs.webkit.org/show_bug.cgi?id=131810
-
+    
     ASSERT(conditionSet.isValid());
-
+    
     if (headStructure->takesSlowPathInDFGForImpureProperty())
         return takesSlowPath();
-
+    
     ComplexGetStatus result;
     result.m_kind = Inlineable;
-
+    
     if (!conditionSet.isEmpty()) {
         result.m_conditionSet = conditionSet;
-
+        
         if (!result.m_conditionSet.structuresEnsureValidity())
             return skip();
 
@@ -66,10 +66,10 @@ ComplexGetStatus ComplexGetStatus::computeFor(
         result.m_offset = base.offset();
     } else
         result.m_offset = headStructure->getConcurrently(uid);
-
+    
     if (!isValidOffset(result.m_offset))
         return takesSlowPath();
-
+    
     return result;
 }
 

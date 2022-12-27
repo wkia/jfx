@@ -33,6 +33,7 @@
 #include "FrameView.h"
 #include "GDIUtilities.h"
 #include "GraphicsContext.h"
+#include "GraphicsContextWin.h"
 #include "HTMLNames.h"
 #include "HWndDC.h"
 #include "HostWindow.h"
@@ -49,7 +50,9 @@
 #include "ScrollbarThemeWin.h"
 #include "TextRun.h"
 #include "WebCoreInstanceHandle.h"
+#include <wtf/HexNumber.h>
 #include <wtf/WindowsExtras.h>
+#include <wtf/text/StringBuilder.h>
 
 #include <windows.h>
 #include <windowsx.h>
@@ -76,7 +79,7 @@ static LPCWSTR kPopupWindowClassName = L"PopupWindowClass";
 // message to the web view and not have our message stolen and sent to
 // the popup window.
 static const UINT WM_HOST_WINDOW_FIRST = WM_USER;
-static const UINT WM_HOST_WINDOW_CHAR = WM_USER + WM_CHAR;
+static const UINT WM_HOST_WINDOW_CHAR = WM_USER + WM_CHAR; 
 static const UINT WM_HOST_WINDOW_MOUSEMOVE = WM_USER + WM_MOUSEMOVE;
 
 // FIXME: Remove this as soon as practical.
@@ -89,7 +92,7 @@ static void translatePoint(LPARAM& lParam, HWND from, HWND to)
 {
     POINT pt;
     pt.x = (short)GET_X_LPARAM(lParam);
-    pt.y = (short)GET_Y_LPARAM(lParam);
+    pt.y = (short)GET_Y_LPARAM(lParam);    
     ::MapWindowPoints(from, to, &pt, 1);
     lParam = MAKELPARAM(pt.x, pt.y);
 }
@@ -139,7 +142,7 @@ void PopupMenuWin::show(const IntRect& r, FrameView* view, int index)
 
     if (!m_scrollbar && visibleItems() < client()->listSize()) {
         // We need a scroll bar
-        m_scrollbar = client()->createScrollbar(*this, VerticalScrollbar, SmallScrollbar);
+        m_scrollbar = client()->createScrollbar(*this, VerticalScrollbar, ScrollbarControlSize::Small);
         m_scrollbar->styleChanged();
     }
 
@@ -181,7 +184,7 @@ void PopupMenuWin::show(const IntRect& r, FrameView* view, int index)
     while (::GetMessage(&msg, 0, 0, 0)) {
         switch (msg.message) {
             case WM_HOST_WINDOW_MOUSEMOVE:
-            case WM_HOST_WINDOW_CHAR:
+            case WM_HOST_WINDOW_CHAR: 
                 if (msg.hwnd == m_popup) {
                     // This message should be sent to the host window.
                     msg.hwnd = hostWindow;
@@ -303,7 +306,7 @@ void PopupMenuWin::calculatePositionAndSize(const IntRect& r, FrameView* v)
         ::MoveWindow(m_popup, absoluteScreenCoords.x(), absoluteScreenCoords.y(), absoluteScreenCoords.width(), absoluteScreenCoords.height(), false);
 
     FloatRect screen = monitorFromHwnd(m_popup);
-
+    
     // Now we determine the actual location and measurements of the popup itself.
     // r is in absolute document coordinates, but we want to be in screen coordinates.
 
@@ -333,7 +336,7 @@ void PopupMenuWin::calculatePositionAndSize(const IntRect& r, FrameView* v)
     int popupHeight = std::min(maxPopupHeight, naturalHeight);
     // The popup should show an integral number of items (i.e. no partial items should be visible)
     popupHeight -= popupHeight % m_itemHeight;
-
+    
     // Next determine its width
     int popupWidth = 0;
     for (int i = 0; i < itemCount; ++i) {
@@ -354,7 +357,7 @@ void PopupMenuWin::calculatePositionAndSize(const IntRect& r, FrameView* v)
 
     if (naturalHeight > maxPopupHeight)
         // We need room for a scrollbar
-        popupWidth += ScrollbarTheme::theme().scrollbarThickness(SmallScrollbar);
+        popupWidth += ScrollbarTheme::theme().scrollbarThickness(ScrollbarControlSize::Small);
 
     // Add padding to align the popup text with the <select> text
     popupWidth += std::max<int>(0, client()->clientPaddingRight() - client()->clientInsetRight()) + std::max<int>(0, client()->clientPaddingLeft() - client()->clientInsetLeft());
@@ -607,7 +610,7 @@ void PopupMenuWin::paint(const IntRect& damageRect, HDC hdc)
         ::SelectObject(m_DC.get(), m_bmp.get());
     }
 
-    GraphicsContext context(m_DC.get());
+    GraphicsContextWin context(m_DC.get());
 
     // listRect is the damageRect translated into the coordinates of the entire menu list (which is listSize * m_itemHeight pixels tall)
     IntRect listRect = damageRect;
@@ -641,7 +644,7 @@ void PopupMenuWin::paint(const IntRect& damageRect, HDC hdc)
 
         String itemText = client()->itemText(index);
 
-        TextRun textRun(itemText, 0, 0, AllowTrailingExpansion, itemStyle.textDirection(), itemStyle.hasTextDirectionOverride());
+        TextRun textRun(itemText, 0, 0, AllowLeftExpansion, itemStyle.textDirection(), itemStyle.hasTextDirectionOverride());
         context.setFillColor(optionTextColor);
 
         FontCascade itemFont = m_font;
@@ -651,7 +654,7 @@ void PopupMenuWin::paint(const IntRect& damageRect, HDC hdc)
             itemFont = FontCascade(WTFMove(d), itemFont.letterSpacing(), itemFont.wordSpacing());
             itemFont.update(m_popupClient->fontSelector());
         }
-
+        
         // Draw the item text
         if (itemStyle.isVisible()) {
             int textX = 0;
@@ -1003,7 +1006,7 @@ LRESULT PopupMenuWin::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
                 }
             }
 
-            // If the mouse is inside the window, update the focused index. Otherwise,
+            // If the mouse is inside the window, update the focused index. Otherwise, 
             // hide the popup.
             RECT bounds;
             GetClientRect(m_popup, &bounds);
@@ -1080,6 +1083,11 @@ LRESULT PopupMenuWin::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
     }
 
     return lResult;
+}
+
+String PopupMenuWin::debugDescription() const
+{
+    return makeString("PopupMenuWin 0x", hex(reinterpret_cast<uintptr_t>(this), Lowercase));
 }
 
 AccessiblePopupMenu::AccessiblePopupMenu(const PopupMenuWin& popupMenu)
@@ -1243,7 +1251,7 @@ HRESULT AccessiblePopupMenu::get_accState(VARIANT vChild, _Out_ VARIANT* pvState
 
     V_VT(pvState) = VT_I4;
     V_I4(pvState) = 0; // STATE_SYSTEM_NORMAL
-
+    
     return S_OK;
 }
 

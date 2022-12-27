@@ -9,13 +9,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -171,7 +171,7 @@ public:
     FrameState state() const { return m_state; }
 
     bool shouldReportResourceTimingToParentFrame() const { return m_shouldReportResourceTimingToParentFrame; };
-
+    
 #if PLATFORM(IOS_FAMILY)
     RetainPtr<CFDictionaryRef> connectionProperties(ResourceLoader*);
 #endif
@@ -441,7 +441,7 @@ private:
     FrameState m_state;
     FrameLoadType m_loadType;
 
-    // Document loaders for the three phases of frame loading. Note that while
+    // Document loaders for the three phases of frame loading. Note that while 
     // a new request is being loaded, the old document loader may still be referenced.
     // E.g. while a new request is in the "policy" state, the old document loader may
     // be consulted in particular as it makes sense to imply certain settings on the new loader.

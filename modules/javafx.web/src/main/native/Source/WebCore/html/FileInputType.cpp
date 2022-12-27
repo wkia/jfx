@@ -75,7 +75,7 @@ public:
 private:
     static Ref<UploadButtonElement> createInternal(Document&, const String& value);
     bool isUploadButton() const override { return true; }
-
+    
     UploadButtonElement(Document&);
 };
 
@@ -290,7 +290,7 @@ void FileInputType::disabledStateChanged()
     auto root = element()->userAgentShadowRoot();
     if (!root)
         return;
-
+    
     if (auto button = makeRefPtr(childrenOfType<UploadButtonElement>(*root).first()))
         button->setBooleanAttribute(disabledAttr, element()->isDisabledFormControl());
 }
@@ -495,7 +495,7 @@ bool FileInputType::receiveDroppedFilesWithImageTranscoding(const Vector<String>
 #if PLATFORM(MAC)
     auto settings = fileChooserSettings();
     auto allowedMIMETypes = MIMETypeRegistry::allowedMIMETypes(settings.acceptMIMETypes, settings.acceptFileExtensions);
-
+    
     auto transcodingPaths = findImagesForTranscoding(paths, allowedMIMETypes);
     if (transcodingPaths.isEmpty())
         return { };
@@ -537,7 +537,7 @@ bool FileInputType::receiveDroppedFiles(const DragData& dragData)
 
     if (receiveDroppedFilesWithImageTranscoding(paths))
         return true;
-
+    
     filesChosen(paths);
     return true;
 }

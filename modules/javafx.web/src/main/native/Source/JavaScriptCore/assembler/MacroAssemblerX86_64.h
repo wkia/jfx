@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -39,7 +39,7 @@ class MacroAssemblerX86_64 : public MacroAssemblerX86Common {
 public:
     static constexpr unsigned numGPRs = 16;
     static constexpr unsigned numFPRs = 16;
-
+    
     static constexpr RegisterID InvalidGPRReg = X86Registers::InvalidGPRReg;
 
     using MacroAssemblerX86Common::add32;
@@ -66,19 +66,19 @@ public:
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
         add32(imm, Address(scratchRegister()));
     }
-
+    
     void and32(TrustedImm32 imm, AbsoluteAddress address)
     {
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
         and32(imm, Address(scratchRegister()));
     }
-
+    
     void add32(AbsoluteAddress address, RegisterID dest)
     {
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
         add32(Address(scratchRegister()), dest);
     }
-
+    
     void or32(TrustedImm32 imm, AbsoluteAddress address)
     {
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
@@ -102,7 +102,7 @@ public:
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
         sub32(imm, Address(scratchRegister()));
     }
-
+    
     void load8(const void* address, RegisterID dest)
     {
         move(TrustedImmPtr(address), dest);
@@ -163,7 +163,7 @@ public:
             store32(source, scratchRegister());
         }
     }
-
+    
     void store8(TrustedImm32 imm, void* address)
     {
         TrustedImm32 imm8(static_cast<int8_t>(imm.m_value));
@@ -291,7 +291,7 @@ public:
     {
         m_assembler.addq_rr(src, dest);
     }
-
+    
     void add64(Address src, RegisterID dest)
     {
         m_assembler.addq_mr(src.offset, src.base, dest);
@@ -547,7 +547,7 @@ public:
     {
         m_assembler.shlq_i8r(imm.m_value, dest);
     }
-
+    
     void lshift64(RegisterID src, RegisterID dest)
     {
         if (src == X86Registers::ecx)
@@ -561,7 +561,7 @@ public:
             swap(src, X86Registers::ecx);
         }
     }
-
+    
     void rshift64(TrustedImm32 imm, RegisterID dest)
     {
         m_assembler.sarq_i8r(imm.m_value, dest);
@@ -573,7 +573,7 @@ public:
             m_assembler.sarq_CLr(dest);
         else {
             ASSERT(src != dest);
-
+            
             // Can only shift by ecx, so we do some swapping if we see anything else.
             swap(src, X86Registers::ecx);
             m_assembler.sarq_CLr(dest == X86Registers::ecx ? src : dest);
@@ -598,7 +598,7 @@ public:
             m_assembler.shrq_CLr(dest);
         else {
             ASSERT(src != dest);
-
+            
             // Can only shift by ecx, so we do some swapping if we see anything else.
             swap(src, X86Registers::ecx);
             m_assembler.shrq_CLr(dest == X86Registers::ecx ? src : dest);
@@ -658,7 +658,7 @@ public:
         move(src1, dest);
         m_assembler.imulq_rr(src2, dest);
     }
-
+    
     void x86ConvertToQuadWord64()
     {
         m_assembler.cqo();
@@ -789,7 +789,7 @@ public:
     {
         m_assembler.subq_rr(src, dest);
     }
-
+    
     void sub64(RegisterID a, RegisterID b, RegisterID dest)
     {
         ASSERT(b != dest);
@@ -804,7 +804,7 @@ public:
         else
             m_assembler.subq_ir(imm.m_value, dest);
     }
-
+    
     void sub64(TrustedImm64 imm, RegisterID dest)
     {
         if (imm.m_value == 1)
@@ -861,7 +861,7 @@ public:
             xor64(op1, dest);
         }
     }
-
+    
     void xor64(RegisterID src, Address dest)
     {
         m_assembler.xorq_rm(src, dest.offset, dest.base);
@@ -944,7 +944,7 @@ public:
         m_assembler.movq_mr_disp32(address.offset, address.base, dest);
         return DataLabel32(this);
     }
-
+    
     DataLabelCompact load64WithCompactAddressOffsetPatch(Address address, RegisterID dest)
     {
         padBeforePatch();
@@ -961,7 +961,7 @@ public:
     {
         m_assembler.movq_rm(src, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void store64(RegisterID src, void* address)
     {
         if (src == X86Registers::eax)
@@ -1014,7 +1014,7 @@ public:
         move(imm, scratchRegister());
         m_assembler.movq_rm(scratchRegister(), address.offset, address.base, address.index, address.scale);
     }
-
+    
     DataLabel32 store64WithAddressOffsetPatch(RegisterID src, Address address)
     {
         padBeforePatch();
@@ -1054,7 +1054,7 @@ public:
         m_assembler.cmpq_ir(right.m_value, left);
         set32(x86Condition(cond), dest);
     }
-
+    
     void compare64(RelationalCondition cond, RegisterID left, RegisterID right, RegisterID dest)
     {
         m_assembler.cmpq_rr(right, left);
@@ -1122,7 +1122,7 @@ public:
         m_assembler.cmpq_rm(right, address.offset, address.base, address.index, address.scale);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branch32(RelationalCondition cond, AbsoluteAddress left, RegisterID right)
     {
         load32(left.m_ptr, scratchRegister());
@@ -1145,7 +1145,7 @@ public:
         m_assembler.testq_rr(reg, mask);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchTest64(ResultCondition cond, RegisterID reg, TrustedImm32 mask = TrustedImm32(-1))
     {
         // if we are only interested in the low seven bits, this can be tested with a testb
@@ -1391,7 +1391,7 @@ public:
         else
             cmov(x86Condition(invert(cond)), elseCase, dest);
     }
-
+    
     void moveConditionallyTest64(ResultCondition cond, RegisterID testReg, TrustedImm32 mask, RegisterID src, RegisterID dest)
     {
         // if we are only interested in the low seven bits, this can be tested with a testb
@@ -1470,7 +1470,7 @@ public:
         moveDouble(thenCase, dest);
         falseCase.link(this);
     }
-
+    
     void abortWithReason(AbortReason reason)
     {
         move(TrustedImm32(reason), X86Registers::r11);
@@ -1540,14 +1540,14 @@ public:
     {
         return PatchableJump(branch64(cond, left, right));
     }
-
+    
     using MacroAssemblerX86Common::branch8;
     Jump branch8(RelationalCondition cond, AbsoluteAddress left, TrustedImm32 right)
     {
         MacroAssemblerX86Common::move(TrustedImmPtr(left.m_ptr), scratchRegister());
         return MacroAssemblerX86Common::branch8(cond, Address(scratchRegister()), right);
     }
-
+    
     using MacroAssemblerX86Common::branchTest8;
     Jump branchTest8(ResultCondition cond, ExtendedAddress address, TrustedImm32 mask = TrustedImm32(-1))
     {
@@ -1556,24 +1556,24 @@ public:
         MacroAssemblerX86Common::move(addr, scratchRegister());
         return MacroAssemblerX86Common::branchTest8(cond, BaseIndex(scratchRegister(), address.base, TimesOne), mask8);
     }
-
+    
     Jump branchTest8(ResultCondition cond, AbsoluteAddress address, TrustedImm32 mask = TrustedImm32(-1))
     {
         TrustedImm32 mask8(static_cast<int8_t>(mask.m_value));
         MacroAssemblerX86Common::move(TrustedImmPtr(address.m_ptr), scratchRegister());
         return MacroAssemblerX86Common::branchTest8(cond, Address(scratchRegister()), mask8);
     }
-
+    
     void xchg64(RegisterID reg, Address address)
     {
         m_assembler.xchgq_rm(reg, address.offset, address.base);
     }
-
+    
     void xchg64(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgq_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicStrongCAS64(StatusCondition cond, RegisterID expectedAndResult, RegisterID newValue, Address address, RegisterID result)
     {
         atomicStrongCAS(cond, expectedAndResult, result, address, [&] { m_assembler.cmpxchgq_rm(newValue, address.offset, address.base); });
@@ -1649,169 +1649,169 @@ public:
         m_assembler.lock();
         add64(imm, address);
     }
-
+    
     void atomicAdd64(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         add64(imm, address);
     }
-
+    
     void atomicAdd64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         add64(reg, address);
     }
-
+    
     void atomicAdd64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         add64(reg, address);
     }
-
+    
     void atomicSub64(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         sub64(imm, address);
     }
-
+    
     void atomicSub64(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         sub64(imm, address);
     }
-
+    
     void atomicSub64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         sub64(reg, address);
     }
-
+    
     void atomicSub64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         sub64(reg, address);
     }
-
+    
     void atomicAnd64(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         and64(imm, address);
     }
-
+    
     void atomicAnd64(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         and64(imm, address);
     }
-
+    
     void atomicAnd64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         and64(reg, address);
     }
-
+    
     void atomicAnd64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         and64(reg, address);
     }
-
+    
     void atomicOr64(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         or64(imm, address);
     }
-
+    
     void atomicOr64(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         or64(imm, address);
     }
-
+    
     void atomicOr64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         or64(reg, address);
     }
-
+    
     void atomicOr64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         or64(reg, address);
     }
-
+    
     void atomicXor64(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         xor64(imm, address);
     }
-
+    
     void atomicXor64(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         xor64(imm, address);
     }
-
+    
     void atomicXor64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         xor64(reg, address);
     }
-
+    
     void atomicXor64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         xor64(reg, address);
     }
-
+    
     void atomicNeg64(Address address)
     {
         m_assembler.lock();
         neg64(address);
     }
-
+    
     void atomicNeg64(BaseIndex address)
     {
         m_assembler.lock();
         neg64(address);
     }
-
+    
     void atomicNot64(Address address)
     {
         m_assembler.lock();
         not64(address);
     }
-
+    
     void atomicNot64(BaseIndex address)
     {
         m_assembler.lock();
         not64(address);
     }
-
+    
     void atomicXchgAdd64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         m_assembler.xaddq_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchgAdd64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         m_assembler.xaddq_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchg64(RegisterID reg, Address address)
     {
         m_assembler.lock();
         m_assembler.xchgq_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchg64(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         m_assembler.xchgq_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
 #if ENABLE(FAST_TLS_JIT)
     void loadFromTLS64(uint32_t offset, RegisterID dst)
     {
@@ -1957,7 +1957,7 @@ public:
     static bool supportsFloatingPointTruncate() { return true; }
     static bool supportsFloatingPointSqrt() { return true; }
     static bool supportsFloatingPointAbs() { return true; }
-
+    
     template<PtrTag resultTag, PtrTag locationTag>
     static FunctionPtr<resultTag> readCallTarget(CodeLocationCall<locationTag> call)
     {

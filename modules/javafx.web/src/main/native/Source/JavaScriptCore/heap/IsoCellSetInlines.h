@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -102,7 +102,7 @@ Ref<SharedTask<void(Visitor&)>> IsoCellSet::forEachMarkedCellInParallel(const Fu
             , m_func(func)
         {
         }
-
+        
         void run(Visitor& visitor) final
         {
             while (MarkedBlock::Handle* handle = m_blockSource->run()) {
@@ -130,7 +130,7 @@ Ref<SharedTask<void(Visitor&)>> IsoCellSet::forEachMarkedCellInParallel(const Fu
                         m_func(visitor, allocation->cell(), attributes.cellKind);
                 });
         }
-
+        
     private:
         IsoCellSet& m_set;
         Ref<SharedTask<MarkedBlock::Handle*()>> m_blockSource;
@@ -138,7 +138,7 @@ Ref<SharedTask<void(Visitor&)>> IsoCellSet::forEachMarkedCellInParallel(const Fu
         Lock m_lock;
         bool m_needToVisitPreciseAllocations { true };
     };
-
+    
     return adoptRef(*new Task(*this, func));
 }
 

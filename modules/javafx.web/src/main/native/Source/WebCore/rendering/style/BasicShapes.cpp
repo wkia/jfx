@@ -58,13 +58,13 @@ void BasicShapeCenterCoordinate::updateComputedLength()
         m_computedLength = Length(100, LengthType::Percent);
         return;
     }
-
+    
     m_computedLength = convertTo100PercentMinusLength(m_length);
 }
 
 struct SVGPathTransformedByteStream {
-    bool operator==(const SVGPathTransformedByteStream& other) const
-    {
+    bool operator==(const SVGPathTransformedByteStream& other) const 
+    { 
         return other.offset == offset && other.zoom == zoom && other.rawStream == rawStream;
     }
     bool operator!=(const SVGPathTransformedByteStream& other) const { return !(*this == other); }
@@ -78,7 +78,7 @@ struct SVGPathTransformedByteStream {
         path.translate(toFloatSize(offset));
         return path;
     }
-
+    
     SVGPathByteStream rawStream;
     float zoom;
     FloatPoint offset;
@@ -494,3 +494,4 @@ TextStream& operator<<(TextStream& ts, const BasicShape& shape)
 }
 
 } // namespace WebCore
+

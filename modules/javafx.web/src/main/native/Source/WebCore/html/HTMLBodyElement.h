@@ -47,7 +47,7 @@ private:
     void didFinishInsertingNode() final;
 
     bool isURLAttribute(const Attribute&) const final;
-
+    
     bool supportsFocus() const final;
 
     void addSubresourceAttributeURLs(ListHashSet<URL>&) const final;

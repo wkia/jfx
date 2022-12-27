@@ -95,7 +95,7 @@ public:
     WEBCORE_EXPORT bool shouldIgnoreContentObservationForSyntheticClick(bool isFirstSyntheticClickOnPage) const;
 
     WEBCORE_EXPORT bool needsYouTubeMouseOutQuirk() const;
-
+    
     WEBCORE_EXPORT bool shouldAvoidUsingIOS13ForGmail() const;
 
     bool needsGMailOverflowScrollQuirk() const;
@@ -128,7 +128,7 @@ public:
 
     bool needsVP9FullRangeFlagQuirk() const;
     bool needsHDRPixelDepthQuirk() const;
-
+    
     bool needsAkamaiMediaPlayerQuirk(const HTMLVideoElement&) const;
 
     bool needsBlackFullscreenBackgroundQuirk() const;

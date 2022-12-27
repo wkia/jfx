@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -150,12 +150,6 @@ void BifurcatedGraphicsContext::fillRoundedRectImpl(const FloatRoundedRect& rect
     m_secondaryContext.fillRoundedRectImpl(rect, color);
 }
 
-void BifurcatedGraphicsContext::fillRoundedRect(const FloatRoundedRect& rect, const Color& color, BlendMode blendMode)
-{
-    m_primaryContext.fillRoundedRect(rect, color, blendMode);
-    m_secondaryContext.fillRoundedRect(rect, color, blendMode);
-}
-
 void BifurcatedGraphicsContext::fillRectWithRoundedHole(const FloatRect& rect, const FloatRoundedRect& roundedHoleRect, const Color& color)
 {
     m_primaryContext.fillRectWithRoundedHole(rect, roundedHoleRect, color);
@@ -275,11 +269,13 @@ void BifurcatedGraphicsContext::drawPattern(NativeImage& nativeImage, const Floa
     m_secondaryContext.drawPattern(nativeImage, imageSize, destRect, tileRect, patternTransform, phase, spacing, options);
 }
 
+#if ENABLE(VIDEO)
 void BifurcatedGraphicsContext::paintFrameForMedia(MediaPlayer& player, const FloatRect& destination)
 {
     m_primaryContext.paintFrameForMedia(player, destination);
     m_secondaryContext.paintFrameForMedia(player, destination);
 }
+#endif // ENABLE(VIDEO)
 
 void BifurcatedGraphicsContext::scale(const FloatSize& scale)
 {

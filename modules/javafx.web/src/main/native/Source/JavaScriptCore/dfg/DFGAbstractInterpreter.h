@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,22 +42,22 @@ class AbstractInterpreter {
 public:
     AbstractInterpreter(Graph&, AbstractStateType&);
     ~AbstractInterpreter();
-
+    
     ALWAYS_INLINE AbstractValue& forNode(NodeFlowProjection node)
     {
         return m_state.forNode(node);
     }
-
+    
     ALWAYS_INLINE AbstractValue& forNode(Edge edge)
     {
         return forNode(edge.node());
     }
-
+    
     ALWAYS_INLINE void clearForNode(NodeFlowProjection node)
     {
         m_state.clearForNode(node);
     }
-
+    
     ALWAYS_INLINE void clearForNode(Edge edge)
     {
         clearForNode(edge.node());
@@ -86,7 +86,7 @@ public:
     {
         setTypeForNode(edge.node(), std::forward<Arguments>(arguments)...);
     }
-
+    
     template<typename... Arguments>
     ALWAYS_INLINE void setNonCellTypeForNode(NodeFlowProjection node, Arguments&&... arguments)
     {
@@ -98,42 +98,42 @@ public:
     {
         setNonCellTypeForNode(edge.node(), std::forward<Arguments>(arguments)...);
     }
-
+    
     ALWAYS_INLINE void makeBytecodeTopForNode(NodeFlowProjection node)
     {
         m_state.makeBytecodeTopForNode(node);
     }
-
+    
     ALWAYS_INLINE void makeBytecodeTopForNode(Edge edge)
     {
         makeBytecodeTopForNode(edge.node());
     }
-
+    
     ALWAYS_INLINE void makeHeapTopForNode(NodeFlowProjection node)
     {
         m_state.makeHeapTopForNode(node);
     }
-
+    
     ALWAYS_INLINE void makeHeapTopForNode(Edge edge)
     {
         makeHeapTopForNode(edge.node());
     }
-
+    
     bool needsTypeCheck(Node* node, SpeculatedType typesPassedThrough)
     {
         return !forNode(node).isType(typesPassedThrough);
     }
-
+    
     bool needsTypeCheck(Edge edge, SpeculatedType typesPassedThrough)
     {
         return needsTypeCheck(edge.node(), typesPassedThrough);
     }
-
+    
     bool needsTypeCheck(Edge edge)
     {
         return needsTypeCheck(edge, typeFilterFor(edge.useKind()));
     }
-
+    
     // Abstractly executes the given node. The new abstract state is stored into an
     // abstract stack stored in *this. Loads of local variables (that span
     // basic blocks) interrogate the basic block's notion of the state at the head.
@@ -148,18 +148,18 @@ public:
     // result = state.executeEffects(index);
     bool execute(unsigned indexInBlock);
     bool execute(Node*);
-
+    
     // Indicate the start of execution of a node. It resets any state in the node
     // that is progressively built up by executeEdges() and executeEffects().
     void startExecuting();
-
+    
     // Abstractly execute the edges of the given node. This runs filterEdgeByUse()
     // on all edges of the node. You can skip this step, if you have already used
     // filterEdgeByUse() (or some equivalent) on each edge.
     void executeEdges(Node*);
 
     void executeKnownEdgeTypes(Node*);
-
+    
     ALWAYS_INLINE void filterEdgeByUse(Edge& edge)
     {
         UseKind useKind = edge.useKind();
@@ -167,39 +167,39 @@ public:
             return;
         filterByType(edge, typeFilterFor(useKind));
     }
-
+    
     // Abstractly execute the effects of the given node. This changes the abstract
     // state assuming that edges have already been filtered.
     bool executeEffects(unsigned indexInBlock);
     bool executeEffects(unsigned clobberLimit, Node*);
-
+    
     void dump(PrintStream& out) const;
     void dump(PrintStream& out);
-
+    
     template<typename T>
     FiltrationResult filter(T node, const RegisteredStructureSet& set, SpeculatedType admittedTypes = SpecNone)
     {
         return filter(forNode(node), set, admittedTypes);
     }
-
+    
     template<typename T>
     FiltrationResult filterArrayModes(T node, ArrayModes arrayModes, SpeculatedType admittedTypes = SpecNone)
     {
         return filterArrayModes(forNode(node), arrayModes, admittedTypes);
     }
-
+    
     template<typename T>
     FiltrationResult filter(T node, SpeculatedType type)
     {
         return filter(forNode(node), type);
     }
-
+    
     template<typename T>
     FiltrationResult filterByValue(T node, FrozenValue value)
     {
         return filterByValue(forNode(node), value);
     }
-
+    
     template<typename T>
     FiltrationResult filterClassInfo(T node, const ClassInfo* classInfo)
     {
@@ -211,49 +211,49 @@ public:
     FiltrationResult filter(AbstractValue&, SpeculatedType);
     FiltrationResult filterByValue(AbstractValue&, FrozenValue);
     FiltrationResult filterClassInfo(AbstractValue&, const ClassInfo*);
-
+    
     PhiChildren* phiChildren() { return m_phiChildren.get(); }
-
+    
     void filterICStatus(Node*);
-
+    
     void clobberWorld();
     void didFoldClobberWorld();
 private:
-
+    
     bool handleConstantBinaryBitwiseOp(Node*);
 
     template<typename Functor>
     void forAllValues(unsigned indexInBlock, Functor&);
-
+    
     void clobberStructures();
     void didFoldClobberStructures();
-
+    
     void observeTransition(unsigned indexInBlock, RegisteredStructure from, RegisteredStructure to);
 public:
     void observeTransitions(unsigned indexInBlock, const TransitionVector&);
 private:
-
+    
     TriState booleanResult(Node*, AbstractValue&);
-
+    
     void setBuiltInConstant(Node* node, FrozenValue value)
     {
         AbstractValue& abstractValue = forNode(node);
         abstractValue.set(m_graph, value, m_state.structureClobberState());
         abstractValue.fixTypeForRepresentation(m_graph, node);
     }
-
+    
     void setConstant(Node* node, FrozenValue value)
     {
         setBuiltInConstant(node, value);
         m_state.setShouldTryConstantFolding(true);
     }
-
+    
     ALWAYS_INLINE void filterByType(Edge& edge, SpeculatedType type);
-
+    
     void verifyEdge(Node*, Edge);
     void verifyEdges(Node*);
     void executeDoubleUnaryOpEffects(Node*, double(*equivalentFunction)(double));
-
+    
     bool handleConstantDivOp(Node*);
 
     CodeBlock* m_codeBlock;

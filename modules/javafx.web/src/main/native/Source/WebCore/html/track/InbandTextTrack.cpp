@@ -131,7 +131,7 @@ bool InbandTextTrack::isEasyToRead() const
 {
     return m_private->isEasyToRead();
 }
-
+    
 size_t InbandTextTrack::inbandTrackIndex()
 {
     return m_private->trackIndex();

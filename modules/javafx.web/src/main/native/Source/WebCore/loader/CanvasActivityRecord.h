@@ -32,14 +32,14 @@ namespace WebCore {
 struct CanvasActivityRecord {
     HashSet<String> textWritten;
     bool wasDataRead { false };
-
+    
     WEBCORE_EXPORT bool recordWrittenOrMeasuredText(const String&);
     void mergeWith(const CanvasActivityRecord&);
-
+    
     template <class Encoder> void encode(Encoder&) const;
     template <class Decoder> static WARN_UNUSED_RETURN bool decode(Decoder&, CanvasActivityRecord&);
 };
-
+    
 template <class Encoder>
 void CanvasActivityRecord::encode(Encoder& encoder) const
 {

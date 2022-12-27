@@ -121,15 +121,15 @@ public:
         ASSERT(isMainThread());
         if (m_tagId >= TagId::Unknown)
             return;
-
+        
         for (auto& attribute : attributes) {
             AtomString attributeName(attribute.name);
             String attributeValue = StringImpl::create8BitIfPossible(attribute.value);
             processAttribute(attributeName, attributeValue, pictureState);
         }
-
+        
         if (m_tagId == TagId::Source && !pictureState.isEmpty() && !pictureState.last() && m_mediaMatched && m_typeMatched && !m_srcSetAttribute.isEmpty()) {
-
+            
             auto sourceSize = SizesAttributeParser(m_sizesAttribute, m_document).length();
             ImageCandidate imageCandidate = bestFitSourceForImageAttributes(m_deviceScaleFactor, m_urlToLoad, m_srcSetAttribute, sourceSize);
             if (!imageCandidate.isEmpty()) {
@@ -137,7 +137,7 @@ public:
                 setUrlToLoad(imageCandidate.string.toString(), true);
             }
         }
-
+        
         // Resolve between src and srcSet if we have them and the tag is img.
         if (m_tagId == TagId::Img && !m_srcSetAttribute.isEmpty()) {
             auto sourceSize = SizesAttributeParser(m_sizesAttribute, m_document).length();

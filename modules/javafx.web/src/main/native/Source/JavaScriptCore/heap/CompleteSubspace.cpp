@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -61,7 +61,7 @@ Allocator CompleteSubspace::allocatorForSlow(size_t size)
     size_t sizeClass = MarkedSpace::s_sizeClassForSizeStep[index];
     if (!sizeClass)
         return Allocator();
-
+    
     // This is written in such a way that it's OK for the JIT threads to end up here if they want
     // to generate code that uses some allocator that hadn't been used yet. Note that a possibly-
     // just-as-good solution would be to return null if we're in the JIT since the JIT treats null
@@ -69,39 +69,39 @@ Allocator CompleteSubspace::allocatorForSlow(size_t size)
     // surprises and the algorithm here is pretty easy. Only this code has to hold the lock, to
     // prevent simultaneously BlockDirectory creations from multiple threads. This code ensures
     // that any "forEachAllocator" traversals will only see this allocator after it's initialized
-    // enough: it will have
+    // enough: it will have 
     Locker locker { m_space.directoryLock() };
     if (Allocator allocator = m_allocatorForSizeStep[index])
         return allocator;
 
     if (false)
         dataLog("Creating BlockDirectory/LocalAllocator for ", m_name, ", ", attributes(), ", ", sizeClass, ".\n");
-
+    
     std::unique_ptr<BlockDirectory> uniqueDirectory = makeUnique<BlockDirectory>(sizeClass);
     BlockDirectory* directory = uniqueDirectory.get();
     m_directories.append(WTFMove(uniqueDirectory));
-
+    
     directory->setSubspace(this);
     m_space.addBlockDirectory(locker, directory);
-
+    
     std::unique_ptr<LocalAllocator> uniqueLocalAllocator =
         makeUnique<LocalAllocator>(directory);
     LocalAllocator* localAllocator = uniqueLocalAllocator.get();
     m_localAllocators.append(WTFMove(uniqueLocalAllocator));
-
+    
     Allocator allocator(localAllocator);
-
+    
     index = MarkedSpace::sizeClassToIndex(sizeClass);
     for (;;) {
         if (MarkedSpace::s_sizeClassForSizeStep[index] != sizeClass)
             break;
 
         m_allocatorForSizeStep[index] = allocator;
-
+        
         if (!index--)
             break;
     }
-
+    
     directory->setNextDirectoryInSubspace(m_firstDirectory);
     m_alignedMemoryAllocator->registerDirectory(m_space.heap(), directory);
     WTF::storeStoreFence();
@@ -123,33 +123,33 @@ void* CompleteSubspace::tryAllocateSlow(VM& vm, size_t size, GCDeferralContext* 
         vm.heap.verifyCanGC();
 
     sanitizeStackForVM(vm);
-
+    
     if (Allocator allocator = allocatorFor(size, AllocatorForMode::EnsureAllocator))
         return allocator.allocate(vm.heap, deferralContext, AllocationFailureMode::ReturnNull);
-
+    
     if (size <= Options::preciseAllocationCutoff()
         && size <= MarkedSpace::largeCutoff) {
         dataLog("FATAL: attampting to allocate small object using large allocation.\n");
         dataLog("Requested allocation size: ", size, "\n");
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     vm.heap.collectIfNecessaryOrDefer(deferralContext);
-
+    
     size = WTF::roundUpToMultipleOf<MarkedSpace::sizeStep>(size);
     PreciseAllocation* allocation = PreciseAllocation::tryCreate(vm.heap, size, this, m_space.m_preciseAllocations.size());
     if (!allocation)
         return nullptr;
-
+    
     m_space.m_preciseAllocations.append(allocation);
     if (auto* set = m_space.preciseAllocationSet())
         set->add(allocation->cell());
     ASSERT(allocation->indexInSpace() == m_space.m_preciseAllocations.size() - 1);
     vm.heap.didAllocate(size);
     m_space.m_capacity += size;
-
+    
     m_preciseAllocations.append(allocation);
-
+        
     return allocation->cell();
 }
 

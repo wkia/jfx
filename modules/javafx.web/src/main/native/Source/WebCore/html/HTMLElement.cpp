@@ -233,7 +233,7 @@ void HTMLElement::collectPresentationalHintsForAttribute(const QualifiedName& na
             if (isLTROrRTLIgnoringCase(value)) {
                 addPropertyToPresentationalHintStyle(style, CSSPropertyDirection, value);
                 unicodeBidiValue = CSSValueIsolate;
-            }
+            } 
 
             if (!hasTagName(bdiTag) && !hasTagName(bdoTag) && !hasTagName(outputTag))
                 addPropertyToPresentationalHintStyle(style, CSSPropertyUnicodeBidi, unicodeBidiValue);

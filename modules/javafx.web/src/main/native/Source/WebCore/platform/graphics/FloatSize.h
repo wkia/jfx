@@ -135,7 +135,7 @@ public:
     {
         return m_width * m_width + m_height * m_height;
     }
-
+    
     float area() const
     {
         return m_width * m_height;
@@ -279,5 +279,5 @@ struct LogArgument<WebCore::FloatSize> {
         return size.toJSONString();
     }
 };
-
+    
 } // namespace WTF

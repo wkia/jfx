@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -63,7 +63,7 @@ public:
         : m_kind(kind)
         , m_operand(operand)
 #endif
-    {
+    { 
         ASSERT(kind == OperandKind::Tmp || VirtualRegister(operand).isLocal() == (kind == OperandKind::Local));
     }
     static Operand tmp(uint32_t index) { return Operand(OperandKind::Tmp, index); }
@@ -162,7 +162,7 @@ public:
     {
         m_values.fill(initialValue);
     }
-
+    
     template<typename U, typename V>
     explicit Operands(OperandsLikeTag, const Operands<U, V>& other, const T& initialValue = T())
         : m_values(other.size())
@@ -194,7 +194,7 @@ public:
         ASSERT(idx < numberOfArguments());
         return idx;
     }
-
+    
     size_t localIndex(size_t idx) const
     {
         ASSERT(idx < numberOfLocals());
@@ -203,13 +203,13 @@ public:
 
     RefType tmp(size_t idx) { return m_values[tmpIndex(idx)]; }
     ConstRefType tmp(size_t idx) const { return m_values[tmpIndex(idx)]; }
-
+    
     RefType argument(size_t idx) { return m_values[argumentIndex(idx)]; }
     ConstRefType argument(size_t idx) const { return m_values[argumentIndex(idx)]; }
-
+    
     RefType local(size_t idx) { return m_values[localIndex(idx)]; }
     ConstRefType local(size_t idx) const { return m_values[localIndex(idx)]; }
-
+    
     template<OperandKind operandKind>
     size_t sizeFor() const
     {
@@ -286,24 +286,24 @@ public:
                 m_values[i] = ensuredValue;
         }
     }
-
+    
     void setLocal(size_t idx, const T& value)
     {
         ensureLocals(idx + 1);
         local(idx) = value;
     }
-
+    
     T getLocal(size_t idx)
     {
         return idx >= numberOfLocals() ? T() : local(idx);
     }
-
+    
     void setArgumentFirstTime(size_t idx, const T& value)
     {
         ASSERT(m_values[idx] == T());
         argument(idx) = value;
     }
-
+    
     void setLocalFirstTime(size_t idx, const T& value)
     {
         ASSERT(idx >= numberOfLocals() || local(idx) == T());
@@ -319,14 +319,14 @@ public:
             return argumentIndex(operand.toArgument());
         return localIndex(operand.toLocal());
     }
-
+    
     size_t operandIndex(Operand op) const
     {
         if (!op.isTmp())
             return operandIndex(op.virtualRegister());
         return tmpIndex(op.value());
     }
-
+    
     RefType operand(VirtualRegister operand)
     {
         if (operand.isArgument())
@@ -343,7 +343,7 @@ public:
 
     ConstRefType operand(VirtualRegister operand) const { return const_cast<Operands*>(this)->operand(operand); }
     ConstRefType operand(Operand operand) const { return const_cast<Operands*>(this)->operand(operand); }
-
+    
     bool hasOperand(VirtualRegister operand) const
     {
         if (operand.isArgument())
@@ -358,7 +358,7 @@ public:
         }
         return hasOperand(op.virtualRegister());
     }
-
+    
     void setOperand(Operand operand, const T& value)
     {
         this->operand(operand) = value;
@@ -384,24 +384,24 @@ public:
         for (size_t i = 0; i < m_values.size(); ++i)
             m_values[i] = value;
     }
-
+    
     void clear()
     {
         fill(T());
     }
-
+    
     bool operator==(const Operands& other) const
     {
         ASSERT(numberOfArguments() == other.numberOfArguments());
         ASSERT(numberOfLocals() == other.numberOfLocals());
         ASSERT(numberOfTmps() == other.numberOfTmps());
-
+        
         return m_values == other.m_values;
     }
-
+    
     void dumpInContext(PrintStream& out, DumpContext* context) const;
     void dump(PrintStream& out) const;
-
+    
 private:
     // The first m_numArguments of m_values are arguments, the next m_numLocals are locals, and the rest are tmps.
     Storage m_values;

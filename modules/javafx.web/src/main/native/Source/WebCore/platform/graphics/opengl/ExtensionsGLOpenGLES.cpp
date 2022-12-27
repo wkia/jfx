@@ -292,7 +292,7 @@ bool ExtensionsGLOpenGLES::supportsExtension(const String& name)
         }
         return m_supportsANGLEinstancedArrays;
     }
-
+    
     if (m_availableExtensions.contains(name)) {
         if (!m_supportsOESvertexArrayObject && name == "GL_OES_vertex_array_object") {
             m_glBindVertexArrayOES = reinterpret_cast<PFNGLBINDVERTEXARRAYOESPROC>(eglGetProcAddress("glBindVertexArrayOES"));

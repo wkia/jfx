@@ -62,7 +62,7 @@ public:
     void getOverhang(bool firstLine, RenderObject* startRenderer, RenderObject* endRenderer, float& startOverhang, float& endOverhang) const;
 
     static RenderPtr<RenderRubyRun> staticCreateRubyRun(const RenderObject* parentRuby);
-
+    
     void updatePriorContextFromCachedBreakIterator(LazyLineBreakIterator&) const;
     void setCachedPriorCharacters(UChar last, UChar secondToLast)
     {
@@ -70,7 +70,7 @@ public:
         m_secondToLastCharacter = secondToLast;
     }
     bool canBreakBefore(const LazyLineBreakIterator&) const;
-
+    
     RenderPtr<RenderRubyBase> createRubyBase() const;
 
 private:

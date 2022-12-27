@@ -88,7 +88,7 @@ namespace JSC {
         {
             return m_cacheMap.inlineGet(CacheKey(evalSource, callSiteIndex)).get();
         }
-
+        
         void set(JSGlobalObject* globalObject, JSCell* owner, const String& evalSource, CallSiteIndex callSiteIndex, DirectEvalExecutable* evalExecutable)
         {
             if (m_cacheMap.size() < maxCacheEntries)

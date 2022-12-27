@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -28,8 +28,7 @@
 
 #include "BitmapInfo.h"
 #include "CachedImage.h"
-#include "GraphicsContext.h"
-#include "GraphicsContextPlatformPrivateCairo.h"
+#include "GraphicsContextCairo.h"
 #include "HWndDC.h"
 #include "Image.h"
 #include <cairo-win32.h>
@@ -39,12 +38,12 @@
 
 namespace WebCore {
 
-void deallocContext(PlatformContextCairo* target)
+void deallocContext(GraphicsContextCairo* target)
 {
     delete target;
 }
 
-GDIObject<HBITMAP> allocImage(HDC dc, IntSize size, PlatformContextCairo** targetRef)
+GDIObject<HBITMAP> allocImage(HDC dc, IntSize size, GraphicsContextCairo** targetRef)
 {
     BitmapInfo bmpInfo = BitmapInfo::create(size);
 
@@ -103,7 +102,7 @@ static cairo_surface_t* createCairoContextFromBitmap(HBITMAP bitmap)
 
 DragImageRef scaleDragImage(DragImageRef imageRef, FloatSize scale)
 {
-    // FIXME: due to the way drag images are done on windows we need
+    // FIXME: due to the way drag images are done on windows we need 
     // to preprocess the alpha channel <rdar://problem/5015946>
     if (!imageRef)
         return 0;
@@ -119,7 +118,7 @@ DragImageRef scaleDragImage(DragImageRef imageRef, FloatSize scale)
     if (!dstDC)
         goto exit;
 
-    PlatformContextCairo* targetContext;
+    GraphicsContextCairo* targetContext;
     hbmp = allocImage(dstDC.get(), dstSize, &targetContext);
     if (!hbmp)
         goto exit;
@@ -145,7 +144,7 @@ exit:
         hbmp.swap(image);
     return hbmp.leak();
 }
-
+    
 DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
 {
     HWndDC dc(0);
@@ -153,7 +152,7 @@ DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
     if (!workingDC)
         return 0;
 
-    PlatformContextCairo* drawContext = 0;
+    GraphicsContextCairo* drawContext = 0;
     auto hbmp = allocImage(workingDC.get(), IntSize(img->size()), &drawContext);
     if (!hbmp || !drawContext)
         return 0;
@@ -162,8 +161,8 @@ DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
     cairo_set_source_rgb(cr, 1.0, 0.0, 1.0);
     cairo_fill_preserve(cr);
 
-    RefPtr<cairo_surface_t> surface = img->nativeImageForCurrentFrame();
-    if (surface) {
+    if (auto nativeImage = img->nativeImageForCurrentFrame()) {
+        auto& surface = nativeImage->platformImage();
         // Draw the image.
         cairo_set_source_surface(cr, surface.get(), 0.0, 0.0);
         cairo_paint(cr);
@@ -173,5 +172,5 @@ DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
 
     return hbmp.leak();
 }
-
+    
 }

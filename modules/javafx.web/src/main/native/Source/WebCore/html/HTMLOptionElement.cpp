@@ -130,7 +130,7 @@ void HTMLOptionElement::setText(const String &text)
         removeChildren();
         appendChild(Text::create(document(), text));
     }
-
+    
     if (selectIsMenuList && select->selectedIndex() != oldSelectedIndex)
         select->setSelectedIndex(oldSelectedIndex);
 }

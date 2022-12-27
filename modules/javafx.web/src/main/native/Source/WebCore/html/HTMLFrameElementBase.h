@@ -69,7 +69,7 @@ private:
 
     bool supportsFocus() const final;
     void setFocus(bool, FocusVisibility = FocusVisibility::Invisible) final;
-
+    
     bool isURLAttribute(const Attribute&) const final;
     bool isHTMLContentAttribute(const Attribute&) const final;
 

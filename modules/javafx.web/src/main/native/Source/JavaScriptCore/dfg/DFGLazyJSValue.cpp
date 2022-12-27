@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -63,15 +63,15 @@ static TriState equalToSingleCharacter(JSValue value, UChar character)
 {
     if (!value.isString())
         return TriState::False;
-
+    
     JSString* jsString = asString(value);
     if (jsString->length() != 1)
         return TriState::False;
-
+    
     const StringImpl* string = jsString->tryGetValueImpl();
     if (!string)
         return TriState::Indeterminate;
-
+    
     return triState(string->at(0) == character);
 }
 
@@ -79,12 +79,12 @@ static TriState equalToStringImpl(JSValue value, StringImpl* stringImpl)
 {
     if (!value.isString())
         return TriState::False;
-
+    
     JSString* jsString = asString(value);
     const StringImpl* string = jsString->tryGetValueImpl();
     if (!string)
         return TriState::Indeterminate;
-
+    
     return triState(WTF::equal(stringImpl, string));
 }
 
@@ -122,13 +122,13 @@ String LazyJSValue::tryGetString(Graph& graph) const
             unsigned ginormousStringLength = 10000;
             if (string->length() > ginormousStringLength)
                 return String();
-
+            
             auto result = graph.m_copiedStrings.add(string, String());
             if (result.isNewEntry)
                 result.iterator->value = string->isolatedCopy();
             return result.iterator->value;
         }
-
+        
         return String();
     }
     RELEASE_ASSERT_NOT_REACHED();
@@ -248,7 +248,7 @@ void LazyJSValue::emit(CCallHelpers& jit, JSValueRegs result) const
         thisValue.u.stringImpl->ref();
 
     CodeBlock* codeBlock = jit.codeBlock();
-
+    
     jit.addLinkTask([=] (LinkBuffer& linkBuffer) {
         auto patchLocation = linkBuffer.locationOf<JITCompilationPtrTag>(label);
         linkBuffer.addMainThreadFinalizationTask([=] {
@@ -256,7 +256,7 @@ void LazyJSValue::emit(CCallHelpers& jit, JSValueRegs result) const
             RELEASE_ASSERT(realValue.isCell());
 
             codeBlock->addConstant(ConcurrentJSLocker(codeBlock->m_lock), realValue);
-
+            
             if (thisValue.m_kind == NewStringImpl)
                 thisValue.u.stringImpl->deref();
 

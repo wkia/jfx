@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2006, 2007, 2014 Apple Inc. All rights reserved.
- *           (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ *           (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)  
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -110,11 +110,11 @@ RenderBox::LogicalExtentComputedValues RenderTextControl::computeLogicalHeight(L
         if ((isHorizontalWritingMode() && (style().overflowX() == Overflow::Scroll ||  (style().overflowX() == Overflow::Auto && innerText->renderer()->style().overflowWrap() == OverflowWrap::Normal)))
             || (!isHorizontalWritingMode() && (style().overflowY() == Overflow::Scroll ||  (style().overflowY() == Overflow::Auto && innerText->renderer()->style().overflowWrap() == OverflowWrap::Normal))))
             logicalHeight += scrollbarThickness();
-
+        
         // FIXME: The logical height of the inner text box should have been added
         // before calling computeLogicalHeight to avoid this hack.
         cacheIntrinsicContentLogicalHeightForFlexItem(logicalHeight);
-
+        
         logicalHeight += verticalBorderAndPaddingExtent();
     }
 

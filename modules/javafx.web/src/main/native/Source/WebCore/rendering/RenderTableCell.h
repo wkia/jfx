@@ -41,7 +41,7 @@ class RenderTableCell final : public RenderBlockFlow {
 public:
     RenderTableCell(Element&, RenderStyle&&);
     RenderTableCell(Document&, RenderStyle&&);
-
+    
     unsigned colSpan() const;
     unsigned rowSpan() const;
 
@@ -95,7 +95,7 @@ public:
     LayoutUnit paddingBottom() const override;
     LayoutUnit paddingLeft() const override;
     LayoutUnit paddingRight() const override;
-
+    
     // FIXME: For now we just assume the cell has the same block flow direction as the table. It's likely we'll
     // create an extra anonymous RenderBlock to handle mixing directionality anyway, in which case we can lock
     // the block flow directionality of the cells to the table's directionality.
@@ -128,7 +128,7 @@ public:
 #if ASSERT_ENABLED
     bool isFirstOrLastCellInRow() const { return !table()->cellAfter(this) || !table()->cellBefore(this); }
 #endif
-
+    
     LayoutRect clippedOverflowRect(const RenderLayerModelObject* repaintContainer, VisibleRectContext) const override;
 
     void invalidateHasEmptyCollapsedBorders();

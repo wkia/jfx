@@ -44,10 +44,10 @@ public:
         , m_length(sqrtf(powf(start.x() - end.x(), 2) + powf(start.y() - end.y(), 2)))
     {
     }
-
+    
     const FloatPoint& start() const { return m_start; }
     const FloatPoint& end() const { return m_end; }
-
+    
     float length() const { return m_length; }
 
     WEBCORE_EXPORT const FloatPoint pointAtAbsoluteDistance(float) const;
@@ -57,7 +57,7 @@ public:
 
     template<class Encoder> void encode(Encoder&) const;
     template<class Decoder> static std::optional<FloatLine> decode(Decoder&);
-
+    
 private:
     FloatPoint m_start { 0, 0 };
     FloatPoint m_end { 0, 0 };

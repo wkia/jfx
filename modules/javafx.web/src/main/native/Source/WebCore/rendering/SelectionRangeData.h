@@ -41,15 +41,15 @@ namespace WebCore {
 class SelectionRangeData : public HighlightData {
 public:
     SelectionRangeData(RenderView&);
-
+    
     enum class RepaintMode { NewXOROld, NewMinusOld, Nothing };
     void set(const RenderRange&, RepaintMode = RepaintMode::NewXOROld);
     void clear();
     void repaint() const;
-
+    
     IntRect bounds() const { return collectBounds(ClipToVisibleContent::No); }
     IntRect boundsClippedToVisibleContent() const { return collectBounds(ClipToVisibleContent::Yes); }
-
+    
 private:
     const RenderView& m_renderView;
 #if ENABLE(SERVICE_CONTROLS)

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -56,7 +56,7 @@ typedef enum JSC_X86_ASM_REGISTER_ID_ENUM_BASE_TYPE {
 } RegisterID;
 
 typedef enum JSC_X86_ASM_REGISTER_ID_ENUM_BASE_TYPE {
-    FOR_EACH_SP_REGISTER(REGISTER_ID)
+    FOR_EACH_SP_REGISTER(REGISTER_ID)                                                     
 } SPRegisterID;
 
 typedef enum JSC_X86_ASM_REGISTER_ID_ENUM_BASE_TYPE {
@@ -71,7 +71,7 @@ typedef enum JSC_X86_ASM_REGISTER_ID_ENUM_BASE_TYPE {
 class X86Assembler {
 public:
     typedef X86Registers::RegisterID RegisterID;
-
+    
     static constexpr RegisterID firstRegister() { return X86Registers::eax; }
     static constexpr RegisterID lastRegister()
     {
@@ -82,16 +82,16 @@ public:
 #endif
     }
     static constexpr unsigned numberOfRegisters() { return lastRegister() - firstRegister() + 1; }
-
+    
     typedef X86Registers::SPRegisterID SPRegisterID;
 
     static constexpr SPRegisterID firstSPRegister() { return X86Registers::eip; }
     static constexpr SPRegisterID lastSPRegister() { return X86Registers::eflags; }
     static constexpr unsigned numberOfSPRegisters() { return lastSPRegister() - firstSPRegister() + 1; }
-
+    
     typedef X86Registers::XMMRegisterID XMMRegisterID;
     typedef XMMRegisterID FPRegisterID;
-
+    
     static constexpr FPRegisterID firstFPRegister() { return X86Registers::xmm0; }
     static constexpr FPRegisterID lastFPRegister()
     {
@@ -102,7 +102,7 @@ public:
 #endif
     }
     static constexpr unsigned numberOfFPRegisters() { return lastFPRegister() - firstFPRegister() + 1; }
-
+    
     static const char* gprName(RegisterID id)
     {
         ASSERT(id >= firstRegister() && id <= lastRegister());
@@ -124,7 +124,7 @@ public:
         };
         return nameForRegister[id];
     }
-
+    
     static const char* fprName(FPRegisterID reg)
     {
         ASSERT(reg >= firstFPRegister() && reg <= lastFPRegister());
@@ -135,7 +135,7 @@ public:
         };
         return nameForRegister[reg];
     }
-
+    
     typedef enum {
         ConditionO,
         ConditionNO,
@@ -252,7 +252,7 @@ private:
         OP_GROUP3_Eb                    = 0xF6,
         OP_GROUP3_EbIb                  = 0xF6,
         OP_GROUP3_Ev                    = 0xF7,
-        OP_GROUP3_EvIz                  = 0xF7, // OP_GROUP3_Ev has an immediate, when instruction is a test.
+        OP_GROUP3_EvIz                  = 0xF7, // OP_GROUP3_Ev has an immediate, when instruction is a test. 
         OP_GROUP5_Ev                    = 0xFF,
     } OneByteOpcodeID;
 
@@ -312,7 +312,7 @@ private:
         OP2_PSRLQ_UdqIb     = 0x73,
         OP2_POR_VdqWdq      = 0XEB,
     } TwoByteOpcodeID;
-
+    
     typedef enum {
         OP3_ROUNDSS_VssWssIb = 0x0A,
         OP3_ROUNDSD_VsdWsdIb = 0x0B,
@@ -332,7 +332,7 @@ private:
         ThreeBytesOp38 = 2,
         ThreeBytesOp3A = 3
     };
-
+    
     TwoByteOpcodeID cmovcc(Condition cond)
     {
         return (TwoByteOpcodeID)(OP2_CMOVCC + cond);
@@ -358,12 +358,12 @@ private:
         GROUP1_OP_CMP = 7,
 
         GROUP1A_OP_POP = 0,
-
+        
         GROUP2_OP_ROL = 0,
         GROUP2_OP_ROR = 1,
         GROUP2_OP_RCL = 2,
         GROUP2_OP_RCR = 3,
-
+        
         GROUP2_OP_SHL = 4,
         GROUP2_OP_SHR = 5,
         GROUP2_OP_SAR = 7,
@@ -388,7 +388,7 @@ private:
 
         GROUP_BT_OP_BT = 4,
     } GroupOpcodeID;
-
+    
     class X86InstructionFormatter;
 public:
 
@@ -397,7 +397,7 @@ public:
         , m_indexOfTailOfLastWatchpoint(INT_MIN)
     {
     }
-
+    
     AssemblerBuffer& buffer() { return m_formatter.m_buffer; }
 
     // Stack operations:
@@ -452,12 +452,12 @@ public:
     {
         m_formatter.oneByteOp(OP_ADD_GvEv, dst, base, offset);
     }
-
+    
     void addl_mr(int offset, RegisterID base, RegisterID index, int scale, RegisterID dst)
     {
         m_formatter.oneByteOp(OP_ADD_GvEv, dst, base, index, scale, offset);
     }
-
+    
 #if !CPU(X86_64)
     void addl_mr(const void* addr, RegisterID dst)
     {
@@ -1248,7 +1248,7 @@ public:
             m_formatter.immediate32(imm);
         }
     }
-
+    
     void subl_im(int imm, int offset, RegisterID base)
     {
         if (CAN_SIGN_EXTEND_8_32(imm)) {
@@ -1519,7 +1519,7 @@ public:
             m_formatter.immediate32(imm);
         }
     }
-
+    
     void xorq_im(int imm, int offset, RegisterID base)
     {
         if (CAN_SIGN_EXTEND_8_32(imm)) {
@@ -1530,7 +1530,7 @@ public:
             m_formatter.immediate32(imm);
         }
     }
-
+    
     void xorq_im(int imm, int offset, RegisterID base, RegisterID index, int scale)
     {
         if (CAN_SIGN_EXTEND_8_32(imm)) {
@@ -1541,7 +1541,7 @@ public:
             m_formatter.immediate32(imm);
         }
     }
-
+    
     void xorq_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.oneByteOp64(OP_XOR_EvGv, src, base, offset);
@@ -1716,12 +1716,12 @@ public:
     {
         m_formatter.oneByteOp(OP_GROUP2_EvCL, GROUP2_OP_SAR, dst);
     }
-
+    
     void shrl_i8r(int imm, RegisterID dst)
     {
         shiftInstruction32<GROUP2_OP_SHR>(imm, dst);
     }
-
+    
     void shrl_CLr(RegisterID dst)
     {
         m_formatter.oneByteOp(OP_GROUP2_EvCL, GROUP2_OP_SHR, dst);
@@ -1907,7 +1907,7 @@ public:
         m_formatter.oneByteOp(OP_GROUP1_EvIz, GROUP1_OP_CMP, dst);
         m_formatter.immediate32(imm);
     }
-
+    
     void cmpl_im(int imm, int offset, RegisterID base)
     {
         if (CAN_SIGN_EXTEND_8_32(imm)) {
@@ -1918,19 +1918,19 @@ public:
             m_formatter.immediate32(imm);
         }
     }
-
+    
     void cmpb_im(int imm, int offset, RegisterID base)
     {
         m_formatter.oneByteOp(OP_GROUP1_EbIb, GROUP1_OP_CMP, base, offset);
         m_formatter.immediate8(imm);
     }
-
+    
     void cmpb_im(int imm, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.oneByteOp(OP_GROUP1_EbIb, GROUP1_OP_CMP, base, index, scale, offset);
         m_formatter.immediate8(imm);
     }
-
+    
 #if CPU(X86)
     void cmpb_im(int imm, const void* addr)
     {
@@ -2066,7 +2066,7 @@ public:
     {
         m_formatter.oneByteOp(OP_TEST_EvGv, src, dst);
     }
-
+    
     void testl_i32r(int imm, RegisterID dst)
     {
         if (dst == X86Registers::eax)
@@ -2092,7 +2092,7 @@ public:
         m_formatter.oneByteOp(OP_GROUP3_EbIb, GROUP3_OP_TEST, base, offset);
         m_formatter.immediate8(imm);
     }
-
+    
     void testb_im(int imm, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.oneByteOp(OP_GROUP3_EbIb, GROUP3_OP_TEST, base, index, scale, offset);
@@ -2144,14 +2144,14 @@ public:
         m_formatter.oneByteOp64(OP_GROUP3_EvIz, GROUP3_OP_TEST, base, index, scale, offset);
         m_formatter.immediate32(imm);
     }
-#endif
+#endif 
 
     void testw_rr(RegisterID src, RegisterID dst)
     {
         m_formatter.prefix(PRE_OPERAND_SIZE);
         m_formatter.oneByteOp(OP_TEST_EvGv, src, dst);
     }
-
+    
     void testb_i8r(int imm, RegisterID dst)
     {
         if (dst == X86Registers::eax)
@@ -2338,7 +2338,7 @@ public:
     {
         m_formatter.oneByteOp(OP_MOV_EvGv, src, dst);
     }
-
+    
     void movl_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.oneByteOp(OP_MOV_EvGv, src, base, offset);
@@ -2353,7 +2353,7 @@ public:
     {
         m_formatter.oneByteOp(OP_MOV_EvGv, src, base, index, scale, offset);
     }
-
+    
     void movl_mEAX(const void* addr)
     {
         m_formatter.oneByteOp(OP_MOV_EAXOv);
@@ -2373,7 +2373,7 @@ public:
     {
         m_formatter.oneByteOp_disp32(OP_MOV_GvEv, dst, base, offset);
     }
-
+    
     void movl_mr_disp8(int offset, RegisterID base, RegisterID dst)
     {
         m_formatter.oneByteOp_disp8(OP_MOV_GvEv, dst, base, offset);
@@ -2395,7 +2395,7 @@ public:
         m_formatter.oneByteOp(OP_GROUP11_EvIz, GROUP11_MOV, base, offset);
         m_formatter.immediate32(imm);
     }
-
+    
     void movl_i32m(int imm, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.oneByteOp(OP_GROUP11_EvIz, GROUP11_MOV, base, index, scale, offset);
@@ -2431,12 +2431,12 @@ public:
         m_formatter.oneByteOpAddr(OP_MOV_EbGb, src, bitwise_cast<uint32_t>(addr));
     }
 #endif
-
+    
     void movb_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.oneByteOp8(OP_MOV_EbGb, src, base, offset);
     }
-
+    
     void movb_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.oneByteOp8(OP_MOV_EbGb, src, base, index, scale, offset);
@@ -2577,7 +2577,7 @@ public:
         m_formatter.oneByteOp64(OP_GROUP11_EvIz, GROUP11_MOV, dst);
         m_formatter.immediate32(imm);
     }
-
+    
     void movsxd_rr(RegisterID src, RegisterID dst)
     {
         m_formatter.oneByteOp64(OP_MOVSXD_GvEv, dst, src);
@@ -2595,10 +2595,10 @@ public:
     {
         if (src == X86Registers::eax)
             movl_EAXm(addr);
-        else
+        else 
             m_formatter.oneByteOpAddr(OP_MOV_EvGv, src, bitwise_cast<uint32_t>(addr));
     }
-
+    
     void movl_i32m(int imm, const void* addr)
     {
         m_formatter.oneByteOpAddr(OP_GROUP11_EvIz, GROUP11_MOV, bitwise_cast<uint32_t>(addr));
@@ -2630,7 +2630,7 @@ public:
     {
         m_formatter.twoByteOp(OP2_MOVZX_GvEb, dst, base, offset);
     }
-
+    
     void movzbl_mr(int offset, RegisterID base, RegisterID index, int scale, RegisterID dst)
     {
         m_formatter.twoByteOp(OP2_MOVZX_GvEb, dst, base, index, scale, offset);
@@ -2647,7 +2647,7 @@ public:
     {
         m_formatter.twoByteOp(OP2_MOVSX_GvEb, dst, base, offset);
     }
-
+    
     void movsbl_mr(int offset, RegisterID base, RegisterID index, int scale, RegisterID dst)
     {
         m_formatter.twoByteOp(OP2_MOVSX_GvEb, dst, base, index, scale, offset);
@@ -2695,17 +2695,17 @@ public:
     {
         m_formatter.twoByteOp(cmovcc(ConditionE), dst, src);
     }
-
+    
     void cmovnel_rr(RegisterID src, RegisterID dst)
     {
         m_formatter.twoByteOp(cmovcc(ConditionNE), dst, src);
     }
-
+    
     void cmovpl_rr(RegisterID src, RegisterID dst)
     {
         m_formatter.twoByteOp(cmovcc(ConditionP), dst, src);
     }
-
+    
     void cmovnpl_rr(RegisterID src, RegisterID dst)
     {
         m_formatter.twoByteOp(cmovcc(ConditionNP), dst, src);
@@ -2782,13 +2782,13 @@ public:
         m_formatter.oneByteOp(OP_CALL_rel32);
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel call(RegisterID dst)
     {
         m_formatter.oneByteOp(OP_GROUP5_Ev, GROUP5_OP_CALLN, dst);
         return m_formatter.label();
     }
-
+    
     void call_m(int offset, RegisterID base)
     {
         m_formatter.oneByteOp(OP_GROUP5_Ev, GROUP5_OP_CALLN, base, offset);
@@ -2799,7 +2799,7 @@ public:
         m_formatter.oneByteOp(OP_JMP_rel32);
         return m_formatter.immediateRel32();
     }
-
+    
     // Return a AssemblerLabel so we have a label to the jump, so we can use this
     // To make a tail recursive call on x86-64.  The MacroAssembler
     // really shouldn't wrap this as a Jump, since it can't be linked. :-/
@@ -2808,17 +2808,17 @@ public:
         m_formatter.oneByteOp(OP_GROUP5_Ev, GROUP5_OP_JMPN, dst);
         return m_formatter.label();
     }
-
+    
     void jmp_m(int offset, RegisterID base)
     {
         m_formatter.oneByteOp(OP_GROUP5_Ev, GROUP5_OP_JMPN, base, offset);
     }
-
+    
     void jmp_m(int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.oneByteOp(OP_GROUP5_Ev, GROUP5_OP_JMPN, base, index, scale, offset);
     }
-
+    
 #if !CPU(X86_64)
     void jmp_m(const void* address)
     {
@@ -2831,7 +2831,7 @@ public:
         m_formatter.twoByteOp(jccRel32(ConditionNE));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jnz()
     {
         return jne();
@@ -2842,7 +2842,7 @@ public:
         m_formatter.twoByteOp(jccRel32(ConditionE));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jz()
     {
         return je();
@@ -2853,25 +2853,25 @@ public:
         m_formatter.twoByteOp(jccRel32(ConditionL));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jb()
     {
         m_formatter.twoByteOp(jccRel32(ConditionB));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jle()
     {
         m_formatter.twoByteOp(jccRel32(ConditionLE));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jbe()
     {
         m_formatter.twoByteOp(jccRel32(ConditionBE));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jge()
     {
         m_formatter.twoByteOp(jccRel32(ConditionGE));
@@ -2889,13 +2889,13 @@ public:
         m_formatter.twoByteOp(jccRel32(ConditionA));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jae()
     {
         m_formatter.twoByteOp(jccRel32(ConditionAE));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel jo()
     {
         m_formatter.twoByteOp(jccRel32(ConditionO));
@@ -2913,7 +2913,7 @@ public:
         m_formatter.twoByteOp(jccRel32(ConditionP));
         return m_formatter.immediateRel32();
     }
-
+    
     AssemblerLabel js()
     {
         m_formatter.twoByteOp(jccRel32(ConditionS));
@@ -3166,7 +3166,7 @@ public:
         m_formatter.prefix(PRE_SSE_F2);
         m_formatter.twoByteOp(OP2_MOVSD_WsdVsd, (RegisterID)src, base, offset);
     }
-
+    
     void movsd_rm(XMMRegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.prefix(PRE_SSE_F2);
@@ -3178,13 +3178,13 @@ public:
         m_formatter.prefix(PRE_SSE_F3);
         m_formatter.twoByteOp(OP2_MOVSD_WsdVsd, (RegisterID)src, base, offset);
     }
-
+    
     void movss_rm(XMMRegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.prefix(PRE_SSE_F3);
         m_formatter.twoByteOp(OP2_MOVSD_WsdVsd, (RegisterID)src, base, index, scale, offset);
     }
-
+    
     void movsd_mr(int offset, RegisterID base, XMMRegisterID dst)
     {
         m_formatter.prefix(PRE_SSE_F2);
@@ -3533,7 +3533,7 @@ public:
     {
         m_formatter.oneByteOp(OP_INT3);
     }
-
+    
     static bool isInt3(void* address)
     {
         uint8_t candidateInstruction = *reinterpret_cast<uint8_t*>(address);
@@ -3549,12 +3549,12 @@ public:
     {
         m_formatter.prefix(PRE_PREDICT_BRANCH_NOT_TAKEN);
     }
-
+    
     void lock()
     {
         m_formatter.prefix(PRE_LOCK);
     }
-
+    
     // Causes the memory access in the next instruction to be offset by %gs. Usually you use
     // this with a 32-bit absolute address load. That "address" ends up being the offset to
     // %gs. This prefix is ignored by lea. Getting the value of %gs is hard - you can pretty
@@ -3563,89 +3563,89 @@ public:
     {
         m_formatter.prefix(PRE_GS);
     }
-
+    
     void cmpxchgb_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp8(OP2_CMPXCHGb, src, base, offset);
     }
-
+    
     void cmpxchgb_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp8(OP2_CMPXCHGb, src, base, index, scale, offset);
     }
-
+    
     void cmpxchgw_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.prefix(PRE_OPERAND_SIZE);
         m_formatter.twoByteOp(OP2_CMPXCHG, src, base, offset);
     }
-
+    
     void cmpxchgw_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.prefix(PRE_OPERAND_SIZE);
         m_formatter.twoByteOp(OP2_CMPXCHG, src, base, index, scale, offset);
     }
-
+    
     void cmpxchgl_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp(OP2_CMPXCHG, src, base, offset);
     }
-
+    
     void cmpxchgl_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp(OP2_CMPXCHG, src, base, index, scale, offset);
     }
 
-#if CPU(X86_64)
+#if CPU(X86_64)    
     void cmpxchgq_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp64(OP2_CMPXCHG, src, base, offset);
     }
-
+    
     void cmpxchgq_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp64(OP2_CMPXCHG, src, base, index, scale, offset);
     }
 #endif // CPU(X86_64)
-
+    
     void xaddb_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp8(OP2_XADDb, src, base, offset);
     }
-
+    
     void xaddb_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp8(OP2_XADDb, src, base, index, scale, offset);
     }
-
+    
     void xaddw_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.prefix(PRE_OPERAND_SIZE);
         m_formatter.twoByteOp(OP2_XADD, src, base, offset);
     }
-
+    
     void xaddw_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.prefix(PRE_OPERAND_SIZE);
         m_formatter.twoByteOp(OP2_XADD, src, base, index, scale, offset);
     }
-
+    
     void xaddl_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp(OP2_XADD, src, base, offset);
     }
-
+    
     void xaddl_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp(OP2_XADD, src, base, index, scale, offset);
     }
 
-#if CPU(X86_64)
+#if CPU(X86_64)    
     void xaddq_rm(RegisterID src, int offset, RegisterID base)
     {
         m_formatter.twoByteOp64(OP2_XADD, src, base, offset);
     }
-
+    
     void xaddq_rm(RegisterID src, int offset, RegisterID base, RegisterID index, int scale)
     {
         m_formatter.twoByteOp64(OP2_XADD, src, base, index, scale, offset);
@@ -3689,7 +3689,7 @@ public:
     {
         return m_formatter.codeSize();
     }
-
+    
     AssemblerLabel labelForWatchpoint()
     {
         AssemblerLabel result = m_formatter.label();
@@ -3699,7 +3699,7 @@ public:
         m_indexOfTailOfLastWatchpoint = result.offset() + maxJumpReplacementSize();
         return result;
     }
-
+    
     AssemblerLabel labelIgnoringWatchpoints()
     {
         return m_formatter.label();
@@ -3740,7 +3740,7 @@ public:
         ASSERT(!WTF::unalignedLoad<int32_t>(bitwise_cast<int32_t*>(code + from.offset()) - 1));
         setRel32(code + from.offset(), code + to.offset());
     }
-
+    
     static void linkJump(void* code, AssemblerLabel from, void* to)
     {
         ASSERT(from.isSet());
@@ -3766,17 +3766,17 @@ public:
     {
         setRel32(from, to);
     }
-
+    
     static void relinkJumpToNop(void* from)
     {
         setInt32(from, 0);
     }
-
+    
     static void relinkCall(void* from, void* to)
     {
         setRel32(from, to);
     }
-
+    
     static void repatchCompact(void* where, int32_t value)
     {
         ASSERT(value >= std::numeric_limits<int8_t>::min());
@@ -3793,7 +3793,7 @@ public:
     {
         setPointer(where, value);
     }
-
+    
     static void* readPointer(void* where)
     {
         return WTF::unalignedLoad<void*>(bitwise_cast<void**>(where) - 1);
@@ -3812,7 +3812,7 @@ public:
         WTF::unalignedStore<uint8_t>(ptr, static_cast<uint8_t>(OP_JMP_rel32));
         WTF::unalignedStore<int32_t>(ptr + 1, static_cast<int32_t>(distance));
     }
-
+    
     static ptrdiff_t maxJumpReplacementSize()
     {
         return 5;
@@ -3822,7 +3822,7 @@ public:
     {
         return 5;
     }
-
+    
 #if CPU(X86_64)
     static void revertJumpTo_movq_i64r(void* instructionStart, int64_t imm, RegisterID dst)
     {
@@ -3832,7 +3832,7 @@ public:
         uint8_t* ptr = reinterpret_cast<uint8_t*>(instructionStart);
         ptr[0] = PRE_REX | (1 << 3) | (dst >> 3);
         ptr[1] = OP_MOV_EAXIv | (dst & 7);
-
+        
         union {
             uint64_t asWord;
             uint8_t asBytes[8];
@@ -3845,7 +3845,7 @@ public:
     static void revertJumpTo_movl_i32r(void* instructionStart, int32_t imm, RegisterID dst)
     {
         // We only revert jumps on inline caches, and inline caches always use the scratch register (r11).
-        // FIXME: If the above is ever false then we need to make this smarter with respect to emitting
+        // FIXME: If the above is ever false then we need to make this smarter with respect to emitting 
         // the REX byte.
         ASSERT(dst == X86Registers::r11);
         const unsigned instructionSize = 6; // REX MOV IMM32
@@ -3854,7 +3854,7 @@ public:
         uint8_t* ptr = reinterpret_cast<uint8_t*>(instructionStart);
         ptr[0] = PRE_REX | (dst >> 3);
         ptr[1] = OP_MOV_EAXIv | (dst & 7);
-
+        
         union {
             uint32_t asWord;
             uint8_t asBytes[4];
@@ -3881,7 +3881,7 @@ public:
         for (unsigned i = opcodeBytes + modRMBytes; i < static_cast<unsigned>(maxJumpReplacementSize()); ++i)
             ptr[i] = u.asBytes[i - opcodeBytes - modRMBytes];
     }
-
+    
     static void revertJumpTo_cmpl_im_force32(void* instructionStart, int32_t imm, int offset, RegisterID dst)
     {
         ASSERT_UNUSED(offset, !offset);
@@ -3899,7 +3899,7 @@ public:
         for (unsigned i = opcodeBytes + modRMBytes; i < static_cast<unsigned>(maxJumpReplacementSize()); ++i)
             ptr[i] = u.asBytes[i - opcodeBytes - modRMBytes];
     }
-
+    
     static void replaceWithLoad(void* instructionStart)
     {
         uint8_t* ptr = reinterpret_cast<uint8_t*>(instructionStart);
@@ -3917,7 +3917,7 @@ public:
             RELEASE_ASSERT_NOT_REACHED();
         }
     }
-
+    
     static void replaceWithAddressComputation(void* instructionStart)
     {
         uint8_t* ptr = reinterpret_cast<uint8_t*>(instructionStart);
@@ -3935,7 +3935,7 @@ public:
             RELEASE_ASSERT_NOT_REACHED();
         }
     }
-
+    
     static unsigned getCallReturnOffset(AssemblerLabel call)
     {
         ASSERT(call.isSet());
@@ -3947,12 +3947,12 @@ public:
         ASSERT(label.isSet());
         return reinterpret_cast<void*>(reinterpret_cast<ptrdiff_t>(code) + label.offset());
     }
-
+    
     static int getDifferenceBetweenLabels(AssemblerLabel a, AssemblerLabel b)
     {
         return b.offset() - a.offset();
     }
-
+    
     unsigned debugOffset() { return m_formatter.debugOffset(); }
 
     void nop()
@@ -4022,7 +4022,7 @@ private:
     {
         WTF::unalignedStore<int32_t>(bitwise_cast<int32_t*>(where) - 1, value);
     }
-
+    
     static void setInt8(void* where, int8_t value)
     {
         WTF::unalignedStore<int8_t>(bitwise_cast<int8_t*>(where) - 1, value);
@@ -4225,7 +4225,7 @@ private:
                     putIntUnchecked(offset);
                 }
             }
-
+        
             ALWAYS_INLINE void memoryModRM(int reg, RegisterID base, RegisterID index, int scale, int offset)
             {
                 ASSERT(index != noIndex);
@@ -4363,7 +4363,7 @@ private:
             writer.putByteUnchecked(opcode);
             writer.memoryModRM_disp32(reg, base, offset);
         }
-
+        
         void oneByteOp_disp8(OneByteOpcodeID opcode, int reg, RegisterID base, int offset)
         {
             SingleInstructionBufferWriter writer(m_buffer);
@@ -4550,7 +4550,7 @@ private:
             writer.putByteUnchecked(opcode);
             writer.memoryModRM_disp32(reg, base, offset);
         }
-
+        
         void oneByteOp64_disp8(OneByteOpcodeID opcode, int reg, RegisterID base, int offset)
         {
             SingleInstructionBufferWriter writer(m_buffer);

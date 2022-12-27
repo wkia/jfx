@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -103,10 +103,10 @@ ObjectPropertyConditionSet ObjectPropertyConditionSet::mergedWith(
         return invalid();
 
     Vector<ObjectPropertyCondition> result;
-
+    
     if (!isEmpty())
         result.append(m_data->m_vector.begin(), m_data->m_vector.size());
-
+    
     for (const ObjectPropertyCondition& newCondition : other) {
         bool foundMatch = false;
         for (const ObjectPropertyCondition& existingCondition : *this) {
@@ -128,7 +128,7 @@ bool ObjectPropertyConditionSet::structuresEnsureValidity() const
 {
     if (!isValid())
         return false;
-
+    
     for (const ObjectPropertyCondition& condition : *this) {
         if (!condition.structureEnsuresValidity())
             return false;
@@ -140,7 +140,7 @@ bool ObjectPropertyConditionSet::structuresEnsureValidityAssumingImpurePropertyW
 {
     if (!isValid())
         return false;
-
+    
     for (const ObjectPropertyCondition& condition : *this) {
         if (!condition.structureEnsuresValidityAssumingImpurePropertyWatchpoint())
             return false;
@@ -172,7 +172,7 @@ void ObjectPropertyConditionSet::dumpInContext(PrintStream& out, DumpContext* co
         out.print("<invalid>");
         return;
     }
-
+    
     out.print("[");
     if (m_data)
         out.print(listDumpInContext(m_data->m_vector, context));
@@ -272,11 +272,11 @@ ObjectPropertyConditionSet generateConditions(
     VM& vm, JSGlobalObject* globalObject, Structure* structure, JSObject* prototype, const Functor& functor)
 {
     Vector<ObjectPropertyCondition> conditions;
-
+    
     for (;;) {
         if (ObjectPropertyConditionSetInternal::verbose)
             dataLog("Considering structure: ", pointerDump(structure), "\n");
-
+        
         if (structure->isProxy()) {
             if (ObjectPropertyConditionSetInternal::verbose)
                 dataLog("It's a proxy, so invalid.\n");
@@ -291,9 +291,9 @@ ObjectPropertyConditionSet generateConditions(
             // https://bugs.webkit.org/show_bug.cgi?id=177721
             return ObjectPropertyConditionSet::invalid();
         }
-
+        
         JSValue value = structure->prototypeForLookup(globalObject);
-
+        
         if (value.isNull()) {
             if (!prototype) {
                 if (ObjectPropertyConditionSetInternal::verbose)
@@ -304,10 +304,10 @@ ObjectPropertyConditionSet generateConditions(
                 dataLog("Unexpectedly reached end of prototype chain, so invalid.\n");
             return ObjectPropertyConditionSet::invalid();
         }
-
+        
         JSObject* object = jsCast<JSObject*>(value);
         structure = object->structure(vm);
-
+        
         if (structure->isDictionary()) {
             if (ObjectPropertyConditionSetInternal::verbose)
                 dataLog("Cannot cache dictionary.\n");
@@ -319,7 +319,7 @@ ObjectPropertyConditionSet generateConditions(
                 dataLog("Functor failed, invalid.\n");
             return ObjectPropertyConditionSet::invalid();
         }
-
+        
         if (object == prototype) {
             if (ObjectPropertyConditionSetInternal::verbose)
                 dataLog("Reached desired prototype, done.\n");

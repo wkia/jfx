@@ -838,9 +838,9 @@ void TextFieldInputType::updateAutoFillButton()
         m_autoFillButton->setInlineStyleProperty(CSSPropertyDisplay, CSSValueBlock, true);
         return;
     }
-
+    
     if (m_autoFillButton)
-        m_autoFillButton->setInlineStyleProperty(CSSPropertyDisplay, CSSValueNone, true);
+        m_autoFillButton->setInlineStyleProperty(CSSPropertyDisplay, CSSValueNone, true);        
 }
 
 #if ENABLE(DATALIST_ELEMENT)
@@ -853,7 +853,7 @@ void TextFieldInputType::dataListMayHaveChanged()
         createDataListDropdownIndicator();
 
     if (!shouldOnlyShowDataListDropdownButtonWhenFocusedOrEdited())
-    m_dataListDropdownIndicator->setInlineStyleProperty(CSSPropertyDisplay, element()->list() ? CSSValueBlock : CSSValueNone, true);
+        m_dataListDropdownIndicator->setInlineStyleProperty(CSSPropertyDisplay, element()->list() ? CSSValueBlock : CSSValueNone, true);
 }
 
 HTMLElement* TextFieldInputType::dataListButtonElement() const

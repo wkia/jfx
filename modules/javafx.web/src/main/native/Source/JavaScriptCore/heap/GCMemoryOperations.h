@@ -38,7 +38,7 @@ namespace JSC {
 constexpr size_t smallCutoff = 30 * 8;
 constexpr size_t mediumCutoff = 4 * 1024;
 
-// This is a forwards loop so gcSafeMemmove can rely on the direction.
+// This is a forwards loop so gcSafeMemmove can rely on the direction. 
 template <typename T>
 ALWAYS_INLINE void gcSafeMemcpy(T* dst, T* src, size_t bytes)
 {

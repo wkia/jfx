@@ -66,16 +66,16 @@ private:
     unsigned m_startOffset { 0 };
     unsigned m_endOffset { 0 };
 };
-
+    
 class RenderRangeIterator {
 public:
     RenderRangeIterator(RenderObject* start);
     RenderObject* current() const;
     RenderObject* next();
-
+    
 private:
     void checkForSpanner();
-
+    
     RenderObject* m_current { nullptr };
     Vector<RenderMultiColumnSpannerPlaceholder*> m_spannerStack;
 };

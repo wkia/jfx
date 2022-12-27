@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -79,9 +79,9 @@ void BranchTarget::dump(PrintStream& out) const
 {
     if (!block)
         return;
-
+    
     out.print(*block);
-
+    
     if (count == count) // If the count is not NaN, then print it.
         out.print("/w:", count);
 }
@@ -118,7 +118,7 @@ void Node::remove(Graph& graph)
         convertToCheckStructure(graph.addStructureSet(set));
         return;
     }
-
+        
     case MatchStructure: {
         MatchStructureData& data = matchStructureData();
         RegisteredStructureSet set;
@@ -127,7 +127,7 @@ void Node::remove(Graph& graph)
         convertToCheckStructure(graph.addStructureSet(set));
         return;
     }
-
+        
     default:
         if (flags() & NodeHasVarArgs) {
             unsigned targetIndex = 0;
@@ -276,7 +276,7 @@ void Node::convertToDirectCall(FrozenValue* executable)
         RELEASE_ASSERT_NOT_REACHED();
         break;
     }
-
+    
     m_op = newOp;
     m_opInfo = executable;
 }

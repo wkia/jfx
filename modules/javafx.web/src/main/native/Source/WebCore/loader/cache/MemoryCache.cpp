@@ -123,7 +123,7 @@ bool MemoryCache::add(CachedResource& resource)
 
     ensureSessionResourceMap(resource.sessionID()).set(key, &resource);
     resource.setInCache(true);
-
+    
     resourceAccessed(resource);
 
     LOG(ResourceLoading, "MemoryCache::add Added '%.255s', resource %p\n", resource.url().string().latin1().data(), &resource);
@@ -192,7 +192,7 @@ CachedResource* MemoryCache::resourceForRequestImpl(const ResourceRequest& reque
     return resources.get(key);
 }
 
-unsigned MemoryCache::deadCapacity() const
+unsigned MemoryCache::deadCapacity() const 
 {
     // Dead resource capacity is whatever space is not occupied by live resources, bounded by an independent minimum and maximum.
     unsigned capacity = m_capacity - std::min(m_liveSize, m_capacity); // Start with available capacity.
@@ -201,8 +201,8 @@ unsigned MemoryCache::deadCapacity() const
     return capacity;
 }
 
-unsigned MemoryCache::liveCapacity() const
-{
+unsigned MemoryCache::liveCapacity() const 
+{ 
     // Live resource capacity is whatever is left over after calculating dead resource capacity.
     return m_capacity - deadCapacity();
 }
@@ -259,7 +259,7 @@ void MemoryCache::pruneLiveResourcesToSize(unsigned targetSize, bool shouldDestr
     MonotonicTime currentTime = FrameView::currentPaintTimeStamp();
     if (!currentTime) // In case prune is called directly, outside of a Frame paint.
         currentTime = MonotonicTime::now();
-
+    
     // Destroy any decoded data in live objects that we can.
     // Start from the head, since this is the least recently accessed of the objects.
 
@@ -321,7 +321,7 @@ void MemoryCache::pruneDeadResourcesToSize(unsigned targetSize)
     LOG(ResourceLoading, "MemoryCache::pruneDeadResourcesToSize(%d)", targetSize);
 
     SetForScope<bool> reentrancyProtector(m_inPruneResources, true);
-
+ 
     if (targetSize && m_deadSize <= targetSize)
         return;
 
@@ -341,8 +341,8 @@ void MemoryCache::pruneDeadResourcesToSize(unsigned targetSize)
                 continue;
 
             if (!resource->hasClients() && !resource->isPreloaded() && resource->isLoaded()) {
-                // Destroy our decoded data. This will remove us from
-                // m_liveDecodedResources, and possibly move us to a different
+                // Destroy our decoded data. This will remove us from 
+                // m_liveDecodedResources, and possibly move us to a different 
                 // LRU list in m_allResources.
 
                 LOG(ResourceLoading, " lru resource %p destroyDecodedData", resource);
@@ -369,7 +369,7 @@ void MemoryCache::pruneDeadResourcesToSize(unsigned targetSize)
                     return;
             }
         }
-
+            
         // Shrink the vector back down so we don't waste time inspecting
         // empty LRU lists on future prunes.
         if (!m_allResources[i]->isEmpty())
@@ -460,7 +460,7 @@ void MemoryCache::insertInLRUList(CachedResource& resource)
 {
     ASSERT(resource.inCache());
     ASSERT(resource.accessCount() > 0);
-
+    
     auto addResult = lruListFor(resource).add(&resource);
     ASSERT_UNUSED(addResult, addResult.isNewEntry);
 }
@@ -468,18 +468,18 @@ void MemoryCache::insertInLRUList(CachedResource& resource)
 void MemoryCache::resourceAccessed(CachedResource& resource)
 {
     ASSERT(resource.inCache());
-
+    
     // Need to make sure to remove before we increase the access count, since
     // the queue will possibly change.
     removeFromLRUList(resource);
-
+    
     // If this is the first time the resource has been accessed, adjust the size of the cache to account for its initial size.
     if (!resource.accessCount())
         adjustSize(resource.hasClients(), resource.size());
-
+    
     // Add to our access count.
     resource.increaseAccessCount();
-
+    
     // Now insert into the new queue.
     insertInLRUList(resource);
 }
@@ -700,7 +700,7 @@ void MemoryCache::prune()
 {
     if (!needsPruning())
         return;
-
+        
     pruneDeadResources(); // Prune dead first, in case it was "borrowing" capacity from live.
     pruneLiveResources();
 }

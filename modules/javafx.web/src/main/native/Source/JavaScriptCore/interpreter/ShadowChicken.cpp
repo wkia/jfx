@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,7 +43,7 @@ void ShadowChicken::Packet::dump(PrintStream& out) const
         out.print("empty");
         return;
     }
-
+    
     if (isPrologue()) {
         String name = "?"_s;
         if (auto* function = jsDynamicCast<JSFunction*>(callee->vm(), callee)) {
@@ -57,12 +57,12 @@ void ShadowChicken::Packet::dump(PrintStream& out) const
             RawPointer(callerFrame), ", name = ", name, "}");
         return;
     }
-
+    
     if (isTail()) {
         out.print("tail-packet:{frame = ", RawPointer(frame), "}");
         return;
     }
-
+    
     ASSERT(isThrow());
     out.print("throw");
 }
@@ -112,9 +112,9 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
         dataLog("Running update on: ", *this, "\n");
         WTFReportBacktrace();
     }
-
+    
     const unsigned logCursorIndex = m_logCursor - m_log;
-
+    
     // We need to figure out how to reconcile the current machine stack with our shadow stack. We do
     // that by figuring out how much of the shadow stack to pop. We apply three different rules. The
     // precise rule relies on the log. The log contains caller frames, which means that we know
@@ -133,16 +133,16 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
             highestPointSinceLastTime = std::max(highestPointSinceLastTime, watermark);
         }
     }
-
+    
     if (ShadowChickenInternal::verbose)
         dataLog("Highest point since last time: ", RawPointer(highestPointSinceLastTime), "\n");
-
+    
     while (!m_stack.isEmpty() && (m_stack.last().frame < highestPointSinceLastTime || m_stack.last().isTailDeleted))
         m_stack.removeLast();
-
+    
     if (ShadowChickenInternal::verbose)
         dataLog("    Revised stack: ", listDump(m_stack), "\n");
-
+    
     // It's possible that the top of stack is now tail-deleted. The stack no longer contains any
     // frames below the log's high watermark. That means that we just need to look for the first
     // occurence of a tail packet for the current stack top.
@@ -164,7 +164,7 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
 
     if (ShadowChickenInternal::verbose)
         dataLog("    Revised stack: ", listDump(m_stack), "\n");
-
+    
     // The log-based and callFrame-based rules require that ShadowChicken was enabled. The point of
     // ShadowChicken is to give sensible-looking results even if we had not logged. This means that
     // we need to reconcile the shadow stack and the real stack by actually looking at the real
@@ -189,10 +189,10 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
                 return StackVisitor::Continue;
             });
         stackRightNow.reverse();
-
+        
         if (ShadowChickenInternal::verbose)
             dataLog("    Stack right now: ", listDump(stackRightNow), "\n");
-
+        
         unsigned shadowIndex = 0;
         unsigned rightNowIndex = 0;
         while (shadowIndex < m_stack.size() && rightNowIndex < stackRightNow.size()) {
@@ -214,11 +214,11 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
             break;
         }
         m_stack.resize(shadowIndex);
-
+        
         if (ShadowChickenInternal::verbose)
             dataLog("    Revised stack: ", listDump(m_stack), "\n");
     }
-
+    
     // It's possible that the top stack frame is actually lower than highestPointSinceLastTime.
     // Account for that here.
     highestPointSinceLastTime = nullptr;
@@ -228,13 +228,13 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
             break;
         }
     }
-
+    
     if (ShadowChickenInternal::verbose)
         dataLog("    Highest point since last time: ", RawPointer(highestPointSinceLastTime), "\n");
-
+    
     // Set everything up so that we know where the top frame is in the log.
     unsigned indexInLog = logCursorIndex;
-
+    
     auto advanceIndexInLogTo = [&] (CallFrame* frame, JSObject* callee, CallFrame* callerFrame) -> bool {
         if (ShadowChickenInternal::verbose)
             dataLog("    Advancing to frame = ", RawPointer(frame), " from indexInLog = ", indexInLog, "\n");
@@ -243,12 +243,12 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
                 dataLog("    Bailing.\n");
             return false;
         }
-
+        
         unsigned oldIndexInLog = indexInLog;
-
+        
         while (indexInLog--) {
             Packet packet = m_log[indexInLog];
-
+            
             // If all callees opt into ShadowChicken, then this search will rapidly terminate when
             // we find our frame. But if our frame's callee didn't emit a prologue packet because it
             // didn't opt in, then we will keep looking backwards until we *might* find a different
@@ -261,7 +261,7 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
             // the one we're looking for.
             // FIXME: Add more filters.
             // https://bugs.webkit.org/show_bug.cgi?id=155685
-
+            
             if (packet.isPrologue() && packet.frame == frame
                 && (!callee || packet.callee == callee)
                 && (!callerFrame || packet.callerFrame == callerFrame)) {
@@ -270,7 +270,7 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
                 return true;
             }
         }
-
+        
         // This is an interesting eventuality. We will see this if ShadowChicken was not
         // consistently enabled. We have a choice between:
         //
@@ -286,12 +286,12 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
         //
         // It seems like the latter option is less harmful, so that's what we do.
         indexInLog = oldIndexInLog;
-
+        
         if (ShadowChickenInternal::verbose)
             dataLog("    Didn't find it.\n");
         return false;
     };
-
+    
     Vector<Frame> toPush;
     StackVisitor::visit(
         callFrame, vm, [&] (StackVisitor& visitor) -> StackVisitor::Status {
@@ -350,12 +350,12 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
                     dataLog("    Going to loop through to find tail deleted frames using ", RawPointer(callFrame), " with indexInLog = ", indexInLog, " and push-stack top = ", toPush.last(), "\n");
                 for (;;) {
                     ASSERT(m_log[indexInLog].frame == toPush.last().frame);
-
+                    
                     // Right now the index is pointing at a prologue packet of the last frame that
                     // we pushed. Peek behind that packet to see if there is a tail packet. If there
                     // is one then we know that there is a corresponding prologue packet that will
                     // tell us about a tail-deleted frame.
-
+                    
                     if (!indexInLog)
                         break;
                     Packet tailPacket = m_log[indexInLog - 1];
@@ -373,7 +373,7 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
                     // FIXME: After a few iterations the tail packet referenced frame may not be the
                     // same as the original callFrame for the real stack frame we started with.
                     // It is unclear when we should break.
-
+                    
                     if (!advanceIndexInLogTo(tailPacket.frame, nullptr, nullptr)) {
                         if (ShadowChickenInternal::verbose)
                             dataLog("Can't find prologue packet for tail: ", RawPointer(tailPacket.frame), "\n");
@@ -397,10 +397,10 @@ void ShadowChicken::update(VM& vm, CallFrame* callFrame)
 
     if (ShadowChickenInternal::verbose)
         dataLog("    Pushing: ", listDump(toPush), "\n");
-
+    
     for (unsigned i = toPush.size(); i--;)
         m_stack.append(toPush[i]);
-
+    
     // We want to reset the log. There is a fun corner-case: there could be a tail marker at the end
     // of this log. We could make that work by setting isTailDeleted on the top of stack, but that
     // would require more corner cases in the complicated reconciliation code above. That code
@@ -456,7 +456,7 @@ void ShadowChicken::visitChildren(AbstractSlotVisitor& visitor)
             visitor.appendUnbarriered(m_log[i].codeBlock);
         }
     }
-
+    
     for (unsigned i = m_stack.size(); i--; ) {
         Frame& frame = m_stack[i];
         visitor.appendUnbarriered(frame.thisValue);
@@ -477,7 +477,7 @@ void ShadowChicken::reset()
 void ShadowChicken::dump(PrintStream& out) const
 {
     out.print("{stack = [", listDump(m_stack), "], log = [");
-
+    
     CommaPrinter comma;
     unsigned limit = static_cast<unsigned>(m_logCursor - m_log);
     out.print("\n");
@@ -501,7 +501,7 @@ JSArray* ShadowChicken::functionsOnStack(JSGlobalObject* globalObject, CallFrame
             scope.releaseAssertNoException(); // This function is only called from tests.
             return true;
         });
-
+    
     return result;
 }
 

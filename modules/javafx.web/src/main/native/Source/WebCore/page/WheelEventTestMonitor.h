@@ -46,7 +46,7 @@ public:
 
     WEBCORE_EXPORT void setTestCallbackAndStartMonitoring(bool expectWheelEndOrCancel, bool expectMomentumEnd, WTF::Function<void()>&&);
     WEBCORE_EXPORT void clearAllTestDeferrals();
-
+    
     enum DeferReason {
         HandlingWheelEvent                  = 1 << 0,
         HandlingWheelEventOnMainThread      = 1 << 1,
@@ -62,7 +62,7 @@ public:
     WEBCORE_EXPORT void receivedWheelEvent(const PlatformWheelEvent&);
     WEBCORE_EXPORT void deferForReason(ScrollableAreaIdentifier, DeferReason);
     WEBCORE_EXPORT void removeDeferralForReason(ScrollableAreaIdentifier, DeferReason);
-
+    
     void checkShouldFireCallbacks();
 
     using ScrollableAreaReasonMap = WTF::HashMap<ScrollableAreaIdentifier, OptionSet<DeferReason>>;
@@ -92,7 +92,7 @@ public:
         if (m_monitor)
             m_monitor->deferForReason(m_identifier, m_reason);
     }
-
+    
     WheelEventTestMonitorCompletionDeferrer(WheelEventTestMonitorCompletionDeferrer&& other)
         : m_monitor(WTFMove(other.m_monitor))
         , m_identifier(other.m_identifier)

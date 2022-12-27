@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -111,7 +111,7 @@ enum PredictionPass {
     // are likely to be purely numerical, which generally doesn't require knowing
     // the rare case profiles.
     PrimaryPass,
-
+    
     // At this point we know what is numerical and what isn't. Non-numerical inputs
     // to arithmetic operations will not have useful information in the Baseline JIT
     // rare case profiles because Baseline may take slow path on non-numerical
@@ -135,14 +135,14 @@ enum PredictionPass {
     // worst thing that can happen is that we violate basic laws of theoretical
     // decency.
     RareCasePass,
-
+    
     // At this point we know what is numerical and what isn't, and we also know what
     // is a double and what isn't. So, we start forcing variables to be double.
     // Doing so may have a cascading effect so this is a fixpoint. It's monotonic
     // in the sense that once a variable is forced double, it cannot be forced in
     // the other direction.
     DoubleVotingPass,
-
+    
     // This pass occurs once we have converged. At this point we are just installing
     // type checks based on the conclusions we have already reached. It's important
     // for this pass to reach the same conclusions that DoubleVotingPass reached.
@@ -184,7 +184,7 @@ enum GraphForm {
     // LoadStore form is suitable for CFG transformations, as well as strength
     // reduction, folding, and CSE.
     LoadStore,
-
+    
     // ThreadedCPS form means that basic blocks list up-front which locals they
     // expect to be live at the head, and which locals they make available at the
     // tail. ThreadedCPS form also implies that:
@@ -199,7 +199,7 @@ enum GraphForm {
     // ThreadedCPS form is suitable for data flow analysis (CFA, prediction
     // propagation), register allocation, and code generation.
     ThreadedCPS,
-
+    
     // SSA form. See DFGSSAConversionPhase.h for a description.
     SSA
 };
@@ -208,7 +208,7 @@ enum GraphForm {
 enum UnificationState {
     // BasicBlock-local accesses to variables are appropriately unified with each other.
     LocallyUnified,
-
+    
     // Unification has been performed globally.
     GloballyUnified
 };
@@ -268,19 +268,19 @@ struct NodeAndIndex {
         , index(UINT_MAX)
     {
     }
-
+    
     NodeAndIndex(Node* node, unsigned index)
         : node(node)
         , index(index)
     {
         ASSERT(!node == (index == UINT_MAX));
     }
-
+    
     bool operator!() const
     {
         return !node;
     }
-
+    
     Node* node;
     unsigned index;
 };

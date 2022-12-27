@@ -88,7 +88,7 @@ UserMessageHandler* UserMessageHandlersNamespace::namedItem(DOMWrapperWorld& wor
     page->userContentProvider().forEachUserMessageHandler([&](const UserMessageHandlerDescriptor& descriptor) {
         if (descriptor.name() != name || &descriptor.world() != &world)
             return;
-
+        
         ASSERT(!handler);
 
         auto addResult = m_messageHandlers.add(std::make_pair(descriptor.name(), const_cast<DOMWrapperWorld*>(&descriptor.world())), UserMessageHandler::create(*frame, const_cast<UserMessageHandlerDescriptor&>(descriptor)));

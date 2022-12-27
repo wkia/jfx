@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -91,10 +91,10 @@ void Safepoint::checkLivenessAndVisitChildren(Visitor& visitor)
 
     if (m_result.m_didGetCancelled)
         return; // We were cancelled during a previous GC!
-
+    
     if (!isKnownToBeLiveDuringGC(visitor))
         return;
-
+    
     for (unsigned i = m_scannables.size(); i--;)
         m_scannables[i]->visitChildren(visitor);
 }
@@ -106,10 +106,10 @@ template<typename Visitor>
 bool Safepoint::isKnownToBeLiveDuringGC(Visitor& visitor)
 {
     RELEASE_ASSERT(m_didCallBegin);
-
+    
     if (m_result.m_didGetCancelled)
         return true; // We were cancelled during a previous GC, so let's not mess with it this time around - pretend it's live and move on.
-
+    
     return m_plan.isKnownToBeLiveDuringGC(visitor);
 }
 
@@ -119,10 +119,10 @@ template bool Safepoint::isKnownToBeLiveDuringGC(SlotVisitor&);
 bool Safepoint::isKnownToBeLiveAfterGC()
 {
     RELEASE_ASSERT(m_didCallBegin);
-
+    
     if (m_result.m_didGetCancelled)
         return true; // We were cancelled during a previous GC, so let's not mess with it this time around - pretend it's live and move on.
-
+    
     return m_plan.isKnownToBeLiveAfterGC();
 }
 
@@ -130,7 +130,7 @@ void Safepoint::cancel()
 {
     RELEASE_ASSERT(m_didCallBegin);
     RELEASE_ASSERT(!m_result.m_didGetCancelled); // We cannot get cancelled twice because subsequent GCs will think that we're alive and they will not do anything to us.
-
+    
     RELEASE_ASSERT(m_plan.stage() == JITPlanStage::Canceled);
     m_result.m_didGetCancelled = true;
     m_vm = nullptr;

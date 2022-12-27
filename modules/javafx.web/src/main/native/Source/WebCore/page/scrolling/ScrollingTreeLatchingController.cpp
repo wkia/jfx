@@ -117,7 +117,7 @@ void ScrollingTreeLatchingController::nodeDidHandleEvent(ScrollingNodeID scrolli
 
         return false;
     };
-
+    
     if (!shouldLatch())
         return;
 

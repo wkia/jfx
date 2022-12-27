@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,12 +38,12 @@
 #include <wtf/text/TextStream.h>
 
 namespace WebCore {
-
+    
 bool DefaultFilterOperation::operator==(const FilterOperation& operation) const
 {
     if (!isSameType(operation))
         return false;
-
+    
     return representedType() == downcast<DefaultFilterOperation>(operation).representedType();
 }
 
@@ -55,12 +55,12 @@ ReferenceFilterOperation::ReferenceFilterOperation(const String& url, const Stri
 }
 
 ReferenceFilterOperation::~ReferenceFilterOperation() = default;
-
+    
 bool ReferenceFilterOperation::operator==(const FilterOperation& operation) const
 {
     if (!isSameType(operation))
         return false;
-
+    
     return m_url == downcast<ReferenceFilterOperation>(operation).m_url;
 }
 
@@ -78,10 +78,10 @@ RefPtr<FilterOperation> BasicColorMatrixFilterOperation::blend(const FilterOpera
 {
     if (from && !from->isSameType(*this))
         return this;
-
+    
     if (blendToPassthrough)
         return BasicColorMatrixFilterOperation::create(WebCore::blend(m_amount, passthroughAmount(), context), m_type);
-
+        
     const BasicColorMatrixFilterOperation* fromOperation = downcast<BasicColorMatrixFilterOperation>(from);
     double fromAmount = fromOperation ? fromOperation->amount() : passthroughAmount();
     return BasicColorMatrixFilterOperation::create(WebCore::blend(fromAmount, m_amount, context), m_type);
@@ -141,10 +141,10 @@ RefPtr<FilterOperation> BasicComponentTransferFilterOperation::blend(const Filte
 {
     if (from && !from->isSameType(*this))
         return this;
-
+    
     if (blendToPassthrough)
         return BasicComponentTransferFilterOperation::create(WebCore::blend(m_amount, passthroughAmount(), context), m_type);
-
+        
     const BasicComponentTransferFilterOperation* fromOperation = downcast<BasicComponentTransferFilterOperation>(from);
     double fromAmount = fromOperation ? fromOperation->amount() : passthroughAmount();
     return BasicComponentTransferFilterOperation::create(WebCore::blend(fromAmount, m_amount, context), m_type);
@@ -206,7 +206,7 @@ double BasicComponentTransferFilterOperation::passthroughAmount() const
         return 0;
     }
 }
-
+    
 bool InvertLightnessFilterOperation::operator==(const FilterOperation& operation) const
 {
     if (!isSameType(operation))
@@ -214,7 +214,7 @@ bool InvertLightnessFilterOperation::operator==(const FilterOperation& operation
 
     return true;
 }
-
+    
 RefPtr<FilterOperation> InvertLightnessFilterOperation::blend(const FilterOperation* from, const BlendingContext&, bool)
 {
     if (from && !from->isSameType(*this))
@@ -267,7 +267,7 @@ static ColorComponents<float, 4> hueRotate(const ColorComponents<float, 4>& colo
 
     float temp2 = lightness <= 0.5f ? lightness * (1.0f + saturation) : lightness + saturation - lightness * saturation;
     float temp1 = 2.0f * lightness - temp2;
-
+    
     hue *= 6.0f; // calcHue() wants hue in the 0-6 range.
 
     // Hue is in the range 0-6, other args in 0-1.
@@ -296,7 +296,7 @@ static ColorComponents<float, 4> hueRotate(const ColorComponents<float, 4>& colo
 bool InvertLightnessFilterOperation::transformColor(SRGBA<float>& color) const
 {
     auto hueRotatedSRGBAComponents = hueRotate(asColorComponents(color), 0.5f);
-
+    
     // Apply the matrix. See rdar://problem/41146650 for how this matrix was derived.
     constexpr ColorMatrix<5, 3> toDarkModeMatrix {
        -0.770f,  0.059f, -0.089f, 0.0f, 1.0f,
@@ -327,10 +327,10 @@ bool BlurFilterOperation::operator==(const FilterOperation& operation) const
 {
     if (!isSameType(operation))
         return false;
-
+    
     return m_stdDeviation == downcast<BlurFilterOperation>(operation).stdDeviation();
 }
-
+    
 RefPtr<FilterOperation> BlurFilterOperation::blend(const FilterOperation* from, const BlendingContext& context, bool blendToPassthrough)
 {
     if (from && !from->isSameType(*this))
@@ -345,7 +345,7 @@ RefPtr<FilterOperation> BlurFilterOperation::blend(const FilterOperation* from, 
     Length fromLength = fromOperation ? fromOperation->m_stdDeviation : Length(lengthType);
     return BlurFilterOperation::create(WebCore::blend(fromLength, m_stdDeviation, context));
 }
-
+    
 bool DropShadowFilterOperation::operator==(const FilterOperation& operation) const
 {
     if (!isSameType(operation))
@@ -353,7 +353,7 @@ bool DropShadowFilterOperation::operator==(const FilterOperation& operation) con
     const DropShadowFilterOperation& other = downcast<DropShadowFilterOperation>(operation);
     return m_location == other.m_location && m_stdDeviation == other.m_stdDeviation && m_color == other.m_color;
 }
-
+    
 RefPtr<FilterOperation> DropShadowFilterOperation::blend(const FilterOperation* from, const BlendingContext& context, bool blendToPassthrough)
 {
     if (from && !from->isSameType(*this))
@@ -369,7 +369,7 @@ RefPtr<FilterOperation> DropShadowFilterOperation::blend(const FilterOperation* 
     IntPoint fromLocation = fromOperation ? fromOperation->location() : IntPoint();
     int fromStdDeviation = fromOperation ? fromOperation->stdDeviation() : 0;
     Color fromColor = fromOperation ? fromOperation->color() : Color::transparentBlack;
-
+    
     return DropShadowFilterOperation::create(
         WebCore::blend(fromLocation, m_location, context),
         WebCore::blend(fromStdDeviation, m_stdDeviation, context),

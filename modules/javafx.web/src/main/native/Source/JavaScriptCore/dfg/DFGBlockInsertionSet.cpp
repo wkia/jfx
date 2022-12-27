@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -67,14 +67,14 @@ bool BlockInsertionSet::execute()
 {
     if (m_insertions.isEmpty())
         return false;
-
+    
     // We allow insertions to be given to us in any order. So, we need to sort them before
     // running WTF::executeInsertions. Also, we don't really care if the sort is stable since
     // basic block order doesn't have semantics - it's just to make code easier to read.
     std::sort(m_insertions.begin(), m_insertions.end());
 
     executeInsertions(m_graph.m_blocks, m_insertions);
-
+    
     // Prune out empty entries. This isn't strictly necessary but it's
     // healthy to keep the block list from growing.
     unsigned targetIndex = 0;
@@ -85,15 +85,15 @@ bool BlockInsertionSet::execute()
         m_graph.m_blocks[targetIndex++] = block;
     }
     m_graph.m_blocks.shrink(targetIndex);
-
+    
     // Make sure that the blocks know their new indices.
     for (unsigned i = 0; i < m_graph.m_blocks.size(); ++i)
         m_graph.m_blocks[i]->index = i;
-
+    
     // And finally, invalidate all analyses that rely on the CFG.
     m_graph.invalidateCFG();
     m_graph.dethread();
-
+    
     return true;
 }
 

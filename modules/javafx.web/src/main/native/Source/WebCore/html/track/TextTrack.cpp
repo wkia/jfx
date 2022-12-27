@@ -79,7 +79,7 @@ static const AtomString& metadataKeyword()
     static MainThreadNeverDestroyed<const AtomString> metadata("metadata", AtomString::ConstructFromLiteral);
     return metadata;
 }
-
+    
 static const AtomString& forcedKeyword()
 {
     static MainThreadNeverDestroyed<const AtomString> forced("forced", AtomString::ConstructFromLiteral);
@@ -287,10 +287,10 @@ void TextTrack::removeAllCues()
 
     if (m_client)
         m_client->textTrackRemoveCues(*this, *m_cues);
-
+    
     for (size_t i = 0; i < m_cues->length(); ++i)
         m_cues->item(i)->setTrack(nullptr);
-
+    
     m_cues->clear();
 }
 
@@ -353,7 +353,7 @@ ExceptionOr<void> TextTrack::removeCue(TextTrackCue& cue)
 
     // The removeCue(cue) method of TextTrack objects, when invoked, must run the following steps:
 
-    // 1. If the given cue is not currently listed in the method's TextTrack
+    // 1. If the given cue is not currently listed in the method's TextTrack 
     // object's text track's text track list of cues, then throw a NotFoundError exception.
     if (cue.track() != this)
         return Exception { NotFoundError };
@@ -523,19 +523,19 @@ bool TextTrack::hasCue(TextTrackCue& cue, TextTrackCue::CueMatchRules match)
 {
     if (cue.startMediaTime() < MediaTime::zeroTime() || cue.endMediaTime() < MediaTime::zeroTime())
         return false;
-
+    
     if (!m_cues || !m_cues->length())
         return false;
-
+    
     size_t searchStart = 0;
     size_t searchEnd = m_cues->length();
-
+    
     while (1) {
         ASSERT(searchStart <= m_cues->length());
         ASSERT(searchEnd <= m_cues->length());
-
+        
         RefPtr<TextTrackCue> existingCue;
-
+        
         // Cues in the TextTrackCueList are maintained in start time order.
         if (searchStart == searchEnd) {
             if (!searchStart)
@@ -545,7 +545,7 @@ bool TextTrack::hasCue(TextTrackCue& cue, TextTrackCue::CueMatchRules match)
             // consider all of them.
             while (searchStart >= 2 && cue.hasEquivalentStartTime(*m_cues->item(searchStart - 2)))
                 --searchStart;
-
+            
             bool firstCompare = true;
             while (1) {
                 if (!firstCompare)
@@ -565,7 +565,7 @@ bool TextTrack::hasCue(TextTrackCue& cue, TextTrackCue::CueMatchRules match)
                     return true;
             }
         }
-
+        
         size_t index = (searchStart + searchEnd) / 2;
         existingCue = m_cues->item(index);
         if ((cue.startMediaTime() + startTimeVariance()) < existingCue->startMediaTime() || (match != TextTrackCue::IgnoreDuration && cue.hasEquivalentStartTime(*existingCue) && cue.endMediaTime() > existingCue->endMediaTime()))
@@ -573,7 +573,7 @@ bool TextTrack::hasCue(TextTrackCue& cue, TextTrackCue::CueMatchRules match)
         else
             searchStart = index + 1;
     }
-
+    
     ASSERT_NOT_REACHED();
     return false;
 }

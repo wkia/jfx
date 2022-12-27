@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -116,10 +116,10 @@ public:
 
     void registerAllViewportConstrainedLayers(RenderLayerCompositor&);
     void unregisterAllViewportConstrainedLayers();
-
+    
     void registerAllScrollingLayers();
     void unregisterAllScrollingLayers();
-
+    
     void addScrollingLayer(RenderLayer&);
     void removeScrollingLayer(RenderLayer&, RenderLayerBacking&);
 
@@ -144,7 +144,7 @@ private:
 // composited RenderLayers. It determines which RenderLayers
 // become compositing, and creates and maintains a hierarchy of
 // GraphicsLayers based on the RenderLayer painting order.
-//
+// 
 // There is one RenderLayerCompositor per RenderView.
 
 class RenderLayerCompositor final : public GraphicsLayerClient, public GraphicsLayerUpdaterClient {
@@ -186,7 +186,7 @@ public:
 
     // Called when something outside WebKit affects the visible rect (e.g. delegated scrolling). Might schedule a layer flush.
     void didChangeVisibleRect();
-
+    
     // Rebuild the tree of compositing layers
     bool updateCompositingLayers(CompositingUpdateType, RenderLayer* updateRoot = nullptr);
     // This is only used when state changes and we do not exepect a style update or layout to happen soon (e.g. when
@@ -233,12 +233,12 @@ public:
 
     // Called after the view transparency, or the document or base background color change.
     void rootBackgroundColorOrTransparencyChanged();
-
+    
     // Repaint the appropriate layers when the given RenderLayer starts or stops being composited.
     void repaintOnCompositingChange(RenderLayer&);
-
+    
     void repaintInCompositedAncestor(RenderLayer&, const LayoutRect&);
-
+    
     // Notify us that a layer has been added or removed
     void layerWasAdded(RenderLayer& parent, RenderLayer& child);
     void layerWillBeRemoved(RenderLayer& parent, RenderLayer& child);
@@ -280,16 +280,16 @@ public:
     RootLayerAttachment rootLayerAttachment() const { return m_rootLayerAttachment; }
     void updateRootLayerAttachment();
     void updateRootLayerPosition();
-
+    
     void setIsInWindow(bool);
 
     void clearBackingForAllLayers();
     void invalidateEventRegionForAllFrames();
     void invalidateEventRegionForAllLayers();
-
+    
     void layerBecameComposited(const RenderLayer&);
     void layerBecameNonComposited(const RenderLayer&);
-
+    
 #if ENABLE(VIDEO)
     // Use by RenderVideo to ask if it should try to use accelerated compositing.
     bool canAccelerateVideoRendering(RenderVideo&) const;
@@ -298,7 +298,7 @@ public:
     // Walk the tree looking for layers with 3d transforms. Useful in case you need
     // to know if there is non-affine content, e.g. for drawing into an image.
     bool has3DContent() const;
-
+    
     static bool isCompositedSubframeRenderer(const RenderObject&);
     static RenderLayerCompositor* frameContentsCompositor(RenderWidget&);
     // Return true if the layers changed.
@@ -328,7 +328,7 @@ public:
     void notifyFlushBeforeDisplayRefresh(const GraphicsLayer*) override;
 
     void layerTiledBackingUsageChanged(const GraphicsLayer*, bool /*usingTiledBacking*/);
-
+    
     bool acceleratedDrawingEnabled() const { return m_acceleratedDrawingEnabled; }
     bool displayListDrawingEnabled() const { return m_displayListDrawingEnabled; }
 
@@ -374,7 +374,7 @@ public:
     bool hasNonMainLayersWithTiledBacking() const { return m_layersWithTiledBackingCount; }
 
     OptionSet<CompositingReason> reasonsForCompositing(const RenderLayer&) const;
-
+    
     void didPaintBacking(RenderLayerBacking*);
 
     const Color& rootExtendedBackgroundColor() const { return m_rootExtendedBackgroundColor; }
@@ -398,12 +398,12 @@ private:
 
     // Returns true if the policy changed.
     bool updateCompositingPolicy();
-
+    
     // GraphicsLayerClient implementation
     void paintContents(const GraphicsLayer*, GraphicsContext&, const FloatRect&, GraphicsLayerPaintBehavior) override;
     void customPositionForVisibleRectComputation(const GraphicsLayer*, FloatPoint&) const override;
     bool isTrackingRepaints() const override { return m_isTrackingRepaints; }
-
+    
     // GraphicsLayerUpdaterClient implementation
     void flushLayersSoon(GraphicsLayerUpdater&) final;
     DisplayRefreshMonitorFactory* displayRefreshMonitorFactory() final;
@@ -465,7 +465,7 @@ private:
 
     void attachRootLayer(RootLayerAttachment);
     void detachRootLayer();
-
+    
     void rootLayerAttachmentChanged();
 
     void updateOverflowControlsLayers();
@@ -483,9 +483,9 @@ private:
 #endif
 
     FloatRect visibleRectForLayerFlushing() const;
-
+    
     Page& page() const;
-
+    
     GraphicsLayerFactory* graphicsLayerFactory() const;
     ScrollingCoordinator* scrollingCoordinator() const;
 
@@ -579,7 +579,7 @@ private:
 
     ChromeClient::CompositingTriggerFlags m_compositingTriggers { static_cast<ChromeClient::CompositingTriggerFlags>(ChromeClient::AllTriggers) };
     bool m_hasAcceleratedCompositing { true };
-
+    
     CompositingPolicy m_compositingPolicy { CompositingPolicy::Normal };
 
     bool m_showDebugBorders { false };

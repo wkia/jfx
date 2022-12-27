@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -75,7 +75,7 @@ inline bool MarkedBlock::marksConveyLivenessDuringMarking(HeapVersion myMarkingV
     // This returns true if any of these is true:
     // - We just created the block and so the bits are clear already.
     // - This block has objects marked during the last GC, and so its version was up-to-date just
-    //   before the current collection did beginMarking(). This means that any objects that have
+    //   before the current collection did beginMarking(). This means that any objects that have 
     //   their mark bit set are valid objects that were never deleted, and so are candidates for
     //   marking in any conservative scan. Using our jargon, they are "live".
     // - We did ~2^32 collections and rotated the version back to null, so we needed to hard-reset
@@ -100,10 +100,10 @@ ALWAYS_INLINE bool MarkedBlock::Handle::isLive(HeapVersion markingVersion, HeapV
 {
     if (directory()->isAllocated(NoLockingNecessary, this))
         return true;
-
+    
     // We need to do this while holding the lock because marks might be stale. In that case, newly
     // allocated will not yet be valid. Consider this interleaving.
-    //
+    // 
     // One thread is doing this:
     //
     // 1) IsLiveChecksNewlyAllocated: We check if newly allocated is valid. If it is valid, and the bit is
@@ -139,16 +139,16 @@ ALWAYS_INLINE bool MarkedBlock::Handle::isLive(HeapVersion markingVersion, HeapV
 
     MarkedBlock& block = this->block();
     MarkedBlock::Footer& footer = block.footer();
-
+    
     auto count = footer.m_lock.tryOptimisticFencelessRead();
     if (count.value) {
         Dependency fenceBefore = Dependency::fence(count.input);
         MarkedBlock& fencedBlock = *fenceBefore.consume(&block);
         MarkedBlock::Footer& fencedFooter = fencedBlock.footer();
         MarkedBlock::Handle* fencedThis = fenceBefore.consume(this);
-
+        
         ASSERT_UNUSED(fencedThis, !fencedThis->isFreeListed());
-
+        
         HeapVersion myNewlyAllocatedVersion = fencedFooter.m_newlyAllocatedVersion;
         if (myNewlyAllocatedVersion == newlyAllocatedVersion) {
             bool result = fencedBlock.isNewlyAllocated(cell);
@@ -167,22 +167,22 @@ ALWAYS_INLINE bool MarkedBlock::Handle::isLive(HeapVersion markingVersion, HeapV
             }
         }
     }
-
+    
     Locker locker { footer.m_lock };
 
     ASSERT(!isFreeListed());
-
+    
     HeapVersion myNewlyAllocatedVersion = footer.m_newlyAllocatedVersion;
     if (myNewlyAllocatedVersion == newlyAllocatedVersion)
         return block.isNewlyAllocated(cell);
-
+    
     if (block.areMarksStale(markingVersion)) {
         if (!isMarking)
             return false;
         if (!block.marksConveyLivenessDuringMarking(markingVersion))
             return false;
     }
-
+    
     return footer.m_marks.get(block.atomNumber(cell));
 }
 
@@ -240,19 +240,19 @@ void MarkedBlock::Handle::specializedSweep(FreeList* freeList, MarkedBlock::Hand
         newlyAllocatedMode = specializedNewlyAllocatedMode;
         marksMode = specializedMarksMode;
     }
-
+    
     RELEASE_ASSERT(!(destructionMode == BlockHasNoDestructors && sweepMode == SweepOnly));
-
+    
     SuperSamplerScope superSamplerScope(false);
 
     MarkedBlock& block = this->block();
     MarkedBlock::Footer& footer = block.footer();
-
+    
     if (false)
         dataLog(RawPointer(this), "/", RawPointer(&block), ": MarkedBlock::Handle::specializedSweep!\n");
-
+    
     unsigned cellSize = this->cellSize();
-
+    
     VM& vm = this->vm();
     auto destroy = [&] (void* cell) {
         JSCell* jsCell = static_cast<JSCell*>(cell);
@@ -261,13 +261,13 @@ void MarkedBlock::Handle::specializedSweep(FreeList* freeList, MarkedBlock::Hand
             jsCell->zap(HeapCell::Destruction);
         }
     };
-
+    
     m_directory->setIsDestructible(NoLockingNecessary, this, false);
-
+    
     if (Options::useBumpAllocator()
         && emptyMode == IsEmpty
         && newlyAllocatedMode == DoesNotHaveNewlyAllocated) {
-
+        
         // This is an incredibly powerful assertion that checks the sanity of our block bits.
         if (marksMode == MarksNotStale && !footer.m_marks.isEmpty()) {
             WTF::dataFile().atomically(
@@ -279,12 +279,12 @@ void MarkedBlock::Handle::specializedSweep(FreeList* freeList, MarkedBlock::Hand
                     UNREACHABLE_FOR_PLATFORM();
                 });
         }
-
+        
         char* startOfLastCell = static_cast<char*>(cellAlign(block.atoms() + m_endAtom - 1));
         char* payloadEnd = startOfLastCell + cellSize;
         RELEASE_ASSERT(payloadEnd - MarkedBlock::blockSize <= bitwise_cast<char*>(&block));
         char* payloadBegin = bitwise_cast<char*>(block.atoms());
-
+        
         if (sweepMode == SweepToFreeList)
             setIsFreeListed();
         if (space()->isMarking())
@@ -334,21 +334,21 @@ void MarkedBlock::Handle::specializedSweep(FreeList* freeList, MarkedBlock::Hand
             isEmpty = false;
             continue;
         }
-
+        
         if (destructionMode == BlockHasDestructorsAndCollectorIsRunning)
             deadCells.append(i);
         else
             handleDeadCell(i);
     }
-
+    
     // We only want to discard the newlyAllocated bits if we're creating a FreeList,
     // otherwise we would lose information on what's currently alive.
     if (sweepMode == SweepToFreeList && newlyAllocatedMode == HasNewlyAllocated)
         footer.m_newlyAllocatedVersion = MarkedSpace::nullVersion;
-
+    
     if (space()->isMarking())
         footer.m_lock.unlock();
-
+    
     if (destructionMode == BlockHasDestructorsAndCollectorIsRunning) {
         for (size_t i : deadCells)
             handleDeadCell(i);
@@ -380,7 +380,7 @@ void MarkedBlock::Handle::finishSweepKnowingHeapCellType(FreeList* freeList, con
             return false;
         if (destructionMode != BlockHasDestructors)
             return false;
-
+        
         switch (emptyMode) {
         case IsEmpty:
             switch (sweepMode) {
@@ -428,13 +428,13 @@ void MarkedBlock::Handle::finishSweepKnowingHeapCellType(FreeList* freeList, con
                 }
             }
         }
-
+        
         return false;
     };
-
+    
     if (trySpecialized())
         return;
-
+    
     // The template arguments don't matter because the first one is false.
     specializedSweep<false, IsEmpty, SweepOnly, BlockHasNoDestructors, DontScribble, HasNewlyAllocated, MarksStale>(freeList, emptyMode, sweepMode, destructionMode, scribbleMode, newlyAllocatedMode, marksMode, destroyFunc);
 }
@@ -506,7 +506,7 @@ inline IterationStatus MarkedBlock::Handle::forEachLiveCell(const Functor& funct
     // during the last collection and no survivors (yet) during this collection.
     //
     // https://bugs.webkit.org/show_bug.cgi?id=180315
-
+    
     HeapCell::Kind kind = m_attributes.cellKind;
     for (size_t i = 0; i < m_endAtom; i += m_atomsPerCell) {
         HeapCell* cell = reinterpret_cast_ptr<HeapCell*>(&m_block->atoms()[i]);

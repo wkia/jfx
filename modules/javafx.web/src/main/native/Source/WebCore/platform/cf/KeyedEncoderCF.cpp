@@ -47,7 +47,7 @@ KeyedEncoderCF::KeyedEncoderCF()
 {
     m_dictionaryStack.append(m_rootDictionary.get());
 }
-
+    
 KeyedEncoderCF::~KeyedEncoderCF()
 {
     ASSERT(m_dictionaryStack.size() == 1);
@@ -71,7 +71,7 @@ void KeyedEncoderCF::encodeUInt32(const String& key, uint32_t value)
     auto number = adoptCF(CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &value));
     CFDictionarySetValue(m_dictionaryStack.last(), key.createCFString().get(), number.get());
 }
-
+    
 void KeyedEncoderCF::encodeUInt64(const String& key, uint64_t value)
 {
     auto number = adoptCF(CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &value));

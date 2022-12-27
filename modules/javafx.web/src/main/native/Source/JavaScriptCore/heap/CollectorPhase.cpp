@@ -36,14 +36,14 @@ bool worldShouldBeSuspended(CollectorPhase phase)
     case CollectorPhase::NotRunning:
     case CollectorPhase::Concurrent:
         return false;
-
+        
     case CollectorPhase::Begin:
     case CollectorPhase::Fixpoint:
     case CollectorPhase::Reloop:
     case CollectorPhase::End:
         return true;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return false;
 }
@@ -76,7 +76,7 @@ void printInternal(PrintStream& out, JSC::CollectorPhase phase)
         out.print("End");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

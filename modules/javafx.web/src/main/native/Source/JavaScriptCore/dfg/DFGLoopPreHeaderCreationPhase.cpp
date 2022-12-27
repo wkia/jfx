@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -102,7 +102,7 @@ BasicBlock* createPreHeader(Graph& graph, BlockInsertionSet& insertionSet, Basic
     // https://bugs.webkit.org/show_bug.cgi?id=148586
     preHeader->appendNode(
         graph, SpecNone, Jump, block->at(0)->origin, OpInfo(block));
-
+    
     for (unsigned predecessorIndex = 0; predecessorIndex < block->predecessors.size(); predecessorIndex++) {
         BasicBlock* predecessor = block->predecessors[predecessorIndex];
         if (graph.m_cpsDominators->dominates(block, predecessor))
@@ -117,7 +117,7 @@ BasicBlock* createPreHeader(Graph& graph, BlockInsertionSet& insertionSet, Basic
             preHeader->predecessors.append(predecessor);
         }
     }
-
+    
     block->predecessors.append(preHeader);
     return preHeader;
 }
@@ -129,12 +129,12 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         m_graph.ensureCPSDominators();
         m_graph.ensureCPSNaturalLoops();
-
+        
         for (unsigned loopIndex = m_graph.m_cpsNaturalLoops->numLoops(); loopIndex--;) {
             const CPSNaturalLoop& loop = m_graph.m_cpsNaturalLoops->loop(loopIndex);
             BasicBlock* existingPreHeader = nullptr;
@@ -152,12 +152,12 @@ public:
                 needsNewPreHeader = true;
                 break;
             }
-
+            
             // This phase should only be run on a DFG where unreachable blocks have been pruned.
             // We also don't allow loops back to root. This means that every loop header has got
             // to have a pre-header.
             DFG_ASSERT(m_graph, nullptr, existingPreHeader);
-
+            
             // We are looking at the predecessors of a loop header. A loop header has to have
             // some predecessor other than the pre-header. We must have broken critical edges
             // because that is the DFG SSA convention. Therefore, each predecessor of the loop
@@ -170,13 +170,13 @@ public:
             if (!needsNewPreHeader && loop.header().node()->at(0)->origin.exitOK
                 && !existingPreHeader->terminal()->origin.exitOK)
                 needsNewPreHeader = true;
-
+            
             if (!needsNewPreHeader)
                 continue;
-
+            
             createPreHeader(m_graph, m_insertionSet, loop.header().node());
         }
-
+        
         return m_insertionSet.execute();
     }
 

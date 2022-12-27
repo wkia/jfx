@@ -49,3 +49,4 @@ JSC::JSValue PerformanceMeasure::detail(JSC::JSGlobalObject& globalObject)
 }
 
 }
+

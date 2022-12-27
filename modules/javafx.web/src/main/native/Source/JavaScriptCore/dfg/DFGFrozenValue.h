@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,7 +43,7 @@ public:
         , m_strength(WeakValue)
     {
     }
-
+    
     FrozenValue(JSValue value)
         : m_value(value)
         , m_structure(nullptr)
@@ -51,7 +51,7 @@ public:
     {
         RELEASE_ASSERT(!value || !value.isCell());
     }
-
+    
     FrozenValue(JSValue value, Structure* structure, ValueStrength strength)
         : m_value(value)
         , m_structure(structure)
@@ -61,14 +61,14 @@ public:
         ASSERT(!value || !value.isCell() || value.asCell()->classInfo(value.asCell()->vm()) == structure->classInfo());
         ASSERT(!!structure || (strength == WeakValue));
     }
-
+    
     static FrozenValue* emptySingleton();
-
+    
     bool operator!() const { return !m_value; }
-
+    
     JSValue value() const { return m_value; }
     JSCell* cell() const { return m_value.asCell(); }
-
+    
     template<typename T>
     T dynamicCast(VM& vm)
     {
@@ -82,28 +82,28 @@ public:
     {
         return jsCast<T>(value());
     }
-
+    
     Structure* structure() const { return m_structure; }
-
+    
     void strengthenTo(ValueStrength strength)
     {
         if (!!m_value && m_value.isCell())
             m_strength = merge(m_strength, strength);
     }
-
+    
     bool pointsToHeap() const { return !!value() && value().isCell(); }
-
+    
     // The strength of the value itself. The structure is almost always weak.
     ValueStrength strength() const { return m_strength; }
 
     String tryGetString(Graph&);
-
+    
     void dumpInContext(PrintStream& out, DumpContext* context) const;
     void dump(PrintStream& out) const;
-
+    
 private:
     friend class Graph;
-
+    
     // This is a utility method for DFG::Graph::freeze(). You should almost always call
     // Graph::freeze() directly. Calling this instead of Graph::freeze() can result in
     // the same constant being viewed as having different structures during the course

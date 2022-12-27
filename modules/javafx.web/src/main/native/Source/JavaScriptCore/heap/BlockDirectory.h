@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -54,7 +54,7 @@ DECLARE_ALLOCATOR_WITH_HEAP_IDENTIFIER(BlockDirectory);
 class BlockDirectory {
     WTF_MAKE_NONCOPYABLE(BlockDirectory);
     WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER(BlockDirectory);
-
+    
     friend class LLIntOffsetsExtractor;
 
 public:
@@ -83,16 +83,16 @@ public:
 
     template<typename Functor> void forEachBlock(const Functor&);
     template<typename Functor> void forEachNotEmptyBlock(const Functor&);
-
+    
     RefPtr<SharedTask<MarkedBlock::Handle*()>> parallelNotEmptyBlockSource();
-
+    
     void addBlock(MarkedBlock::Handle*);
     enum class WillDeleteBlock { No, Yes };
     // If WillDeleteBlock::Yes is passed then the block will be left in an invalid state. We do this, however, to avoid potentially paging in / decompressing old blocks to update their handle just before freeing them.
     void removeBlock(MarkedBlock::Handle*, WillDeleteBlock = WillDeleteBlock::No);
 
     void updatePercentageOfPagedOutPages(WTF::SimpleStats&);
-
+    
     Lock& bitvectorLock() WTF_RETURNS_LOCK(m_bitvectorLock) { return m_bitvectorLock; }
 
 #define BLOCK_DIRECTORY_BIT_ACCESSORS(lowerBitName, capitalBitName)     \
@@ -111,7 +111,7 @@ public:
         FOR_EACH_BLOCK_DIRECTORY_BIT(BLOCK_DIRECTORY_BIT_CALLBACK);
 #undef BLOCK_DIRECTORY_BIT_CALLBACK
     }
-
+    
     template<typename Func>
     void forEachBitVectorWithName(const AbstractLocker&, const Func& func)
     {
@@ -120,35 +120,35 @@ public:
         FOR_EACH_BLOCK_DIRECTORY_BIT(BLOCK_DIRECTORY_BIT_CALLBACK);
 #undef BLOCK_DIRECTORY_BIT_CALLBACK
     }
-
+    
     BlockDirectory* nextDirectory() const { return m_nextDirectory; }
     BlockDirectory* nextDirectoryInSubspace() const { return m_nextDirectoryInSubspace; }
     BlockDirectory* nextDirectoryInAlignedMemoryAllocator() const { return m_nextDirectoryInAlignedMemoryAllocator; }
-
+    
     void setNextDirectory(BlockDirectory* directory) { m_nextDirectory = directory; }
     void setNextDirectoryInSubspace(BlockDirectory* directory) { m_nextDirectoryInSubspace = directory; }
     void setNextDirectoryInAlignedMemoryAllocator(BlockDirectory* directory) { m_nextDirectoryInAlignedMemoryAllocator = directory; }
-
+    
     MarkedBlock::Handle* findEmptyBlockToSteal();
-
+    
     MarkedBlock::Handle* findBlockToSweep();
-
+    
     Subspace* subspace() const { return m_subspace; }
     MarkedSpace& markedSpace() const;
-
+    
     void dump(PrintStream&) const;
     void dumpBits(PrintStream& = WTF::dataFile());
-
+    
 private:
     friend class IsoCellSet;
     friend class LocalAllocator;
     friend class LocalSideAllocator;
     friend class MarkedBlock;
-
+    
     MarkedBlock::Handle* findBlockForAllocation(LocalAllocator&);
-
+    
     MarkedBlock::Handle* tryAllocateBlock(Heap&);
-
+    
     Vector<MarkedBlock::Handle*> m_blocks;
     Vector<unsigned> m_freeBlockIndices;
 
@@ -160,20 +160,20 @@ private:
     CellAttributes m_attributes;
 
     unsigned m_cellSize;
-
+    
     // After you do something to a block based on one of these cursors, you clear the bit in the
     // corresponding bitvector and leave the cursor where it was. We can use unsigned instead of size_t since
     // this number is bound by capacity of Vector m_blocks, which must be within unsigned.
     unsigned m_emptyCursor { 0 };
     unsigned m_unsweptCursor { 0 }; // Points to the next block that is a candidate for incremental sweeping.
-
+    
     // FIXME: All of these should probably be references.
     // https://bugs.webkit.org/show_bug.cgi?id=166988
     Subspace* m_subspace { nullptr };
     BlockDirectory* m_nextDirectory { nullptr };
     BlockDirectory* m_nextDirectoryInSubspace { nullptr };
     BlockDirectory* m_nextDirectoryInAlignedMemoryAllocator { nullptr };
-
+    
     SentinelLinkedList<LocalAllocator, BasicRawSentinelNode<LocalAllocator>> m_localAllocators;
 };
 

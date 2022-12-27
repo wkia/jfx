@@ -680,7 +680,7 @@ void RenderGrid::performGridItemsPreLayout(const GridTrackSizingAlgorithm& algor
         if (child->isOutOfFlowPositioned())
             continue;
         // Orthogonal items should be laid out in order to properly compute content-sized tracks that may depend on item's intrinsic size.
-        // We also need to properly estimate its grid area size, since it may affect to the baseline shims if such item particiaptes in baseline alignment.
+        // We also need to properly estimate its grid area size, since it may affect to the baseline shims if such item particiaptes in baseline alignment. 
         if (GridLayoutFunctions::isOrthogonalChild(*this, *child)) {
             updateGridAreaLogicalSize(*child, algorithm.estimatedGridAreaBreadthForChild(*child, ForColumns), algorithm.estimatedGridAreaBreadthForChild(*child, ForRows));
             child->layoutIfNeeded();
@@ -709,7 +709,7 @@ void RenderGrid::populateExplicitGridAndOrderIterator(Grid& grid) const
     for (RenderBox* child = firstChildBox(); child; child = child->nextSiblingBox()) {
         if (!populator.collectChild(*child))
             continue;
-
+        
         GridSpan rowPositions = GridPositionsResolver::resolveGridPositionsFromStyle(style(), *child, ForRows, autoRepeatRows);
         if (!rowPositions.isIndefinite()) {
             explicitRowStart = std::max<int>(explicitRowStart, -rowPositions.untranslatedStartLine());
@@ -940,7 +940,7 @@ void RenderGrid::layoutGridItems()
     populateGridPositionsForDirection(ForRows);
 
     for (RenderBox* child = firstChildBox(); child; child = child->nextSiblingBox()) {
-
+        
         if (m_grid.orderIterator().shouldSkipChild(*child)) {
             if (child->isOutOfFlowPositioned())
                 prepareChildForPositionedLayout(*child);
@@ -1181,7 +1181,7 @@ void RenderGrid::applyStretchAlignmentToChildIfNeeded(RenderBox& child)
             child.setLogicalWidth(0_lu);
             child.setNeedsLayout(MarkOnlyThis);
         }
-    }
+    } 
 }
 
 // FIXME: This logic is shared by RenderFlexibleBox, so it should be moved to RenderBox.

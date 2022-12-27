@@ -30,7 +30,7 @@
 namespace WebCore {
 
 Ref<StyleImageSet> StyleImageSet::create(CSSImageSetValue& cssValue)
-{
+{ 
     return adoptRef(*new StyleImageSet(cssValue));
 }
 
@@ -48,8 +48,8 @@ bool StyleImageSet::operator==(const StyleImage& other) const
 StyleImageSet::~StyleImageSet() = default;
 
 Ref<CSSValue> StyleImageSet::cssValue() const
-{
-    return m_cssValue.copyRef();
+{ 
+    return m_cssValue.copyRef(); 
 }
 
 ImageWithScale StyleImageSet::selectBestFitImage(const Document& document) const

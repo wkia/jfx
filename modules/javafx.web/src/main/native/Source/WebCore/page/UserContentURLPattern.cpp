@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -197,15 +197,15 @@ struct MatchTester {
                 return true;
             return false;
         }
-
+  
         // Pattern is empty but not string, this is not a match.
         if (patternStringFinished())
             return false;
-
+        
         // If we don't encounter a *, then we're hosed.
         if (m_pattern[m_patternIndex] != '*')
             return false;
-
+        
         while (!testStringFinished()) {
             MatchTester nextMatch(*this);
             nextMatch.m_patternIndex++;

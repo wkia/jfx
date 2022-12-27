@@ -86,7 +86,7 @@ int HTMLTableCellElement::cellIndex() const
         if (node->hasTagName(tdTag) || node->hasTagName(thTag))
             index++;
     }
-
+    
     return index;
 }
 

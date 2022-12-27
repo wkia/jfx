@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -45,7 +45,7 @@ CallLinkInfo::CallType CallLinkInfo::callTypeFor(OpcodeID opcodeID)
     switch (opcodeID) {
     case op_tail_call_varargs:
     case op_tail_call_forward_arguments:
-        return TailCallVarargs;
+        return TailCallVarargs;        
 
     case op_call:
     case op_call_eval:
@@ -88,7 +88,7 @@ CallLinkInfo::CallLinkInfo(CodeOrigin codeOrigin)
 CallLinkInfo::~CallLinkInfo()
 {
     clearStub();
-
+    
     if (isOnList())
         remove();
 }
@@ -139,7 +139,7 @@ void CallLinkInfo::setMonomorphicCallee(VM& vm, JSCell* owner, JSObject* callee,
     RELEASE_ASSERT(!(bitwise_cast<uintptr_t>(callee) & polymorphicCalleeMask));
     m_calleeOrCodeBlock.set(vm, owner, callee);
 
-    if (isDataIC())
+    if (isDataIC()) 
         u.dataIC.m_monomorphicCallDestination = codePtr;
     else {
         MacroAssembler::repatchNearCall(u.codeIC.m_callLocation, CodeLocationLabel<JSEntryPtrTag>(codePtr));
@@ -233,7 +233,7 @@ void CallLinkInfo::visitWeak(VM& vm)
         else
             m_clearedByGC = true;
     };
-
+    
     if (isLinked()) {
         if (stub()) {
             if (!stub()->visitWeak(vm)) {
@@ -316,7 +316,7 @@ MacroAssembler::JumpList CallLinkInfo::emitFastPathImpl(CCallHelpers& jit, GPRRe
 
     if (isDataIC()) {
         GPRReg scratchGPR = jit.scratchRegister();
-        jit.loadPtr(CCallHelpers::Address(callLinkInfoGPR, offsetOfCallee()), scratchGPR);
+        jit.loadPtr(CCallHelpers::Address(callLinkInfoGPR, offsetOfCallee()), scratchGPR); 
         CCallHelpers::Jump goPolymorphic;
         {
             DisallowMacroScratchRegisterUsage disallowScratch(jit);

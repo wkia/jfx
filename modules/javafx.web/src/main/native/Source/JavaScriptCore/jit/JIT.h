@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -118,7 +118,7 @@ namespace JSC {
     struct SlowCaseEntry {
         MacroAssembler::Jump from;
         BytecodeIndex to;
-
+        
         SlowCaseEntry(MacroAssembler::Jump f, BytecodeIndex t)
             : from(f)
             , to(t)
@@ -182,7 +182,7 @@ namespace JSC {
         size_t codeSize() const;
 
         void doMainThreadPreparationBeforeCompile();
-
+        
         static CompilationResult compile(VM& vm, CodeBlock* codeBlock, JITCompilationEffort effort, BytecodeIndex bytecodeOffset = BytecodeIndex(0))
         {
             return JIT(vm, codeBlock, bytecodeOffset).privateCompile(effort);
@@ -279,7 +279,7 @@ namespace JSC {
         enum class CompileOpEqType { Eq, NEq };
         void compileOpEqJumpSlow(Vector<SlowCaseEntry>::iterator&, CompileOpEqType, int jumpTarget);
         bool isOperandConstantDouble(VirtualRegister);
-
+        
         enum WriteBarrierMode { UnconditionalWriteBarrier, ShouldFilterBase, ShouldFilterValue, ShouldFilterBaseAndValue };
         // value register in write barrier is used before any scratch registers
         // so may safely be the same as either of the scratch registers.
@@ -388,7 +388,7 @@ namespace JSC {
         void emit_compareAndJumpSlow(const Instruction*, DoubleCondition, SlowOperation, bool invert, Vector<SlowCaseEntry>::iterator&);
         template<typename SlowOperation>
         void emit_compareAndJumpSlowImpl(VirtualRegister op1, VirtualRegister op2, unsigned target, size_t instructionSize, DoubleCondition, SlowOperation, bool invert, Vector<SlowCaseEntry>::iterator&);
-
+        
         void assertStackPointerOffset();
 
         void emit_op_add(const Instruction*);
@@ -763,7 +763,7 @@ namespace JSC {
         MacroAssembler::Call appendCallWithExceptionCheckSetJSValueResultWithProfile(Metadata&, const FunctionPtr<CFunctionPtrTag>, VirtualRegister result);
         template<typename Metadata>
         void appendCallWithExceptionCheckSetJSValueResultWithProfile(Metadata&, Address, VirtualRegister result);
-
+        
         template<typename OperationType, typename... Args>
         std::enable_if_t<FunctionTraits<OperationType>::hasResult, MacroAssembler::Call>
         callOperation(OperationType operation, VirtualRegister result, Args... args)
@@ -896,7 +896,7 @@ namespace JSC {
         void emitLoadCharacterString(RegisterID src, RegisterID dst, JumpList& failures);
 
         int jumpTarget(const Instruction*, int target);
-
+        
 #if ENABLE(DFG_JIT)
         void emitEnterOptimizationCheck();
 #else
@@ -930,7 +930,7 @@ namespace JSC {
 
         static bool reportCompileTimes();
         static bool computeCompileTimes();
-
+        
         // If you need to check a value from the metadata table and you need it to
         // be consistent across the fast and slow path, then you want to use this.
         // It will give the slow path the same value read by the fast path.
@@ -985,7 +985,7 @@ namespace JSC {
         unsigned m_privateBrandAccessIndex { UINT_MAX };
         unsigned m_callLinkInfoIndex { UINT_MAX };
         unsigned m_bytecodeCountHavingSlowCase { 0 };
-
+        
         Label m_arityCheck;
         std::unique_ptr<LinkBuffer> m_linkBuffer;
 

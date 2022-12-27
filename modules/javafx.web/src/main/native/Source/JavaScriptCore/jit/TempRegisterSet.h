@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,43 +40,43 @@ public:
     {
         clearAll();
     }
-
+    
     TempRegisterSet(const RegisterSet&);
-
+    
     void set(GPRReg reg)
     {
         setBit(GPRInfo::toIndex(reg));
     }
-
+    
     void set(JSValueRegs regs)
     {
         if (regs.tagGPR() != InvalidGPRReg)
             set(regs.tagGPR());
         set(regs.payloadGPR());
     }
-
+    
     void setGPRByIndex(unsigned index)
     {
         ASSERT(index < GPRInfo::numberOfRegisters);
         setBit(index);
     }
-
+    
     void clear(GPRReg reg)
     {
         clearBit(GPRInfo::toIndex(reg));
     }
-
+    
     bool get(GPRReg reg) const
     {
         return getBit(GPRInfo::toIndex(reg));
     }
-
+    
     bool getGPRByIndex(unsigned index) const
     {
         ASSERT(index < GPRInfo::numberOfRegisters);
         return getBit(index);
     }
-
+    
     // Return the index'th free GPR.
     GPRReg getFreeGPR(unsigned index = 0) const
     {
@@ -86,34 +86,34 @@ public:
         }
         return InvalidGPRReg;
     }
-
+    
     void set(FPRReg reg)
     {
         setBit(GPRInfo::numberOfRegisters + FPRInfo::toIndex(reg));
     }
-
+    
     void setFPRByIndex(unsigned index)
     {
         ASSERT(index < FPRInfo::numberOfRegisters);
         setBit(GPRInfo::numberOfRegisters + index);
     }
-
+    
     void clear(FPRReg reg)
     {
         clearBit(GPRInfo::numberOfRegisters + FPRInfo::toIndex(reg));
     }
-
+    
     bool get(FPRReg reg) const
     {
         return getBit(GPRInfo::numberOfRegisters + FPRInfo::toIndex(reg));
     }
-
+    
     bool getFPRByIndex(unsigned index) const
     {
         ASSERT(index < FPRInfo::numberOfRegisters);
         return getBit(GPRInfo::numberOfRegisters + index);
     }
-
+    
     // Return the index'th free FPR.
     FPRReg getFreeFPR(unsigned index = 0) const
     {
@@ -129,13 +129,13 @@ public:
     {
         set(BankInfo::toRegister(index));
     }
-
+    
     template<typename BankInfo>
     bool getByIndex(unsigned index)
     {
         return get(BankInfo::toRegister(index));
     }
-
+    
     unsigned numberOfSetGPRs() const
     {
         unsigned result = 0;
@@ -146,7 +146,7 @@ public:
         }
         return result;
     }
-
+    
     unsigned numberOfSetFPRs() const
     {
         unsigned result = 0;
@@ -157,7 +157,7 @@ public:
         }
         return result;
     }
-
+    
     unsigned numberOfSetRegisters() const
     {
         unsigned result = 0;
@@ -168,7 +168,7 @@ public:
         }
         return result;
     }
-
+    
 private:
     void clearAll()
     {
@@ -181,22 +181,22 @@ private:
         ASSERT(i < totalNumberOfRegisters);
         m_set[i >> 3] |= (1 << (i & 7));
     }
-
+    
     void clearBit(unsigned i)
     {
         ASSERT(i < totalNumberOfRegisters);
         m_set[i >> 3] &= ~(1 << (i & 7));
     }
-
+    
     bool getBit(unsigned i) const
     {
         ASSERT(i < totalNumberOfRegisters);
         return !!(m_set[i >> 3] & (1 << (i & 7)));
     }
-
+    
     static constexpr unsigned totalNumberOfRegisters =
         GPRInfo::numberOfRegisters + FPRInfo::numberOfRegisters;
-
+    
     static constexpr unsigned numberOfBytesInTempRegisterSet =
         (totalNumberOfRegisters + 7) >> 3;
 

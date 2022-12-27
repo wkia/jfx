@@ -168,7 +168,7 @@ void AsyncScrollingCoordinator::frameViewVisualViewportChanged(FrameView& frameV
 
     if (!coordinatesScrollingForFrameView(frameView))
         return;
-
+    
     // If the root layer does not have a ScrollingStateNode, then we should create one.
     auto* node = m_scrollingStateTree->stateNodeForID(frameView.scrollingNodeID());
     if (!node)
@@ -213,12 +213,12 @@ void AsyncScrollingCoordinator::frameViewRootLayerDidChange(FrameView& frameView
 
     if (!coordinatesScrollingForFrameView(frameView))
         return;
-
+    
     // FIXME: In some navigation scenarios, the FrameView has no RenderView or that RenderView has not been composited.
     // This needs cleaning up: https://bugs.webkit.org/show_bug.cgi?id=132724
     if (!frameView.scrollingNodeID())
         return;
-
+    
     // If the root layer does not have a ScrollingStateNode, then we should create one.
     ensureRootStateNodeForFrameView(frameView);
     ASSERT(m_scrollingStateTree->stateNodeForID(frameView.scrollingNodeID()));
@@ -317,7 +317,7 @@ FrameView* AsyncScrollingCoordinator::frameViewForScrollingNode(ScrollingNodeID 
 {
     if (!m_scrollingStateTree->rootStateNode())
         return nullptr;
-
+    
     if (scrollingNodeID == m_scrollingStateTree->rootStateNode()->scrollingNodeID())
         return m_page->mainFrame().view();
 
@@ -329,10 +329,10 @@ FrameView* AsyncScrollingCoordinator::frameViewForScrollingNode(ScrollingNodeID 
     auto* parentNode = stateNode;
     while (parentNode && !parentNode->isFrameScrollingNode())
         parentNode = parentNode->parent();
-
+    
     if (!parentNode)
         return nullptr;
-
+    
     // Walk the frame tree to find the matching FrameView. This is not ideal, but avoids back pointers to FrameViews
     // from ScrollingTreeStateNodes.
     for (Frame* frame = &m_page->mainFrame(); frame; frame = frame->tree().traverseNext()) {
@@ -365,7 +365,7 @@ void AsyncScrollingCoordinator::updateScrollPositionAfterAsyncScroll(ScrollingNo
     LOG_WITH_STREAM(Scrolling, stream << "AsyncScrollingCoordinator::updateScrollPositionAfterAsyncScroll node " << scrollingNodeID << " " << scrollType << " scrollPosition " << scrollPosition << " action " << scrollingLayerPositionAction);
 
     auto& frameView = *frameViewPtr;
-
+    
     if (!frameViewPtr->frame().isMainFrame()) {
         if (scrollingLayerPositionAction == ScrollingLayerPositionAction::Set)
             m_page->editorClient().subFrameScrollPositionChanged();
@@ -443,7 +443,7 @@ void AsyncScrollingCoordinator::reconcileScrollingState(FrameView& frameView, co
     if (insetClipLayer)
         positionForInsetClipLayer = FloatPoint(insetClipLayer->position().x(), FrameView::yPositionForInsetClipLayer(scrollPosition, topContentInset));
     FloatPoint positionForContentsLayer = frameView.positionForRootContentLayer();
-
+    
     FloatPoint positionForHeaderLayer = FloatPoint(scrollPositionForFixed.x(), FrameView::yPositionForHeaderLayer(scrollPosition, topContentInset));
     FloatPoint positionForFooterLayer = FloatPoint(scrollPositionForFixed.x(),
         FrameView::yPositionForFooterLayer(scrollPosition, topContentInset, frameView.totalContentsSize().height(), frameView.footerHeight()));
@@ -580,7 +580,7 @@ Vector<ScrollingNodeID> AsyncScrollingCoordinator::childrenOfNode(ScrollingNodeI
     auto* children = scrollingNode->children();
     if (!children || children->isEmpty())
         return { };
-
+    
     Vector<ScrollingNodeID> childNodeIDs;
     childNodeIDs.reserveInitialCapacity(children->size());
     for (const auto& childNode : *children)
@@ -668,7 +668,7 @@ void AsyncScrollingCoordinator::setFrameScrollingNodeState(ScrollingNodeID nodeI
         return visualViewport.width() < layoutViewport.width() || visualViewport.height() < layoutViewport.height();
     };
     frameScrollingNode.setVisualViewportIsSmallerThanLayoutViewport(visualViewportIsSmallerThanLayoutViewport(frameView));
-
+    
     frameScrollingNode.setScrollBehaviorForFixedElements(frameView.scrollBehaviorForFixedElements());
 }
 
@@ -870,14 +870,14 @@ String AsyncScrollingCoordinator::scrollingTreeAsText(ScrollingStateTreeAsTextBe
 void AsyncScrollingCoordinator::setActiveScrollSnapIndices(ScrollingNodeID scrollingNodeID, std::optional<unsigned> horizontalIndex, std::optional<unsigned> verticalIndex)
 {
     ASSERT(isMainThread());
-
+    
     if (!m_page)
         return;
-
+    
     auto* frameView = frameViewForScrollingNode(scrollingNodeID);
     if (!frameView)
         return;
-
+    
     if (auto* scrollableArea = frameView->scrollableAreaForScrollingNodeID(scrollingNodeID)) {
         scrollableArea->setCurrentHorizontalSnapPointIndex(horizontalIndex);
         scrollableArea->setCurrentVerticalSnapPointIndex(verticalIndex);

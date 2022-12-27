@@ -33,3 +33,4 @@ enum InbandGenericCueIdentifierType { };
 using InbandGenericCueIdentifier = ObjectIdentifier<InbandGenericCueIdentifierType>;
 
 } // namespace WebCore
+

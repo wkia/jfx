@@ -22,7 +22,7 @@
 #include "RenderSVGContainer.h"
 
 namespace WebCore {
-
+    
 class SVGElement;
 
 // This class is for containers which are never drawn, but do need to support style

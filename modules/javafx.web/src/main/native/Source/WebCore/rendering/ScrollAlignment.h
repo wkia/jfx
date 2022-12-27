@@ -79,7 +79,7 @@ struct ScrollAlignment {
     Behavior m_rectHidden;
     Behavior m_rectPartial;
 };
-
+    
 WEBCORE_EXPORT WTF::TextStream& operator<<(WTF::TextStream&, ScrollAlignment::Behavior);
 WEBCORE_EXPORT WTF::TextStream& operator<<(WTF::TextStream&, const ScrollAlignment&);
 

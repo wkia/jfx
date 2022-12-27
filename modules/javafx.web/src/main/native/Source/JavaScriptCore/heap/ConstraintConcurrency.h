@@ -33,7 +33,7 @@ enum class ConstraintConcurrency : uint8_t {
     Sequential,
     Concurrent
 };
-
+    
 } // namespace JSC
 
 namespace WTF {

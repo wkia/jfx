@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,16 +50,16 @@ public:
         : Phase(graph, "varargs forwarding")
     {
     }
-
+    
     bool run()
     {
         DFG_ASSERT(m_graph, nullptr, m_graph.m_form != SSA);
-
+        
         if (verbose) {
             dataLog("Graph before varargs forwarding:\n");
             m_graph.dump();
         }
-
+        
         m_changed = false;
         for (BasicBlock* block : m_graph.blocksInNaturalOrder())
             handleBlock(block);
@@ -81,19 +81,19 @@ private:
             }
         }
     }
-
+    
     void handleCandidate(BasicBlock* block, unsigned candidateNodeIndex)
     {
         // We expect calls into this function to be rare. So, this is written in a simple O(n) manner.
-
+        
         Node* candidate = block->at(candidateNodeIndex);
         if (verbose)
             dataLog("Handling candidate ", candidate, "\n");
-
+        
         // We eliminate GetButterfly over CreateClonedArguments if the butterfly is only
         // used by a GetByOffset  that loads the CreateClonedArguments's length. We also
         // eliminate it if the GetButterfly node is totally unused.
-        Vector<Node*, 1> candidateButterflies;
+        Vector<Node*, 1> candidateButterflies; 
 
         // Find the index of the last node in this block to use the candidate, and look for escaping
         // sites.
@@ -120,7 +120,7 @@ private:
                 if (!relevantLocals.contains(node->unlinkedOperand()))
                     relevantLocals.append(node->unlinkedOperand());
                 break;
-
+                
             case CheckVarargs:
             case Check: {
                 bool sawEscape = false;
@@ -146,13 +146,13 @@ private:
                 }
                 break;
             }
-
+                
             case VarargsLength:
             case LoadVarargs:
                 if (m_graph.uses(node, candidate))
                     lastUserIndex = nodeIndex;
                 break;
-
+                
             case CallVarargs:
             case ConstructVarargs:
             case TailCallVarargs:
@@ -165,7 +165,7 @@ private:
                 if (node->child2() == candidate)
                     lastUserIndex = nodeIndex;
                 break;
-
+                
             case SetLocal:
                 if (node->child1() == candidate && node->variableAccessData()->isLoadedFrom()) {
                     if (verbose)
@@ -183,7 +183,7 @@ private:
                     return;
                 break;
             }
-
+            
             case GetButterfly: {
                 if (node->child1() == candidate && candidate->op() == CreateClonedArguments) {
                     lastUserIndex = nodeIndex;
@@ -194,7 +194,7 @@ private:
                     return;
                 break;
             }
-
+                
             case FilterGetByStatus:
             case FilterPutByStatus:
             case FilterCallLinkStatus:
@@ -258,12 +258,12 @@ private:
 
         InlineCallFrame* startingInlineCallFrame = block->at(candidateNodeIndex)->origin.forExit.inlineCallFrame();
         HashSet<InlineCallFrame*, WTF::DefaultHash<InlineCallFrame*>, WTF::NullableHashTraits<InlineCallFrame*>> seenInlineCallFrames;
-
+        
         // We're still in business. Determine if between the candidate and the last user there is any
         // effect that could interfere with sinking.
         for (unsigned nodeIndex = candidateNodeIndex + 1; nodeIndex <= lastUserIndex; ++nodeIndex) {
             Node* node = block->at(nodeIndex);
-
+            
             // We have our own custom switch to detect some interferences that clobberize() wouldn't know
             // about, and also some of the common ones, too. In particular, clobberize() doesn't know
             // that Flush, MovHint, ZombieHint, and KillStack are bad because it's not worried about
@@ -277,7 +277,7 @@ private:
                     return;
                 }
                 break;
-
+                
             case PutStack:
                 if (argumentsInvolveStackSlot(candidate, node->stackAccessData()->operand)) {
                     if (verbose)
@@ -285,7 +285,7 @@ private:
                     return;
                 }
                 break;
-
+                
             case SetLocal:
                 if (argumentsInvolveStackSlot(candidate, node->operand())) {
                     if (verbose)
@@ -293,7 +293,7 @@ private:
                     return;
                 }
                 break;
-
+                
             default: {
                 bool doesInterfere = false;
                 clobberize(
@@ -333,12 +333,12 @@ private:
                 inlineCallFrame = inlineCallFrame->directCaller.inlineCallFrame();
             }
         }
-
+        
         // We can make this work.
         if (verbose)
             dataLog("    Will do forwarding!\n");
         m_changed = true;
-
+        
         // Transform the program.
         switch (candidate->op()) {
         case CreateDirectArguments:
@@ -348,7 +348,7 @@ private:
         case CreateClonedArguments:
             candidate->setOpAndDefaultFlags(PhantomClonedArguments);
             break;
-
+            
         default:
             DFG_CRASH(m_graph, candidate, "bad node type");
             break;
@@ -364,7 +364,7 @@ private:
             case PutHint:
                 // We don't need to change anything with these.
                 break;
-
+                
             case VarargsLength: {
                 if (node->argumentsChild() != candidate)
                     break;
@@ -378,13 +378,13 @@ private:
                     break;
                 node->setOpAndDefaultFlags(ForwardVarargs);
                 break;
-
+                
             case CallVarargs:
                 if (node->child3() != candidate)
                     break;
                 node->setOpAndDefaultFlags(CallForwardVarargs);
                 break;
-
+                
             case ConstructVarargs:
                 if (node->child3() != candidate)
                     break;
@@ -462,7 +462,7 @@ private:
 
         insertionSet.execute(block);
     }
-
+    
     bool m_changed;
 };
 

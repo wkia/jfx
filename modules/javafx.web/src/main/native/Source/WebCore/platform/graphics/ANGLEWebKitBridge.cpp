@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,12 +38,12 @@ namespace WebCore {
 static void appendSymbol(const sh::ShaderVariable& variable, ANGLEShaderSymbolType symbolType, Vector<std::pair<ANGLEShaderSymbolType, sh::ShaderVariable>>& symbols, const std::string& name, const std::string& mappedName)
 {
     LOG(WebGL, "Map shader symbol %s -> %s\n", name.c_str(), mappedName.c_str());
-
+    
     sh::ShaderVariable variableToAppend = variable;
     variableToAppend.name = name;
     variableToAppend.mappedName = mappedName;
     symbols.append(std::make_pair(symbolType, variableToAppend));
-
+    
     if (variable.isArray()) {
         for (unsigned i = 0; i < std::max(1u, variable.arraySizes.back()); i++) {
             std::string arrayBrackets = "[" + std::to_string(i) + "]";
@@ -61,7 +61,7 @@ static void getStructInfo(const sh::ShaderVariable& field, ANGLEShaderSymbolType
 {
     std::string name = namePrefix + '.' + field.name;
     std::string mappedName = mappedNamePrefix + '.' + field.mappedName;
-
+    
     if (field.isStruct()) {
         for (const auto& subfield : field.fields) {
             // ANGLE restricts the depth of structs, which prevents stack overflow errors in this recursion.
@@ -151,12 +151,12 @@ void ANGLEWebKitBridge::cleanupCompilers()
 
     builtCompilers = false;
 }
-
+    
 void ANGLEWebKitBridge::setResources(const ShBuiltInResources& resources)
 {
     // Resources are (possibly) changing - cleanup compilers if we had them already
     cleanupCompilers();
-
+    
     m_resources = resources;
 }
 
@@ -172,7 +172,7 @@ bool ANGLEWebKitBridge::compileShaderSource(const char* shaderSource, ANGLEShade
 
         builtCompilers = true;
     }
-
+    
     ShHandle compiler;
 
     if (shaderType == SHADER_TYPE_VERTEX)
@@ -193,7 +193,7 @@ bool ANGLEWebKitBridge::compileShaderSource(const char* shaderSource, ANGLEShade
     const std::string& objectCode = sh::GetObjectCode(compiler);
     if (objectCode.length())
         translatedShaderSource = objectCode.c_str();
-
+    
     if (!getSymbolInfo(compiler, SHADER_SYMBOL_TYPE_ATTRIBUTE, symbols))
         return false;
     if (!getSymbolInfo(compiler, SHADER_SYMBOL_TYPE_UNIFORM, symbols))

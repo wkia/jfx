@@ -250,16 +250,16 @@ void Frame::setView(RefPtr<FrameView>&& view)
     // these calls to work.
     if (!view && m_doc && m_doc->backForwardCacheState() != Document::InBackForwardCache)
         m_doc->willBeRemovedFromFrame();
-
+    
     if (m_view)
         m_view->layoutContext().unscheduleLayout();
-
+    
     m_eventHandler->clear();
 
     RELEASE_ASSERT(!m_doc || !m_doc->hasLivingRenderTree());
 
     m_view = WTFMove(view);
-
+    
     // Only one form submission is allowed per view of a part.
     // Since this part may be getting reused as a result of being
     // pulled from the back/forward cache, reset this flag.
@@ -404,7 +404,7 @@ String Frame::searchForLabelsAboveCell(const JSC::Yarr::RegularExpression& regEx
     HTMLTableCellElement* aboveCell = cell->cellAbove();
     if (aboveCell) {
         // search within the above cell we found for a match
-        size_t lengthSearched = 0;
+        size_t lengthSearched = 0;    
         for (Text* textNode = TextNodeTraversal::firstWithin(*aboveCell); textNode; textNode = TextNodeTraversal::next(*textNode, aboveCell)) {
             if (!textNode->renderer() || textNode->renderer()->style().visibility() != Visibility::Visible)
                 continue;
@@ -444,7 +444,7 @@ String Frame::searchForLabelsBeforeElement(const Vector<String>& labels, Element
         *resultDistance = notFound;
     if (resultIsInCellAbove)
         *resultIsInCellAbove = false;
-
+    
     // walk backwards in the node tree, until another element, or form, or end of tree
     int unsigned lengthSearched = 0;
     Node* n;
@@ -502,7 +502,7 @@ static String matchLabelsAgainstString(const Vector<String>& labels, const Strin
     // Make numbers and _'s in field names behave like word boundaries, e.g., "address2"
     replace(mutableStringToMatch, JSC::Yarr::RegularExpression("\\d"), " ");
     mutableStringToMatch.replace('_', ' ');
-
+    
     JSC::Yarr::RegularExpression regExp = createRegExpForLabels(labels);
     // Use the largest match we can find in the whole string
     int pos;
@@ -521,12 +521,12 @@ static String matchLabelsAgainstString(const Vector<String>& labels, const Strin
             start = pos + 1;
         }
     } while (pos != -1);
-
+    
     if (bestPos != -1)
         return mutableStringToMatch.substring(bestPos, bestLength);
     return String();
 }
-
+    
 String Frame::matchLabelsAgainstElement(const Vector<String>& labels, Element* element)
 {
     // Match against the name element, then against the id element if no match is found for the name element.
@@ -536,7 +536,7 @@ String Frame::matchLabelsAgainstElement(const Vector<String>& labels, Element* e
     String resultFromNameAttribute = matchLabelsAgainstString(labels, element->getNameAttribute());
     if (!resultFromNameAttribute.isEmpty())
         return resultFromNameAttribute;
-
+    
     return matchLabelsAgainstString(labels, element->attributeWithoutSynchronization(idAttr));
 }
 
@@ -669,7 +669,7 @@ void Frame::injectUserScripts(UserScriptInjectionTime injectionTime)
             if (script.waitForNotificationBeforeInjecting() == WaitForNotificationBeforeInjecting::Yes && !pageWasNotified)
                 addUserScriptAwaitingNotification(world, script);
             else
-            injectUserScriptImmediately(world, script);
+                injectUserScriptImmediately(world, script);
         }
     });
 }
@@ -802,7 +802,7 @@ void Frame::disconnectOwnerElement()
 {
     if (m_ownerElement) {
         m_ownerElement->clearContentFrame();
-    m_ownerElement = nullptr;
+        m_ownerElement = nullptr;
     }
 
     if (auto* document = this->document())
@@ -1113,7 +1113,7 @@ String Frame::debugDescription() const
 
     if (auto document = this->document())
         builder.append(' ', document->documentURI());
-
+    
     return builder.toString();
 }
 

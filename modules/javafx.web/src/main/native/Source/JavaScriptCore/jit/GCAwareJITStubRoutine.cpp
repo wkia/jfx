@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -63,7 +63,7 @@ void GCAwareJITStubRoutine::observeZeroRefCount()
         delete this;
         return;
     }
-
+    
     RELEASE_ASSERT(!m_refCount);
 
     m_isJettisoned = true;
@@ -74,7 +74,7 @@ void GCAwareJITStubRoutine::deleteFromGC()
     ASSERT(m_isJettisoned);
     ASSERT(!m_refCount);
     ASSERT(!m_mayBeExecuting);
-
+    
     delete this;
 }
 
@@ -198,7 +198,7 @@ Ref<PolymorphicAccessJITStubRoutine> createICJITStubRoutine(
         ASSERT(callLinkInfos.isEmpty());
         return adoptRef(*new PolymorphicAccessJITStubRoutine(code, vm, WTFMove(cases), WTFMove(weakStructures)));
     }
-
+    
     if (codeBlockForExceptionHandlers) {
         RELEASE_ASSERT(JITCode::isOptimizingJIT(codeBlockForExceptionHandlers->jitType()));
         auto stub = adoptRef(*new GCAwareJITStubRoutineWithExceptionHandler(code, vm, WTFMove(cases), WTFMove(weakStructures), owner, cells, WTFMove(callLinkInfos), codeBlockForExceptionHandlers, exceptionHandlerCallSiteIndex));
@@ -211,7 +211,7 @@ Ref<PolymorphicAccessJITStubRoutine> createICJITStubRoutine(
         stub->makeGCAware(vm);
         return stub;
     }
-
+    
     auto stub = adoptRef(*new MarkingGCAwareJITStubRoutine(code, vm, WTFMove(cases), WTFMove(weakStructures), owner, cells, WTFMove(callLinkInfos)));
     stub->makeGCAware(vm);
     return stub;

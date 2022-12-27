@@ -57,7 +57,7 @@ public:
     float committedWidth() const { return m_committedWidth; }
     float availableWidth() const { return m_availableWidth; }
     float logicalLeftOffset() const { return m_left; }
-
+    
     bool hasCommitted() const { return m_hasCommitted; }
     bool hasCommittedReplaced() const { return m_hasCommittedReplaced; }
 
@@ -77,7 +77,7 @@ public:
     void fitBelowFloats(bool isFirstLine = false);
     void setTrailingWhitespaceWidth(float collapsedWhitespace, float borderPaddingMargin = 0);
     IndentTextOrNot shouldIndentText() const { return m_shouldIndentText; }
-
+    
     bool isFirstLine() const { return m_isFirstLine; }
 
 private:

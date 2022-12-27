@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -38,10 +38,10 @@ class GigacageAlignedMemoryAllocator final : public AlignedMemoryAllocator {
 public:
     GigacageAlignedMemoryAllocator(Gigacage::Kind);
     ~GigacageAlignedMemoryAllocator() final;
-
+    
     void* tryAllocateAlignedMemory(size_t alignment, size_t size) final;
     void freeAlignedMemory(void*) final;
-
+    
     void dump(PrintStream&) const final;
 
     void* tryAllocateMemory(size_t) final;

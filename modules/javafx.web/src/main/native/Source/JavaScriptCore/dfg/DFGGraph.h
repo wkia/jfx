@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -163,31 +163,31 @@ class Graph final : public virtual Scannable {
 public:
     Graph(VM&, Plan&);
     ~Graph() final;
-
+    
     void changeChild(Edge& edge, Node* newNode)
     {
         edge.setNode(newNode);
     }
-
+    
     void changeEdge(Edge& edge, Edge newEdge)
     {
         edge = newEdge;
     }
-
+    
     void compareAndSwap(Edge& edge, Node* oldNode, Node* newNode)
     {
         if (edge.node() != oldNode)
             return;
         changeChild(edge, newNode);
     }
-
+    
     void compareAndSwap(Edge& edge, Edge oldEdge, Edge newEdge)
     {
         if (edge != oldEdge)
             return;
         changeEdge(edge, newEdge);
     }
-
+    
     void performSubstitution(Node* node)
     {
         if (node->flags() & NodeHasVarArgs) {
@@ -199,25 +199,25 @@ public:
             performSubstitutionForEdge(node->child3());
         }
     }
-
+    
     void performSubstitutionForEdge(Edge& child)
     {
         // Check if this operand is actually unused.
         if (!child)
             return;
-
+        
         // Check if there is any replacement.
         Node* replacement = child->replacement();
         if (!replacement)
             return;
-
+        
         child.setNode(replacement);
-
+        
         // There is definitely a replacement. Assert that the replacement does not
         // have a replacement.
         ASSERT(!child->replacement());
     }
-
+    
     template<typename... Params>
     Node* addNode(Params... params)
     {
@@ -238,10 +238,10 @@ public:
     void packNodeIndices();
 
     void dethread();
-
+    
     FrozenValue* freeze(JSValue); // We use weak freezing by default.
     FrozenValue* freezeStrong(JSValue); // Shorthand for freeze(value)->strengthenTo(StrongValue).
-
+    
     void convertToConstant(Node* node, FrozenValue* value);
     void convertToConstant(Node* node, JSValue value);
     void convertToStrongConstant(Node* node, JSValue value);
@@ -256,7 +256,7 @@ public:
     // fix this when we can allocate on the Compiler thread.
     // https://bugs.webkit.org/show_bug.cgi?id=210627
     FrozenValue* bottomValueMatchingSpeculation(SpeculatedType);
-
+    
     RegisteredStructure registerStructure(Structure* structure)
     {
         StructureRegistrationResult ignored;
@@ -265,12 +265,12 @@ public:
     RegisteredStructure registerStructure(Structure*, StructureRegistrationResult&);
     void registerAndWatchStructureTransition(Structure*);
     void assertIsRegistered(Structure* structure);
-
+    
     // CodeBlock is optional, but may allow additional information to be dumped (e.g. Identifier names).
     void dump(PrintStream& = WTF::dataFile(), DumpContext* = nullptr);
 
     bool terminalsAreValid();
-
+    
     enum PhiNodeDumpMode { DumpLivePhisOnly, DumpAllPhis };
     void dumpBlockHeader(PrintStream&, const char* prefix, BasicBlock*, PhiNodeDumpMode, DumpContext*);
     void dump(PrintStream&, Edge);
@@ -285,20 +285,20 @@ public:
     AddSpeculationMode addSpeculationMode(Node* add, bool leftShouldSpeculateInt32, bool rightShouldSpeculateInt32, PredictionPass pass)
     {
         ASSERT(add->op() == ValueAdd || add->op() == ValueSub || add->op() == ArithAdd || add->op() == ArithSub);
-
+        
         RareCaseProfilingSource source = add->sourceFor(pass);
-
+        
         Node* left = add->child1().node();
         Node* right = add->child2().node();
-
+        
         if (left->hasConstant())
             return addImmediateShouldSpeculateInt32(add, rightShouldSpeculateInt32, right, left, source);
         if (right->hasConstant())
             return addImmediateShouldSpeculateInt32(add, leftShouldSpeculateInt32, left, right, source);
-
+        
         return (leftShouldSpeculateInt32 && rightShouldSpeculateInt32 && add->canSpeculateInt32(source)) ? SpeculateInt32 : DontSpeculateInt32;
     }
-
+    
     AddSpeculationMode valueAddSpeculationMode(Node* add, PredictionPass pass)
     {
         return addSpeculationMode(
@@ -307,7 +307,7 @@ public:
             add->child2()->shouldSpeculateInt32OrBooleanExpectingDefined(),
             pass);
     }
-
+    
     AddSpeculationMode arithAddSpeculationMode(Node* add, PredictionPass pass)
     {
         return addSpeculationMode(
@@ -316,25 +316,25 @@ public:
             add->child2()->shouldSpeculateInt32OrBooleanForArithmetic(),
             pass);
     }
-
+    
     AddSpeculationMode addSpeculationMode(Node* add, PredictionPass pass)
     {
         if (add->op() == ValueAdd)
             return valueAddSpeculationMode(add, pass);
-
+        
         return arithAddSpeculationMode(add, pass);
     }
-
+    
     bool addShouldSpeculateInt32(Node* add, PredictionPass pass)
     {
         return addSpeculationMode(add, pass) != DontSpeculateInt32;
     }
-
+    
     bool addShouldSpeculateInt52(Node* add)
     {
         if (!enableInt52())
             return false;
-
+        
         Node* left = add->child1().node();
         Node* right = add->child2().node();
 
@@ -373,21 +373,21 @@ public:
 
         return shouldSpeculateInt52ForAdd(left) && shouldSpeculateInt52ForAdd(right);
     }
-
+    
     bool binaryArithShouldSpeculateInt32(Node* node, PredictionPass pass)
     {
         Node* left = node->child1().node();
         Node* right = node->child2().node();
-
+        
         return Node::shouldSpeculateInt32OrBooleanForArithmetic(left, right)
             && node->canSpeculateInt32(node->sourceFor(pass));
     }
-
+    
     bool binaryArithShouldSpeculateInt52(Node* node, PredictionPass pass)
     {
         if (!enableInt52())
             return false;
-
+        
         Node* left = node->child1().node();
         Node* right = node->child2().node();
 
@@ -395,13 +395,13 @@ public:
             && node->canSpeculateInt52(pass)
             && !hasExitSite(node, Int52Overflow);
     }
-
+    
     bool unaryArithShouldSpeculateInt32(Node* node, PredictionPass pass)
     {
         return node->child1()->shouldSpeculateInt32OrBooleanForArithmetic()
             && node->canSpeculateInt32(pass);
     }
-
+    
     bool unaryArithShouldSpeculateInt52(Node* node, PredictionPass pass)
     {
         if (!enableInt52())
@@ -440,9 +440,9 @@ public:
         ASSERT(arithRound->op() == ArithRound || arithRound->op() == ArithFloor || arithRound->op() == ArithCeil || arithRound->op() == ArithTrunc);
         return arithRound->canSpeculateInt32(pass) && !hasExitSite(arithRound->origin.semantic, Overflow) && !hasExitSite(arithRound->origin.semantic, NegativeZero);
     }
-
+    
     static const char* opName(NodeType);
-
+    
     RegisteredStructureSet* addStructureSet(const StructureSet& structureSet)
     {
         m_structureSets.append();
@@ -464,65 +464,65 @@ public:
 
         return result;
     }
-
+    
     JSGlobalObject* globalObjectFor(CodeOrigin codeOrigin)
     {
         return m_codeBlock->globalObjectFor(codeOrigin);
     }
-
+    
     JSObject* globalThisObjectFor(CodeOrigin codeOrigin)
     {
         JSGlobalObject* object = globalObjectFor(codeOrigin);
         return jsCast<JSObject*>(object->methodTable(m_vm)->toThis(object, object, ECMAMode::sloppy()));
     }
-
+    
     ScriptExecutable* executableFor(InlineCallFrame* inlineCallFrame)
     {
         if (!inlineCallFrame)
             return m_codeBlock->ownerExecutable();
-
+        
         return inlineCallFrame->baselineCodeBlock->ownerExecutable();
     }
-
+    
     ScriptExecutable* executableFor(const CodeOrigin& codeOrigin)
     {
         return executableFor(codeOrigin.inlineCallFrame());
     }
-
+    
     CodeBlock* baselineCodeBlockFor(InlineCallFrame* inlineCallFrame)
     {
         if (!inlineCallFrame)
             return m_profiledBlock;
         return baselineCodeBlockForInlineCallFrame(inlineCallFrame);
     }
-
+    
     CodeBlock* baselineCodeBlockFor(const CodeOrigin& codeOrigin)
     {
         return baselineCodeBlockForOriginAndBaselineCodeBlock(codeOrigin, m_profiledBlock);
     }
-
+    
     bool masqueradesAsUndefinedWatchpointIsStillValid(const CodeOrigin& codeOrigin)
     {
         return globalObjectFor(codeOrigin)->masqueradesAsUndefinedWatchpoint()->isStillValid();
     }
-
+    
     bool hasGlobalExitSite(const CodeOrigin& codeOrigin, ExitKind exitKind)
     {
         return baselineCodeBlockFor(codeOrigin)->unlinkedCodeBlock()->hasExitSite(FrequentExitSite(exitKind));
     }
-
+    
     bool hasExitSite(const CodeOrigin& codeOrigin, ExitKind exitKind)
     {
         return baselineCodeBlockFor(codeOrigin)->unlinkedCodeBlock()->hasExitSite(FrequentExitSite(codeOrigin.bytecodeIndex(), exitKind));
     }
-
+    
     bool hasExitSite(Node* node, ExitKind exitKind)
     {
         return hasExitSite(node->origin.semantic, exitKind);
     }
-
+    
     MethodOfGettingAValueProfile methodOfGettingAValueProfileFor(Node* currentNode, Node* operandNode);
-
+    
     BlockIndex numBlocks() const { return m_blocks.size(); }
     BasicBlock* block(BlockIndex blockIndex) const { return m_blocks[blockIndex].get(); }
     BasicBlock* lastBlock() const { return block(numBlocks() - 1); }
@@ -532,32 +532,32 @@ public:
         basicBlock->index = m_blocks.size();
         m_blocks.append(WTFMove(basicBlock));
     }
-
+    
     void killBlock(BlockIndex blockIndex)
     {
         m_blocks[blockIndex] = nullptr;
     }
-
+    
     void killBlock(BasicBlock* basicBlock)
     {
         killBlock(basicBlock->index);
     }
-
+    
     void killBlockAndItsContents(BasicBlock*);
-
+    
     void killUnreachableBlocks();
-
+    
     void determineReachability();
     void resetReachability();
-
+    
     void computeRefCounts();
-
+    
     unsigned varArgNumChildren(Node* node)
     {
         ASSERT(node->flags() & NodeHasVarArgs);
         return node->numChildren();
     }
-
+    
     unsigned numChildren(Node* node)
     {
         if (node->flags() & NodeHasVarArgs)
@@ -580,20 +580,20 @@ public:
 
         return AdjacencyList(AdjacencyList::Variable, firstChild, numChildren);
     }
-
+    
     Edge& varArgChild(Node* node, unsigned index)
     {
         ASSERT(node->flags() & NodeHasVarArgs);
         return m_varArgChildren[node->firstChild() + index];
     }
-
+    
     Edge& child(Node* node, unsigned index)
     {
         if (node->flags() & NodeHasVarArgs)
             return varArgChild(node, index);
         return node->children.child(index);
     }
-
+    
     void voteNode(Node* node, unsigned ballot, float weight = 1)
     {
         switch (node->op()) {
@@ -604,16 +604,16 @@ public:
         default:
             break;
         }
-
+        
         if (node->op() == GetLocal)
             node->variableAccessData()->vote(ballot, weight);
     }
-
+    
     void voteNode(Edge edge, unsigned ballot, float weight = 1)
     {
         voteNode(edge.node(), ballot, weight);
     }
-
+    
     void voteChildren(Node* node, unsigned ballot, float weight = 1)
     {
         if (node->flags() & NodeHasVarArgs) {
@@ -625,7 +625,7 @@ public:
             }
             return;
         }
-
+        
         if (!node->child1())
             return;
         voteNode(node->child1(), ballot, weight);
@@ -636,7 +636,7 @@ public:
             return;
         voteNode(node->child3(), ballot, weight);
     }
-
+    
     template<typename T> // T = Node* or Edge
     void substitute(BasicBlock& block, unsigned startIndexInBlock, T oldThing, T newThing)
     {
@@ -660,37 +660,37 @@ public:
             compareAndSwap(node->children.child3(), oldThing, newThing);
         }
     }
-
+    
     // Use this if you introduce a new GetLocal and you know that you introduced it *before*
     // any GetLocals in the basic block.
     // FIXME: it may be appropriate, in the future, to generalize this to handle GetLocals
     // introduced anywhere in the basic block.
     void substituteGetLocal(BasicBlock& block, unsigned startIndexInBlock, VariableAccessData* variableAccessData, Node* newGetLocal);
-
+    
     void invalidateCFG();
     void invalidateNodeLiveness();
-
+    
     void clearFlagsOnAllNodes(NodeFlags);
-
+    
     void clearReplacements();
     void clearEpochs();
     void initializeNodeOwners();
-
+    
     BlockList blocksInPreOrder();
     BlockList blocksInPostOrder(bool isSafeToValidate = true);
-
+    
     class NaturalBlockIterable {
     public:
         NaturalBlockIterable()
             : m_graph(nullptr)
         {
         }
-
+        
         NaturalBlockIterable(const Graph& graph)
             : m_graph(&graph)
         {
         }
-
+        
         class iterator {
         public:
             iterator()
@@ -698,34 +698,34 @@ public:
                 , m_index(0)
             {
             }
-
+            
             iterator(const Graph& graph, BlockIndex index)
                 : m_graph(&graph)
                 , m_index(findNext(index))
             {
             }
-
+            
             BasicBlock *operator*()
             {
                 return m_graph->block(m_index);
             }
-
+            
             iterator& operator++()
             {
                 m_index = findNext(m_index + 1);
                 return *this;
             }
-
+            
             bool operator==(const iterator& other) const
             {
                 return m_index == other.m_index;
             }
-
+            
             bool operator!=(const iterator& other) const
             {
                 return !(*this == other);
             }
-
+            
         private:
             BlockIndex findNext(BlockIndex index)
             {
@@ -733,36 +733,36 @@ public:
                     index++;
                 return index;
             }
-
+            
             const Graph* m_graph;
             BlockIndex m_index;
         };
-
+        
         iterator begin()
         {
             return iterator(*m_graph, 0);
         }
-
+        
         iterator end()
         {
             return iterator(*m_graph, m_graph->numBlocks());
         }
-
+        
     private:
         const Graph* m_graph;
     };
-
+    
     NaturalBlockIterable blocksInNaturalOrder() const
     {
         return NaturalBlockIterable(*this);
     }
-
+    
     template<typename ChildFunctor>
     ALWAYS_INLINE void doToChildrenWithNode(Node* node, const ChildFunctor& functor)
     {
         DFG_NODE_DO_TO_CHILDREN(*this, node, functor);
     }
-
+    
     template<typename ChildFunctor>
     ALWAYS_INLINE void doToChildren(Node* node, const ChildFunctor& functor)
     {
@@ -772,20 +772,20 @@ public:
                 : m_functor(functor)
             {
             }
-
+            
             // This is a manually written func because we want ALWAYS_INLINE.
             ALWAYS_INLINE void operator()(Node*, Edge& edge) const
             {
                 m_functor(edge);
             }
-
+        
         private:
             const ChildFunctor& m_functor;
         };
-
+    
         doToChildrenWithNode(node, ForwardingFunc(functor));
     }
-
+    
     bool uses(Node* node, Node* child)
     {
         bool result = false;
@@ -852,15 +852,15 @@ public:
     // value for some property accessed with the given abstract value base.
     AbstractValue inferredValueForProperty(
         const AbstractValue& base, PropertyOffset, StructureClobberState);
-
+    
     FullBytecodeLiveness& livenessFor(CodeBlock*);
     FullBytecodeLiveness& livenessFor(InlineCallFrame*);
-
+    
     // Quickly query if a single local is live at the given point. This is faster than calling
     // forAllLiveInBytecode() if you will only query one local. But, if you want to know all of the
     // locals live, then calling this for each local is much slower than forAllLiveInBytecode().
     bool isLiveInBytecode(Operand, CodeOrigin);
-
+    
     // Quickly get all of the non-argument locals and tmps live at the given point. This doesn't give you
     // any arguments because those are all presumed live. You can call forAllLiveInBytecode() to
     // also get the arguments. This is much faster than calling isLiveInBytecode() for each local.
@@ -874,29 +874,29 @@ public:
         VirtualRegister exclusionEnd;
 
         CodeOrigin* codeOriginPtr = &codeOrigin;
-
+        
         bool isCallerOrigin = false;
         for (;;) {
             InlineCallFrame* inlineCallFrame = codeOriginPtr->inlineCallFrame();
             VirtualRegister stackOffset(inlineCallFrame ? inlineCallFrame->stackOffset : 0);
-
+            
             if (inlineCallFrame) {
                 if (inlineCallFrame->isClosureCall)
                     functor(stackOffset + CallFrameSlot::callee);
                 if (inlineCallFrame->isVarargs())
                     functor(stackOffset + CallFrameSlot::argumentCountIncludingThis);
             }
-
+            
             CodeBlock* codeBlock = baselineCodeBlockFor(inlineCallFrame);
             FullBytecodeLiveness& fullLiveness = livenessFor(codeBlock);
             const auto& livenessAtBytecode = fullLiveness.getLiveness(codeOriginPtr->bytecodeIndex(), appropriateLivenessCalculationPoint(*codeOriginPtr, isCallerOrigin));
             for (unsigned relativeLocal = codeBlock->numCalleeLocals(); relativeLocal--;) {
                 VirtualRegister reg = stackOffset + virtualRegisterForLocal(relativeLocal);
-
+                
                 // Don't report if our callee already reported.
                 if (reg >= exclusionStart && reg < exclusionEnd)
                     continue;
-
+                
                 if (livenessAtBytecode[relativeLocal])
                     functor(reg);
             }
@@ -908,7 +908,7 @@ public:
                     functor(remapOperand(inlineCallFrame, Operand::tmp(tmp)));
                 });
             }
-
+            
             if (!inlineCallFrame)
                 break;
 
@@ -916,7 +916,7 @@ public:
             // op_call_varargs inlining. See the comment above.
             exclusionStart = stackOffset + CallFrame::argumentOffsetIncludingThis(0);
             exclusionEnd = stackOffset + CallFrame::argumentOffsetIncludingThis(inlineCallFrame->m_argumentsWithFixup.size());
-
+            
             // We will always have a "this" argument and exclusionStart should be a smaller stack
             // offset than exclusionEnd.
             ASSERT(exclusionStart < exclusionEnd);
@@ -930,7 +930,7 @@ public:
             isCallerOrigin = true;
         }
     }
-
+    
     // Get a BitVector of all of the locals and tmps live right now. This is mostly useful if
     // you want to compare two sets of live locals from two different CodeOrigins.
     BitVector localsAndTmpsLiveInBytecode(CodeOrigin);
@@ -964,40 +964,40 @@ public:
         }
         return LivenessCalculationPoint::BeforeUse;
     }
-
+    
     // Tells you all of the operands live at the given CodeOrigin. This is a small
     // extension to forAllLocalsOrTmpsLiveInBytecode(), since all arguments are always presumed live.
     template<typename Functor>
     void forAllLiveInBytecode(CodeOrigin codeOrigin, const Functor& functor)
     {
         forAllLocalsAndTmpsLiveInBytecode(codeOrigin, functor);
-
+        
         // Report all arguments as being live.
         for (unsigned argument = block(0)->variablesAtHead.numberOfArguments(); argument--;)
             functor(virtualRegisterForArgumentIncludingThis(argument));
     }
 
     static unsigned parameterSlotsForArgCount(unsigned);
-
+    
     unsigned frameRegisterCount();
     unsigned stackPointerOffset();
     unsigned requiredRegisterCountForExit();
     unsigned requiredRegisterCountForExecutionAndExit();
-
+    
     JSValue tryGetConstantProperty(JSValue base, const RegisteredStructureSet&, PropertyOffset);
     JSValue tryGetConstantProperty(JSValue base, Structure*, PropertyOffset);
     JSValue tryGetConstantProperty(JSValue base, const StructureAbstractValue&, PropertyOffset);
     JSValue tryGetConstantProperty(const AbstractValue&, PropertyOffset);
-
+    
     JSValue tryGetConstantClosureVar(JSValue base, ScopeOffset);
     JSValue tryGetConstantClosureVar(const AbstractValue&, ScopeOffset);
     JSValue tryGetConstantClosureVar(Node*, ScopeOffset);
-
+    
     JSArrayBufferView* tryGetFoldableView(JSValue);
     JSArrayBufferView* tryGetFoldableView(JSValue, ArrayMode arrayMode);
 
     bool canDoFastSpread(Node*, const AbstractValue&);
-
+    
     void registerFrozenValues();
 
     void visitChildren(AbstractSlotVisitor&) final;
@@ -1034,7 +1034,7 @@ public:
         return willCatchExceptionInMachineFrame(codeOrigin, ignored, ignored2);
     }
     bool willCatchExceptionInMachineFrame(CodeOrigin, CodeOrigin& opCatchOriginOut, HandlerInfo*& catchHandlerOut);
-
+    
     bool needsScopeRegister() const { return m_hasDebuggerEnabled || m_codeBlock->usesCallEval(); }
     bool needsFlushedThis() const { return m_codeBlock->usesCallEval(); }
 
@@ -1096,9 +1096,9 @@ public:
     Bag<FrozenValue> m_frozenValues;
 
     Vector<uint32_t> m_uint32ValuesInUse;
-
+    
     Bag<StorageAccessData> m_storageAccessData;
-
+    
     // In CPS, this is all of the SetArgumentDefinitely nodes for the arguments in the machine code block
     // that survived DCE. All of them except maybe "this" will survive DCE, because of the Flush
     // nodes. In SSA, this has no meaning. It's empty.
@@ -1182,7 +1182,7 @@ public:
     StdUnorderedMap<int64_t, double*> m_doubleConstantsMap;
     std::unique_ptr<Bag<double>> m_doubleConstants;
 #endif
-
+    
     OptimizationFixpointState m_fixpointState;
     StructureRegistrationState m_structureRegistrationState;
     GraphForm m_form;
@@ -1210,15 +1210,15 @@ private:
     bool isStringPrototypeMethodSane(JSGlobalObject*, UniquedStringImpl*);
 
     void handleSuccessor(Vector<BasicBlock*, 16>& worklist, BasicBlock*, BasicBlock* successor);
-
+    
     AddSpeculationMode addImmediateShouldSpeculateInt32(Node* add, bool variableShouldSpeculateInt32, Node* operand, Node*immediate, RareCaseProfilingSource source)
     {
         ASSERT(immediate->hasConstant());
-
+        
         JSValue immediateValue = immediate->asJSValue();
         if (!immediateValue.isNumber() && !immediateValue.isBoolean())
             return DontSpeculateInt32;
-
+        
         if (!variableShouldSpeculateInt32)
             return DontSpeculateInt32;
 
@@ -1227,15 +1227,15 @@ private:
         NodeFlags operandResultType = operand->result();
         if (operandResultType != NodeResultInt32 && immediateValue.isDouble())
             return DontSpeculateInt32;
-
+        
         if (immediateValue.isBoolean() || jsNumber(immediateValue.asNumber()).isInt32())
             return add->canSpeculateInt32(source) ? SpeculateInt32 : DontSpeculateInt32;
-
+        
         double doubleImmediate = immediateValue.asDouble();
         const double twoToThe48 = 281474976710656.0;
         if (doubleImmediate < -twoToThe48 || doubleImmediate > twoToThe48)
             return DontSpeculateInt32;
-
+        
         return bytecodeCanTruncateInteger(add->arithNodeFlags()) ? SpeculateInt32AndTruncateConstants : DontSpeculateInt32;
     }
 

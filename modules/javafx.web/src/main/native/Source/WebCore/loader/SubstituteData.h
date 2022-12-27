@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -59,7 +59,7 @@ namespace WebCore {
         const String& textEncoding() const { return m_response.textEncodingName(); }
         const URL& failingURL() const { return m_failingURL; }
         const ResourceResponse& response() const { return m_response; }
-
+        
     private:
         RefPtr<SharedBuffer> m_content;
         URL m_failingURL;

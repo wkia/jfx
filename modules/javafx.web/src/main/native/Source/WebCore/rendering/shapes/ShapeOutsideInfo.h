@@ -33,7 +33,6 @@
 #include "Shape.h"
 #include <wtf/HashMap.h>
 #include <wtf/NeverDestroyed.h>
-#include <wtf/SetForScope.h>
 
 namespace WebCore {
 
@@ -84,7 +83,6 @@ class ShapeOutsideInfo final {
 public:
     ShapeOutsideInfo(const RenderBox& renderer)
         : m_renderer(renderer)
-        , m_isComputingShape(false)
     {
     }
 
@@ -103,7 +101,6 @@ public:
 
     void markShapeAsDirty() { m_shape = nullptr; }
     bool isShapeDirty() { return !m_shape; }
-    bool isComputingShape() const { return m_isComputingShape; }
 
     LayoutRect computedShapePhysicalBoundingBox() const;
     FloatPoint shapeToRendererPoint(const FloatPoint&) const;
@@ -141,7 +138,6 @@ private:
     LayoutSize m_referenceBoxLogicalSize;
 
     ShapeOutsideDeltas m_shapeOutsideDeltas;
-    mutable bool m_isComputingShape;
 };
 
 }

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -36,7 +36,7 @@ void InsertionSet::insertSlow(const Insertion& insertion)
 {
     ASSERT(!m_insertions.isEmpty());
     ASSERT(m_insertions.last().index() > insertion.index());
-
+    
     for (size_t index = m_insertions.size() - 1; index--;) {
         if (m_insertions[index].index() <= insertion.index()) {
             m_insertions.insert(index + 1, insertion);

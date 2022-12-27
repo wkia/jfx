@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -155,7 +155,7 @@ inline IntSize FELighting::LightingData::leftColumnNormal(int offset) const
 inline IntSize FELighting::LightingData::interiorNormal(int offset, AlphaWindow& alphaWindow) const
 {
     int rightAlphaOffset = offset + cPixelSize + cAlphaChannelOffset;
-
+    
     int right = static_cast<int>(pixels->item(rightAlphaOffset));
     int topRight = static_cast<int>(pixels->item(rightAlphaOffset - widthMultipliedByPixelSize));
     int bottomRight = static_cast<int>(pixels->item(rightAlphaOffset + widthMultipliedByPixelSize));
@@ -171,7 +171,7 @@ inline IntSize FELighting::LightingData::interiorNormal(int offset, AlphaWindow&
     alphaWindow.alpha[0][2] = topRight;
     alphaWindow.alpha[1][2] = right;
     alphaWindow.alpha[2][2] = bottomRight;
-
+    
     // Check that the alphaWindow is working with some spot-checks.
     ASSERT(alphaWindow.topLeft() == pixels->item(offset - cPixelSize - widthMultipliedByPixelSize + cAlphaChannelOffset)); // topLeft
     ASSERT(alphaWindow.top() == pixels->item(offset - widthMultipliedByPixelSize + cAlphaChannelOffset)); // top
@@ -300,7 +300,7 @@ void FELighting::setPixelInternal(int offset, const LightingData& data, const Li
         static_cast<uint8_t>(lightStrength * lightingData.colorVector.y() * 255.0f),
         static_cast<uint8_t>(lightStrength * lightingData.colorVector.z() * 255.0f)
     };
-
+    
     data.pixels->setRange(pixelValue, 3, offset);
 }
 

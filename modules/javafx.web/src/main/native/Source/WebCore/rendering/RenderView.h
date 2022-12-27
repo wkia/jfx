@@ -111,7 +111,7 @@ public:
     void setBestTruncatedAt(int y, RenderBoxModelObject* forRenderer, bool forcedBreak = false);
     int truncatedAt() const { return m_legacyPrinting.m_truncatedAt; }
     void setTruncatedAt(int y)
-    {
+    { 
         m_legacyPrinting.m_truncatedAt = y;
         m_legacyPrinting.m_bestTruncatedAt = 0;
         m_legacyPrinting.m_truncatorWidth = 0;
@@ -188,7 +188,7 @@ public:
 
     void scheduleLazyRepaint(RenderBox&);
     void unscheduleLazyRepaint(RenderBox&);
-
+    
     void layerChildrenChangedDuringStyleChange(RenderLayer&);
     RenderLayer* takeStyleChangeLayerTreeMutationRoot();
 

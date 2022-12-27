@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -47,14 +47,14 @@ struct CheckData {
     ArrayMode m_arrayMode;
     bool m_arrayModeIsValid;
     bool m_arrayModeHoistingOkay;
-
+    
     CheckData()
         : m_structure(nullptr)
         , m_arrayModeIsValid(false)
         , m_arrayModeHoistingOkay(false)
     {
     }
-
+    
     CheckData(Structure* structure)
         : m_structure(structure)
         , m_arrayModeIsValid(false)
@@ -76,18 +76,18 @@ struct CheckData {
         m_arrayModeHoistingOkay = false;
     }
 };
-
+    
 class TypeCheckHoistingPhase : public Phase {
 public:
     TypeCheckHoistingPhase(Graph& graph)
         : Phase(graph, "structure check hoisting")
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == ThreadedCPS);
-
+        
         clearVariableVotes();
         identifyRedundantStructureChecks();
         disableHoistingForVariablesWithInsufficientVotes<StructureTypeCheck>();
@@ -111,12 +111,12 @@ public:
             NodeOrigin originForChecks;
             for (unsigned indexInBlock = 0; indexInBlock < block->size(); ++indexInBlock) {
                 Node* node = block->at(indexInBlock);
-
+                
                 if (node->origin.exitOK) {
                     indexForChecks = indexInBlock;
                     originForChecks = node->origin;
                 }
-
+                
                 // Be careful not to use 'node' after appending to the graph. In those switch
                 // cases where we need to append, we first carefully extract everything we need
                 // from the node, before doing any appending.
@@ -138,7 +138,7 @@ public:
 
                     NodeOrigin origin = node->origin;
                     RELEASE_ASSERT(origin.exitOK);
-
+                    
                     Node* getLocal = insertionSet.insertNode(
                         indexInBlock + 1, variable->prediction(), GetLocal, origin,
                         OpInfo(variable), Edge(node));
@@ -178,13 +178,13 @@ public:
 
                     if (block->variablesAtTail.operand(variable->operand()) == node)
                         block->variablesAtTail.operand(variable->operand()) = getLocal;
-
+                    
                     m_graph.substituteGetLocal(*block, indexInBlock, variable, getLocal);
-
+                    
                     changed = true;
                     break;
                 }
-
+                    
                 case SetLocal: {
                     VariableAccessData* variable = node->variableAccessData();
                     HashMap<VariableAccessData*, CheckData>::iterator iter = m_map.find(variable);
@@ -195,7 +195,7 @@ public:
 
                     NodeOrigin origin = node->origin;
                     Edge child1 = node->child1();
-
+                    
                     // Note: On 64-bit platforms, cell checks allow the empty value to flow through.
                     // This means that this structure/array check may see the empty value as input. We need
                     // to emit a node that explicitly handles the empty value. Most of the time, CheckStructureOrEmpty/CheckArrayOrEmpty
@@ -219,20 +219,20 @@ public:
                     changed = true;
                     break;
                 }
-
+                    
                 default:
                     break;
                 }
             }
             insertionSet.execute(block);
         }
-
+        
         return changed;
     }
 
 private:
     void clearVariableVotes()
-    {
+    { 
         for (unsigned i = m_graph.m_variableAccessData.size(); i--;) {
             VariableAccessData* variable = &m_graph.m_variableAccessData[i];
             if (!variable->isRoot())
@@ -240,11 +240,11 @@ private:
             variable->clearVotes();
         }
     }
-
+        
     // Identify the set of variables that are always subject to the same structure
     // checks. For now, only consider monomorphic structure checks (one structure).
     void identifyRedundantStructureChecks()
-    {
+    {    
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
@@ -290,7 +290,7 @@ private:
                 case MultiDeleteByOffset:
                     // Don't count these uses.
                     break;
-
+                    
                 case SetLocal: {
                     // Find all uses of the source of the SetLocal. If any of them are a
                     // kind of CheckStructure, then we should notice them to ensure that
@@ -305,7 +305,7 @@ private:
                         case CheckStructure: {
                             if (subNode->child1() != source)
                                 break;
-
+                            
                             noticeStructureCheck(variable, subNode->structureSet());
                             break;
                         }
@@ -313,11 +313,11 @@ private:
                             break;
                         }
                     }
-
+                    
                     m_graph.voteChildren(node, VoteOther);
                     break;
                 }
-
+                    
                 default:
                     m_graph.voteChildren(node, VoteOther);
                     break;
@@ -325,7 +325,7 @@ private:
             }
         }
     }
-
+        
     void identifyRedundantArrayChecks()
     {
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
@@ -367,7 +367,7 @@ private:
                 case MultiDeleteByOffset:
                     // Don't count these uses.
                     break;
-
+                    
                 case AllocatePropertyStorage:
                 case ArrayifyToStructure:
                 case Arrayify: {
@@ -383,7 +383,7 @@ private:
                     disableCheckArrayHoisting(variable);
                     break;
                 }
-
+                    
                 case SetLocal: {
                     // Find all uses of the source of the SetLocal. If any of them are a
                     // kind of CheckStructure, then we should notice them to ensure that
@@ -398,7 +398,7 @@ private:
                         case CheckStructure: {
                             if (subNode->child1() != source)
                                 break;
-
+                            
                             noticeStructureCheckAccountingForArrayMode(variable, subNode->structureSet());
                             break;
                         }
@@ -412,11 +412,11 @@ private:
                             break;
                         }
                     }
-
+                    
                     m_graph.voteChildren(node, VoteOther);
                     break;
                 }
-
+                    
                 default:
                     m_graph.voteChildren(node, VoteOther);
                     break;
@@ -429,7 +429,7 @@ private:
     // contexts where it doesn't make sense.
     template <typename TypeCheck>
     void disableHoistingForVariablesWithInsufficientVotes()
-    {
+    {    
         for (unsigned i = m_graph.m_variableAccessData.size(); i--;) {
             VariableAccessData* variable = &m_graph.m_variableAccessData[i];
             if (!variable->isRoot())
@@ -496,7 +496,7 @@ private:
             return false;
         return true;
     }
-
+    
     void noticeStructureCheck(VariableAccessData* variable, RegisteredStructure structure)
     {
         HashMap<VariableAccessData*, CheckData>::AddResult result = m_map.add(variable, CheckData(structure.get()));
@@ -506,7 +506,7 @@ private:
             return;
         result.iterator->value.m_structure = nullptr;
     }
-
+    
     void noticeStructureCheck(VariableAccessData* variable, RegisteredStructureSet set)
     {
         if (set.size() != 1) {

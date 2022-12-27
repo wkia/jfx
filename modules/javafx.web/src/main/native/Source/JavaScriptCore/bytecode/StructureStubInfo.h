@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -103,12 +103,12 @@ public:
     // Check if the stub has weak references that are dead. If it does, then it resets itself,
     // either entirely or just enough to ensure that those dead pointers don't get used anymore.
     void visitWeakReferences(const ConcurrentJSLockerBase&, CodeBlock*);
-
+    
     // This returns true if it has marked everything that it will ever mark.
     template<typename Visitor> void propagateTransitions(Visitor&);
-
+        
     StubInfoSummary summary(VM&) const;
-
+    
     static StubInfoSummary summary(VM&, const StructureStubInfo*);
 
     CacheableIdentifier identifier()
@@ -195,7 +195,7 @@ private:
             sawNonCell = true;
             return false;
         }
-
+        
         // This method is called from the Optimize variants of IC slow paths. The first part of this
         // method tries to determine if the Optimize variant should really behave like the
         // non-Optimize variant and leave the IC untouched.
@@ -204,7 +204,7 @@ private:
         // to determine if this Structure would impact the IC at all. We know that it won't, if we
         // have already buffered something on its behalf. That's what the m_bufferedStructures set is
         // for.
-
+        
         everConsidered = true;
         if (!countdown) {
             // Check if we have been doing repatching too frequently. If so, then we should cool off
@@ -222,12 +222,12 @@ private:
                     numberOfCoolDowns,
                     static_cast<uint8_t>(std::numeric_limits<uint8_t>::max() - 1));
                 WTF::incrementWithSaturation(numberOfCoolDowns);
-
+                
                 // We may still have had something buffered. Trigger generation now.
                 bufferingCountdown = 0;
                 return true;
             }
-
+            
             // We don't want to return false due to buffering indefinitely.
             if (!bufferingCountdown) {
                 // Note that when this returns true, it's possible that we will not even get an
@@ -235,9 +235,9 @@ private:
                 // repatching.
                 return true;
             }
-
+            
             bufferingCountdown--;
-
+            
             // Now protect the IC buffering. We want to proceed only if this is a structure that
             // we don't already have a case buffered for. Note that if this returns true but the
             // bufferingCountdown is not zero then we will buffer the access case for later without

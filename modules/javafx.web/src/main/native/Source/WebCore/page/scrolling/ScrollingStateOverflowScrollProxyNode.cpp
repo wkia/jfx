@@ -71,7 +71,7 @@ void ScrollingStateOverflowScrollProxyNode::setOverflowScrollingNode(ScrollingNo
 {
     if (nodeID == m_overflowScrollingNodeID)
         return;
-
+    
     m_overflowScrollingNodeID = nodeID;
     setPropertyChanged(Property::OverflowScrollingNode);
 }
@@ -79,7 +79,7 @@ void ScrollingStateOverflowScrollProxyNode::setOverflowScrollingNode(ScrollingNo
 void ScrollingStateOverflowScrollProxyNode::dumpProperties(TextStream& ts, ScrollingStateTreeAsTextBehavior behavior) const
 {
     ts << "Overflow scroll proxy node";
-
+    
     ScrollingStateNode::dumpProperties(ts, behavior);
 
     if (auto* relatedOverflowNode = scrollingStateTree().stateNodeForID(m_overflowScrollingNodeID)) {

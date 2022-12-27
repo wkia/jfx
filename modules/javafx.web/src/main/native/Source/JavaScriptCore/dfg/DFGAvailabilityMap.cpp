@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -39,9 +39,9 @@ void AvailabilityMap::pruneHeap()
 {
     if (m_heap.isEmpty())
         return;
-
+    
     NodeSet possibleNodes;
-
+    
     for (unsigned i = m_locals.size(); i--;) {
         if (m_locals[i].hasNode())
             possibleNodes.addVoid(m_locals[i].node());
@@ -54,7 +54,7 @@ void AvailabilityMap::pruneHeap()
         [&] (Node* node) -> bool {
             return possibleNodes.add(node).isNewEntry;
         });
-
+    
     HashMap<PromotedHeapLocation, Availability> newHeap;
     for (auto pair : m_heap) {
         if (possibleNodes.contains(pair.key.base()))
@@ -96,7 +96,7 @@ void AvailabilityMap::merge(const AvailabilityMap& other)
 {
     for (unsigned i = other.m_locals.size(); i--;)
         m_locals[i] = other.m_locals[i].merge(m_locals[i]);
-
+    
     for (auto pair : other.m_heap) {
         auto result = m_heap.add(pair.key, Availability());
         result.iterator->value = pair.value.merge(result.iterator->value);

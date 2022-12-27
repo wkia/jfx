@@ -45,45 +45,45 @@ namespace JSC {
             // Check that we have the expected number of arguments
             m_failures.append(branch32(NotEqual, payloadFor(CallFrameSlot::argumentCountIncludingThis), TrustedImm32(expectedArgCount + 1)));
         }
-
+        
         explicit SpecializedThunkJIT(VM& vm)
             : JSInterfaceJIT(&vm)
         {
             emitFunctionPrologue();
             emitSaveThenMaterializeTagRegisters();
         }
-
+        
         void loadDoubleArgument(int argument, FPRegisterID dst, RegisterID scratch)
         {
             VirtualRegister src = virtualRegisterForArgumentIncludingThis(argument + 1);
             m_failures.append(emitLoadDouble(src, dst, scratch));
         }
-
+        
         void loadCellArgument(int argument, RegisterID dst)
         {
             VirtualRegister src = virtualRegisterForArgumentIncludingThis(argument + 1);
             m_failures.append(emitLoadJSCell(src, dst));
         }
-
+        
         void loadJSStringArgument(int argument, RegisterID dst)
         {
             loadCellArgument(argument, dst);
             m_failures.append(branchIfNotString(dst));
         }
-
+        
         void loadInt32Argument(int argument, RegisterID dst, Jump& failTarget)
         {
             VirtualRegister src = virtualRegisterForArgumentIncludingThis(argument + 1);
             failTarget = emitLoadInt32(src, dst);
         }
-
+        
         void loadInt32Argument(int argument, RegisterID dst)
         {
             Jump conversionFailed;
             loadInt32Argument(argument, dst, conversionFailed);
             m_failures.append(conversionFailed);
         }
-
+        
         void appendFailure(const Jump& failure)
         {
             m_failures.append(failure);
@@ -93,7 +93,7 @@ namespace JSC {
         {
             if (src != regT0)
                 move(src, regT0);
-
+            
             emitRestoreSavedTagRegisters();
             emitFunctionEpilogue();
             ret();
@@ -108,7 +108,7 @@ namespace JSC {
             ret();
         }
 #endif
-
+        
         void returnDouble(FPRegisterID src)
         {
 #if USE(JSVALUE64)
@@ -152,7 +152,7 @@ namespace JSC {
             emitFunctionEpilogue();
             ret();
         }
-
+        
         MacroAssemblerCodeRef<JITThunkPtrTag> finalize(MacroAssemblerCodePtr<JITThunkPtrTag> fallback, const char* thunkKind)
         {
             LinkBuffer patchBuffer(*this, GLOBAL_THUNK_ID, LinkBuffer::Profile::SpecializedThunk);
@@ -168,7 +168,7 @@ namespace JSC {
         {
             m_calls.append(std::make_pair(call(OperationPtrTag), function.retagged<OperationPtrTag>()));
         }
-
+        
         void callDoubleToDoublePreservingReturn(FunctionPtr<CFunctionPtrTag> function)
         {
             if (!isX86())
@@ -194,7 +194,7 @@ namespace JSC {
             move(TrustedImm32(JSValue::CellTag), regT1);
 #endif
         }
-
+        
         MacroAssembler::JumpList m_failures;
         Vector<std::pair<Call, FunctionPtr<OperationPtrTag>>> m_calls;
     };

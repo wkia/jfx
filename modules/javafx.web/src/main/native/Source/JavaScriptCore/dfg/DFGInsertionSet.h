@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -41,7 +41,7 @@ public:
         : m_graph(graph)
     {
     }
-
+    
     Graph& graph() { return m_graph; }
 
     // Adds another code insertion. It's expected that you'll usually insert things in order. If
@@ -56,7 +56,7 @@ public:
             insertSlow(insertion);
         return insertion.element();
     }
-
+    
     Node* insert(size_t index, Node* element)
     {
         return insert(Insertion(index, element));
@@ -67,7 +67,7 @@ public:
     {
         return insert(index, m_graph.addNode(type, params...));
     }
-
+    
     Node* insertConstant(
         size_t index, NodeOrigin origin, FrozenValue* value,
         NodeType op = JSConstant)
@@ -75,7 +75,7 @@ public:
         return insertNode(
             index, speculationFromValue(value->value()), op, origin, OpInfo(value));
     }
-
+    
     Edge insertConstantForUse(
         size_t index, NodeOrigin origin, FrozenValue* value, UseKind useKind)
     {
@@ -88,17 +88,17 @@ public:
             op = JSConstant;
         return Edge(insertConstant(index, origin, value, op), useKind);
     }
-
+    
     Node* insertConstant(size_t index, NodeOrigin origin, JSValue value, NodeType op = JSConstant)
     {
         return insertConstant(index, origin, m_graph.freeze(value), op);
     }
-
+    
     Edge insertConstantForUse(size_t index, NodeOrigin origin, JSValue value, UseKind useKind)
     {
         return insertConstantForUse(index, origin, m_graph.freeze(value), useKind);
     }
-
+    
     Edge insertBottomConstantForUse(size_t index, NodeOrigin origin, UseKind useKind)
     {
         if (isDouble(useKind))
@@ -107,7 +107,7 @@ public:
             return insertConstantForUse(index, origin, jsNumber(0), useKind);
         return insertConstantForUse(index, origin, jsUndefined(), useKind);
     }
-
+    
     Node* insertCheck(size_t index, NodeOrigin origin, AdjacencyList children)
     {
         children = children.justChecks();
@@ -115,7 +115,7 @@ public:
             return nullptr;
         return insertNode(index, SpecNone, Check, origin, children);
     }
-
+    
     Node* insertCheck(Graph& graph, size_t index, Node* node)
     {
         if (!(node->flags() & NodeHasVarArgs))
@@ -126,19 +126,19 @@ public:
             return nullptr;
         return insertNode(index, SpecNone, CheckVarargs, node->origin, children);
     }
-
+    
     Node* insertCheck(size_t index, NodeOrigin origin, Edge edge)
     {
         if (edge.willHaveCheck())
             return insertNode(index, SpecNone, Check, origin, edge);
         return nullptr;
     }
-
+    
     size_t execute(BasicBlock* block);
 
 private:
     void insertSlow(const Insertion&);
-
+    
     Graph& m_graph;
     Vector<Insertion, 8> m_insertions;
 };

@@ -79,7 +79,7 @@ public:
     {
         return nullptr;
     }
-
+    
     virtual bool transformColor(SRGBA<float>&) const { return false; }
     virtual bool inverseTransformColor(SRGBA<float>&) const { return false; }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -61,7 +61,7 @@ void computePreciseJumpTargetsInternal(Block* codeBlock, const InstructionStream
     // The code block has a superset of the jump targets. So if it claims to have none, we are done.
     if (Mode == ComputePreciseJumpTargetsMode::FollowCodeBlockClaim && !codeBlock->numberOfJumpTargets())
         return;
-
+    
     for (unsigned i = codeBlock->numberOfExceptionHandlers(); i--;) {
         out.append(codeBlock->exceptionHandler(i).target);
         out.append(codeBlock->exceptionHandler(i).start);
@@ -71,9 +71,9 @@ void computePreciseJumpTargetsInternal(Block* codeBlock, const InstructionStream
     for (const auto& instruction : instructions) {
         getJumpTargetsForInstruction(codeBlock, instruction, out);
     }
-
+    
     std::sort(out.begin(), out.end());
-
+    
     // We will have duplicates, and we must remove them.
     unsigned toIndex = 0;
     unsigned fromIndex = 0;

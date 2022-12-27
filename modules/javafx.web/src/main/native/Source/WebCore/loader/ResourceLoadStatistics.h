@@ -55,7 +55,7 @@ struct ResourceLoadStatistics {
     ResourceLoadStatistics& operator=(ResourceLoadStatistics&&) = default;
 
     static constexpr Seconds NoExistingTimestamp { -1 };
-
+    
     WEBCORE_EXPORT static WallTime reduceTimeResolution(WallTime);
 
     WEBCORE_EXPORT void encode(KeyedEncoder&) const;
@@ -68,7 +68,7 @@ struct ResourceLoadStatistics {
     RegistrableDomain registrableDomain;
 
     WallTime lastSeen;
-
+    
     // User interaction
     bool hadUserInteraction { false };
     // Timestamp. Default value is negative, 0 means it was reset.
@@ -88,7 +88,7 @@ struct ResourceLoadStatistics {
 
     // Subframe stats
     HashSet<RegistrableDomain> subframeUnderTopFrameDomains;
-
+    
     // Subresource stats
     HashSet<RegistrableDomain> subresourceUnderTopFrameDomains;
     HashSet<RegistrableDomain> subresourceUniqueRedirectsTo;

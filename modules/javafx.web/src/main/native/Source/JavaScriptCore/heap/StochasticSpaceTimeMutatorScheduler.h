@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,47 +43,47 @@ class StochasticSpaceTimeMutatorScheduler final : public MutatorScheduler {
 public:
     StochasticSpaceTimeMutatorScheduler(Heap&);
     ~StochasticSpaceTimeMutatorScheduler() final;
-
+    
     State state() const final;
-
+    
     void beginCollection() final;
-
+    
     void didStop() final;
     void willResume() final;
     void didReachTermination() final;
     void didExecuteConstraints() final;
     void synchronousDrainingDidStall() final;
-
+    
     MonotonicTime timeToStop() final;
     MonotonicTime timeToResume() final;
-
+    
     void log() final;
-
+    
     void endCollection() final;
-
+    
 private:
     class Snapshot;
     friend class Snapshot;
-
+    
     double bytesAllocatedThisCycleImpl();
-
+    
     double bytesSinceBeginningOfCycle(const Snapshot&);
     double maxHeadroom();
     double headroomFullness(const Snapshot&);
     double mutatorUtilization(const Snapshot&);
-
+    
     Heap& m_heap;
     State m_state { Normal };
-
+    
     WeakRandom m_random;
-
+    
     Seconds m_minimumPause;
     double m_pauseScale;
     Seconds m_targetPause;
-
+    
     double m_bytesAllocatedThisCycleAtTheBeginning { 0 };
     double m_bytesAllocatedThisCycleAtTheEnd { 0 };
-
+    
     MonotonicTime m_beforeConstraints;
     MonotonicTime m_plannedResumeTime;
 };

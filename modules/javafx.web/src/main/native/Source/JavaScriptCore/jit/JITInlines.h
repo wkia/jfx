@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -241,7 +241,7 @@ ALWAYS_INLINE void JIT::addSlowCase(const JumpList& jumpList)
 ALWAYS_INLINE void JIT::addSlowCase()
 {
     ASSERT(m_bytecodeIndex); // This method should only be called during hot/cold path generation, so that m_bytecodeIndex is set.
-
+    
     Jump emptyJump; // Doing it this way to make Windows happy.
     m_slowCases.append(SlowCaseEntry(emptyJump, m_bytecodeIndex));
 }
@@ -532,7 +532,7 @@ ALWAYS_INLINE bool JIT::getOperandConstantInt(VirtualRegister op1, VirtualRegist
         op = op1;
         return true;
     }
-
+    
     return false;
 }
 

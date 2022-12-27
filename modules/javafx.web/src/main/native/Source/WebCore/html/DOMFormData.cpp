@@ -46,12 +46,12 @@ ExceptionOr<Ref<DOMFormData>> DOMFormData::create(HTMLFormElement* form)
     auto formData = adoptRef(*new DOMFormData);
     if (!form)
         return formData;
-
+    
     auto result = form->constructEntryList(WTFMove(formData), nullptr, HTMLFormElement::IsMultipartForm::Yes);
-
+    
     if (!result)
         return Exception { InvalidStateError, "Already constructing Form entry list."_s };
-
+    
     return result.releaseNonNull();
 }
 
@@ -64,7 +64,7 @@ Ref<DOMFormData> DOMFormData::clone() const
 {
     auto newFormData = adoptRef(*new DOMFormData(this->encoding()));
     newFormData->m_items = m_items;
-
+    
     return newFormData;
 }
 
@@ -73,7 +73,7 @@ auto DOMFormData::createFileEntry(const String& name, Blob& blob, const String& 
 {
     if (!blob.isFile())
         return { name, File::create(blob.scriptExecutionContext(), blob, filename.isNull() ? "blob"_s : filename) };
-
+    
     if (!filename.isNull())
         return { name, File::create(blob.scriptExecutionContext(), downcast<File>(blob), filename) };
 
@@ -125,7 +125,7 @@ bool DOMFormData::has(const String& name)
         if (item.name == name)
             return true;
     }
-
+    
     return false;
 }
 

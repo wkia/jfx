@@ -27,10 +27,6 @@
 #include <wtf/MathExtras.h>
 #include <wtf/text/TextStream.h>
 
-#if PLATFORM(JAVA)
-#include <wtf/java/JavaMath.h>
-#endif
-
 namespace WebCore {
 
 bool RotateTransformOperation::operator==(const TransformOperation& other) const
@@ -45,10 +41,10 @@ Ref<TransformOperation> RotateTransformOperation::blend(const TransformOperation
 {
     if (from && !from->isSameType(*this))
         return *this;
-
+    
     if (blendToIdentity)
         return RotateTransformOperation::create(m_x, m_y, m_z, m_angle - m_angle * context.progress, type());
-
+    
     const RotateTransformOperation* fromOp = downcast<RotateTransformOperation>(from);
     const RotateTransformOperation* toOp = this;
 
@@ -89,25 +85,21 @@ Ref<TransformOperation> RotateTransformOperation::blend(const TransformOperation
         (toOp ? toOp->m_y : 0),
         (toOp ? toOp->m_z : 1),
         (toOp ? toOp->m_angle : 0));
-
+    
     // Blend them
     toT.blend(fromT, context.progress);
-
+    
     // Extract the result as a quaternion
     TransformationMatrix::Decomposed4Type decomp;
     toT.decompose4(decomp);
-
+    
     // Convert that to Axis/Angle form
     double x = -decomp.quaternionX;
     double y = -decomp.quaternionY;
     double z = -decomp.quaternionZ;
-#if PLATFORM(JAVA)
-    double length = javamath::hypot(x, y, z);
-#else
     double length = std::hypot(x, y, z);
-#endif
     double angle = 0;
-
+    
     if (length > 0.00001) {
         x /= length;
         y /= length;

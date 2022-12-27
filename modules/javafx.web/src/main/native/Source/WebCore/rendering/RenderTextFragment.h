@@ -47,7 +47,7 @@ public:
 
     RenderBoxModelObject* firstLetter() const { return m_firstLetter.get(); }
     void setFirstLetter(RenderBoxModelObject& firstLetter) { m_firstLetter = makeWeakPtr(firstLetter); }
-
+    
     RenderBlock* blockForAccompanyingFirstLetter();
 
     void setContentString(const String& text);
@@ -57,7 +57,7 @@ public:
 
     const String& altText() const { return m_altText; }
     void setAltText(const String& altText) { m_altText = altText; }
-
+    
 private:
     bool isTextFragment() const override { return true; }
     void styleDidChange(StyleDifference, const RenderStyle* oldStyle) override;

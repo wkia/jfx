@@ -38,12 +38,12 @@ namespace WebCore {
 struct DisplayUpdate {
     unsigned updateIndex { 0 };
     FramesPerSecond updatesPerSecond { 0 };
-
+    
     DisplayUpdate nextUpdate() const
     {
         return { (updateIndex + 1) % updatesPerSecond, updatesPerSecond };
     }
-
+    
     WEBCORE_EXPORT bool relevantForUpdateFrequency(FramesPerSecond) const;
 
     template<class Encoder> void encode(Encoder&) const;

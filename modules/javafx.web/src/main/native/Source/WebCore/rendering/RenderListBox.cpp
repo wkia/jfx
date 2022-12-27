@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -72,7 +72,7 @@ namespace WebCore {
 using namespace HTMLNames;
 
 WTF_MAKE_ISO_ALLOCATED_IMPL(RenderListBox);
-
+ 
 const int rowSpacing = 1;
 
 const int optionsSpacingHorizontal = 2;
@@ -173,7 +173,7 @@ void RenderListBox::selectionChanged()
         else
             scrollToRevealSelection();
     }
-
+    
     if (AXObjectCache* cache = document().existingAXObjectCache())
         cache->deferSelectedChildrenChangedIfNeeded(selectElement());
 }
@@ -201,7 +201,7 @@ void RenderListBox::layout()
 }
 
 void RenderListBox::scrollToRevealSelection()
-{
+{    
     m_scrollToRevealSelectionAfterLayout = false;
 
     int firstIndex = selectElement().activeSelectionStartListIndex();
@@ -303,7 +303,7 @@ void RenderListBox::paintObject(PaintInfo& paintInfo, const LayoutPoint& paintOf
 {
     if (style().visibility() != Visibility::Visible)
         return;
-
+    
     if (paintInfo.phase == PaintPhase::Foreground) {
         paintItem(paintInfo, paintOffset, [this](PaintInfo& paintInfo, const LayoutPoint& paintOffset, int listItemIndex) {
             paintItemForeground(paintInfo, paintOffset, listItemIndex);
@@ -524,7 +524,7 @@ void RenderListBox::panScroll(const IntPoint& panStartMousePosition)
 
     // If the point is too far from the center we limit the speed
     yDelta = std::max<int>(std::min<int>(yDelta, maxSpeed), -maxSpeed);
-
+    
     if (abs(yDelta) < iconRadius) // at the center we let the space for the icon
         return;
 
@@ -540,7 +540,7 @@ void RenderListBox::panScroll(const IntPoint& panStartMousePosition)
     IntPoint scrollPoint(0, 0);
     scrollPoint.setY(absOffset.y() + yDelta);
     int newOffset = scrollToward(scrollPoint);
-    if (newOffset < 0)
+    if (newOffset < 0) 
         return;
 
     m_inAutoscroll = true;
@@ -556,13 +556,13 @@ int RenderListBox::scrollToward(const IntPoint& destination)
 
     int rows = numVisibleItems();
     int offset = m_indexOffset;
-
+    
     if (positionOffset.height() < borderTop() + paddingTop() && scrollToRevealElementAtListIndex(offset - 1))
         return offset - 1;
-
+    
     if (positionOffset.height() > height() - paddingBottom() - borderBottom() && scrollToRevealElementAtListIndex(offset + rows))
         return offset + rows - 1;
-
+    
     return listIndexAtOffset(positionOffset);
 }
 
@@ -754,7 +754,7 @@ static void setupWheelEventTestMonitor(RenderListBox& renderer)
 
 void RenderListBox::setScrollTop(int newTop, const ScrollPositionChangeOptions&)
 {
-    // Determine an index and scroll to it.
+    // Determine an index and scroll to it.    
     int index = newTop / itemHeight();
     if (index < 0 || index >= numItems() || index == m_indexOffset)
         return;
@@ -984,5 +984,5 @@ bool RenderListBox::scrolledToRight() const
     // that we are at the full extent of the scroll.
     return true;
 }
-
+    
 } // namespace WebCore

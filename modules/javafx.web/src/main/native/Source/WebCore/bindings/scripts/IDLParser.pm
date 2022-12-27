@@ -893,7 +893,7 @@ sub parseCallbackInterface
 
         my $interfaceNameToken = $self->getToken();
         $self->assertTokenType($interfaceNameToken, IdentifierToken);
-
+        
         my $name = identifierRemoveNullablePrefix($interfaceNameToken->value());
         $interface->type(makeSimpleType($name));
 
@@ -1042,7 +1042,7 @@ sub parseNamespace
 
         my $namespaceNameToken = $self->getToken();
         $self->assertTokenType($namespaceNameToken, IdentifierToken);
-
+        
         my $name = identifierRemoveNullablePrefix($namespaceNameToken->value());
         $namespace->name($name);
 
@@ -1050,7 +1050,7 @@ sub parseNamespace
         my $namespaceMembers = $self->parseNamespaceMembers();
         $self->assertTokenValue($self->getToken(), "}", __LINE__);
         $self->assertTokenValue($self->getToken(), ";", __LINE__);
-
+        
         for my $namespaceMember (@{$namespaceMembers}) {
             if (ref($namespaceMember) eq "IDLAttribute") {
                 push(@{$namespace->attributes}, $namespaceMember);
@@ -1399,7 +1399,7 @@ sub parseDictionaryMember
 
             my $type = $self->parseType();
             $self->moveExtendedAttributesApplicableToTypes($type, $extendedAttributeList);
-
+            
             $member->type($type);
         }
 
@@ -1587,7 +1587,7 @@ sub parseIncludesStatement
     my $next = $self->nextToken();
     if ($next->type() == IdentifierToken) {
         my $includesStatement = IDLIncludesStatement->new();
-
+    
         my $interfaceIdentifier = $self->parseName();
         $includesStatement->interfaceIdentifier($interfaceIdentifier);
 
@@ -2108,7 +2108,7 @@ sub parseSetLikeRest
     my $next = $self->nextToken();
     if ($next->value() eq "setlike") {
         $self->assertTokenValue($self->getToken(), "setlike", __LINE__);
-
+        
         my $setlike = IDLSetLike->new();
 
         $self->assertTokenValue($self->getToken(), "<", __LINE__);
@@ -2118,7 +2118,7 @@ sub parseSetLikeRest
 
         $self->assertExtendedAttributesValidForContext($extendedAttributeList, "set-like");
         $setlike->extendedAttributes($extendedAttributeList);
-
+        
         return $setlike;
     }
     $self->assertUnexpectedToken($next->value(), __LINE__);
@@ -2227,7 +2227,7 @@ sub parseArgumentsRest
         return $argument;
     } else {
         my $argument = IDLArgument->new();
-
+    
         my $type = $self->parseType();
         $self->moveExtendedAttributesApplicableToTypes($type, $extendedAttributeList);
 

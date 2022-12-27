@@ -10,13 +10,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -58,7 +58,7 @@
 #include <wtf/CompletionHandler.h>
 
 namespace WebCore {
-
+    
 using namespace HTMLNames;
 
 FrameLoader::SubframeLoader::SubframeLoader(Frame& frame)
@@ -109,7 +109,7 @@ bool FrameLoader::SubframeLoader::requestFrame(HTMLFrameOwnerElement& ownerEleme
 
     return true;
 }
-
+    
 bool FrameLoader::SubframeLoader::resourceWillUsePlugin(const String& url, const String& mimeType)
 {
     URL completedURL;
@@ -233,7 +233,7 @@ bool FrameLoader::SubframeLoader::requestObject(HTMLPlugInImageElement& ownerEle
     }
 
     // If the plug-in element already contains a subframe, loadOrRedirectSubframe will re-use it. Otherwise,
-    // it will create a new frame and set it as the RenderWidget's Widget, causing what was previously
+    // it will create a new frame and set it as the RenderWidget's Widget, causing what was previously 
     // in the widget to be torn down.
     return loadOrRedirectSubframe(ownerElement, completedURL, frameName, LockHistory::Yes, LockBackForwardList::Yes);
 }
@@ -310,7 +310,7 @@ RefPtr<Frame> FrameLoader::SubframeLoader::loadSubframe(HTMLFrameOwnerElement& o
     // loads, so that checkCompleted() below won't bail early.)
     // FIXME: Can we remove this entirely? m_isComplete normally gets set to false when a load is committed.
     frame->loader().started();
-
+   
     auto* renderer = ownerElement.renderer();
     auto* view = frame->view();
     if (is<RenderWidget>(renderer) && view)
@@ -321,10 +321,10 @@ RefPtr<Frame> FrameLoader::SubframeLoader::loadSubframe(HTMLFrameOwnerElement& o
     // Some loads are performed synchronously (e.g., about:blank and loads
     // cancelled by returning a null ResourceRequest from requestFromDelegate).
     // In these cases, the synchronous load would have finished
-    // before we could connect the signals, so make sure to send the
+    // before we could connect the signals, so make sure to send the 
     // completed() signal for the child by hand and mark the load as being
     // complete.
-    // FIXME: In this case the Frame will have finished loading before
+    // FIXME: In this case the Frame will have finished loading before 
     // it's being added to the child list. It would be a good idea to
     // create the child first, then invoke the loader separately.
     if (frame->loader().state() == FrameState::Complete && !frame->loader().policyDocumentLoader())

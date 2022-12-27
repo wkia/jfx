@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -59,19 +59,19 @@ public:
         GeneratedFinalCode, // Generated so much code that we never want to generate code again.
         ResetStubAndFireWatchpoints // We found out some data that makes us want to start over fresh with this stub. Currently, this happens when we detect poly proto.
     };
-
+    
 
     AccessGenerationResult() = default;
     AccessGenerationResult(AccessGenerationResult&&) = default;
     AccessGenerationResult& operator=(AccessGenerationResult&&) = default;
-
+    
     AccessGenerationResult(Kind kind)
         : m_kind(kind)
     {
         RELEASE_ASSERT(kind != GeneratedNewCode);
         RELEASE_ASSERT(kind != GeneratedFinalCode);
     }
-
+    
     AccessGenerationResult(Kind kind, MacroAssemblerCodePtr<JITStubRoutinePtrTag> code)
         : m_kind(kind)
         , m_code(code)
@@ -79,39 +79,39 @@ public:
         RELEASE_ASSERT(kind == GeneratedNewCode || kind == GeneratedFinalCode);
         RELEASE_ASSERT(code);
     }
-
+    
     bool operator==(const AccessGenerationResult& other) const
     {
         return m_kind == other.m_kind && m_code == other.m_code;
     }
-
+    
     bool operator!=(const AccessGenerationResult& other) const
     {
         return !(*this == other);
     }
-
+    
     explicit operator bool() const
     {
         return *this != AccessGenerationResult();
     }
-
+    
     Kind kind() const { return m_kind; }
-
+    
     const MacroAssemblerCodePtr<JITStubRoutinePtrTag>& code() const { return m_code; }
-
+    
     bool madeNoChanges() const { return m_kind == MadeNoChanges; }
     bool gaveUp() const { return m_kind == GaveUp; }
     bool buffered() const { return m_kind == Buffered; }
     bool generatedNewCode() const { return m_kind == GeneratedNewCode; }
     bool generatedFinalCode() const { return m_kind == GeneratedFinalCode; }
     bool shouldResetStubAndFireWatchpoints() const { return m_kind == ResetStubAndFireWatchpoints; }
-
+    
     // If we gave up on this attempt to generate code, or if we generated the "final" code, then we
     // should give up after this.
     bool shouldGiveUpNow() const { return gaveUp() || generatedFinalCode(); }
-
+    
     bool generatedSomeCode() const { return generatedNewCode() || generatedFinalCode(); }
-
+    
     void dump(PrintStream&) const;
 
     void addWatchpointToFire(InlineWatchpointSet& set, StringFireDetail detail)
@@ -124,7 +124,7 @@ public:
         for (auto& pair : m_watchpointsToFire)
             pair.first.invalidate(vm, pair.second);
     }
-
+    
 private:
     Kind m_kind;
     MacroAssemblerCodePtr<JITStubRoutinePtrTag> m_code;
@@ -145,9 +145,9 @@ public:
 
     AccessGenerationResult addCase(
         const GCSafeConcurrentJSLocker&, VM&, CodeBlock*, StructureStubInfo&, Ref<AccessCase>);
-
+    
     AccessGenerationResult regenerate(const GCSafeConcurrentJSLocker&, VM&, JSGlobalObject*, CodeBlock*, ECMAMode, StructureStubInfo&);
-
+    
     bool isEmpty() const { return m_list.isEmpty(); }
     unsigned size() const { return m_list.size(); }
     const AccessCase& at(unsigned i) const { return *m_list[i]; }
@@ -157,7 +157,7 @@ public:
 
     // If this returns false then we are requesting a reset of the owning StructureStubInfo.
     bool visitWeak(VM&) const;
-
+    
     // This returns true if it has marked everything it will ever marked. This can be used as an
     // optimization to then avoid calling this method again during the fixpoint.
     template<typename Visitor> void propagateTransitions(Visitor&) const;
@@ -166,7 +166,7 @@ public:
 
     void dump(PrintStream& out) const;
     bool containsPC(void* pc) const
-    {
+    { 
         if (!m_stubRoutine)
             return false;
 
@@ -178,9 +178,9 @@ private:
     friend class AccessCase;
     friend class CodeBlock;
     friend struct AccessGenerationState;
-
+    
     typedef Vector<RefPtr<AccessCase>, 2> ListType;
-
+    
     void commit(
         const GCSafeConcurrentJSLocker&, VM&, std::unique_ptr<WatchpointsOnStructureStubInfo>&, CodeBlock*, StructureStubInfo&,
         AccessCase&);
@@ -192,7 +192,7 @@ private:
 
 struct AccessGenerationState {
     AccessGenerationState(VM& vm, JSGlobalObject* globalObject, ECMAMode ecmaMode)
-        : m_vm(vm)
+        : m_vm(vm) 
         , m_globalObject(globalObject)
         , m_ecmaMode(ecmaMode)
         , m_doesJSGetterSetterCalls(false)
@@ -265,7 +265,7 @@ struct AccessGenerationState {
 
     bool needsToRestoreRegistersIfException() const { return m_needsToRestoreRegistersIfException; }
     CallSiteIndex originalCallSiteIndex() const;
-
+    
     void emitExplicitExceptionHandler();
 
     void setSpillStateForJSGetterSetter(SpillState& spillState)
@@ -277,10 +277,10 @@ struct AccessGenerationState {
         m_spillStateForJSGetterSetter = spillState;
     }
     SpillState spillStateForJSGetterSetter() const { return m_spillStateForJSGetterSetter; }
-
+    
 private:
     const RegisterSet& liveRegistersToPreserveAtExceptionHandlingCallSite();
-
+    
     RegisterSet m_liveRegistersToPreserveAtExceptionHandlingCallSite;
     RegisterSet m_liveRegistersForCall;
     CallSiteIndex m_callSiteIndex;

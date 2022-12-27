@@ -37,11 +37,11 @@ struct BlendingContext;
 class TransformOperation : public RefCounted<TransformOperation> {
 public:
     enum OperationType {
-        SCALE_X, SCALE_Y, SCALE,
-        TRANSLATE_X, TRANSLATE_Y, TRANSLATE,
+        SCALE_X, SCALE_Y, SCALE, 
+        TRANSLATE_X, TRANSLATE_Y, TRANSLATE, 
         ROTATE,
         ROTATE_Z = ROTATE,
-        SKEW_X, SKEW_Y, SKEW,
+        SKEW_X, SKEW_Y, SKEW, 
         MATRIX,
         SCALE_Z, SCALE_3D,
         TRANSLATE_Z, TRANSLATE_3D,
@@ -73,7 +73,7 @@ public:
     bool isSameType(const TransformOperation& other) const { return type() == other.type(); }
 
     virtual bool isAffectedByTransformOrigin() const { return false; }
-
+    
     bool is3DOperation() const
     {
         OperationType opType = type();
@@ -87,7 +87,7 @@ public:
                opType == MATRIX_3D ||
                opType == PERSPECTIVE;
     }
-
+    
     virtual bool isRepresentableIn2D() const { return true; }
 
     bool isRotateTransformOperationType() const
@@ -109,7 +109,7 @@ public:
     {
         return type() == TRANSLATE_X || type() == TRANSLATE_Y || type() == TRANSLATE_Z || type() == TRANSLATE || type() == TRANSLATE_3D;
     }
-
+    
     virtual void dump(WTF::TextStream&) const = 0;
 
 private:

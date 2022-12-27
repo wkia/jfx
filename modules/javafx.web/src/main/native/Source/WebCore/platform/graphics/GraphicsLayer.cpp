@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -67,7 +67,7 @@ void KeyframeValueList::insert(std::unique_ptr<const AnimationValue> value)
             return;
         }
     }
-
+    
     m_values.append(WTFMove(value));
 }
 
@@ -233,7 +233,7 @@ bool GraphicsLayer::hasAncestor(GraphicsLayer* ancestor) const
         if (curr == ancestor)
             return true;
     }
-
+    
     return false;
 }
 
@@ -248,14 +248,14 @@ bool GraphicsLayer::setChildren(Vector<Ref<GraphicsLayer>>&& newChildren)
     size_t listSize = newChildren.size();
     for (size_t i = 0; i < listSize; ++i)
         addChild(WTFMove(newChildren[i]));
-
+    
     return true;
 }
 
 void GraphicsLayer::addChild(Ref<GraphicsLayer>&& childLayer)
 {
     ASSERT(childLayer.ptr() != this);
-
+    
     childLayer->removeFromParent();
     childLayer->setParent(this);
     m_children.append(WTFMove(childLayer));
@@ -307,7 +307,7 @@ void GraphicsLayer::addChildAbove(Ref<GraphicsLayer>&& childLayer, GraphicsLayer
 bool GraphicsLayer::replaceChild(GraphicsLayer* oldChild, Ref<GraphicsLayer>&& newChild)
 {
     ASSERT(!newChild->parent());
-
+    
     GraphicsLayer* rawNewChild = newChild.ptr();
 
     bool found = false;
@@ -396,7 +396,7 @@ void GraphicsLayer::setMaskLayer(RefPtr<GraphicsLayer>&& layer)
         m_maskLayer->setParent(nullptr);
         m_maskLayer->setIsMaskLayer(false);
     }
-
+    
     m_maskLayer = WTFMove(layer);
 }
 
@@ -508,7 +508,7 @@ void GraphicsLayer::setSize(const FloatSize& size)
 {
     if (size == m_size)
         return;
-
+    
     m_size = size;
 
     if (shouldRepaintOnSizeChange())
@@ -554,7 +554,7 @@ FloatRect GraphicsLayer::adjustCoverageRectForMovement(const FloatRect& coverage
 
     float topEdgeDelta = paddingMultiplier * (currentVisibleRect.y() - previousVisibleRect.y());
     float bottomEdgeDelta = paddingMultiplier * (currentVisibleRect.maxY() - previousVisibleRect.maxY());
-
+    
     FloatRect expandedRect = currentVisibleRect;
 
     // More exposed on left side.
@@ -594,7 +594,7 @@ FloatRect GraphicsLayer::adjustCoverageRectForMovement(const FloatRect& coverage
         else
             expandedRect.setHeight(previousVisibleRect.maxY() - expandedRect.y());
     }
-
+    
     return unionRect(coverageRect, expandedRect);
 }
 
@@ -621,7 +621,7 @@ void GraphicsLayer::getDebugBorderInfo(Color& color, float& width) const
         width = 12;
         return;
     }
-
+    
     if (drawsContent()) {
         if (tiledBacking()) {
             color = Color::orange.colorWithAlphaByte(128); // tiled layer: orange
@@ -637,7 +637,7 @@ void GraphicsLayer::getDebugBorderInfo(Color& color, float& width) const
         width = 8;
         return;
     }
-
+    
     if (masksToBounds()) {
         color = SRGBA<uint8_t> { 128, 255, 255, 48 }; // masking layer: pale blue
         width = 16;
@@ -690,23 +690,23 @@ int GraphicsLayer::validateFilterOperations(const KeyframeValueList& valueList)
         return -1;
 
     const FilterOperations& firstVal = filterOperationsAt(valueList, firstIndex);
-
+    
     for (size_t i = firstIndex + 1; i < valueList.size(); ++i) {
         const FilterOperations& val = filterOperationsAt(valueList, i);
-
+        
         // An emtpy filter list matches anything.
         if (val.operations().isEmpty())
             continue;
-
+        
         if (!firstVal.operationsMatch(val))
             return -1;
     }
-
+    
     return firstIndex;
 }
 
 // An "invalid" list is one whose functions don't match, and therefore has to be animated as a Matrix
-// The hasBigRotation flag will always return false if isValid is false. Otherwise hasBigRotation is
+// The hasBigRotation flag will always return false if isValid is false. Otherwise hasBigRotation is 
 // true if the rotation between any two keyframes is >= 180 degrees.
 
 static inline const TransformOperations& operationsAt(const KeyframeValueList& valueList, size_t index)
@@ -719,51 +719,51 @@ int GraphicsLayer::validateTransformOperations(const KeyframeValueList& valueLis
     ASSERT(animatedPropertyIsTransformOrRelated(valueList.property()));
 
     hasBigRotation = false;
-
+    
     if (valueList.size() < 2)
         return -1;
-
+    
     // Empty transforms match anything, so find the first non-empty entry as the reference.
     size_t firstIndex = 0;
     for ( ; firstIndex < valueList.size(); ++firstIndex) {
         if (!operationsAt(valueList, firstIndex).operations().isEmpty())
             break;
     }
-
+    
     if (firstIndex >= valueList.size())
         return -1;
-
+        
     const TransformOperations& firstVal = operationsAt(valueList, firstIndex);
-
+    
     // See if the keyframes are valid.
     for (size_t i = firstIndex + 1; i < valueList.size(); ++i) {
         const TransformOperations& val = operationsAt(valueList, i);
-
+        
         // An empty transform list matches anything.
         if (val.operations().isEmpty())
             continue;
-
+            
         if (!firstVal.operationsMatch(val))
             return -1;
     }
 
-    // Keyframes are valid, check for big rotations.
+    // Keyframes are valid, check for big rotations.    
     double lastRotationAngle = 0.0;
     double maxRotationAngle = -1.0;
-
+        
     for (size_t j = 0; j < firstVal.operations().size(); ++j) {
         TransformOperation::OperationType type = firstVal.operations().at(j)->type();
-
+        
         // if this is a rotation entry, we need to see if any angle differences are >= 180 deg
         if (type == TransformOperation::ROTATE_X ||
             type == TransformOperation::ROTATE_Y ||
             type == TransformOperation::ROTATE_Z ||
             type == TransformOperation::ROTATE_3D) {
             lastRotationAngle = downcast<RotateTransformOperation>(*firstVal.operations().at(j)).angle();
-
+            
             if (maxRotationAngle < 0)
                 maxRotationAngle = fabs(lastRotationAngle);
-
+            
             for (size_t i = firstIndex + 1; i < valueList.size(); ++i) {
                 const TransformOperations& val = operationsAt(valueList, i);
                 double rotationAngle = val.operations().isEmpty() ? 0 : downcast<RotateTransformOperation>(*val.operations().at(j)).angle();
@@ -774,9 +774,9 @@ int GraphicsLayer::validateTransformOperations(const KeyframeValueList& valueLis
             }
         }
     }
-
+    
     hasBigRotation = maxRotationAngle >= 180.0;
-
+    
     return firstIndex;
 }
 
@@ -784,7 +784,7 @@ double GraphicsLayer::backingStoreMemoryEstimate() const
 {
     if (!drawsContent())
         return 0;
-
+    
     // Effects of page and device scale are ignored; subclasses should override to take these into account.
     return static_cast<double>(4 * size().width()) * size().height();
 }
@@ -994,7 +994,7 @@ void GraphicsLayer::dumpProperties(TextStream& ts, OptionSet<LayerTreeAsTextOpti
         ts << indent << "(event region" << m_eventRegion;
         ts << indent << ")\n";
     }
-
+    
 #if ENABLE(SCROLLING_THREAD)
     if ((options & LayerTreeAsTextOptions::Debug) && m_scrollingNodeID)
         ts << indent << "(scrolling node " << m_scrollingNodeID << ")\n";
@@ -1004,10 +1004,10 @@ void GraphicsLayer::dumpProperties(TextStream& ts, OptionSet<LayerTreeAsTextOpti
         ts << indent << "(paintingPhases " << paintingPhase() << ")\n";
 
     dumpAdditionalProperties(ts, options);
-
+    
     if (m_children.size()) {
         TextStream childrenStream;
-
+        
         childrenStream.increaseIndent(ts.indent());
         unsigned totalChildCount = 0;
         dumpChildren(childrenStream, m_children, totalChildCount, options);

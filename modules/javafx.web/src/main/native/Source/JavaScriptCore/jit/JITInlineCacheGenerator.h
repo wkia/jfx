@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,7 +47,7 @@ class JITInlineCacheGenerator {
 protected:
     JITInlineCacheGenerator() { }
     JITInlineCacheGenerator(CodeBlock*, JITType, CodeOrigin, CallSiteIndex, AccessType, const RegisterSet& usedRegisters);
-
+    
 public:
     StructureStubInfo* stubInfo() const { return m_stubInfo; }
 
@@ -56,13 +56,13 @@ public:
         m_slowPathBegin = slowPathBegin;
         m_slowPathCall = call;
     }
-
+    
     MacroAssembler::Label slowPathBegin() const { return m_slowPathBegin; }
 
     void finalize(
         LinkBuffer& fastPathLinkBuffer, LinkBuffer& slowPathLinkBuffer,
         CodeLocationLabel<JITStubRoutinePtrTag> start);
-
+    
 protected:
     CodeBlock* m_codeBlock;
     JITType m_jitType;
@@ -90,11 +90,11 @@ public:
 
     void finalize(
         LinkBuffer& fastPathLinkBuffer, LinkBuffer& slowPathLinkBuffer);
-
+    
 protected:
-
+    
     void generateFastCommon(MacroAssembler&, size_t size);
-
+    
     JSValueRegs m_base;
     JSValueRegs m_value;
 
@@ -109,7 +109,7 @@ public:
     JITGetByIdGenerator(
         CodeBlock*, JITType, CodeOrigin, CallSiteIndex, const RegisterSet& usedRegisters, CacheableIdentifier,
         JSValueRegs base, JSValueRegs value, GPRReg stubInfoGPR, AccessType);
-
+    
     void generateFastPath(MacroAssembler&);
 
 private:
@@ -134,9 +134,9 @@ public:
     JITPutByIdGenerator(
         CodeBlock*, JITType, CodeOrigin, CallSiteIndex, const RegisterSet& usedRegisters, CacheableIdentifier, JSValueRegs base,
         JSValueRegs value, GPRReg stubInfoGPR, GPRReg scratch, ECMAMode, PutKind);
-
+    
     void generateFastPath(MacroAssembler&);
-
+    
     V_JITOperation_GSsiJJC slowPathFunction();
 
 private:
@@ -261,12 +261,12 @@ class JITInstanceOfGenerator final : public JITInlineCacheGenerator {
 public:
     using Base = JITInlineCacheGenerator;
     JITInstanceOfGenerator() { }
-
+    
     JITInstanceOfGenerator(
         CodeBlock*, JITType, CodeOrigin, CallSiteIndex, const RegisterSet& usedRegisters, GPRReg result,
         GPRReg value, GPRReg prototype, GPRReg stubInfoGPR, GPRReg scratch1, GPRReg scratch2,
         bool prototypeIsKnownObject = false);
-
+    
     void generateFastPath(MacroAssembler&);
 
     MacroAssembler::Jump slowPathJump() const
@@ -299,7 +299,7 @@ public:
 
     void finalize(
         LinkBuffer& fastPathLinkBuffer, LinkBuffer& slowPathLinkBuffer);
-
+    
     void generateFastPath(MacroAssembler&);
 
 private:
@@ -327,7 +327,7 @@ public:
 
     void finalize(
         LinkBuffer& fastPathLinkBuffer, LinkBuffer& slowPathLinkBuffer);
-
+    
     void generateFastPath(MacroAssembler&);
 
 private:

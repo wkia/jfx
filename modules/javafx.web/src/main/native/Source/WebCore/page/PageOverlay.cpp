@@ -186,7 +186,7 @@ void PageOverlay::drawRect(GraphicsContext& graphicsContext, const IntRect& dirt
 
     m_client.drawRect(*this, graphicsContext, paintRect);
 }
-
+    
 bool PageOverlay::mouseEvent(const PlatformMouseEvent& mouseEvent)
 {
     IntPoint mousePositionInOverlayCoordinates(mouseEvent.position());

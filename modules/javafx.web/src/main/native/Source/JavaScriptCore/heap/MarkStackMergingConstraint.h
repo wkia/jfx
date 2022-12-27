@@ -37,15 +37,15 @@ class MarkStackMergingConstraint final : public MarkingConstraint {
 public:
     MarkStackMergingConstraint(Heap&);
     ~MarkStackMergingConstraint() final;
-
+    
     double quickWorkEstimate(SlotVisitor&) final;
-
+    
 private:
     void prepareToExecuteImpl(const AbstractLocker& constraintSolvingLocker, AbstractSlotVisitor&) final;
     template<typename Visitor> ALWAYS_INLINE void executeImplImpl(Visitor&);
     void executeImpl(AbstractSlotVisitor&) final;
     void executeImpl(SlotVisitor&) final;
-
+    
     Heap& m_heap;
 };
 

@@ -53,7 +53,7 @@ std::unique_ptr<FullBytecodeLiveness> BytecodeLivenessAnalysis::computeFullLiven
     for (BytecodeBasicBlock& block : m_graph.basicBlocksInReverseOrder()) {
         if (block.isEntryBlock() || block.isExitBlock())
             continue;
-
+        
         out = block.out();
 
         auto use = [&] (unsigned bitIndex) {

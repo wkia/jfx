@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -54,7 +54,7 @@ Ref<SharedTask<MarkedBlock::Handle*()>> IsoCellSet::parallelNotEmptyMarkedBlockS
             , m_directory(set.m_subspace.m_directory)
         {
         }
-
+        
         MarkedBlock::Handle* run() final
         {
             if (m_done)
@@ -68,7 +68,7 @@ Ref<SharedTask<MarkedBlock::Handle*()>> IsoCellSet::parallelNotEmptyMarkedBlockS
             }
             return m_directory.m_blocks[m_index++];
         }
-
+        
     private:
         IsoCellSet& m_set;
         BlockDirectory& m_directory;
@@ -76,7 +76,7 @@ Ref<SharedTask<MarkedBlock::Handle*()>> IsoCellSet::parallelNotEmptyMarkedBlockS
         Lock m_lock;
         bool m_done { false };
     };
-
+    
     return adoptRef(*new Task(*this));
 }
 
@@ -112,19 +112,19 @@ void IsoCellSet::didRemoveBlock(unsigned blockIndex)
 void IsoCellSet::sweepToFreeList(MarkedBlock::Handle* block)
 {
     RELEASE_ASSERT(!block->isAllocated());
-
+    
     if (!m_blocksWithBits[block->index()])
         return;
-
+    
     WTF::loadLoadFence();
-
+    
     if (!m_bits[block->index()]) {
         dataLog("FATAL: for block index ", block->index(), ":\n");
         dataLog("Blocks with bits says: ", !!m_blocksWithBits[block->index()], "\n");
         dataLog("Bits says: ", RawPointer(m_bits[block->index()].get()), "\n");
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     if (block->block().hasAnyNewlyAllocated()) {
         // The newlyAllocated() bits are a superset of the marks() bits.
         m_bits[block->index()]->concurrentFilter(block->block().newlyAllocated());
@@ -141,7 +141,7 @@ void IsoCellSet::sweepToFreeList(MarkedBlock::Handle* block)
         m_bits[block->index()] = nullptr;
         return;
     }
-
+    
     m_bits[block->index()]->concurrentFilter(block->block().marks());
 }
 

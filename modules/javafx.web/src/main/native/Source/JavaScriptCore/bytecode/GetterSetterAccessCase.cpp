@@ -68,7 +68,7 @@ Ref<AccessCase> GetterSetterAccessCase::create(
 }
 
 Ref<AccessCase> GetterSetterAccessCase::create(VM& vm, JSCell* owner, AccessType type, Structure* structure, CacheableIdentifier identifier, PropertyOffset offset,
-    const ObjectPropertyConditionSet& conditionSet, RefPtr<PolyProtoAccessChain>&& prototypeAccessChain, bool viaProxy,
+    const ObjectPropertyConditionSet& conditionSet, RefPtr<PolyProtoAccessChain>&& prototypeAccessChain, bool viaProxy, 
     FunctionPtr<CustomAccessorPtrTag> customSetter, JSObject* customSlotBase)
 {
     ASSERT(type == Setter || type == CustomValueSetter || type == CustomAccessorSetter);
@@ -236,7 +236,7 @@ void GetterSetterAccessCase::emitDOMJITGetter(AccessGenerationState& state, cons
     snippet->generator()->run(jit, params);
     allocator.restoreReusedRegistersByPopping(jit, preservedState);
     state.succeed();
-
+    
     CCallHelpers::JumpList exceptions = params.emitSlowPathCalls(state, registersToSpillForCCall, jit);
     if (!exceptions.empty()) {
         exceptions.link(&jit);

@@ -191,7 +191,7 @@ void RenderMenuList::updateOptionsWidth()
 {
     float maxOptionWidth = 0;
     const Vector<HTMLElement*>& listItems = selectElement().listItems();
-    int size = listItems.size();
+    int size = listItems.size();    
 
     for (int i = 0; i < size; ++i) {
         HTMLElement* element = listItems[i];
@@ -300,14 +300,14 @@ LayoutRect RenderMenuList::controlClipRect(const LayoutPoint& additionalOffset) 
     // Clip to the intersection of the content box and the content box for the inner box
     // This will leave room for the arrows which sit in the inner box padding,
     // and if the inner box ever spills out of the outer box, that will get clipped too.
-    LayoutRect outerBox(additionalOffset.x() + borderLeft() + paddingLeft(),
+    LayoutRect outerBox(additionalOffset.x() + borderLeft() + paddingLeft(), 
                    additionalOffset.y() + borderTop() + paddingTop(),
-                   contentWidth(),
+                   contentWidth(), 
                    contentHeight());
-
-    LayoutRect innerBox(additionalOffset.x() + m_innerBlock->x() + m_innerBlock->paddingLeft(),
+    
+    LayoutRect innerBox(additionalOffset.x() + m_innerBlock->x() + m_innerBlock->paddingLeft(), 
                    additionalOffset.y() + m_innerBlock->y() + m_innerBlock->paddingTop(),
-                   m_innerBlock->contentWidth(),
+                   m_innerBlock->contentWidth(), 
                    m_innerBlock->contentHeight());
 
     return intersection(outerBox, innerBox);
@@ -325,7 +325,7 @@ void RenderMenuList::computePreferredLogicalWidths()
 {
     m_minPreferredLogicalWidth = 0;
     m_maxPreferredLogicalWidth = 0;
-
+    
     if (style().width().isFixed() && style().width().value() > 0)
         m_minPreferredLogicalWidth = m_maxPreferredLogicalWidth = adjustContentBoxLogicalWidthForBoxSizing(style().width());
     else
@@ -451,7 +451,7 @@ String RenderMenuList::itemAccessibilityText(unsigned listIndex) const
         return String();
     return listItems[listIndex]->attributeWithoutSynchronization(aria_labelAttr);
 }
-
+    
 String RenderMenuList::itemToolTip(unsigned listIndex) const
 {
     const Vector<HTMLElement*>& listItems = selectElement().listItems();

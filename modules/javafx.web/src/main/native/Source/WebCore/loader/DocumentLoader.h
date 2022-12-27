@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -170,7 +170,7 @@ public:
     WEBCORE_EXPORT FrameLoader* frameLoader() const;
     WEBCORE_EXPORT SubresourceLoader* mainResourceLoader() const;
     WEBCORE_EXPORT RefPtr<SharedBuffer> mainResourceData() const;
-
+    
     DocumentWriter& writer() const { return m_writer; }
 
     const ResourceRequest& originalRequest() const;
@@ -251,8 +251,8 @@ public:
 #if ASSERT_ENABLED
     bool isSubstituteLoadPending(ResourceLoader*) const;
 #endif
-    void cancelPendingSubstituteLoad(ResourceLoader*);
-
+    void cancelPendingSubstituteLoad(ResourceLoader*);   
+    
     void addResponse(const ResourceResponse&);
     const Vector<ResourceResponse>& responses() const { return m_responses; }
 
@@ -276,7 +276,7 @@ public:
     String clientRedirectSourceForHistory() const { return m_clientRedirectSourceForHistory; } // null if no client redirect occurred.
     String clientRedirectDestinationForHistory() const { return urlForHistory().string(); }
     void setClientRedirectSourceForHistory(const String& clientRedirectSourceForHistory) { m_clientRedirectSourceForHistory = clientRedirectSourceForHistory; }
-
+    
     String serverRedirectSourceForHistory() const { return (urlForHistory() == url() || url() == aboutBlankURL()) ? String() : urlForHistory().string(); } // null if no server redirect occurred.
     String serverRedirectDestinationForHistory() const { return url().string(); }
 
@@ -346,7 +346,7 @@ public:
     void subresourceLoaderFinishedLoadingOnePart(ResourceLoader*);
 
     void setDeferMainResourceDataLoad(bool defer) { m_deferMainResourceDataLoad = defer; }
-
+    
     void didTellClientAboutLoad(const String& url);
     bool haveToldClientAboutLoad(const String& url) { return m_resourcesClientKnowsAbout.contains(url); }
     void recordMemoryCacheLoadForFutureClientNotification(const ResourceRequest&);
@@ -423,6 +423,7 @@ public:
     bool lastNavigationWasAppInitiated() const { return m_lastNavigationWasAppInitiated; }
     void setLastNavigationWasAppInitiated(bool lastNavigationWasAppInitiated) { m_lastNavigationWasAppInitiated = lastNavigationWasAppInitiated; }
 
+    ContentSecurityPolicy* contentSecurityPolicy() const { return m_contentSecurityPolicy.get(); }
     std::optional<CrossOriginOpenerPolicy> crossOriginOpenerPolicy() const { return m_currentCoopEnforcementResult ? std::make_optional(m_currentCoopEnforcementResult->crossOriginOpenerPolicy) : std::nullopt; }
 
     bool isContinuingLoadAfterResponsePolicyCheck() const { return m_isContinuingLoadAfterResponsePolicyCheck; }
@@ -462,7 +463,7 @@ private:
 
     void setupForReplace();
     void maybeFinishLoadingMultipartContent();
-
+    
     bool maybeCreateArchive();
 #if ENABLE(WEB_ARCHIVE) || ENABLE(MHTML)
     void clearArchiveResources();
@@ -534,21 +535,21 @@ private:
     ResourceLoaderMap m_subresourceLoaders;
     ResourceLoaderMap m_multipartSubresourceLoaders;
     ResourceLoaderMap m_plugInStreamLoaders;
-
+    
     mutable DocumentWriter m_writer;
 
     // A reference to actual request used to create the data source.
     // This should only be used by the resourceLoadDelegate's
     // identifierForInitialRequest:fromDatasource: method. It is
     // not guaranteed to remain unchanged, as requests are mutable.
-    ResourceRequest m_originalRequest;
+    ResourceRequest m_originalRequest;   
 
     SubstituteData m_substituteData;
 
     // A copy of the original request used to create the data source.
     // We have to copy the request because requests are mutable.
     ResourceRequest m_originalRequestCopy;
-
+    
     // The 'working' request. It may be mutated
     // several times from the original request to include additional
     // headers, cookie information, canonicalization and redirects.
@@ -556,7 +557,7 @@ private:
 
     ResourceResponse m_response;
 
-    ResourceError m_mainDocumentError;
+    ResourceError m_mainDocumentError;    
 
     bool m_originalSubstituteDataWasValid;
     bool m_committed { false };
@@ -589,7 +590,7 @@ private:
     bool m_stopRecordingResponses { false };
 
     std::optional<CrossOriginOpenerPolicyEnforcementResult> m_currentCoopEnforcementResult;
-
+    
     typedef HashMap<RefPtr<ResourceLoader>, RefPtr<SubstituteResource>> SubstituteResourceMap;
     SubstituteResourceMap m_pendingSubstituteResources;
     Timer m_substituteResourceDeliveryTimer;
@@ -602,7 +603,7 @@ private:
 
     HashSet<String> m_resourcesClientKnowsAbout;
     Vector<ResourceRequest> m_resourcesLoadedFromMemoryCacheForClientNotification;
-
+    
     String m_clientRedirectSourceForHistory;
     bool m_didCreateGlobalHistoryEntry { false };
 
@@ -624,10 +625,11 @@ private:
 #endif
 
     Vector<CustomHeaderFields> m_customHeaderFields;
-
+    
     ShouldOpenExternalURLsPolicy m_shouldOpenExternalURLsPolicy { ShouldOpenExternalURLsPolicy::ShouldNotAllow };
 
     std::unique_ptr<ApplicationCacheHost> m_applicationCacheHost;
+    std::unique_ptr<ContentSecurityPolicy> m_contentSecurityPolicy;
 
 #if ENABLE(CONTENT_FILTERING)
     std::unique_ptr<ContentFilter> m_contentFilter;

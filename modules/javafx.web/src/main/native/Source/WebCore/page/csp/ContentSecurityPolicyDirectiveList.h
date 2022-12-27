@@ -136,9 +136,9 @@ private:
     std::unique_ptr<ContentSecurityPolicySourceListDirective> m_objectSrc;
     std::unique_ptr<ContentSecurityPolicySourceListDirective> m_scriptSrc;
     std::unique_ptr<ContentSecurityPolicySourceListDirective> m_styleSrc;
-
+    
     Vector<String> m_reportURIs;
-
+    
     String m_evalDisabledErrorMessage;
     String m_webAssemblyDisabledErrorMessage;
 };

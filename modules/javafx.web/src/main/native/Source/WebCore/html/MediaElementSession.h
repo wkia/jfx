@@ -239,7 +239,7 @@ private:
 #if ENABLE(MEDIA_USAGE)
     bool m_haveAddedMediaUsageManagerSession { false };
 #endif
-
+    
 #if ENABLE(MEDIA_SESSION)
     bool m_isScrubbing { false };
     std::unique_ptr<MediaSessionObserver> m_observer;
@@ -251,7 +251,7 @@ String convertEnumerationToString(const MediaPlaybackDenialReason);
 } // namespace WebCore
 
 namespace WTF {
-
+    
 template<typename Type>
 struct LogArgument;
 
@@ -262,7 +262,7 @@ struct LogArgument<WebCore::MediaPlaybackDenialReason> {
         return convertEnumerationToString(reason);
     }
 };
-
+    
 }; // namespace WTF
 
 

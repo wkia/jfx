@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -74,7 +74,7 @@ public:
         Packet()
         {
         }
-
+        
         static constexpr unsigned unlikelyValue = 0x7a11;
 
         static constexpr intptr_t tailMarkerValue = static_cast<intptr_t>(unlikelyValue);
@@ -82,12 +82,12 @@ public:
         {
             return bitwise_cast<JSObject*>(tailMarkerValue);
         }
-
+        
         static JSObject* throwMarker()
         {
             return bitwise_cast<JSObject*>(static_cast<intptr_t>(unlikelyValue + 1));
         }
-
+        
         static Packet prologue(JSObject* callee, CallFrame* frame, CallFrame* callerFrame, JSScope* scope)
         {
             Packet result;
@@ -97,7 +97,7 @@ public:
             result.scope = scope;
             return result;
         }
-
+        
         static Packet tail(CallFrame* frame, JSValue thisValue, JSScope* scope, CodeBlock* codeBlock, CallSiteIndex callSiteIndex)
         {
             Packet result;
@@ -109,22 +109,22 @@ public:
             result.callSiteIndex = callSiteIndex;
             return result;
         }
-
+        
         static Packet throwPacket()
         {
             Packet result;
             result.callee = throwMarker();
             return result;
         }
-
+        
         explicit operator bool() const { return !!callee; }
-
+        
         bool isPrologue() const { return *this && callee != tailMarker() && callee != throwMarker(); }
         bool isTail() const { return *this && callee == tailMarker(); }
         bool isThrow() const { return *this && callee == throwMarker(); }
-
+        
         void dump(PrintStream&) const;
-
+        
         // Only tail packets have a valid thisValue, CodeBlock*, and CallSiteIndex. We grab 'this' and CodeBlock* from non tail-deleted frames from the machine frame.
         JSValue thisValue { JSValue() };
         JSObject* callee { nullptr };
@@ -134,12 +134,12 @@ public:
         CodeBlock* codeBlock { nullptr };
         CallSiteIndex callSiteIndex;
     };
-
+    
     struct Frame {
         Frame()
         {
         }
-
+        
         Frame(JSObject* callee, CallFrame* frame, bool isTailDeleted, JSValue thisValue = JSValue(), JSScope* scope = nullptr, CodeBlock* codeBlock = nullptr, CallSiteIndex callSiteIndex = CallSiteIndex())
             : callee(callee)
             , frame(frame)
@@ -150,7 +150,7 @@ public:
             , isTailDeleted(isTailDeleted)
         {
         }
-
+        
         bool operator==(const Frame& other) const
         {
             return callee == other.callee
@@ -161,14 +161,14 @@ public:
                 && callSiteIndex.bits() == other.callSiteIndex.bits()
                 && isTailDeleted == other.isTailDeleted;
         }
-
+        
         bool operator!=(const Frame& other) const
         {
             return !(*this == other);
         }
-
+        
         void dump(PrintStream&) const;
-
+        
         // FIXME: This should be able to hold the moral equivalent of StackVisitor::Frame, so that
         // we can support inlining.
         // https://bugs.webkit.org/show_bug.cgi?id=155686
@@ -180,14 +180,14 @@ public:
         CallSiteIndex callSiteIndex;
         bool isTailDeleted { false };
     };
-
+    
     ShadowChicken();
     ~ShadowChicken();
-
+    
     void log(VM& vm, CallFrame*, const Packet&);
-
+    
     void update(VM&, CallFrame*);
-
+    
     // Expects this signature: (const Frame& frame) -> bool. Return true to keep iterating. Return false to stop iterating.
     // Note that this only works right with inlining disabled, but that's OK since for now we
     // disable inlining when the inspector is attached. It would be easy to make this work with
@@ -195,28 +195,28 @@ public:
     // frames.
     template<typename Functor>
     void iterate(VM&, CallFrame*, const Functor&);
-
+    
     void visitChildren(AbstractSlotVisitor&);
     void reset();
-
+    
     // JIT support.
     Packet* log() const { return m_log; }
     unsigned logSize() const { return m_logSize; }
     Packet** addressOfLogCursor() { return &m_logCursor; }
     Packet* logEnd() { return m_logEnd; }
-
+    
     void dump(PrintStream&) const;
-
+    
     JS_EXPORT_PRIVATE JSArray* functionsOnStack(JSGlobalObject*, CallFrame*);
 
 private:
     friend class LLIntOffsetsExtractor;
-
+    
     Packet* m_log { nullptr };
     unsigned m_logSize { 0 };
     Packet* m_logCursor { nullptr };
     Packet* m_logEnd { nullptr };
-
+    
     Vector<Frame> m_stack;
 };
 

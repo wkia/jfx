@@ -13,7 +13,7 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -51,7 +51,7 @@ public:
 
     CSSFilter* filter() const { return m_filter.get(); }
     void setFilter(RefPtr<CSSFilter>&&);
-
+    
     bool hasFilterThatMovesPixels() const;
     bool hasFilterThatShouldBeRestrictedBySecurityOrigin() const;
 
@@ -77,7 +77,7 @@ private:
 
     RefPtr<CSSFilter> m_filter;
     LayoutRect m_dirtySourceRect;
-
+    
     // Data used per paint
     LayoutPoint m_paintOffset;
     LayoutRect m_repaintRect;

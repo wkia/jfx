@@ -104,7 +104,7 @@ void RenderTheme::adjustStyle(RenderStyle& style, const Element* element, const 
 
     if (!supportsBoxShadow(style))
         style.setBoxShadow(nullptr);
-
+    
 #if USE(NEW_THEME)
     switch (part) {
     case CheckboxPart:
@@ -309,7 +309,7 @@ bool RenderTheme::paint(const RenderBox& box, ControlStates& controlStates, cons
     IntRect integralSnappedRect = snappedIntRect(rect);
     float deviceScaleFactor = box.document().deviceScaleFactor();
     FloatRect devicePixelSnappedRect = snapRectToDevicePixels(rect, deviceScaleFactor);
-
+    
 #if USE(NEW_THEME)
     float pageScaleFactor = box.page().pageScaleFactor();
 
@@ -1434,7 +1434,7 @@ Color RenderTheme::disabledTextColor(const Color& textColor, const Color& backgr
         disabledColor = textColor.lightened();
     else
         disabledColor = textColor.darkened();
-
+    
     // If there's not very much contrast between the disabled color and the background color,
     // just leave the text color alone. We don't want to change a good contrast color scheme so that it has really bad contrast.
     // If the contrast was already poor, then it doesn't do any good to change it to a different poor contrast color scheme.

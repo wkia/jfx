@@ -104,7 +104,7 @@ void WheelEventTestMonitor::removeDeferralForReason(ScrollableAreaIdentifier ide
 
     LOG_WITH_STREAM(WheelEventTestMonitor, stream << "      (=) WheelEventTestMonitor::removeDeferralForReason: id=" << identifier << ", reason=" << reason);
     it->value.remove(reason);
-
+    
     if (it->value.isEmpty())
         m_deferCompletionReasons.remove(it);
 
@@ -147,7 +147,7 @@ void WheelEventTestMonitor::checkShouldFireCallbacks()
             LOG_WITH_STREAM(WheelEventTestMonitor, stream << "  WheelEventTestMonitor::checkShouldFireCallbacks - have not yet seen any deferral reasons");
             return;
         }
-
+        
         if (m_expectWheelEndOrCancel && !m_receivedWheelEndOrCancel) {
             LOG_WITH_STREAM(WheelEventTestMonitor, stream << "  WheelEventTestMonitor::checkShouldFireCallbacks - have not seen end of of wheel phase");
             return;

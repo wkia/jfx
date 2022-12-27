@@ -150,26 +150,6 @@ bool PlatformDisplayX11::supportsGLX(std::optional<int>& glxErrorBase) const
     glxErrorBase = m_glxErrorBase;
     return m_supportsGLX.value();
 #else
-    return false;
-#endif
-}
-
-bool PlatformDisplayX11::supportsGLX(std::optional<int>& glxErrorBase) const
-{
-#if USE(GLX)
-    if (!m_supportsGLX) {
-        m_supportsGLX = false;
-        if (m_display) {
-            int eventBase, errorBase;
-            m_supportsGLX = glXQueryExtension(m_display, &errorBase, &eventBase);
-            if (m_supportsGLX.value())
-                m_glxErrorBase = errorBase;
-        }
-    }
-
-    glxErrorBase = m_glxErrorBase;
-    return m_supportsGLX.value();
-#else
     UNUSED_PARAM(glxErrorBase);
     return false;
 #endif

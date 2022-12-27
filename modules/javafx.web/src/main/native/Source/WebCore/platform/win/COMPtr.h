@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #ifndef COMPtr_h
@@ -37,7 +37,7 @@ typedef _Return_type_success_(return >= 0) long HRESULT;
 #endif // __midl
 
 // FIXME: Should we put this into the WebCore namespace and use "using" on it
-// as we do with things in WTF?
+// as we do with things in WTF? 
 
 enum AdoptCOMTag { AdoptCOM };
 enum QueryTag { Query };
@@ -46,10 +46,11 @@ enum CreateTag { Create };
 template<typename T> class COMPtr {
 public:
     typedef T* PtrType;
-    COMPtr() : m_ptr(0) { }
+    COMPtr() : m_ptr(nullptr) { }
     COMPtr(T* ptr) : m_ptr(ptr) { if (m_ptr) m_ptr->AddRef(); }
     COMPtr(AdoptCOMTag, T* ptr) : m_ptr(ptr) { }
     COMPtr(const COMPtr& o) : m_ptr(o.m_ptr) { if (T* ptr = m_ptr) ptr->AddRef(); }
+    COMPtr(COMPtr&& o) : m_ptr(o.leakRef()) { }
 
     COMPtr(QueryTag, IUnknown* ptr) : m_ptr(copyQueryInterfaceRef(ptr)) { }
     template<typename U> COMPtr(QueryTag, const COMPtr<U>& ptr) : m_ptr(copyQueryInterfaceRef(ptr.get())) { }
@@ -73,12 +74,13 @@ public:
     T** operator&() { ASSERT(!m_ptr); return &m_ptr; }
 
     bool operator!() const { return !m_ptr; }
-
+    
     // This conversion operator allows implicit conversion to bool but not to other integer types.
     typedef T* (COMPtr::*UnspecifiedBoolType)() const;
     operator UnspecifiedBoolType() const { return m_ptr ? &COMPtr::get : 0; }
 
     COMPtr& operator=(const COMPtr&);
+    COMPtr& operator=(COMPtr&&);
     COMPtr& operator=(T*);
     template<typename U> COMPtr& operator=(const COMPtr<U>&);
 
@@ -165,6 +167,14 @@ template<typename T> inline COMPtr<T>& COMPtr<T>::operator=(const COMPtr<T>& o)
     return *this;
 }
 
+template<typename T> inline COMPtr<T>& COMPtr<T>::operator=(COMPtr<T>&& o)
+{
+    if (T* ptr = m_ptr)
+        ptr->Release();
+    m_ptr = o.leakRef();
+    return *this;
+}
+
 template<typename T> template<typename U> inline COMPtr<T>& COMPtr<T>::operator=(const COMPtr<U>& o)
 {
     T* optr = o.get();
@@ -198,7 +208,7 @@ template<typename T, typename U> inline bool operator==(const COMPtr<T>& a, U* b
     return a.get() == b;
 }
 
-template<typename T, typename U> inline bool operator==(T* a, const COMPtr<U>& b)
+template<typename T, typename U> inline bool operator==(T* a, const COMPtr<U>& b) 
 {
     return a == b.get();
 }
@@ -218,6 +228,19 @@ template<typename T, typename U> inline bool operator!=(T* a, const COMPtr<U>& b
     return a != b.get();
 }
 
+#if ASSERT_ENABLED
+inline unsigned refCount(IUnknown* ptr)
+{
+    if (!ptr)
+        return 0;
+
+    unsigned temp = ptr->AddRef();
+    unsigned value = ptr->Release();
+    ASSERT(temp = value + 1);
+    return value;
+}
+#endif
+
 namespace WTF {
 
 template<typename P> struct IsSmartPtr<COMPtr<P>> {
@@ -232,9 +255,7 @@ template<typename P> struct HashTraits<COMPtr<P> > : SimpleClassHashTraits<COMPt
     static PeekType peek(P* value) { return value; }
 };
 
-template<typename P> struct DefaultHash<COMPtr<P>> {
-    typedef PtrHash<COMPtr<P>> Hash;
-};
+template<typename P> struct DefaultHash<COMPtr<P>> : PtrHash<COMPtr<P>> { };
 
 }
 

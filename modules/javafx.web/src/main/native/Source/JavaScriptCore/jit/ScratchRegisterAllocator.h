@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -46,25 +46,25 @@ public:
     void lock(GPRReg);
     void lock(FPRReg);
     void lock(JSValueRegs);
-
+    
     template<typename BankInfo>
     typename BankInfo::RegisterType allocateScratch();
-
+    
     GPRReg allocateScratchGPR();
     FPRReg allocateScratchFPR();
-
+    
     bool didReuseRegisters() const
     {
         return !!m_numberOfReusedRegisters;
     }
-
+    
     unsigned numberOfReusedRegisters() const
     {
         return m_numberOfReusedRegisters;
     }
 
     RegisterSet usedRegisters() const { return m_usedRegisters; }
-
+    
     enum class ExtraStackSpace { SpaceForCCall, NoExtraSpace };
 
     struct PreservedState {
@@ -86,9 +86,9 @@ public:
 
     PreservedState preserveReusedRegistersByPushing(AssemblyHelpers& jit, ExtraStackSpace);
     void restoreReusedRegistersByPopping(AssemblyHelpers& jit, const PreservedState&);
-
+    
     RegisterSet usedRegistersForCall() const;
-
+    
     unsigned desiredScratchBufferSizeForCall() const;
 
     static unsigned preserveRegistersToStackForCall(AssemblyHelpers& jit, const RegisterSet& usedRegisters, unsigned extraPaddingInBytes);

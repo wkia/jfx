@@ -83,7 +83,7 @@ bool JITAddGenerator::generateFastPath(CCallHelpers& jit, CCallHelpers::JumpList
 #endif
 
     ASSERT(!m_leftOperand.isConstInt32() || !m_rightOperand.isConstInt32());
-
+    
     if (!m_leftOperand.mightBeNumber() || !m_rightOperand.mightBeNumber())
         return false;
 

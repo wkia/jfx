@@ -172,7 +172,7 @@ StyleDifference SVGRenderStyle::diff(const SVGRenderStyle& other) const
 
     // The x or y properties require relayout.
     if (m_layoutData != other.m_layoutData)
-        return StyleDifference::Layout;
+        return StyleDifference::Layout; 
 
     // Some stroke properties, requires relayouts, as the cached stroke boundaries need to be recalculated.
     if (m_strokeData != other.m_strokeData) {
@@ -197,7 +197,7 @@ StyleDifference SVGRenderStyle::diff(const SVGRenderStyle& other) const
 
     // NOTE: All comparisions below may only return StyleDifference::Repaint
 
-    // Painting related properties only need repaints.
+    // Painting related properties only need repaints. 
     if (miscNotEqual) {
         if (m_miscData->floodColor != other.m_miscData->floodColor
             || m_miscData->floodOpacity != other.m_miscData->floodOpacity

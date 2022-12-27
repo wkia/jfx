@@ -48,7 +48,7 @@ FrameTree::~FrameTree()
         child->setView(nullptr);
 }
 
-void FrameTree::setName(const AtomString& name)
+void FrameTree::setName(const AtomString& name) 
 {
     m_name = name;
     if (!parent()) {
@@ -65,8 +65,8 @@ void FrameTree::clearName()
     m_uniqueName = nullAtom();
 }
 
-Frame* FrameTree::parent() const
-{
+Frame* FrameTree::parent() const 
+{ 
     return m_parent.get();
 }
 
@@ -240,10 +240,10 @@ Frame* FrameTree::find(const AtomString& name, Frame& activeFrame) const
     // FIXME: _current is not part of the HTML specification.
     if (equalIgnoringASCIICase(name, "_self") || name == "_current" || name.isEmpty())
         return &m_thisFrame;
-
+    
     if (equalIgnoringASCIICase(name, "_top"))
         return &top();
-
+    
     if (equalIgnoringASCIICase(name, "_parent"))
         return parent() ? parent() : &m_thisFrame;
 
@@ -268,7 +268,7 @@ Frame* FrameTree::find(const AtomString& name, Frame& activeFrame) const
     Page* page = m_thisFrame.page();
     if (!page)
         return nullptr;
-
+    
     for (auto& otherPage : page->group().pages()) {
         if (&otherPage == page)
             continue;
@@ -333,7 +333,7 @@ Frame* FrameTree::firstRenderedChild() const
     Frame* child = firstChild();
     if (!child)
         return nullptr;
-
+    
     if (child->ownerRenderer())
         return child;
 
@@ -341,7 +341,7 @@ Frame* FrameTree::firstRenderedChild() const
         if (child->ownerRenderer())
             return child;
     }
-
+    
     return nullptr;
 }
 
@@ -353,7 +353,7 @@ Frame* FrameTree::nextRenderedSibling() const
         if (sibling->ownerRenderer())
             return sibling;
     }
-
+    
     return nullptr;
 }
 
@@ -412,7 +412,7 @@ Frame* FrameTree::traversePrevious(CanWrap canWrap, DidWrap* didWrap) const
         return prevSibling->tree().deepLastChild();
     if (Frame* parentFrame = parent())
         return parentFrame;
-
+    
     // no siblings, no parent, self==top
     if (canWrap == CanWrap::Yes) {
         if (didWrap)

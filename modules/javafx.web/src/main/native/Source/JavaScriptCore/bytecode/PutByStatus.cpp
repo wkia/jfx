@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -52,7 +52,7 @@ void PutByStatus::shrinkToFit()
 PutByStatus PutByStatus::computeFromLLInt(CodeBlock* profiledBlock, BytecodeIndex bytecodeIndex)
 {
     VM& vm = profiledBlock->vm();
-
+    
     auto instruction = profiledBlock->instructions().at(bytecodeIndex.offset());
 
     switch (instruction->opcodeID()) {
@@ -80,7 +80,7 @@ PutByStatus PutByStatus::computeFromLLInt(CodeBlock* profiledBlock, BytecodeInde
     StructureID structureID = metadata.m_oldStructureID;
     if (!structureID)
         return PutByStatus(NoInformation);
-
+    
     Structure* structure = vm.heap.structureIDTable().get(structureID);
 
     StructureID newStructureID = metadata.m_newStructureID;
@@ -88,18 +88,18 @@ PutByStatus PutByStatus::computeFromLLInt(CodeBlock* profiledBlock, BytecodeInde
         PropertyOffset offset = structure->getConcurrently(uid);
         if (!isValidOffset(offset))
             return PutByStatus(NoInformation);
-
+        
         return PutByVariant::replace(nullptr, structure, offset);
     }
 
     Structure* newStructure = vm.heap.structureIDTable().get(newStructureID);
-
+    
     ASSERT(structure->transitionWatchpointSetHasBeenInvalidated());
-
+    
     PropertyOffset offset = newStructure->getConcurrently(uid);
     if (!isValidOffset(offset))
         return PutByStatus(NoInformation);
-
+    
     ObjectPropertyConditionSet conditionSet;
     if (!(bytecode.m_flags.isDirect())) {
         conditionSet =
@@ -108,7 +108,7 @@ PutByStatus PutByStatus::computeFromLLInt(CodeBlock* profiledBlock, BytecodeInde
         if (!conditionSet.isValid())
             return PutByStatus(NoInformation);
     }
-
+    
     return PutByVariant::transition(nullptr, structure, newStructure, conditionSet, offset);
 }
 
@@ -136,19 +136,19 @@ PutByStatus::PutByStatus(StubInfoSummary summary, StructureStubInfo& stubInfo)
 PutByStatus PutByStatus::computeFor(CodeBlock* profiledBlock, ICStatusMap& map, BytecodeIndex bytecodeIndex, ExitFlag didExit, CallLinkStatus::ExitSiteData callExitSiteData)
 {
     ConcurrentJSLocker locker(profiledBlock->m_lock);
-
+    
     UNUSED_PARAM(profiledBlock);
     UNUSED_PARAM(bytecodeIndex);
 #if ENABLE(DFG_JIT)
     if (didExit)
         return PutByStatus(LikelyTakesSlowPath);
-
+    
     StructureStubInfo* stubInfo = map.get(CodeOrigin(bytecodeIndex)).stubInfo;
     PutByStatus result = computeForStubInfo(
         locker, profiledBlock, stubInfo, callExitSiteData);
     if (!result)
         return computeFromLLInt(profiledBlock, bytecodeIndex);
-
+    
     return result;
 #else // ENABLE(JIT)
     UNUSED_PARAM(map);
@@ -170,12 +170,12 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
     StubInfoSummary summary = StructureStubInfo::summary(profiledBlock->vm(), stubInfo);
     if (!isInlineable(summary))
         return PutByStatus(summary, *stubInfo);
-
+    
     switch (stubInfo->cacheType()) {
     case CacheType::Unset:
         // This means that we attempted to cache but failed for some reason.
         return PutByStatus(JSC::slowVersion(summary), *stubInfo);
-
+        
     case CacheType::PutByIdReplace: {
         CacheableIdentifier identifier = stubInfo->identifier();
         UniquedStringImpl* uid = identifier.uid();
@@ -186,20 +186,20 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
             return PutByVariant::replace(WTFMove(identifier), stubInfo->m_inlineAccessBaseStructure.get(), offset);
         return PutByStatus(JSC::slowVersion(summary), *stubInfo);
     }
-
+        
     case CacheType::Stub: {
         PolymorphicAccess* list = stubInfo->u.stub;
-
+        
         PutByStatus result;
         result.m_state = Simple;
-
+        
         for (unsigned i = 0; i < list->size(); ++i) {
             const AccessCase& access = list->at(i);
             if (access.viaProxy())
                 return PutByStatus(JSC::slowVersion(summary), *stubInfo);
             if (access.usesPolyProto())
                 return PutByStatus(JSC::slowVersion(summary), *stubInfo);
-
+            
             switch (access.type()) {
             case AccessCase::Replace: {
                 Structure* structure = access.structure();
@@ -211,7 +211,7 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
                     return PutByStatus(JSC::slowVersion(summary), *stubInfo);
                 break;
             }
-
+                
             case AccessCase::Transition: {
                 PropertyOffset offset = access.newStructure()->getConcurrently(access.uid());
                 if (!isValidOffset(offset))
@@ -224,19 +224,19 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
                     return PutByStatus(JSC::slowVersion(summary), *stubInfo);
                 break;
             }
-
+                
             case AccessCase::Setter: {
                 Structure* structure = access.structure();
-
+                
                 ComplexGetStatus complexGetStatus = ComplexGetStatus::computeFor(structure, access.conditionSet(), access.uid());
-
+                
                 switch (complexGetStatus.kind()) {
                 case ComplexGetStatus::ShouldSkip:
                     continue;
-
+                    
                 case ComplexGetStatus::TakesSlowPath:
                     return PutByStatus(JSC::slowVersion(summary), *stubInfo);
-
+                    
                 case ComplexGetStatus::Inlineable: {
                     std::unique_ptr<CallLinkStatus> callLinkStatus =
                         makeUnique<CallLinkStatus>();
@@ -244,7 +244,7 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
                         *callLinkStatus = CallLinkStatus::computeFor(
                             locker, profiledBlock, *callLinkInfo, callExitSiteData);
                     }
-
+                    
                     auto variant = PutByVariant::setter(access.identifier(), structure, complexGetStatus.offset(), complexGetStatus.conditionSet(), WTFMove(callLinkStatus));
                     if (!result.appendVariant(variant))
                         return PutByStatus(JSC::slowVersion(summary), *stubInfo);
@@ -252,7 +252,7 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
                 }
                 break;
             }
-
+                
             case AccessCase::CustomValueSetter:
             case AccessCase::CustomAccessorSetter:
                 return PutByStatus(MakesCalls);
@@ -261,11 +261,11 @@ PutByStatus PutByStatus::computeForStubInfo(const ConcurrentJSLocker& locker, Co
                 return PutByStatus(JSC::slowVersion(summary), *stubInfo);
             }
         }
-
+        
         result.shrinkToFit();
         return result;
     }
-
+        
     default:
         return PutByStatus(JSC::slowVersion(summary), *stubInfo);
     }
@@ -279,7 +279,7 @@ PutByStatus PutByStatus::computeFor(CodeBlock* baselineBlock, ICStatusMap& basel
 
     for (ICStatusContext* context : contextStack) {
         ICStatus status = context->get(codeOrigin);
-
+        
         auto bless = [&] (const PutByStatus& result) -> PutByStatus {
             if (!context->isInlined(codeOrigin)) {
                 PutByStatus baselineResult = computeFor(
@@ -292,7 +292,7 @@ PutByStatus PutByStatus::computeFor(CodeBlock* baselineBlock, ICStatusMap& basel
                 return result.slowVersion();
             return result;
         };
-
+        
         if (status.stubInfo) {
             PutByStatus result;
             {
@@ -303,11 +303,11 @@ PutByStatus PutByStatus::computeFor(CodeBlock* baselineBlock, ICStatusMap& basel
             if (result.isSet())
                 return bless(result);
         }
-
+        
         if (status.putStatus)
             return bless(*status.putStatus);
     }
-
+    
     return computeFor(baselineBlock, baselineMap, bytecodeIndex, didExit, callExitSiteData);
 }
 
@@ -319,24 +319,24 @@ PutByStatus PutByStatus::computeFor(JSGlobalObject* globalObject, const Structur
 
     if (set.isEmpty())
         return PutByStatus();
-
+    
     VM& vm = globalObject->vm();
     PutByStatus result;
     result.m_state = Simple;
     for (unsigned i = 0; i < set.size(); ++i) {
         Structure* structure = set[i];
-
+        
         if (structure->typeInfo().overridesGetOwnPropertySlot() && structure->typeInfo().type() != GlobalObjectType)
             return PutByStatus(LikelyTakesSlowPath);
 
         if (!structure->propertyAccessesAreCacheable())
             return PutByStatus(LikelyTakesSlowPath);
-
+    
         unsigned attributes;
         PropertyOffset offset = structure->getConcurrently(uid, attributes);
         if (isValidOffset(offset)) {
             // We can't have a valid offset for structures on `PutPrivateNameById` define mode
-            // since it means we are redefining a private field. In such case, we need to take
+            // since it means we are redefining a private field. In such case, we need to take 
             // slow path to throw exception.
             if (privateFieldPutKind.isDefine())
                 return PutByStatus(LikelyTakesSlowPath);
@@ -346,7 +346,7 @@ PutByStatus PutByStatus::computeFor(JSGlobalObject* globalObject, const Structur
 
             if (attributes & (PropertyAttribute::Accessor | PropertyAttribute::ReadOnly))
                 return PutByStatus(LikelyTakesSlowPath);
-
+            
             WatchpointSet* replaceSet = structure->propertyReplacementWatchpointSet(offset);
             if (!replaceSet || replaceSet->isStillValid()) {
                 // When this executes, it'll create, and fire, this replacement watchpoint set.
@@ -372,7 +372,7 @@ PutByStatus PutByStatus::computeFor(JSGlobalObject* globalObject, const Structur
 
         // Our hypothesis is that we're doing a transition. Before we prove that this is really
         // true, we want to do some sanity checks.
-
+    
         // Don't cache put transitions on dictionaries.
         if (structure->isDictionary())
             return PutByStatus(LikelyTakesSlowPath);
@@ -381,7 +381,7 @@ PutByStatus PutByStatus::computeFor(JSGlobalObject* globalObject, const Structur
         // we don't want to be adding properties to strings.
         if (!structure->typeInfo().isObject())
             return PutByStatus(LikelyTakesSlowPath);
-
+    
         ObjectPropertyConditionSet conditionSet;
         if (!isDirect) {
             ASSERT(privateFieldPutKind.isNone());
@@ -390,19 +390,19 @@ PutByStatus PutByStatus::computeFor(JSGlobalObject* globalObject, const Structur
             if (!conditionSet.isValid())
                 return PutByStatus(LikelyTakesSlowPath);
         }
-
+    
         // We only optimize if there is already a structure that the transition is cached to.
         Structure* transition =
             Structure::addPropertyTransitionToExistingStructureConcurrently(structure, uid, 0, offset);
         if (!transition)
             return PutByStatus(LikelyTakesSlowPath);
         ASSERT(isValidOffset(offset));
-
+    
         bool didAppend = result.appendVariant(PutByVariant::transition(identifier, structure, transition, conditionSet, offset));
         if (!didAppend)
             return PutByStatus(LikelyTakesSlowPath);
     }
-
+    
     result.shrinkToFit();
     return result;
 }
@@ -486,25 +486,25 @@ void PutByStatus::merge(const PutByStatus& other)
     case NoInformation:
         *this = other;
         return;
-
+        
     case Simple:
         if (other.m_state != Simple)
             return mergeSlow();
-
+        
         for (const PutByVariant& other : other.m_variants) {
             if (!appendVariant(other))
                 return mergeSlow();
         }
         shrinkToFit();
         return;
-
+        
     case LikelyTakesSlowPath:
     case ObservedTakesSlowPath:
     case MakesCalls:
     case ObservedSlowPathAndMakesCalls:
         return mergeSlow();
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 
@@ -541,7 +541,7 @@ void PutByStatus::dump(PrintStream& out) const
         out.print("ObservedSlowPathAndMakesCalls");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

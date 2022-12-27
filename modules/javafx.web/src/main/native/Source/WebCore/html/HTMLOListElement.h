@@ -45,7 +45,7 @@ public:
 
 private:
     HTMLOListElement(const QualifiedName&, Document&);
-
+        
     WEBCORE_EXPORT unsigned itemCount() const;
 
     void parseAttribute(const QualifiedName&, const AtomString&) final;

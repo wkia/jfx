@@ -393,7 +393,7 @@ bool InputType::isInRange(const String& value) const
     StepRange stepRange(createStepRange(AnyStepHandling::Reject));
     if (!stepRange.hasRangeLimitations())
         return false;
-
+    
     const Decimal numericValue = parseToNumberOrNaN(value);
     if (!numericValue.isFinite())
         return true;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -62,7 +62,7 @@ void printInternal(PrintStream& out, PromotedLocationKind kind)
     case InvalidPromotedLocationKind:
         out.print("InvalidPromotedLocationKind");
         return;
-
+        
     case StructurePLoc:
         out.print("StructurePLoc");
         return;
@@ -70,7 +70,7 @@ void printInternal(PrintStream& out, PromotedLocationKind kind)
     case ActivationSymbolTablePLoc:
         out.print("ActivationSymbolTablePLoc");
         return;
-
+        
     case NamedPropertyPLoc:
         out.print("NamedPropertyPLoc");
         return;
@@ -78,15 +78,15 @@ void printInternal(PrintStream& out, PromotedLocationKind kind)
     case IndexedPropertyPLoc:
         out.print("IndexedPropertyPLoc");
         return;
-
+        
     case ArgumentPLoc:
         out.print("ArgumentPLoc");
         return;
-
+        
     case ArgumentCountPLoc:
         out.print("ArgumentCountPLoc");
         return;
-
+        
     case ArgumentsCalleePLoc:
         out.print("ArgumentsCalleePLoc");
         return;
@@ -139,7 +139,7 @@ void printInternal(PrintStream& out, PromotedLocationKind kind)
         out.print("InternalFieldObjectPLoc");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

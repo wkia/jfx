@@ -43,11 +43,11 @@ public:
     Element& element() const { return downcast<Element>(nodeForNonAnonymous()); }
 
     bool isChildAllowed(const RenderObject&, const RenderStyle&) const override;
-
+    
     RenderRubyRun* rubyRun() const;
-
+    
     bool canBreakBefore(const LazyLineBreakIterator&) const;
-
+   
 private:
     const char* renderName() const override { return "RenderRubyText"; }
     bool isRubyText() const override { return true; }

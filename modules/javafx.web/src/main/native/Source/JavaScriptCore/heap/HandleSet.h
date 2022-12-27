@@ -43,7 +43,7 @@ class HandleNode {
 public:
     HandleNode(WTF::SentinelTag);
     HandleNode();
-
+    
     HandleSlot slot();
     HandleSet* handleSet();
 
@@ -86,7 +86,7 @@ private:
     static Node* toNode(HandleSlot);
 
     JS_EXPORT_PRIVATE void grow();
-
+    
 #if ENABLE(GC_VALIDATION) || ASSERT_ENABLED
     bool isLiveNode(Node*);
 #endif

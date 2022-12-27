@@ -233,7 +233,7 @@ void VTTCueBox::applyCSSProperties(const IntSize& videoSize)
     // whose first cell is the value of the corresponding cue's text track cue
     // alignment:
     setInlineStyleProperty(CSSPropertyTextAlign, cue->getCSSAlignment());
-
+    
     if (!cue->snapToLines()) {
         // 10.13.1 Set up x and y:
         // Note: x and y are set through the CSS left and top above.
@@ -330,7 +330,7 @@ void VTTCue::didChange()
 const String& VTTCue::vertical() const
 {
     switch (m_writingDirection) {
-    case Horizontal:
+    case Horizontal: 
         return horizontalKeyword();
     case VerticalGrowingLeft:
         return verticalGrowingLeftKeyword();
@@ -345,11 +345,11 @@ const String& VTTCue::vertical() const
 ExceptionOr<void> VTTCue::setVertical(const String& value)
 {
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#dom-texttrackcue-vertical
-    // On setting, the text track cue writing direction must be set to the value given
-    // in the first cell of the row in the table above whose second cell is a
+    // On setting, the text track cue writing direction must be set to the value given 
+    // in the first cell of the row in the table above whose second cell is a 
     // case-sensitive match for the new value, if any. If none of the values match, then
     // the user agent must instead throw a SyntaxError exception.
-
+    
     WritingDirection direction = m_writingDirection;
     if (value == horizontalKeyword())
         direction = Horizontal;
@@ -374,7 +374,7 @@ void VTTCue::setSnapToLines(bool value)
 {
     if (m_snapToLines == value)
         return;
-
+    
     willChange();
     m_snapToLines = value;
     didChange();
@@ -537,7 +537,7 @@ ExceptionOr<void> VTTCue::setSize(int size)
     // Otherwise, set the text track cue line position to the new value.
     if (m_cueSize == size)
         return { };
-
+    
     willChange();
     m_cueSize = size;
     didChange();
@@ -567,11 +567,11 @@ const String& VTTCue::align() const
 ExceptionOr<void> VTTCue::setAlign(const String& value)
 {
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#dom-texttrackcue-align
-    // On setting, the text track cue alignment must be set to the value given in the
+    // On setting, the text track cue alignment must be set to the value given in the 
     // first cell of the row in the table above whose second cell is a case-sensitive
     // match for the new value, if any. If none of the values match, then the user
     // agent must instead throw a SyntaxError exception.
-
+    
     CueAlignment alignment;
     if (value == startKeyword())
         alignment = Start;
@@ -595,12 +595,12 @@ ExceptionOr<void> VTTCue::setAlign(const String& value)
 
     return { };
 }
-
+    
 void VTTCue::setText(const String& text)
 {
     if (m_content == text)
         return;
-
+    
     willChange();
     // Clear the document fragment but don't bother to create it again just yet as we can do that
     // when it is requested.
@@ -805,12 +805,12 @@ void VTTCue::determineTextDirection()
 double VTTCue::calculateComputedTextPosition() const
 {
     // http://dev.w3.org/html5/webvtt/#dfn-cue-computed-position
-
+    
     // 1. If the position is numeric, then return the value of the position and
     // abort these steps. (Otherwise, the position is the special value auto.)
     if (!textPositionIsAuto())
         return m_textPosition;
-
+    
     switch (m_cueAlignment) {
     case Start:
     case Left:
@@ -932,27 +932,27 @@ void VTTCue::calculateDisplayParameters()
     if (!m_snapToLines && (m_writingDirection == VerticalGrowingLeft || m_writingDirection == VerticalGrowingRight))
         m_displayPosition.first = m_computedLinePosition;
 }
-
+    
 void VTTCue::markFutureAndPastNodes(ContainerNode* root, const MediaTime& previousTimestamp, const MediaTime& movieTime)
 {
     static NeverDestroyed<const String> timestampTag(MAKE_STATIC_STRING_IMPL("timestamp"));
-
+    
     bool isPastNode = true;
     MediaTime currentTimestamp = previousTimestamp;
     if (currentTimestamp > movieTime)
         isPastNode = false;
-
+    
     for (RefPtr<Node> child = root->firstChild(); child; child = NodeTraversal::next(*child, root)) {
         if (child->nodeName() == timestampTag) {
             MediaTime currentTimestamp;
             bool check = WebVTTParser::collectTimeStamp(child->nodeValue(), currentTimestamp);
             ASSERT_UNUSED(check, check);
-
+            
             currentTimestamp += m_originalStartTime;
             if (currentTimestamp > movieTime)
                 isPastNode = false;
         }
-
+        
         if (is<WebVTTElement>(*child)) {
             downcast<WebVTTElement>(*child).setIsPastNode(isPastNode);
             // Make an elemenet id match a cue id for style matching purposes.
@@ -1074,7 +1074,7 @@ std::pair<double, double> VTTCue::getPositionCoordinates() const
     std::pair<double, double> coordinates;
 
     auto textPosition = calculateComputedTextPosition();
-
+    
     if (m_writingDirection == Horizontal && m_displayDirection == CSSValueLtr) {
         coordinates.first = textPosition;
         coordinates.second = m_computedLinePosition;
@@ -1140,17 +1140,17 @@ void VTTCue::setCueSettings(const String& inputString)
 
     while (!input.isAtEnd()) {
 
-        // The WebVTT cue settings part of a WebVTT cue consists of zero or more of the following components, in any order,
+        // The WebVTT cue settings part of a WebVTT cue consists of zero or more of the following components, in any order, 
         // separated from each other by one or more U+0020 SPACE characters or U+0009 CHARACTER TABULATION (tab) characters.
         input.skipWhile<WebVTTParser::isValidSettingDelimiter>();
         if (input.isAtEnd())
             break;
 
-        // When the user agent is to parse the WebVTT settings given by a string input for a text track cue cue,
+        // When the user agent is to parse the WebVTT settings given by a string input for a text track cue cue, 
         // the user agent must run the following steps:
         // 1. Let settings be the result of splitting input on spaces.
         // 2. For each token setting in the list settings, run the following substeps:
-        //    1. If setting does not contain a U+003A COLON character (:), or if the first U+003A COLON character (:)
+        //    1. If setting does not contain a U+003A COLON character (:), or if the first U+003A COLON character (:) 
         //       in setting is either the first or last character of setting, then jump to the step labeled next setting.
         //    2. Let name be the leading substring of setting up to and excluding the first U+003A COLON character (:) in that string.
         CueSetting name = settingName(input);
@@ -1162,12 +1162,12 @@ void VTTCue::setCueSettings(const String& inputString)
         switch (name) {
         case Vertical: {
             // If name is a case-sensitive match for "vertical"
-            // 1. If value is a case-sensitive match for the string "rl", then let cue's text track cue writing direction
+            // 1. If value is a case-sensitive match for the string "rl", then let cue's text track cue writing direction 
             //    be vertical growing left.
             if (input.scanRun(valueRun, verticalGrowingLeftKeyword()))
                 m_writingDirection = VerticalGrowingLeft;
-
-            // 2. Otherwise, if value is a case-sensitive match for the string "lr", then let cue's text track cue writing
+            
+            // 2. Otherwise, if value is a case-sensitive match for the string "lr", then let cue's text track cue writing 
             //    direction be vertical growing right.
             else if (input.scanRun(valueRun, verticalGrowingRightKeyword()))
                 m_writingDirection = VerticalGrowingRight;
@@ -1231,7 +1231,7 @@ void VTTCue::setCueSettings(const String& inputString)
 
                     m_snapToLines = true;
                 }
-
+                
                 m_linePosition = linePosition;
                 isValid = true;
             } while (0);

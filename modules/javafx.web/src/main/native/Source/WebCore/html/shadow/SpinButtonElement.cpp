@@ -242,7 +242,7 @@ void SpinButtonElement::step(int amount)
 #endif
     doStepAction(amount);
 }
-
+    
 void SpinButtonElement::repeatingTimerFired()
 {
     if (m_upDownState != Indeterminate)

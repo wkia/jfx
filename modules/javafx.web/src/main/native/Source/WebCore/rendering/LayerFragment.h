@@ -32,7 +32,7 @@ namespace WebCore {
 class LayerFragment {
 public:
     LayerFragment() = default;
-
+    
     void setRects(const LayoutRect& bounds, const ClipRect& background, const ClipRect& foreground, const std::optional<LayoutRect>& bbox)
     {
         layerBounds = bounds;
@@ -40,7 +40,7 @@ public:
         foregroundRect = foreground;
         boundingBox = bbox;
     }
-
+    
     void moveBy(const LayoutPoint& offset)
     {
         layerBounds.moveBy(offset);
@@ -50,7 +50,7 @@ public:
         if (boundingBox)
             boundingBox->moveBy(offset);
     }
-
+    
     void intersect(const LayoutRect& rect)
     {
         backgroundRect.intersect(rect);
@@ -58,7 +58,7 @@ public:
         if (boundingBox)
             boundingBox->intersect(rect);
     }
-
+    
     void intersect(const ClipRect& clipRect)
     {
         backgroundRect.intersect(clipRect);
@@ -71,10 +71,10 @@ public:
     LayoutRect layerBounds;
     ClipRect backgroundRect;
     ClipRect foregroundRect;
-
+    
     // Unique to paginated fragments. The physical translation to apply to shift the layer when painting/hit-testing.
     LayoutSize paginationOffset;
-
+    
     // Also unique to paginated fragments. An additional clip that applies to the layer. It is in layer-local
     // (physical) coordinates.
     LayoutRect paginationClip;

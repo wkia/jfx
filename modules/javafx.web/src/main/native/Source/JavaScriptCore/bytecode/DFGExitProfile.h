@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,7 +45,7 @@ public:
         , m_inlineKind(ExitFromAnyInlineKind)
     {
     }
-
+    
     FrequentExitSite(WTF::HashTableDeletedValueType)
         : m_bytecodeIndex(WTF::HashTableDeletedValue)
         , m_kind(ExitKindUnset)
@@ -53,7 +53,7 @@ public:
         , m_inlineKind(ExitFromAnyInlineKind)
     {
     }
-
+    
     explicit FrequentExitSite(BytecodeIndex bytecodeIndex, ExitKind kind, ExitingJITType jitType = ExitFromAnything, ExitingInlineKind inlineKind = ExitFromAnyInlineKind)
         : m_bytecodeIndex(bytecodeIndex)
         , m_kind(kind)
@@ -66,7 +66,7 @@ public:
             m_bytecodeIndex = BytecodeIndex(0);
         }
     }
-
+    
     // Use this constructor if you wish for the exit site to be counted globally within its
     // code block.
     explicit FrequentExitSite(ExitKind kind, ExitingJITType jitType = ExitFromAnything, ExitingInlineKind inlineKind = ExitFromAnyInlineKind)
@@ -76,12 +76,12 @@ public:
         , m_inlineKind(inlineKind)
     {
     }
-
+    
     bool operator!() const
     {
         return m_kind == ExitKindUnset;
     }
-
+    
     bool operator==(const FrequentExitSite& other) const
     {
         return m_bytecodeIndex == other.m_bytecodeIndex
@@ -89,7 +89,7 @@ public:
             && m_jitType == other.m_jitType
             && m_inlineKind == other.m_inlineKind;
     }
-
+    
     bool subsumes(const FrequentExitSite& other) const
     {
         if (m_bytecodeIndex != other.m_bytecodeIndex)
@@ -104,17 +104,17 @@ public:
             return false;
         return true;
     }
-
+    
     unsigned hash() const
     {
         return m_bytecodeIndex.hash() + m_kind + static_cast<unsigned>(m_jitType) * 7 + static_cast<unsigned>(m_inlineKind) * 11;
     }
-
+    
     BytecodeIndex bytecodeIndex() const { return m_bytecodeIndex; }
     ExitKind kind() const { return m_kind; }
     ExitingJITType jitType() const { return m_jitType; }
     ExitingInlineKind inlineKind() const { return m_inlineKind; }
-
+    
     FrequentExitSite withJITType(ExitingJITType jitType) const
     {
         FrequentExitSite result = *this;
@@ -133,7 +133,7 @@ public:
     {
         return m_kind == ExitKindUnset && m_bytecodeIndex.isHashTableDeletedValue();
     }
-
+    
     void dump(PrintStream& out) const;
 
 private:
@@ -170,7 +170,7 @@ class ExitProfile {
 public:
     ExitProfile();
     ~ExitProfile();
-
+    
     // Add a new frequent exit site. Return true if this is a new one, or false
     // if we already knew about it. This is an O(n) operation, because it errs
     // on the side of keeping the data structure compact. Also, this will only
@@ -178,11 +178,11 @@ public:
     // rare to begin with, and implies doing O(n) operations on the CodeBlock
     // anyway.
     static bool add(CodeBlock*, const FrequentExitSite&);
-
+    
     // Get the frequent exit sites for a bytecode index. This is O(n), and is
     // meant to only be used from debugging/profiling code.
     Vector<FrequentExitSite> exitSitesFor(BytecodeIndex);
-
+    
     // This is O(n) and should be called on less-frequently executed code paths
     // in the compiler. It should be strictly cheaper than building a
     // QueryableExitProfile, if you really expect this to be called infrequently
@@ -192,10 +192,10 @@ public:
     {
         return hasExitSite(locker, FrequentExitSite(kind));
     }
-
+    
 private:
     friend class QueryableExitProfile;
-
+    
     std::unique_ptr<Vector<FrequentExitSite>> m_frequentExitSites;
 };
 
@@ -203,7 +203,7 @@ class QueryableExitProfile {
 public:
     QueryableExitProfile();
     ~QueryableExitProfile();
-
+    
     void initialize(UnlinkedCodeBlock*);
 
     bool hasExitSite(const FrequentExitSite& site) const
@@ -214,12 +214,12 @@ public:
         }
         return hasExitSiteWithSpecificJITType(site);
     }
-
+    
     bool hasExitSite(ExitKind kind) const
     {
         return hasExitSite(FrequentExitSite(kind));
     }
-
+    
     bool hasExitSite(BytecodeIndex bytecodeIndex, ExitKind kind) const
     {
         return hasExitSite(FrequentExitSite(bytecodeIndex, kind));
@@ -233,12 +233,12 @@ private:
         }
         return hasExitSiteWithSpecificInlineKind(site);
     }
-
+    
     bool hasExitSiteWithSpecificInlineKind(const FrequentExitSite& site) const
     {
         return m_frequentExitSites.find(site) != m_frequentExitSites.end();
     }
-
+    
     HashSet<FrequentExitSite> m_frequentExitSites;
 };
 

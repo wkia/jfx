@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,29 +37,29 @@ class TimeRanges;
 class MediaControllerInterface : public HTMLMediaElementEnums {
 public:
     virtual ~MediaControllerInterface() { };
-
+    
     // MediaController IDL:
     virtual Ref<TimeRanges> buffered() const = 0;
     virtual Ref<TimeRanges> seekable() const = 0;
     virtual Ref<TimeRanges> played() = 0;
-
+    
     virtual double duration() const = 0;
     virtual double currentTime() const = 0;
     virtual void setCurrentTime(double) = 0;
-
+    
     virtual bool paused() const = 0;
     virtual void play() = 0;
     virtual void pause() = 0;
-
+    
     virtual double defaultPlaybackRate() const = 0;
     virtual void setDefaultPlaybackRate(double) = 0;
-
+    
     virtual double playbackRate() const = 0;
     virtual void setPlaybackRate(double) = 0;
-
+    
     virtual double volume() const = 0;
     virtual ExceptionOr<void> setVolume(double) = 0;
-
+    
     virtual bool muted() const = 0;
     virtual void setMuted(bool) = 0;
 

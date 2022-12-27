@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -32,8 +32,8 @@
 namespace JSC { namespace DFG {
 
 // This phase is used to determine if a node can safely run at a new location.
-// It is important to note that returning false does not mean it's definitely
-// wrong to run the node at the new location. In other words, returning false
+// It is important to note that returning false does not mean it's definitely 
+// wrong to run the node at the new location. In other words, returning false 
 // does not imply moving the node would be invalid only that this phase could
 // not prove it is valid. Thus, it is always ok to return false.
 
@@ -44,7 +44,7 @@ public:
         : m_state(state)
     {
     }
-
+    
     void operator()(Node*, Edge edge)
     {
         m_maySeeEmptyChild |= !!(m_state.forNode(edge).m_type & SpecEmpty);
@@ -95,7 +95,7 @@ public:
         case NotDoubleUse:
         case NeitherDoubleNorHeapBigIntNorStringUse:
             return;
-
+            
         case KnownInt32Use:
             if (m_state.forNode(edge).m_type & ~SpecInt32Only)
                 m_result = false;
@@ -105,12 +105,12 @@ public:
             if (m_state.forNode(edge).m_type & ~SpecBoolean)
                 m_result = false;
             return;
-
+            
         case KnownCellUse:
             if (m_state.forNode(edge).m_type & ~SpecCell)
                 m_result = false;
             return;
-
+            
         case KnownStringUse:
             if (m_state.forNode(edge).m_type & ~SpecString)
                 m_result = false;
@@ -125,14 +125,14 @@ public:
             if (m_state.forNode(edge).m_type & ~SpecOther)
                 m_result = false;
             return;
-
+            
         case LastUseKind:
             RELEASE_ASSERT_NOT_REACHED();
             break;
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     bool result() const { return m_result; }
     bool maySeeEmptyChild() const { return m_maySeeEmptyChild; }
 private:
@@ -356,7 +356,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
         // already force these things to be ordered precisely. I'm just not confident enough in my
         // effect based memory model to rely solely on that right now.
         return false;
-
+        
     case FilterCallLinkStatus:
     case FilterGetByStatus:
     case FilterPutByStatus:
@@ -385,7 +385,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
     case CheckDetached:
     case GetTypedArrayByteOffset:
         return !(state.forNode(node->child1()).m_type & ~(SpecTypedArrayView));
-
+            
     case PutByValDirect:
     case PutByVal:
     case PutByValAlias:
@@ -396,7 +396,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
     case ReallocatePropertyStorage:
         return state.forNode(node->child1()).m_structure.isSubsetOf(
             RegisteredStructureSet(node->transition()->previous));
-
+        
     case GetGetterSetterByOffset: {
         // If it's an inline property, we need to make sure it's a cell before trusting what the structure set tells us.
         if (node->child1().node() == node->child2().node() && !state.forNode(node->child2()).isType(SpecCell))
@@ -437,7 +437,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
                     return true;
             }
         }
-
+        
         StructureAbstractValue& value = state.forNode(node->child2()).m_structure;
         if (value.isInfinite())
             return false;
@@ -450,7 +450,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
         }
         return true;
     }
-
+        
     case MultiGetByOffset: {
         // We can't always guarantee that the MultiGetByOffset is safe to execute if it
         // contains loads from prototypes. If the load requires a check in IR, which is rare, then
@@ -720,7 +720,7 @@ bool safeToExecute(AbstractStateType& state, Graph& graph, Node* node, bool igno
         RELEASE_ASSERT_NOT_REACHED();
         return false;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return false;
 }

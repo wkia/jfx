@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 Apple Inc. All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -9,7 +9,7 @@
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -54,7 +54,7 @@ WTF_MAKE_ISO_ALLOCATED_IMPL(RenderFullScreenPlaceholder);
 RenderFullScreen::RenderFullScreen(Document& document, RenderStyle&& style)
     : RenderFlexibleBox(document, WTFMove(style))
 {
-    setReplaced(false);
+    setReplaced(false); 
 }
 
 RenderFullScreen::~RenderFullScreen()
@@ -76,13 +76,13 @@ static RenderStyle createFullScreenStyle()
     fullscreenStyle.setJustifyContentPosition(ContentPosition::Center);
     fullscreenStyle.setAlignItemsPosition(ItemPosition::Center);
     fullscreenStyle.setFlexDirection(FlexDirection::Column);
-
+    
     fullscreenStyle.setPosition(PositionType::Fixed);
     fullscreenStyle.setWidth(Length(100.0, LengthType::Percent));
     fullscreenStyle.setHeight(Length(100.0, LengthType::Percent));
     fullscreenStyle.setLeft(Length(0, LengthType::Fixed));
     fullscreenStyle.setTop(Length(0, LengthType::Fixed));
-
+    
     fullscreenStyle.setBackgroundColor(Color::black);
 
     return fullscreenStyle;

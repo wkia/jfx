@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -241,7 +241,7 @@ void DocumentLoader::setRequest(const ResourceRequest& req)
         shouldNotifyAboutProvisionalURLChange = true;
 
     // We should never be getting a redirect callback after the data
-    // source is committed, except in the unreachable URL case. It
+    // source is committed, except in the unreachable URL case. It 
     // would be a WebFoundation bug if it sent a redirect callback after commit.
     ASSERT(!m_committed);
 
@@ -259,7 +259,7 @@ void DocumentLoader::setMainDocumentError(const ResourceError& error)
     if (!error.isNull())
         DOCUMENTLOADER_RELEASE_LOG("setMainDocumentError: (type=%d, code=%d)", static_cast<int>(error.type()), error.errorCode());
 
-    m_mainDocumentError = error;
+    m_mainDocumentError = error;    
     frameLoader()->client().setMainDocumentError(this, error);
 }
 
@@ -298,8 +298,8 @@ void DocumentLoader::frameDestroyed()
 }
 
 // Cancels the data source's pending loads.  Conceptually, a data source only loads
-// one document at a time, but one document may have many related resources.
-// stopLoading will stop all loads initiated by the data source,
+// one document at a time, but one document may have many related resources. 
+// stopLoading will stop all loads initiated by the data source, 
 // but not loads initiated by child frames' data sources -- that's the WebFrame's job.
 void DocumentLoader::stopLoading()
 {
@@ -321,7 +321,7 @@ void DocumentLoader::stopLoading()
         // Attempt to stop the frame if the document loader is loading, or if it is done loading but
         // still  parsing. Failure to do so can cause a world leak.
         Document* doc = m_frame->document();
-
+        
         if (loading || doc->parsing())
             m_frame->loader().stopLoading(UnloadEventPolicy::None);
     }
@@ -330,7 +330,7 @@ void DocumentLoader::stopLoading()
         callback(nullptr);
     m_iconLoaders.clear();
     m_iconsPendingLoadDecision.clear();
-
+    
 #if ENABLE(APPLICATION_MANIFEST)
     for (auto callbackIdentifier : m_applicationManifestLoaders.values())
         notifyFinishedLoadingApplicationManifest(callbackIdentifier, std::nullopt);
@@ -345,19 +345,19 @@ void DocumentLoader::stopLoading()
 
     // Appcache uses ResourceHandle directly, DocumentLoader doesn't count these loads.
     m_applicationCacheHost->stopLoadingInFrame(*m_frame);
-
+    
 #if ENABLE(WEB_ARCHIVE) || ENABLE(MHTML)
     clearArchiveResources();
 #endif
 
     if (!loading) {
-        // If something above restarted loading we might run into mysterious crashes like
+        // If something above restarted loading we might run into mysterious crashes like 
         // https://bugs.webkit.org/show_bug.cgi?id=62764 and <rdar://problem/9328684>
         ASSERT(!isLoading());
         return;
     }
 
-    // We might run in to infinite recursion if we're stopping loading as the result of
+    // We might run in to infinite recursion if we're stopping loading as the result of 
     // detaching from the frame, so break out of that recursion here.
     // See <rdar://problem/9673866> for more details.
     if (m_isStopping)
@@ -387,10 +387,10 @@ void DocumentLoader::stopLoading()
     // in unexpected side effects such as erroneous event dispatch. ( http://webkit.org/b/117112 )
     if (Document* document = this->document())
         document->cancelParsing();
-
+    
     stopLoadingSubresources();
     stopLoadingPlugIns();
-
+    
     m_isStopping = false;
 }
 
@@ -470,7 +470,7 @@ void DocumentLoader::finishedLoading()
     maybeFinishLoadingMultipartContent();
 
     timing().markEndTime();
-
+    
     commitIfReady();
     if (!frameLoader())
         return;
@@ -480,7 +480,7 @@ void DocumentLoader::finishedLoading()
         // DocumentWriter::begin() gets called and creates the Document.
         if (!m_gotFirstByte)
             commitData(0, 0);
-
+        
         if (!frameLoader())
             return;
         frameLoader()->client().finishedLoading(this);
@@ -525,7 +525,7 @@ bool DocumentLoader::isPostOrRedirectAfterPost(const ResourceRequest& newRequest
 void DocumentLoader::handleSubstituteDataLoadNow()
 {
     Ref<DocumentLoader> protectedThis = makeRef(*this);
-
+    
     ResourceResponse response = m_substituteData.response();
     if (response.url().isEmpty())
         response = ResourceResponse(m_request.url(), m_substituteData.mimeType(), m_substituteData.content()->size(), m_substituteData.textEncoding());
@@ -622,7 +622,7 @@ void DocumentLoader::willSendRequest(ResourceRequest&& newRequest, const Resourc
 {
     // Note that there are no asserts here as there are for the other callbacks. This is due to the
     // fact that this "callback" is sent when starting every load, and the state of callback
-    // deferrals plays less of a part in this function in preventing the bad behavior deferring
+    // deferrals plays less of a part in this function in preventing the bad behavior deferring 
     // callbacks is meant to prevent.
     ASSERT(!newRequest.isNull());
 
@@ -663,7 +663,7 @@ void DocumentLoader::willSendRequest(ResourceRequest&& newRequest, const Resourc
 
     ASSERT(m_frame->document());
     ASSERT(topFrame.document());
-
+    
     // Update cookie policy base URL as URL changes, except for subframes, which use the
     // URL of the main frame which doesn't change when we redirect.
     if (m_frame->isMainFrame())
@@ -758,7 +758,7 @@ static bool checkIfCOOPValuesRequireBrowsingContextGroupSwitch(bool isInitialAbo
     return true;
 }
 
-static std::tuple<Ref<SecurityOrigin>, CrossOriginOpenerPolicy> computeResponseOriginAndCOOP(const ResourceResponse& response, const Document& document, const std::optional<NavigationAction::Requester>& requester)
+static std::tuple<Ref<SecurityOrigin>, CrossOriginOpenerPolicy> computeResponseOriginAndCOOP(const ResourceResponse& response, const Document& document, const std::optional<NavigationAction::Requester>& requester, ContentSecurityPolicy* responseCSP)
 {
     // Non-initial empty documents (about:blank) should inherit their cross-origin-opener-policy from the navigation's initiator top level document,
     // if the initiator and its top level document are same-origin, or default (unsafe-none) otherwise.
@@ -766,7 +766,9 @@ static std::tuple<Ref<SecurityOrigin>, CrossOriginOpenerPolicy> computeResponseO
     if (SecurityPolicy::shouldInheritSecurityOriginFromOwner(response.url()) && requester)
         return std::make_tuple(makeRef(requester->securityOrigin()), requester->securityOrigin().isSameOriginAs(requester->topOrigin()) ? requester->crossOriginOpenerPolicy() : CrossOriginOpenerPolicy { });
 
-    return std::make_tuple(SecurityOrigin::create(response.url()), obtainCrossOriginOpenerPolicy(response, document));
+    // If the HTTP response contains a CSP header, it may set sandbox flags, which would cause the origin to become unique.
+    auto responseOrigin = responseCSP && responseCSP->sandboxFlags() != SandboxNone ? SecurityOrigin::createUnique() : SecurityOrigin::create(response.url());
+    return std::make_tuple(WTFMove(responseOrigin), obtainCrossOriginOpenerPolicy(response, document));
 }
 
 // https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-fetch (Step 12.5.6)
@@ -779,7 +781,7 @@ bool DocumentLoader::doCrossOriginOpenerHandlingOfResponse(const ResourceRespons
     if (!m_frame->document() || !m_frame->document()->settings().crossOriginOpenerPolicyEnabled())
         return true;
 
-    auto [responseOrigin, responseCOOP] = computeResponseOriginAndCOOP(response, *m_frame->document(), m_triggeringAction.requester());
+    auto [responseOrigin, responseCOOP] = computeResponseOriginAndCOOP(response, *m_frame->document(), m_triggeringAction.requester(), m_contentSecurityPolicy.get());
 
     // https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-fetch (Step 12.5.6.2)
     // If sandboxFlags is not empty and responseCOOP's value is not "unsafe-none", then set response to an appropriate network error and break.
@@ -853,7 +855,7 @@ bool DocumentLoader::tryLoadingSubstituteData()
             handleSubstituteDataLoadNow();
         };
 
-#if USE(COCOA_EVENT_LOOP) && !PLATFORM(JAVA)
+#if USE(COCOA_EVENT_LOOP)
         RunLoop::dispatch(*m_frame->page()->scheduledRunLoopPairs(), WTFMove(loadData));
 #else
         RunLoop::current().dispatch(WTFMove(loadData));
@@ -915,6 +917,12 @@ static URL microsoftTeamsRedirectURL()
 void DocumentLoader::responseReceived(CachedResource& resource, const ResourceResponse& response, CompletionHandler<void()>&& completionHandler)
 {
     ASSERT_UNUSED(resource, m_mainResource == &resource);
+
+    if (!response.httpHeaderField(HTTPHeaderName::ContentSecurityPolicy).isNull()) {
+        m_contentSecurityPolicy = makeUnique<ContentSecurityPolicy>(URL { response.url() }, nullptr);
+        m_contentSecurityPolicy->didReceiveHeaders(ContentSecurityPolicyResponseHeaders { response }, m_request.httpReferrer(), ContentSecurityPolicy::ReportParsingErrors::No);
+    } else
+        m_contentSecurityPolicy = nullptr;
 
 #if ENABLE(RESOURCE_LOAD_STATISTICS)
     // FIXME(218779): Remove this quirk once microsoft.com completes their login flow redesign.
@@ -1205,11 +1213,11 @@ void DocumentLoader::continueAfterContentPolicy(PolicyAction policy)
             auto* owner = m_frame->ownerElement();
             if (is<HTMLObjectElement>(owner)) {
                 downcast<HTMLObjectElement>(*owner).renderFallbackContent();
-            // object elements are no longer rendered after we fallback, so don't
-            // keep trying to process data from their load
+                // object elements are no longer rendered after we fallback, so don't
+                // keep trying to process data from their load
                 cancelMainResourceLoad(frameLoader()->cancelledError(m_request));
+            }
         }
-    }
     }
 
     if (!isStopping() && m_substituteData.isValid() && isLoadingMainResource()) {
@@ -1406,13 +1414,13 @@ void DocumentLoader::setupForReplace()
         return;
 
     frameLoader()->client().willReplaceMultipartContent();
-
+    
     maybeFinishLoadingMultipartContent();
     maybeCreateArchive();
     m_writer.end();
     frameLoader()->setReplacing();
     m_gotFirstByte = false;
-
+    
     stopLoadingSubresources();
     stopLoadingPlugIns();
 #if ENABLE(WEB_ARCHIVE) || ENABLE(MHTML)
@@ -1425,7 +1433,7 @@ void DocumentLoader::checkLoadComplete()
     if (!m_frame || isLoading())
         return;
 
-    // ASSERT(this == frameLoader()->activeDocumentLoader());
+    ASSERT(this == frameLoader()->activeDocumentLoader());
     m_frame->document()->domWindow()->finishedLoading();
 }
 
@@ -1634,7 +1642,7 @@ bool DocumentLoader::maybeCreateArchive()
     m_archive = ArchiveFactory::create(m_response.url(), mainResourceData().get(), m_response.mimeType());
     if (!m_archive)
         return false;
-
+    
     addAllArchiveResources(*m_archive);
     ASSERT(m_archive->mainResource());
     auto& mainResource = *m_archive->mainResource();
@@ -1712,7 +1720,7 @@ RefPtr<ArchiveResource> DocumentLoader::subresource(const URL& url) const
 {
     if (!isCommitted())
         return nullptr;
-
+    
     auto* resource = m_cachedResourceLoader->cachedResource(url);
     if (!resource || !resource->isLoaded())
         return archiveResourceForURL(url);

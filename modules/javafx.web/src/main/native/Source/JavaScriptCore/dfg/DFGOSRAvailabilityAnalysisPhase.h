@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -50,11 +50,11 @@ class LocalOSRAvailabilityCalculator {
 public:
     LocalOSRAvailabilityCalculator(Graph&);
     ~LocalOSRAvailabilityCalculator();
-
+    
     void beginBlock(BasicBlock*);
     void endBlock(BasicBlock*); // Useful if you want to get data for the end of the block. You don't need to call this if you did beginBlock() and then executeNode() for every node.
     void executeNode(Node*);
-
+    
     AvailabilityMap m_availability;
     Graph& m_graph;
 };

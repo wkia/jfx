@@ -201,7 +201,7 @@ void FEMorphology::platformApply(const PaintingData& paintingData)
     float kernelFactor = sqrt(paintingData.radiusX * paintingData.radiusY) * 0.65;
 
     static const int minimalArea = (160 * 160); // Empirical data limit for parallel jobs
-
+    
     unsigned maxNumThreads = paintingData.height / 8;
     unsigned optimalThreadNumber = std::min<unsigned>((paintingData.width * paintingData.height * kernelFactor) / minimalArea, maxNumThreads);
     if (optimalThreadNumber > 1) {
@@ -269,7 +269,7 @@ void FEMorphology::platformApplySoftware()
 
     if (platformApplyDegenerate(destinationPixelArray, effectDrawingRect, radiusX, radiusY))
         return;
-
+    
     PaintingData paintingData;
     paintingData.srcPixelArray = sourcePixelArray.get();
     paintingData.dstPixelArray = &destinationPixelArray;

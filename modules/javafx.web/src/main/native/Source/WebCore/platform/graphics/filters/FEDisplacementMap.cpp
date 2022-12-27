@@ -111,7 +111,7 @@ void FEDisplacementMap::platformApplySoftware()
     IntRect effectBDrawingRect = requestedRegionOfInputPixelBuffer(in2->absolutePaintRect());
     // The calculations using the pixel values from ‘in2’ are performed using non-premultiplied color values.
     auto displacementImage = in2->unmultipliedResult(effectBDrawingRect);
-
+    
     if (!inputImage || !displacementImage)
         return;
 
@@ -126,7 +126,7 @@ void FEDisplacementMap::platformApplySoftware()
     float scaleForColorY = scale.height() / 255.0;
     float scaledOffsetX = 0.5 - scale.width() * 0.5;
     float scaledOffsetY = 0.5 - scale.height() * 0.5;
-
+    
     int displacementChannelX = xChannelIndex();
     int displacementChannelY = yChannelIndex();
 
@@ -137,7 +137,7 @@ void FEDisplacementMap::platformApplySoftware()
 
         for (int x = 0; x < paintSize.width(); ++x) {
             int destinationIndex = lineStartOffset + x * 4;
-
+            
             int srcX = x + static_cast<int>(scaleForColorX * displacementImage->item(destinationIndex + displacementChannelX) + scaledOffsetX);
             int srcY = y + static_cast<int>(scaleForColorY * displacementImage->item(destinationIndex + displacementChannelY) + scaledOffsetY);
 

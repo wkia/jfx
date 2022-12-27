@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -44,17 +44,17 @@ bool InstanceOfVariant::attemptToMerge(const InstanceOfVariant& other)
 {
     if (m_prototype != other.m_prototype)
         return false;
-
+    
     if (m_isHit != other.m_isHit)
         return false;
-
+    
     ObjectPropertyConditionSet mergedConditionSet = m_conditionSet.mergedWith(other.m_conditionSet);
     if (!mergedConditionSet.isValid())
         return false;
     m_conditionSet = mergedConditionSet;
-
+    
     m_structureSet.merge(other.m_structureSet);
-
+    
     return true;
 }
 
@@ -69,7 +69,7 @@ void InstanceOfVariant::dumpInContext(PrintStream& out, DumpContext* context) co
         out.print("<empty>");
         return;
     }
-
+    
     out.print(
         "<", inContext(structureSet(), context), ", ", inContext(m_conditionSet, context), ","
         " prototype = ", inContext(JSValue(m_prototype), context), ","

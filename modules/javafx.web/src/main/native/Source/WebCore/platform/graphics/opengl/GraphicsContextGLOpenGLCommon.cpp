@@ -219,7 +219,7 @@ void GraphicsContextGLOpenGL::reshape(int width, int height)
 
     TemporaryOpenGLSetting scopedScissor(GL_SCISSOR_TEST, GL_FALSE);
     TemporaryOpenGLSetting scopedDither(GL_DITHER, GL_FALSE);
-
+    
     bool mustRestoreFBO = reshapeFBOs(IntSize(width, height));
 
     // Initialize renderbuffers to 0.
@@ -457,7 +457,7 @@ void GraphicsContextGLOpenGL::blendFunc(GCGLenum sfactor, GCGLenum dfactor)
         return;
 
     ::glBlendFunc(sfactor, dfactor);
-}
+}       
 
 void GraphicsContextGLOpenGL::blendFuncSeparate(GCGLenum srcRGB, GCGLenum dstRGB, GCGLenum srcAlpha, GCGLenum dstAlpha)
 {
@@ -566,11 +566,11 @@ void GraphicsContextGLOpenGL::compileShader(PlatformGLObject shader)
     LOG(WebGL, "--- begin translated shader source ---\n%s\n--- end translated shader source ---", translatedShaderPtr);
 
     ::glShaderSource(shader, 1, &translatedShaderPtr, &translatedShaderLength);
-
+    
     ::glCompileShader(shader);
-
+    
     int compileStatus;
-
+    
     ::glGetShaderiv(shader, COMPILE_STATUS, &compileStatus);
 
     ShaderSourceMap::iterator result = m_shaderSourceMap.find(shader);
@@ -817,9 +817,9 @@ bool GraphicsContextGLOpenGL::getActiveAttribImpl(PlatformGLObject program, GCGL
     ::glGetActiveAttrib(program, index, maxAttributeSize, &nameLength, &size, &type, name.data());
     if (!nameLength)
         return false;
-
+    
     String originalName = originalSymbolName(program, SHADER_SYMBOL_TYPE_ATTRIBUTE, String(name.data(), nameLength));
-
+    
 #ifndef NDEBUG
     String uniformName(name.data(), nameLength);
     LOG(WebGL, "Program %d is mapping active attribute %d from '%s' to '%s'", program, index, uniformName.utf8().data(), originalName.utf8().data());
@@ -839,7 +839,7 @@ bool GraphicsContextGLOpenGL::getActiveAttrib(PlatformGLObject program, GCGLuint
         getNonBuiltInActiveSymbolCount(program, GraphicsContextGL::ACTIVE_ATTRIBUTES, &symbolCount);
         result = m_shaderProgramSymbolCountMap.find(program);
     }
-
+    
     ActiveShaderSymbolCounts& symbolCounts = result->value;
     GCGLuint rawIndex = (index < symbolCounts.filteredToActualAttributeIndexMap.size()) ? symbolCounts.filteredToActualAttributeIndexMap[index] : -1;
 
@@ -866,14 +866,14 @@ bool GraphicsContextGLOpenGL::getActiveUniformImpl(PlatformGLObject program, GCG
     ::glGetActiveUniform(program, index, maxUniformSize, &nameLength, &size, &type, name.data());
     if (!nameLength)
         return false;
-
+    
     String originalName = originalSymbolName(program, SHADER_SYMBOL_TYPE_UNIFORM, String(name.data(), nameLength));
-
+    
 #ifndef NDEBUG
     String uniformName(name.data(), nameLength);
     LOG(WebGL, "Program %d is mapping active uniform %d from '%s' to '%s'", program, index, uniformName.utf8().data(), originalName.utf8().data());
 #endif
-
+    
     info.name = originalName;
     info.type = type;
     info.size = size;
@@ -888,10 +888,10 @@ bool GraphicsContextGLOpenGL::getActiveUniform(PlatformGLObject program, GCGLuin
         getNonBuiltInActiveSymbolCount(program, GraphicsContextGL::ACTIVE_UNIFORMS, &symbolCount);
         result = m_shaderProgramSymbolCountMap.find(program);
     }
-
+    
     ActiveShaderSymbolCounts& symbolCounts = result->value;
     GCGLuint rawIndex = (index < symbolCounts.filteredToActualUniformIndexMap.size()) ? symbolCounts.filteredToActualUniformIndexMap[index] : -1;
-
+    
     return getActiveUniformImpl(program, rawIndex, info);
 }
 
@@ -992,7 +992,7 @@ String GraphicsContextGLOpenGL::originalSymbolName(PlatformGLObject program, ANG
     GCGLsizei count;
     PlatformGLObject shaders[2];
     getAttachedShaders(program, 2, &count, shaders);
-
+    
     for (GCGLsizei i = 0; i < count; ++i) {
         auto originalName = originalSymbolInShaderSourceMap(shaders[i], symbolType, name);
         if (originalName)
@@ -1030,7 +1030,7 @@ String GraphicsContextGLOpenGL::mappedSymbolName(PlatformGLObject shaders[2], si
             ShaderSourceMap::iterator result = m_shaderSourceMap.find(shaders[i]);
             if (result == m_shaderSourceMap.end())
                 continue;
-
+            
             const ShaderSymbolMap& symbolMap = result->value.symbolMap(static_cast<enum ANGLEShaderSymbolType>(symbolType));
             for (const auto& symbolEntry : symbolMap) {
                 if (name == symbolEntry.value.get().mappedName.c_str())
@@ -1710,7 +1710,7 @@ void GraphicsContextGLOpenGL::getNonBuiltInActiveSymbolCount(PlatformGLObject pr
 
         symbolCounts.filteredToActualAttributeIndexMap.append(i);
     }
-
+    
     // Do the same for uniforms.
     GCGLint uniformCount = 0;
     ::glGetProgramiv(program, ACTIVE_UNIFORMS, &uniformCount);
@@ -1719,10 +1719,10 @@ void GraphicsContextGLOpenGL::getNonBuiltInActiveSymbolCount(PlatformGLObject pr
         getActiveUniformImpl(program, i, info);
         if (info.name.startsWith("gl_"))
             continue;
-
+        
         symbolCounts.filteredToActualUniformIndexMap.append(i);
     }
-
+    
     *value = symbolCounts.countForType(pname);
 }
 
@@ -1733,7 +1733,7 @@ String GraphicsContextGLOpenGL::getUnmangledInfoLog(PlatformGLObject shaders[2],
     JSC::Yarr::RegularExpression regExp("webgl_[0123456789abcdefABCDEF]+");
 
     StringBuilder processedLog;
-
+    
     // ANGLE inserts a "#extension" line into the shader source that
     // causes a warning in some compilers. There is no point showing
     // this warning to the user since they didn't write the code that
@@ -1772,7 +1772,7 @@ String GraphicsContextGLOpenGL::getProgramInfoLog(PlatformGLObject program)
     GLint length = 0;
     ::glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
     if (!length)
-        return String();
+        return String(); 
 
     GLsizei size = 0;
     Vector<GLchar> info(length);
@@ -1803,7 +1803,7 @@ GCGLint GraphicsContextGLOpenGL::getShaderi(PlatformGLObject shader, GCGLenum pn
 
 
     const auto& result = m_shaderSourceMap.find(shader);
-
+    
     switch (pname) {
     case DELETE_STATUS:
     case SHADER_TYPE:
@@ -1835,7 +1835,7 @@ String GraphicsContextGLOpenGL::getShaderInfoLog(PlatformGLObject shader)
 
     const auto& result = m_shaderSourceMap.find(shader);
     if (result == m_shaderSourceMap.end())
-        return String();
+        return String(); 
 
     const ShaderSourceEntry& entry = result->value;
     if (!entry.isValid)
@@ -1844,7 +1844,7 @@ String GraphicsContextGLOpenGL::getShaderInfoLog(PlatformGLObject shader)
     GLint length = 0;
     ::glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
     if (!length)
-        return String();
+        return String(); 
 
     GLsizei size = 0;
     Vector<GLchar> info(length);
@@ -1863,7 +1863,7 @@ String GraphicsContextGLOpenGL::getShaderSource(PlatformGLObject shader)
 
     const auto& result = m_shaderSourceMap.find(shader);
     if (result == m_shaderSourceMap.end())
-        return String();
+        return String(); 
 
     return result->value.source;
 }

@@ -441,7 +441,7 @@ static Vector<FloatQuad> collectAbsoluteQuads(const RenderText& textRenderer, bo
                     boundaries.setHeight(ellipsisRect.maxY() - boundaries.y());
             }
         }
-
+        
         quads.append(textRenderer.localToAbsoluteQuad(boundaries, UseTransforms, wasFixed));
     }
     return quads;
@@ -777,7 +777,7 @@ unsigned RenderText::lastCharacterIndexStrippingSpaces() const
 
     if (!style().collapseWhiteSpace())
         return text().length() - 1;
-
+    
     int i = text().length() - 1;
     for ( ; i  >= 0; --i) {
         if (text()[i] != ' ' && (text()[i] != '\n' || style().preserveNewline()) && text()[i] != '\t')
@@ -874,7 +874,7 @@ float RenderText::minLogicalWidth() const
 {
     if (preferredLogicalWidthsDirty())
         const_cast<RenderText*>(this)->computePreferredLogicalWidths(0);
-
+        
     return m_minWidth;
 }
 
@@ -882,7 +882,7 @@ float RenderText::maxLogicalWidth() const
 {
     if (preferredLogicalWidthsDirty())
         const_cast<RenderText*>(this)->computePreferredLogicalWidths(0);
-
+        
     return m_maxWidth;
 }
 
@@ -1012,7 +1012,7 @@ void RenderText::computePreferredLogicalWidths(float leadWidth, HashSet<const Fo
     std::optional<LayoutUnit> firstGlyphLeftOverflow;
 
     bool breakNBSP = style.autoWrap() && style.nbspMode() == NBSPMode::Space;
-
+    
     // Note the deliberate omission of word-wrap and overflow-wrap from this breakAll check. Those
     // do not affect minimum preferred sizes. Note that break-word is a non-standard value for
     // word-break, but we support it as though it means break-all.
@@ -1346,7 +1346,7 @@ void RenderText::setRenderedText(const String& newText)
 
     if (m_useBackslashAsYenSymbol)
         m_text.replace('\\', yenSign);
-
+    
     const auto& style = this->style();
     if (style.textTransform() != TextTransform::None)
         m_text = applyTextTransform(style, m_text, previousCharacter());
@@ -1381,7 +1381,7 @@ void RenderText::setRenderedText(const String& newText)
     m_isAllASCII = text().isAllASCII();
     m_canUseSimpleFontCodePath = computeCanUseSimpleFontCodePath();
     m_canUseSimplifiedTextMeasuring = computeCanUseSimplifiedTextMeasuring();
-
+    
     if (m_text != originalText) {
         originalTextMap().set(this, originalText);
         m_originalTextDiffersFromRendered = true;
@@ -1427,7 +1427,7 @@ bool RenderText::computeCanUseSimplifiedTextMeasuring() const
 {
     if (!m_canUseSimpleFontCodePath)
         return false;
-
+    
     auto& font = style().fontCascade();
     if (font.wordSpacing() || font.letterSpacing())
         return false;

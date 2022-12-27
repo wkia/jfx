@@ -191,9 +191,9 @@ public:
     void resolvePendingPlayPromises(PlayPromiseVector&&);
     void scheduleNotifyAboutPlaying();
     void notifyAboutPlaying(PlayPromiseVector&&);
-
+    
     MediaPlayer::MovieLoadType movieLoadType() const;
-
+    
     bool inActiveDocument() const { return m_inActiveDocument; }
 
     MediaSessionGroupIdentifier mediaSessionGroupIdentifier() const final;
@@ -434,7 +434,7 @@ public:
     bool hasSingleSecurityOrigin() const { return !m_player || m_player->hasSingleSecurityOrigin(); }
     bool didPassCORSAccessCheck() const { return m_player && m_player->didPassCORSAccessCheck(); }
     bool wouldTaintOrigin(const SecurityOrigin& origin) const { return m_player && m_player->wouldTaintOrigin(origin); }
-
+    
     WEBCORE_EXPORT bool isFullscreen() const override;
     bool isStandardFullscreen() const;
     void toggleStandardFullscreenState();
@@ -614,7 +614,7 @@ protected:
 
     bool showPosterFlag() const { return m_showPoster; }
     void setShowPosterFlag(bool);
-
+    
     void setChangingVideoFullscreenMode(bool value) { m_changingVideoFullscreenMode = value; }
     bool isChangingVideoFullscreenMode() const { return m_changingVideoFullscreenMode; }
 
@@ -647,7 +647,7 @@ private:
 
     void stopWithoutDestroyingMediaPlayer();
     void contextDestroyed() override;
-
+    
     void visibilityStateChanged() final;
 
     void setReadyState(MediaPlayer::ReadyState);
@@ -770,7 +770,7 @@ private:
     void finishSeek();
     void clearSeeking();
     void addPlayedRange(const MediaTime& start, const MediaTime& end);
-
+    
     void scheduleTimeupdateEvent(bool periodicEvent);
     virtual void scheduleResizeEvent() { }
     virtual void scheduleResizeEventIfSizeChanged() { }
@@ -1002,7 +1002,7 @@ private:
     double m_volume { 1 };
     bool m_volumeInitialized { false };
     MediaTime m_lastSeekTime;
-
+    
     MonotonicTime m_previousProgressTime { MonotonicTime::infinity() };
     double m_playbackStartedTime { 0 };
 
@@ -1011,7 +1011,7 @@ private:
 
     // The last time a timeupdate event was sent in movie time.
     MediaTime m_lastTimeUpdateEventMovieTime;
-
+    
     // Loading state.
     enum LoadState { WaitingForSource, LoadingFromSrcAttr, LoadingFromSourceElement };
     LoadState m_loadState { WaitingForSource };

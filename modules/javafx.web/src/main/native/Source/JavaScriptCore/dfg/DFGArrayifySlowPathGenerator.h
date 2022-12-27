@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -51,9 +51,9 @@ public:
         , m_structureGPR(structureGPR)
     {
         ASSERT(m_op == Arrayify || m_op == ArrayifyToStructure);
-
+        
         jit->silentSpillAllRegistersImpl(false, m_plans, InvalidGPRReg);
-
+        
         if (m_propertyGPR != InvalidGPRReg) {
             switch (m_arrayMode.type()) {
             case Array::Int32:
@@ -67,14 +67,14 @@ public:
         }
         m_badIndexingTypeJump = jit->speculationCheck(BadIndexingType, JSValueSource::unboxedCell(m_baseGPR), nullptr);
     }
-
+    
 private:
     void generateInternal(SpeculativeJIT* jit) final
     {
         linkFrom(jit);
-
+        
         ASSERT(m_op == Arrayify || m_op == ArrayifyToStructure);
-
+        
         if (m_propertyGPR != InvalidGPRReg) {
             switch (m_arrayMode.type()) {
             case Array::Int32:
@@ -88,7 +88,7 @@ private:
                 break;
             }
         }
-
+        
         for (unsigned i = 0; i < m_plans.size(); ++i)
             jit->silentSpill(m_plans[i]);
         VM& vm = jit->vm();
@@ -113,14 +113,14 @@ private:
         for (unsigned i = m_plans.size(); i--;)
             jit->silentFill(m_plans[i]);
         jit->m_jit.exceptionCheck();
-
+        
         if (m_op == ArrayifyToStructure) {
             ASSERT(m_structure.get());
             m_badIndexingTypeJump.fill(
                 jit, jit->m_jit.branchWeakStructure(MacroAssembler::NotEqual, MacroAssembler::Address(m_baseGPR, JSCell::structureIDOffset()), m_structure));
         } else {
             // Finally, check that we have the kind of array storage that we wanted to get.
-            // Note that this is a backwards speculation check, which will result in the
+            // Note that this is a backwards speculation check, which will result in the 
             // bytecode operation corresponding to this arrayification being reexecuted.
             // That's fine, since arrayification is not user-visible.
             jit->m_jit.load8(
@@ -129,7 +129,7 @@ private:
             m_badIndexingTypeJump.fill(
                 jit, jit->jumpSlowForUnwantedArrayMode(m_structureGPR, m_arrayMode));
         }
-
+        
         jumpTo(jit);
     }
 

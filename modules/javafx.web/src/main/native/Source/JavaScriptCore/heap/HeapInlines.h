@@ -188,10 +188,10 @@ inline void Heap::decrementDeferralDepthAndGCIfNeeded()
 {
     ASSERT(!Thread::mayBeGCThread() || m_worldIsStopped);
     m_deferralDepth--;
-
+    
     if (UNLIKELY(m_didDeferGCWork) || Options::forceDidDeferGCWork()) {
         decrementDeferralDepthAndGCIfNeededSlow();
-
+        
         // Here are the possible relationships between m_deferralDepth and m_didDeferGCWork.
         // Note that prior to the call to decrementDeferralDepthAndGCIfNeededSlow,
         // m_didDeferGCWork had to have been true. Now it can be either false or true. There is
@@ -224,13 +224,13 @@ inline HashSet<MarkedArgumentBuffer*>& Heap::markListSet()
 
 inline void Heap::reportExtraMemoryAllocated(size_t size)
 {
-    if (size > minExtraMemory)
+    if (size > minExtraMemory) 
         reportExtraMemoryAllocatedSlowCase(size);
 }
 
 inline void Heap::deprecatedReportExtraMemory(size_t size)
 {
-    if (size > minExtraMemory)
+    if (size > minExtraMemory) 
         deprecatedReportExtraMemorySlowCase(size);
 }
 

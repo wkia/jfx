@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -89,7 +89,7 @@ Ref<TimeRanges> MediaController::buffered() const
     if (m_mediaElements.isEmpty())
         return TimeRanges::create();
 
-    // The buffered attribute must return a new static normalized TimeRanges object that represents
+    // The buffered attribute must return a new static normalized TimeRanges object that represents 
     // the intersection of the ranges of the media resources of the mediagroup elements that the
     // user agent has buffered, at the time the attribute is evaluated.
     Ref<TimeRanges> bufferedRanges = m_mediaElements.first()->buffered();
@@ -117,7 +117,7 @@ Ref<TimeRanges> MediaController::played()
     if (m_mediaElements.isEmpty())
         return TimeRanges::create();
 
-    // The played attribute must return a new static normalized TimeRanges object that represents
+    // The played attribute must return a new static normalized TimeRanges object that represents 
     // the union of the ranges of the media resources of the mediagroup elements that the
     // user agent has so far rendered, at the time the attribute is evaluated.
     Ref<TimeRanges> playedRanges = m_mediaElements.first()->played();
@@ -156,18 +156,18 @@ double MediaController::currentTime() const
 
 void MediaController::setCurrentTime(double time)
 {
-    // When the user agent is to seek the media controller to a particular new playback position,
+    // When the user agent is to seek the media controller to a particular new playback position, 
     // it must follow these steps:
     // If the new playback position is less than zero, then set it to zero.
     time = std::max(0.0, time);
-
-    // If the new playback position is greater than the media controller duration, then set it
+    
+    // If the new playback position is greater than the media controller duration, then set it 
     // to the media controller duration.
     time = std::min(time, duration());
-
+    
     // Set the media controller position to the new playback position.
     m_clock->setCurrentTime(time);
-
+    
     // Seek each mediagroup element to the new playback position relative to the media element timeline.
     for (auto& mediaElement : m_mediaElements)
         mediaElement->seek(MediaTime::createWithDouble(time));
@@ -237,7 +237,7 @@ void MediaController::setPlaybackRate(double rate)
     if (m_clock->playRate() == rate)
         return;
 
-    // The playbackRate attribute, on setting, must set the MediaController's media controller
+    // The playbackRate attribute, on setting, must set the MediaController's media controller 
     // playback rate to the new value,
     m_clock->setPlayRate(rate);
 
@@ -253,7 +253,7 @@ ExceptionOr<void> MediaController::setVolume(double level)
     if (m_volume == level)
         return { };
 
-    // If the new value is outside the range 0.0 to 1.0 inclusive, then, on setting, an
+    // If the new value is outside the range 0.0 to 1.0 inclusive, then, on setting, an 
     // IndexSizeError exception must be raised instead.
     if (!(level >= 0 && level <= 1))
         return Exception { IndexSizeError };
@@ -349,7 +349,7 @@ void MediaController::updateReadyState()
 {
     ReadyState oldReadyState = m_readyState;
     ReadyState newReadyState;
-
+    
     if (m_mediaElements.isEmpty()) {
         // If the MediaController has no mediagroup elements, let new readiness state be 0.
         newReadyState = HAVE_NOTHING;
@@ -361,10 +361,10 @@ void MediaController::updateReadyState()
             newReadyState = std::min(newReadyState, m_mediaElements[index]->readyState());
     }
 
-    if (newReadyState == oldReadyState)
+    if (newReadyState == oldReadyState) 
         return;
 
-    // If the MediaController's most recently reported readiness state is greater than new readiness
+    // If the MediaController's most recently reported readiness state is greater than new readiness 
     // state then queue a task to fire a simple event at the MediaController object, whose name is the
     // event name corresponding to the value of new readiness state given in the table below. [omitted]
     if (oldReadyState > newReadyState) {
@@ -381,7 +381,7 @@ void MediaController::updateReadyState()
         nextState = static_cast<ReadyState>(nextState + 1);
         // 3. Queue a task to fire a simple event at the MediaController object, whose name is the
         // event name corresponding to the value of next state given in the table below. [omitted]
-        scheduleEvent(eventNameForReadyState(nextState));
+        scheduleEvent(eventNameForReadyState(nextState));        
         // If next state is less than new readiness state, then return to the step labeled loop
     } while (nextState < newReadyState);
 
@@ -394,7 +394,7 @@ void MediaController::updatePlaybackState()
     PlaybackState oldPlaybackState = m_playbackState;
     PlaybackState newPlaybackState;
 
-    // Initialize new playback state by setting it to the state given for the first matching
+    // Initialize new playback state by setting it to the state given for the first matching 
     // condition from the following list:
     if (m_mediaElements.isEmpty()) {
         // If the MediaController has no mediagroup elements
@@ -421,9 +421,9 @@ void MediaController::updatePlaybackState()
 
     // and the new playback state is ended,
     if (newPlaybackState == ENDED) {
-        // then queue a task that, if the MediaController object is a playing media controller, and
+        // then queue a task that, if the MediaController object is a playing media controller, and 
         // all of the MediaController's mediagroup elements have still ended playback, and the
-        // media controller playback rate is still positive or zero,
+        // media controller playback rate is still positive or zero, 
         if (!m_paused && hasEnded()) {
             // changes the MediaController object to a paused media controller
             m_paused = true;
@@ -434,7 +434,7 @@ void MediaController::updatePlaybackState()
     }
 
     // If the MediaController's most recently reported playback state is not equal to new playback state
-    // then queue a task to fire a simple event at the MediaController object, whose name is playing
+    // then queue a task to fire a simple event at the MediaController object, whose name is playing 
     // if new playback state is playing, ended if new playback state is ended, and waiting otherwise.
     AtomString eventName;
     switch (newPlaybackState) {
@@ -487,29 +487,29 @@ void MediaController::bringElementUpToSpeed(HTMLMediaElement& element)
 
 bool MediaController::isBlocked() const
 {
-    // A MediaController is a blocked media controller if the MediaController is a paused media
+    // A MediaController is a blocked media controller if the MediaController is a paused media 
     // controller,
     if (m_paused)
         return true;
-
+    
     if (m_mediaElements.isEmpty())
         return false;
-
+    
     bool allPaused = true;
     for (auto& element : m_mediaElements) {
         //  or if any of its mediagroup elements are blocked media elements,
         if (element->isBlocked())
             return true;
-
+        
         // or if any of its mediagroup elements whose autoplaying flag is true still have their
         // paused attribute set to true,
         if (element->isAutoplaying() && element->paused())
             return true;
-
+        
         if (!element->paused())
             allPaused = false;
     }
-
+    
     // or if all of its mediagroup elements have their paused attribute set to true.
     return allPaused;
 }
@@ -524,7 +524,7 @@ bool MediaController::hasEnded() const
     // playback state be ended.
     if (m_mediaElements.isEmpty())
         return false;
-
+    
     bool allHaveEnded = true;
     for (auto& mediaElement : m_mediaElements) {
         if (!mediaElement->ended())

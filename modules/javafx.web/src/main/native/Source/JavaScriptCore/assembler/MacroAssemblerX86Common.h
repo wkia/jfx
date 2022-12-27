@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -49,7 +49,7 @@ public:
         return s_scratchRegister;
     }
 #endif
-
+    
 protected:
     static constexpr int DoubleConditionBitInvert = 0x10;
     static constexpr int DoubleConditionBitSpecial = 0x20;
@@ -57,7 +57,7 @@ protected:
 
 public:
     typedef X86Assembler::XMMRegisterID XMMRegisterID;
-
+    
     static bool isCompactPtrAlignedAddressOffset(ptrdiff_t value)
     {
         return value >= -128 && value <= 127;
@@ -107,7 +107,7 @@ public:
 
     static constexpr RegisterID stackPointerRegister = X86Registers::esp;
     static constexpr RegisterID framePointerRegister = X86Registers::ebp;
-
+    
     static bool canBlind() { return true; }
     static bool shouldBlindForSpecificArch(uint32_t value) { return value >= 0x00ffffff; }
     static bool shouldBlindForSpecificArch(uint64_t value) { return value >= 0x00ffffff; }
@@ -163,7 +163,7 @@ public:
         else
             m_assembler.addl_ir(imm.m_value, dest);
     }
-
+    
     void add32(Address src, RegisterID dest)
     {
         m_assembler.addl_mr(src.offset, src.base, dest);
@@ -430,7 +430,7 @@ public:
     {
         m_assembler.illegalInstruction();
     }
-
+    
     void lshift32(RegisterID shift_amount, RegisterID dest)
     {
         if (shift_amount == X86Registers::ecx)
@@ -458,13 +458,13 @@ public:
     {
         m_assembler.shll_i8r(imm.m_value, dest);
     }
-
+    
     void lshift32(RegisterID src, TrustedImm32 imm, RegisterID dest)
     {
         move32IfNeeded(src, dest);
         lshift32(imm, dest);
     }
-
+    
     void mul32(RegisterID src, RegisterID dest)
     {
         m_assembler.imull_rr(src, dest);
@@ -502,7 +502,7 @@ public:
     {
         mul32(src2, src1, dest);
     }
-
+    
     void mul32(TrustedImm32 imm, RegisterID src, RegisterID dest)
     {
         m_assembler.imull_i32r(src, imm.m_value, dest);
@@ -719,7 +719,7 @@ public:
             m_assembler.sarl_CLr(dest);
         else {
             ASSERT(shift_amount != dest);
-
+            
             // On x86 we can only shift by ecx; if asked to shift by another register we'll
             // need rejig the shift amount into ecx first, and restore the registers afterwards.
             // If we dest is ecx, then shift the swapped register!
@@ -741,20 +741,20 @@ public:
     {
         m_assembler.sarl_i8r(imm.m_value, dest);
     }
-
+    
     void rshift32(RegisterID src, TrustedImm32 imm, RegisterID dest)
     {
         move32IfNeeded(src, dest);
         rshift32(imm, dest);
     }
-
+    
     void urshift32(RegisterID shift_amount, RegisterID dest)
     {
         if (shift_amount == X86Registers::ecx)
             m_assembler.shrl_CLr(dest);
         else {
             ASSERT(shift_amount != dest);
-
+        
             // On x86 we can only shift by ecx; if asked to shift by another register we'll
             // need rejig the shift amount into ecx first, and restore the registers afterwards.
             // If we dest is ecx, then shift the swapped register!
@@ -776,7 +776,7 @@ public:
     {
         m_assembler.shrl_i8r(imm.m_value, dest);
     }
-
+    
     void urshift32(RegisterID src, TrustedImm32 imm, RegisterID dest)
     {
         move32IfNeeded(src, dest);
@@ -850,7 +850,7 @@ public:
         else
             m_assembler.subl_ir(imm.m_value, dest);
     }
-
+    
     void sub32(TrustedImm32 imm, Address address)
     {
         m_assembler.subl_im(imm.m_value, address.offset, address.base);
@@ -1020,12 +1020,12 @@ public:
     {
         m_assembler.xorl_mr(src.offset, src.base, dest);
     }
-
+    
     void xor32(BaseIndex src, RegisterID dest)
     {
         m_assembler.xorl_mr(src.offset, src.base, src.index, src.scale, dest);
     }
-
+    
     void xor32(RegisterID op1, RegisterID op2, RegisterID dest)
     {
         if (op1 == op2)
@@ -1241,7 +1241,7 @@ public:
         m_assembler.movl_mr_disp32(address.offset, address.base, dest);
         return DataLabel32(this);
     }
-
+    
     DataLabelCompact load32WithCompactAddressOffsetPatch(Address address, RegisterID dest)
     {
         padBeforePatch();
@@ -1255,7 +1255,7 @@ public:
         ASSERT(isCompactPtrAlignedAddressOffset(value));
         AssemblerType_T::repatchCompact(dataLabelCompact.dataLocation(), value);
     }
-
+    
     DataLabelCompact loadCompactWithAddressOffsetPatch(Address address, RegisterID dest)
     {
         padBeforePatch();
@@ -1272,7 +1272,7 @@ public:
     {
         m_assembler.movzbl_mr(address.offset, address.base, dest);
     }
-
+    
     void load8SignedExtendTo32(BaseIndex address, RegisterID dest)
     {
         m_assembler.movsbl_mr(address.offset, address.base, address.index, address.scale, dest);
@@ -1287,12 +1287,12 @@ public:
     {
         m_assembler.movzbl_rr(src, dest);
     }
-
+    
     void signExtend8To32(RegisterID src, RegisterID dest)
     {
         m_assembler.movsbl_rr(src, dest);
     }
-
+    
     void load16(ImplicitAddress address, RegisterID dest)
     {
         m_assembler.movzwl_mr(address.offset, address.base, dest);
@@ -1302,7 +1302,7 @@ public:
     {
         m_assembler.movzwl_mr(address.offset, address.base, address.index, address.scale, dest);
     }
-
+    
     void load16(Address address, RegisterID dest)
     {
         m_assembler.movzwl_mr(address.offset, address.base, dest);
@@ -1312,7 +1312,7 @@ public:
     {
         m_assembler.movswl_mr(address.offset, address.base, address.index, address.scale, dest);
     }
-
+    
     void load16SignedExtendTo32(Address address, RegisterID dest)
     {
         m_assembler.movswl_mr(address.offset, address.base, dest);
@@ -1339,12 +1339,12 @@ public:
     {
         m_assembler.movzwl_rr(src, dest);
     }
-
+    
     void signExtend16To32(RegisterID src, RegisterID dest)
     {
         m_assembler.movswl_rr(src, dest);
     }
-
+    
     DataLabel32 store32WithAddressOffsetPatch(RegisterID src, Address address)
     {
         padBeforePatch();
@@ -1366,7 +1366,7 @@ public:
     {
         m_assembler.movl_i32m(imm.m_value, address.offset, address.base);
     }
-
+    
     void store32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.movl_i32m(imm.m_value, address.offset, address.base, address.index, address.scale);
@@ -1434,7 +1434,7 @@ public:
 #endif
         m_assembler.movb_rm(src, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void store8(RegisterID src, Address address)
     {
 #if CPU(X86)
@@ -1526,7 +1526,7 @@ public:
     {
         m_assembler.movsd_rm(src, address.offset, address.base);
     }
-
+    
     void storeDouble(FPRegisterID src, BaseIndex address)
     {
         m_assembler.movsd_rm(src, address.offset, address.base, address.index, address.scale);
@@ -1541,7 +1541,7 @@ public:
     {
         m_assembler.movss_rm(src, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void convertDoubleToFloat(FPRegisterID src, FPRegisterID dst)
     {
         m_assembler.cvtsd2ss_rr(src, dst);
@@ -2146,7 +2146,7 @@ public:
     // operations add and remove a single register sized unit of data
     // to or from the stack.  Peek and poke operations read or write
     // values on the stack, without moving the current stack position.
-
+    
     void pop(RegisterID dest)
     {
         m_assembler.pop_r(dest);
@@ -2279,7 +2279,7 @@ public:
             m_assembler.ucomiss_rr(right, left);
         moveConditionallyAfterFloatingPointCompare(cond, left, right, src, dest);
     }
-
+    
     void swap(RegisterID reg1, RegisterID reg2)
     {
         if (reg1 != reg2)
@@ -2633,13 +2633,13 @@ public:
         m_assembler.cmpl_ir(right.m_value, left);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branch32(RelationalCondition cond, RegisterID left, Address right)
     {
         m_assembler.cmpl_mr(right.offset, right.base, left);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branch32(RelationalCondition cond, Address left, RegisterID right)
     {
         m_assembler.cmpl_rm(right, left.offset, left.base);
@@ -2737,13 +2737,13 @@ public:
             m_assembler.testl_i32m(mask.m_value, address.offset, address.base, address.index, address.scale);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchTest32(ResultCondition cond, AbsoluteAddress address, TrustedImm32 mask = TrustedImm32(-1))
     {
         move(TrustedImmPtr(address.m_ptr), scratchRegister());
         return branchTest32(cond, Address(scratchRegister()), mask);
     }
-
+    
     Jump branchTest8(ResultCondition cond, Address address, TrustedImm32 mask = TrustedImm32(-1))
     {
         TrustedImm32 mask8(static_cast<int8_t>(mask.m_value));
@@ -2753,7 +2753,7 @@ public:
             m_assembler.testb_im(mask8.m_value, address.offset, address.base);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchTest8(ResultCondition cond, BaseIndex address, TrustedImm32 mask = TrustedImm32(-1))
     {
         TrustedImm32 mask8(static_cast<int8_t>(mask.m_value));
@@ -2812,7 +2812,7 @@ public:
     // * jz operations branch if the result is zero.
     // * jo operations branch if the (signed) arithmetic
     //   operation caused an overflow to occur.
-
+    
     Jump branchAdd32(ResultCondition cond, RegisterID src, RegisterID dest)
     {
         add32(src, dest);
@@ -2824,7 +2824,7 @@ public:
         add32(imm, dest);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchAdd32(ResultCondition cond, TrustedImm32 src, Address dest)
     {
         add32(src, dest);
@@ -2889,7 +2889,7 @@ public:
             m_assembler.testl_rr(dest, dest);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchMul32(ResultCondition cond, RegisterID src, TrustedImm32 imm, RegisterID dest)
     {
         mul32(imm, src, dest);
@@ -2897,7 +2897,7 @@ public:
             m_assembler.testl_rr(dest, dest);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchMul32(ResultCondition cond, RegisterID src1, RegisterID src2, RegisterID dest)
     {
         if (src1 == dest)
@@ -2911,7 +2911,7 @@ public:
         sub32(src, dest);
         return Jump(m_assembler.jCC(x86Condition(cond)));
     }
-
+    
     Jump branchSub32(ResultCondition cond, TrustedImm32 imm, RegisterID dest)
     {
         sub32(imm, dest);
@@ -3007,7 +3007,7 @@ public:
         m_assembler.cmpb_im(right8.m_value, left.offset, left.base);
         set32(x86Condition(cond), dest);
     }
-
+    
     void compare32(RelationalCondition cond, RegisterID left, RegisterID right, RegisterID dest)
     {
         m_assembler.cmpl_rr(right, left);
@@ -3154,37 +3154,37 @@ public:
     {
         m_assembler.nop();
     }
-
+    
     void xchg8(RegisterID reg, Address address)
     {
         m_assembler.xchgb_rm(reg, address.offset, address.base);
     }
-
+    
     void xchg8(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgb_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void xchg16(RegisterID reg, Address address)
     {
         m_assembler.xchgw_rm(reg, address.offset, address.base);
     }
-
+    
     void xchg16(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgw_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void xchg32(RegisterID reg, Address address)
     {
         m_assembler.xchgl_rm(reg, address.offset, address.base);
     }
-
+    
     void xchg32(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgl_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     // We take memoryFence to mean acqrel. This has acqrel semantics on x86.
     void memoryFence()
     {
@@ -3192,7 +3192,7 @@ public:
         m_assembler.lock();
         m_assembler.orl_im(0, 0, X86Registers::esp);
     }
-
+    
     void atomicStrongCAS8(StatusCondition cond, RegisterID expectedAndResult, RegisterID newValue, Address address, RegisterID result)
     {
         atomicStrongCAS(cond, expectedAndResult, result, address, [&] { m_assembler.cmpxchgb_rm(newValue, address.offset, address.base); });
@@ -3345,7 +3345,7 @@ public:
     {
         return branchAtomicStrongCAS32(cond, expectedAndClobbered, newValue, address);
     }
-
+    
     void atomicRelaxedWeakCAS8(StatusCondition cond, RegisterID expectedAndClobbered, RegisterID newValue, Address address, RegisterID result)
     {
         atomicStrongCAS8(cond, expectedAndClobbered, newValue, address, result);
@@ -3405,505 +3405,505 @@ public:
     {
         return branchAtomicStrongCAS32(cond, expectedAndClobbered, newValue, address);
     }
-
+    
     void atomicAdd8(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         add8(imm, address);
     }
-
+    
     void atomicAdd8(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         add8(imm, address);
     }
-
+    
     void atomicAdd8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         add8(reg, address);
     }
-
+    
     void atomicAdd8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         add8(reg, address);
     }
-
+    
     void atomicAdd16(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         add16(imm, address);
     }
-
+    
     void atomicAdd16(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         add16(imm, address);
     }
-
+    
     void atomicAdd16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         add16(reg, address);
     }
-
+    
     void atomicAdd16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         add16(reg, address);
     }
-
+    
     void atomicAdd32(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         add32(imm, address);
     }
-
+    
     void atomicAdd32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         add32(imm, address);
     }
-
+    
     void atomicAdd32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         add32(reg, address);
     }
-
+    
     void atomicAdd32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         add32(reg, address);
     }
-
+    
     void atomicSub8(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         sub8(imm, address);
     }
-
+    
     void atomicSub8(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         sub8(imm, address);
     }
-
+    
     void atomicSub8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         sub8(reg, address);
     }
-
+    
     void atomicSub8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         sub8(reg, address);
     }
-
+    
     void atomicSub16(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         sub16(imm, address);
     }
-
+    
     void atomicSub16(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         sub16(imm, address);
     }
-
+    
     void atomicSub16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         sub16(reg, address);
     }
-
+    
     void atomicSub16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         sub16(reg, address);
     }
-
+    
     void atomicSub32(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         sub32(imm, address);
     }
-
+    
     void atomicSub32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         sub32(imm, address);
     }
-
+    
     void atomicSub32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         sub32(reg, address);
     }
-
+    
     void atomicSub32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         sub32(reg, address);
     }
-
+    
     void atomicAnd8(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         and8(imm, address);
     }
-
+    
     void atomicAnd8(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         and8(imm, address);
     }
-
+    
     void atomicAnd8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         and8(reg, address);
     }
-
+    
     void atomicAnd8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         and8(reg, address);
     }
-
+    
     void atomicAnd16(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         and16(imm, address);
     }
-
+    
     void atomicAnd16(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         and16(imm, address);
     }
-
+    
     void atomicAnd16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         and16(reg, address);
     }
-
+    
     void atomicAnd16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         and16(reg, address);
     }
-
+    
     void atomicAnd32(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         and32(imm, address);
     }
-
+    
     void atomicAnd32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         and32(imm, address);
     }
-
+    
     void atomicAnd32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         and32(reg, address);
     }
-
+    
     void atomicAnd32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         and32(reg, address);
     }
-
+    
     void atomicOr8(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         or8(imm, address);
     }
-
+    
     void atomicOr8(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         or8(imm, address);
     }
-
+    
     void atomicOr8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         or8(reg, address);
     }
-
+    
     void atomicOr8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         or8(reg, address);
     }
-
+    
     void atomicOr16(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         or16(imm, address);
     }
-
+    
     void atomicOr16(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         or16(imm, address);
     }
-
+    
     void atomicOr16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         or16(reg, address);
     }
-
+    
     void atomicOr16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         or16(reg, address);
     }
-
+    
     void atomicOr32(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         or32(imm, address);
     }
-
+    
     void atomicOr32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         or32(imm, address);
     }
-
+    
     void atomicOr32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         or32(reg, address);
     }
-
+    
     void atomicOr32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         or32(reg, address);
     }
-
+    
     void atomicXor8(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         xor8(imm, address);
     }
-
+    
     void atomicXor8(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         xor8(imm, address);
     }
-
+    
     void atomicXor8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         xor8(reg, address);
     }
-
+    
     void atomicXor8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         xor8(reg, address);
     }
-
+    
     void atomicXor16(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         xor16(imm, address);
     }
-
+    
     void atomicXor16(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         xor16(imm, address);
     }
-
+    
     void atomicXor16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         xor16(reg, address);
     }
-
+    
     void atomicXor16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         xor16(reg, address);
     }
-
+    
     void atomicXor32(TrustedImm32 imm, Address address)
     {
         m_assembler.lock();
         xor32(imm, address);
     }
-
+    
     void atomicXor32(TrustedImm32 imm, BaseIndex address)
     {
         m_assembler.lock();
         xor32(imm, address);
     }
-
+    
     void atomicXor32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         xor32(reg, address);
     }
-
+    
     void atomicXor32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         xor32(reg, address);
     }
-
+    
     void atomicNeg8(Address address)
     {
         m_assembler.lock();
         neg8(address);
     }
-
+    
     void atomicNeg8(BaseIndex address)
     {
         m_assembler.lock();
         neg8(address);
     }
-
+    
     void atomicNeg16(Address address)
     {
         m_assembler.lock();
         neg16(address);
     }
-
+    
     void atomicNeg16(BaseIndex address)
     {
         m_assembler.lock();
         neg16(address);
     }
-
+    
     void atomicNeg32(Address address)
     {
         m_assembler.lock();
         neg32(address);
     }
-
+    
     void atomicNeg32(BaseIndex address)
     {
         m_assembler.lock();
         neg32(address);
     }
-
+    
     void atomicNot8(Address address)
     {
         m_assembler.lock();
         not8(address);
     }
-
+    
     void atomicNot8(BaseIndex address)
     {
         m_assembler.lock();
         not8(address);
     }
-
+    
     void atomicNot16(Address address)
     {
         m_assembler.lock();
         not16(address);
     }
-
+    
     void atomicNot16(BaseIndex address)
     {
         m_assembler.lock();
         not16(address);
     }
-
+    
     void atomicNot32(Address address)
     {
         m_assembler.lock();
         not32(address);
     }
-
+    
     void atomicNot32(BaseIndex address)
     {
         m_assembler.lock();
         not32(address);
     }
-
+    
     void atomicXchgAdd8(RegisterID reg, Address address)
     {
         m_assembler.lock();
         m_assembler.xaddb_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchgAdd8(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         m_assembler.xaddb_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchgAdd16(RegisterID reg, Address address)
     {
         m_assembler.lock();
         m_assembler.xaddw_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchgAdd16(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         m_assembler.xaddw_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchgAdd32(RegisterID reg, Address address)
     {
         m_assembler.lock();
         m_assembler.xaddl_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchgAdd32(RegisterID reg, BaseIndex address)
     {
         m_assembler.lock();
         m_assembler.xaddl_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchg8(RegisterID reg, Address address)
     {
         m_assembler.xchgb_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchg8(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgb_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchg16(RegisterID reg, Address address)
     {
         m_assembler.xchgw_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchg16(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgw_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     void atomicXchg32(RegisterID reg, Address address)
     {
         m_assembler.xchgl_rm(reg, address.offset, address.base);
     }
-
+    
     void atomicXchg32(RegisterID reg, BaseIndex address)
     {
         m_assembler.xchgl_rm(reg, address.offset, address.base, address.index, address.scale);
     }
-
+    
     // We take this to mean that it prevents motion of normal stores. So, it's a no-op on x86.
     void storeFence()
     {
@@ -3913,7 +3913,7 @@ public:
     void loadFence()
     {
     }
-
+    
 #if ENABLE(FAST_TLS_JIT)
     void loadFromTLS32(uint32_t offset, RegisterID dst)
     {
@@ -3950,7 +3950,7 @@ public:
     {
         X86Assembler::replaceWithJump(instructionStart.executableAddress(), destination.executableAddress());
     }
-
+    
     static ptrdiff_t maxJumpReplacementSize()
     {
         return X86Assembler::maxJumpReplacementSize();
@@ -4081,7 +4081,7 @@ protected:
         move(TrustedImm32(sizeOfRegister), dst);
         srcIsNonZero.link(this);
     }
-
+    
     template<typename AddressType, typename Func>
     void atomicStrongCAS(StatusCondition cond, RegisterID expectedAndResult, RegisterID result, AddressType& address, const Func& func)
     {

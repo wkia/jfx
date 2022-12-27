@@ -85,7 +85,7 @@ void ScrollingStateFixedNode::reconcileLayerPositionForViewportRect(const Layout
         auto* graphicsLayer = static_cast<GraphicsLayer*>(layer());
 
         LOG_WITH_STREAM(Scrolling, stream << "ScrollingStateFixedNode " << scrollingNodeID() <<" reconcileLayerPositionForViewportRect " << action << " position of layer " << graphicsLayer->primaryLayerID() << " to " << position);
-
+        
         switch (action) {
         case ScrollingLayerPositionAction::Set:
             graphicsLayer->setPosition(position);
@@ -94,7 +94,7 @@ void ScrollingStateFixedNode::reconcileLayerPositionForViewportRect(const Layout
         case ScrollingLayerPositionAction::SetApproximate:
             graphicsLayer->setApproximatePosition(position);
             break;
-
+        
         case ScrollingLayerPositionAction::Sync:
             graphicsLayer->syncPosition(position);
             break;

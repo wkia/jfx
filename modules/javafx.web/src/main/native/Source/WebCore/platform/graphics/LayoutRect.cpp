@@ -126,7 +126,7 @@ bool LayoutRect::checkedUnite(const LayoutRect& other)
     FloatPoint topLeft = FloatPoint(std::min<float>(x(), other.x()), std::min<float>(y(), other.y()));
     FloatPoint bottomRight = FloatPoint(std::max<float>(maxX(), other.maxX()), std::max<float>(maxY(), other.maxY()));
     FloatSize size = bottomRight - topLeft;
-
+    
     if (size.width() >= LayoutUnit::nearlyMax() || size.height() >= LayoutUnit::nearlyMax())
         return false;
     m_location = LayoutPoint(topLeft);
@@ -204,7 +204,7 @@ TextStream& operator<<(TextStream& ts, const LayoutRect& r)
 {
     if (ts.hasFormattingFlag(TextStream::Formatting::LayoutUnitsAsIntegers))
         return ts << snappedIntRect(r);
-
+    
     return ts << FloatRect(r);
 }
 

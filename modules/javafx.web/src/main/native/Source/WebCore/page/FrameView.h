@@ -98,7 +98,7 @@ public:
     virtual ~FrameView();
 
     HostWindow* hostWindow() const final;
-
+    
     WEBCORE_EXPORT void invalidateRect(const IntRect&) final;
     void setFrameRect(const IntRect&) final;
 
@@ -199,7 +199,7 @@ public:
 
     WEBCORE_EXPORT bool isTransparent() const;
     WEBCORE_EXPORT void setTransparent(bool isTransparent);
-
+    
     // True if the FrameView is not transparent, and the base background color is opaque.
     bool hasOpaqueBackground() const;
 
@@ -270,7 +270,7 @@ public:
     void setBaseLayoutViewportOrigin(LayoutPoint, TriggerLayoutOrNot = TriggerLayoutOrNot::Yes);
     // This size can be overridden by setLayoutViewportOverrideRect.
     WEBCORE_EXPORT LayoutSize baseLayoutViewportSize() const;
-
+    
     // If set, overrides the default "m_layoutViewportOrigin, size of initial containing block" rect.
     // Used with delegated scrolling (i.e. iOS).
     WEBCORE_EXPORT void setLayoutViewportOverrideRect(std::optional<LayoutRect>, TriggerLayoutOrNot = TriggerLayoutOrNot::Yes);
@@ -282,11 +282,11 @@ public:
     // These are in document coordinates, unaffected by page scale (but affected by zooming).
     WEBCORE_EXPORT LayoutRect layoutViewportRect() const;
     WEBCORE_EXPORT LayoutRect visualViewportRect() const;
-
+    
     static LayoutRect visibleDocumentRect(const FloatRect& visibleContentRect, float headerHeight, float footerHeight, const FloatSize& totalContentsSize, float pageScaleFactor);
 
     // This is different than visibleContentRect() in that it ignores negative (or overly positive)
-    // offsets from rubber-banding, and it takes zooming into account.
+    // offsets from rubber-banding, and it takes zooming into account. 
     LayoutRect viewportConstrainedVisibleContentRect() const;
 
     WEBCORE_EXPORT void layoutOrVisualViewportChanged();
@@ -315,13 +315,13 @@ public:
     void removeViewportConstrainedObject(RenderLayerModelObject&);
     const WeakHashSet<RenderLayerModelObject>* viewportConstrainedObjects() const { return m_viewportConstrainedObjects.get(); }
     bool hasViewportConstrainedObjects() const { return m_viewportConstrainedObjects && !m_viewportConstrainedObjects->computesEmpty(); }
-
+    
     float frameScaleFactor() const;
 
     // Functions for querying the current scrolled position, negating the effects of overhang
     // and adjusting for page scale.
     LayoutPoint scrollPositionForFixedPosition() const;
-
+    
     // Static function can be called from another thread.
     WEBCORE_EXPORT static LayoutPoint scrollPositionForFixedPosition(const LayoutRect& visibleContentRect, const LayoutSize& totalContentsSize, const LayoutPoint& scrollPosition, const LayoutPoint& scrollOrigin, float frameScaleFactor, bool fixedElementsLayoutRelativeToFrame, ScrollBehaviorForFixedElements, int headerHeight, int footerHeight);
 
@@ -329,7 +329,7 @@ public:
 
     enum class LayoutViewportConstraint { ConstrainedToDocumentRect, Unconstrained };
     WEBCORE_EXPORT static LayoutRect computeUpdatedLayoutViewportRect(const LayoutRect& layoutViewport, const LayoutRect& documentRect, const LayoutSize& unobscuredContentSize, const LayoutRect& unobscuredContentRect, const LayoutSize& baseLayoutViewportSize, const LayoutPoint& stableLayoutViewportOriginMin, const LayoutPoint& stableLayoutViewportOriginMax, LayoutViewportConstraint);
-
+    
     WEBCORE_EXPORT static LayoutPoint computeLayoutViewportOrigin(const LayoutRect& visualViewport, const LayoutPoint& stableLayoutViewportOriginMin, const LayoutPoint& stableLayoutViewportOriginMax, const LayoutRect& layoutViewport, ScrollBehaviorForFixedElements);
 
     // These layers are positioned differently when there is a topContentInset, a header, or a footer. These value need to be computed
@@ -348,7 +348,7 @@ public:
 #endif
 
     IntRect viewRectExpandedByContentInsets() const;
-
+    
     bool fixedElementsLayoutRelativeToFrame() const;
 
     bool speculativeTilingEnabled() const { return m_speculativeTilingEnabled; }
@@ -408,7 +408,7 @@ public:
     void endDisallowingLayout() { layoutContext().endDisallowingLayout(); }
 
     static MonotonicTime currentPaintTimeStamp() { return sCurrentPaintTimeStamp; } // returns 0 if not painting
-
+    
     WEBCORE_EXPORT void updateLayoutAndStyleIfNeededRecursive();
 
     void incrementVisuallyNonEmptyCharacterCount(const String&);
@@ -433,7 +433,7 @@ public:
     // resize around that view.  Auto-pagination uses the bounds of the actual view that's being printed to determine
     // the edges of the print operation, so the resize is necessary if the enclosing view's bounds depend on the
     // web document's bounds.
-    //
+    // 
     // This is already a problem if the view needs to be a different size because of printer fonts or because of print stylesheets.
     // Mail/Dictionary work around this problem by using the _layoutForPrinting SPI
     // to at least get print stylesheets and printer fonts into play, but since WebKit doesn't know about the page offset or
@@ -452,7 +452,7 @@ public:
     // Coordinate systems:
     //
     // "View"
-    //     Top left is top left of the FrameView/ScrollView/Widget. Size is Widget::boundsRect().size().
+    //     Top left is top left of the FrameView/ScrollView/Widget. Size is Widget::boundsRect().size(). 
     //
     // "TotalContents"
     //    Relative to ScrollView's scrolled contents, including headers and footers. Size is totalContentsSize().
@@ -547,7 +547,7 @@ public:
     void scrollbarStyleChanged(ScrollbarStyle, bool forceUpdate) override;
 
     RenderBox* embeddedContentBox() const;
-
+    
     WEBCORE_EXPORT void setTracksRepaints(bool);
     bool isTrackingRepaints() const { return m_isTrackingRepaints; }
     WEBCORE_EXPORT void resetTrackedRepaints();
@@ -690,7 +690,7 @@ private:
 
     bool scrollContentsFastPath(const IntSize& scrollDelta, const IntRect& rectToScroll, const IntRect& clipRect) final;
     void scrollContentsSlowPath(const IntRect& updateRect) final;
-
+    
     void repaintSlowRepaintObjects();
 
     bool isVerticalDocument() const final;
@@ -785,7 +785,7 @@ private:
 
     IntSize sizeForResizeEvent() const;
     void scheduleResizeEventIfNeeded();
-
+    
     RefPtr<Element> rootElementForCustomScrollbarPartStyle(PseudoId) const;
 
     void adjustScrollbarsForLayout(bool firstLayout);
@@ -836,7 +836,7 @@ private:
     void notifyWidgets(WidgetNotification);
 
     RenderElement* viewportRenderer() const;
-
+    
     void willDoLayout(WeakPtr<RenderElement> layoutRoot);
     void didLayout(WeakPtr<RenderElement> layoutRoot);
 
@@ -891,7 +891,7 @@ private:
     String m_mediaTypeWhenNotPrinting;
 
     Vector<FloatRect> m_trackedRepaintRects;
-
+    
     IntRect* m_cachedWindowClipRect { nullptr };
     Vector<WTF::Function<void ()>> m_postLayoutCallbackQueue;
 

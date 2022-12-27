@@ -115,7 +115,7 @@ void WeakBlock::specializedVisit(ContainerType& container, Visitor& visitor)
         JSValue jsValue = weakImpl->jsValue();
         if (visitor.isMarked(container, jsValue.asCell()))
             continue;
-
+        
         const char* reason = "";
         const char** reasonPtr = nullptr;
         if (UNLIKELY(heapAnalyzer))
@@ -144,7 +144,7 @@ ALWAYS_INLINE void WeakBlock::visitImpl(Visitor& visitor)
 
     // If this WeakBlock doesn't belong to a CellContainer, we won't even be here.
     ASSERT(m_container);
-
+    
     if (m_container.isPreciseAllocation())
         specializedVisit(m_container.preciseAllocation(), visitor);
     else
@@ -162,7 +162,7 @@ void WeakBlock::reap()
 
     // If this WeakBlock doesn't belong to a CellContainer, we won't even be here.
     ASSERT(m_container);
-
+    
     HeapVersion markingVersion = m_container.heap()->objectSpace().markingVersion();
 
     for (size_t i = 0; i < weakImplCount(); ++i) {

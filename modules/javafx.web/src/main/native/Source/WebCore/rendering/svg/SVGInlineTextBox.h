@@ -66,12 +66,12 @@ public:
 
     int offsetForPositionInFragment(const SVGTextFragment&, float position, bool includePartialGlyphs) const;
     FloatRect selectionRectForTextFragment(const SVGTextFragment&, unsigned fragmentStartPosition, unsigned fragmentEndPosition, const RenderStyle&) const;
-
+    
     OptionSet<RenderSVGResourceMode> paintingResourceMode() const { return OptionSet<RenderSVGResourceMode>::fromRaw(m_paintingResourceMode); }
     void setPaintingResourceMode(OptionSet<RenderSVGResourceMode> mode) { m_paintingResourceMode = mode.toRaw(); }
 
     SVGInlineTextBox* nextTextBox() const { return downcast<SVGInlineTextBox>(LegacyInlineTextBox::nextTextBox()); }
-
+    
 private:
     bool isSVGInlineTextBox() const override { return true; }
 

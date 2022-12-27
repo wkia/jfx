@@ -339,9 +339,9 @@ void RenderTableSection::layout()
 
     LayoutStateMaintainer statePusher(*this, locationOffset(), hasTransform() || hasReflection() || style().isFlippedBlocksWritingMode());
     bool paginated = view().frameView().layoutContext().layoutState()->isPaginated();
-
+    
     const Vector<LayoutUnit>& columnPos = table()->columnPositions();
-
+    
     for (unsigned r = 0; r < m_grid.size(); ++r) {
         Row& row = m_grid[r].row;
         unsigned cols = row.size();
@@ -494,7 +494,7 @@ void RenderTableSection::relayoutCellIfFlexed(RenderTableCell& cell, int rowInde
     // bugs. :)
     bool cellChildrenFlex = false;
     bool flexAllChildren = cell.style().logicalHeight().isFixed() || (!table()->style().logicalHeight().isAuto() && rowHeight != cell.logicalHeight());
-
+    
     for (auto& renderer : childrenOfType<RenderBox>(cell)) {
         if (renderer.style().logicalHeight().isPercentOrCalculated()
             && (flexAllChildren || shouldFlexCellChild(cell, renderer))
@@ -514,7 +514,7 @@ void RenderTableSection::relayoutCellIfFlexed(RenderTableCell& cell, int rowInde
             }
         }
     }
-
+    
     if (!cellChildrenFlex)
         return;
 
@@ -524,10 +524,10 @@ void RenderTableSection::relayoutCellIfFlexed(RenderTableCell& cell, int rowInde
     // been resized based off its percentage.
     cell.setOverridingLogicalHeightFromRowHeight(rowHeight);
     cell.layoutIfNeeded();
-
+    
     if (!cell.isBaselineAligned())
         return;
-
+    
     // If the baseline moved, we may have to update the data for our row. Find out the new baseline.
     LayoutUnit baseline = cell.cellBaselinePosition();
     if (baseline > cell.borderAndPaddingBefore())
@@ -554,7 +554,7 @@ void RenderTableSection::layoutRows()
     for (unsigned r = 0; r < totalRows; r++) {
         // Set the row's x/y position and width/height.
         if (RenderTableRow* rowRenderer = m_grid[r].rowRenderer) {
-            // FIXME: the x() position of the row should be table()->hBorderSpacing() so that it can
+            // FIXME: the x() position of the row should be table()->hBorderSpacing() so that it can 
             // report the correct offsetLeft. However, that will require a lot of rebaselining of test results.
             rowRenderer->setLocation(LayoutPoint(0_lu, m_rowPos[r]));
             rowRenderer->setLogicalWidth(logicalWidth());
@@ -897,7 +897,7 @@ void RenderTableSection::paint(PaintInfo& paintInfo, const LayoutPoint& paintOff
     // avoid crashing on bugs that cause us to paint with dirty layout
     if (needsLayout())
         return;
-
+    
     unsigned totalRows = m_grid.size();
     unsigned totalCols = table()->columns().size();
 
@@ -982,7 +982,7 @@ LayoutRect RenderTableSection::logicalRectForWritingModeAndDirection(const Layou
 
 CellSpan RenderTableSection::dirtiedRows(const LayoutRect& damageRect) const
 {
-    if (m_forceSlowPaintPathWithOverflowingCell)
+    if (m_forceSlowPaintPathWithOverflowingCell) 
         return fullTableRowSpan();
 
     CellSpan coveredRows = spannedRows(damageRect, IncludeAllIntersectingCells);
@@ -999,7 +999,7 @@ CellSpan RenderTableSection::dirtiedRows(const LayoutRect& damageRect) const
 
 CellSpan RenderTableSection::dirtiedColumns(const LayoutRect& damageRect) const
 {
-    if (m_forceSlowPaintPathWithOverflowingCell)
+    if (m_forceSlowPaintPathWithOverflowingCell) 
         return fullTableColumnSpan();
 
     CellSpan coveredColumns = spannedColumns(damageRect, IncludeAllIntersectingCells);
@@ -1137,11 +1137,11 @@ void RenderTableSection::paintRowGroupBorderIfRequired(const PaintInfo& paintInf
 
     switch (borderSide) {
     case BoxSide::Top:
-        paintRowGroupBorder(paintInfo, antialias, LayoutRect(paintOffset.x() + offsetLeftForRowGroupBorder(cell, rowGroupRect, row), rowGroupRect.y(),
+        paintRowGroupBorder(paintInfo, antialias, LayoutRect(paintOffset.x() + offsetLeftForRowGroupBorder(cell, rowGroupRect, row), rowGroupRect.y(), 
             horizontalRowGroupBorderWidth(cell, rowGroupRect, row, column), LayoutUnit(style.borderTop().width())), BoxSide::Top, CSSPropertyBorderTopColor, style.borderTopStyle(), table()->style().borderTopStyle());
         break;
     case BoxSide::Bottom:
-        paintRowGroupBorder(paintInfo, antialias, LayoutRect(paintOffset.x() + offsetLeftForRowGroupBorder(cell, rowGroupRect, row), rowGroupRect.y() + rowGroupRect.height(),
+        paintRowGroupBorder(paintInfo, antialias, LayoutRect(paintOffset.x() + offsetLeftForRowGroupBorder(cell, rowGroupRect, row), rowGroupRect.y() + rowGroupRect.height(), 
             horizontalRowGroupBorderWidth(cell, rowGroupRect, row, column), LayoutUnit(style.borderBottom().width())), BoxSide::Bottom, CSSPropertyBorderBottomColor, style.borderBottomStyle(), table()->style().borderBottomStyle());
         break;
     case BoxSide::Left:
@@ -1218,7 +1218,7 @@ void RenderTableSection::paintObject(PaintInfo& paintInfo, const LayoutPoint& pa
                         }
                         if ((row > dirtiedRows.start && primaryCellAt(row - 1, col) == cell) || (col > dirtiedColumns.start && primaryCellAt(row, col - 1) == cell))
                             continue;
-
+                        
                         // If we had a run of null cells paint their corresponding section of the row group's border if necessary. Note that
                         // this will only happen once within a row as the null cells will always be clustered together on one end of the row.
                         if (shouldPaintRowGroupBorder) {
@@ -1375,7 +1375,7 @@ unsigned RenderTableSection::numColumns() const
 {
     ASSERT(!m_needsCellRecalc);
     unsigned result = 0;
-
+    
     for (unsigned r = 0; r < m_grid.size(); ++r) {
         for (unsigned c = result; c < table()->numEffCols(); ++c) {
             const CellStruct& cell = cellAt(r, c);
@@ -1383,7 +1383,7 @@ unsigned RenderTableSection::numColumns() const
                 result = c;
         }
     }
-
+    
     return result + 1;
 }
 
@@ -1523,7 +1523,7 @@ void RenderTableSection::removeCachedCollapsedBorders(const RenderTableCell& cel
 {
     if (!table()->collapseBorders())
         return;
-
+    
     for (int side = CBSBefore; side <= CBSEnd; ++side)
         m_cellsCollapsedBorders.remove(std::make_pair(&cell, side));
 }

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -102,7 +102,7 @@ MarkedBlock::Handle* BlockDirectory::findBlockForAllocation(LocalAllocator& allo
         allocator.m_allocationCursor = (m_bits.canAllocateButNotEmpty() | m_bits.empty()).findBit(allocator.m_allocationCursor, true);
         if (allocator.m_allocationCursor >= m_blocks.size())
             return nullptr;
-
+        
         unsigned blockIndex = allocator.m_allocationCursor++;
         MarkedBlock::Handle* result = m_blocks[blockIndex];
         setIsCanAllocateButNotEmpty(NoLockingNecessary, blockIndex, false);
@@ -113,13 +113,13 @@ MarkedBlock::Handle* BlockDirectory::findBlockForAllocation(LocalAllocator& allo
 MarkedBlock::Handle* BlockDirectory::tryAllocateBlock(Heap& heap)
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     MarkedBlock::Handle* handle = MarkedBlock::tryCreate(heap, subspace()->alignedMemoryAllocator());
     if (!handle)
         return nullptr;
-
+    
     markedSpace().didAddBlock(handle);
-
+    
     return handle;
 }
 
@@ -134,7 +134,7 @@ void BlockDirectory::addBlock(MarkedBlock::Handle* block)
         if (m_blocks.capacity() != oldCapacity) {
             ASSERT(m_bits.numBits() == oldCapacity);
             ASSERT(m_blocks.capacity() > oldCapacity);
-
+            
             Locker locker { m_bitvectorLock };
             subspace()->didResizeBits(m_blocks.capacity());
             m_bits.resize(m_blocks.capacity());
@@ -144,7 +144,7 @@ void BlockDirectory::addBlock(MarkedBlock::Handle* block)
         ASSERT(!m_blocks[index]);
         m_blocks[index] = block;
     }
-
+    
     forEachBitVector(
         NoLockingNecessary,
         [&](auto vectorRef) {
@@ -153,7 +153,7 @@ void BlockDirectory::addBlock(MarkedBlock::Handle* block)
 
     // This is the point at which the block learns of its cellSize() and attributes().
     block->didAddToDirectory(this, index);
-
+    
     setIsLive(NoLockingNecessary, index, true);
     setIsEmpty(NoLockingNecessary, index, true);
 }
@@ -162,12 +162,12 @@ void BlockDirectory::removeBlock(MarkedBlock::Handle* block, WillDeleteBlock wil
 {
     ASSERT(block->directory() == this);
     ASSERT(m_blocks[block->index()] == block);
-
+    
     subspace()->didRemoveBlock(block->index());
-
+    
     m_blocks[block->index()] = nullptr;
     m_freeBlockIndices.append(block->index());
-
+    
     forEachBitVector(
         Locker { m_bitvectorLock },
         [&](auto vectorRef) {
@@ -194,10 +194,10 @@ void BlockDirectory::prepareForAllocation()
         [&] (LocalAllocator* allocator) {
             allocator->prepareForAllocation();
         });
-
+    
     m_unsweptCursor = 0;
     m_emptyCursor = 0;
-
+    
     m_bits.eden().clearAll();
 
     if (UNLIKELY(Options::useImmortalObjects())) {
@@ -211,7 +211,7 @@ void BlockDirectory::stopAllocatingForGood()
 {
     if (false)
         dataLog(RawPointer(this), ": BlockDirectory::stopAllocatingForGood!\n");
-
+    
     m_localAllocators.forEach(
         [&] (LocalAllocator* allocator) {
             allocator->stopAllocatingForGood();
@@ -250,11 +250,11 @@ void BlockDirectory::beginMarkingForFullCollection()
 void BlockDirectory::endMarking()
 {
     m_bits.allocated().clearAll();
-
+    
     // It's surprising and frustrating to comprehend, but the end-of-marking flip does not need to
     // know what kind of collection it is. That knowledge is already encoded in the m_markingXYZ
     // vectors.
-
+    
     m_bits.empty() = m_bits.live() & ~m_bits.markingNotEmpty();
     m_bits.canAllocateButNotEmpty() = m_bits.live() & m_bits.markingNotEmpty() & ~m_bits.markingRetired();
 
@@ -266,7 +266,7 @@ void BlockDirectory::endMarking()
         // happen here.
         m_bits.destructible() = m_bits.live();
     }
-
+    
     if (false) {
         dataLog("Bits for ", m_cellSize, ", ", m_attributes, " after endMarking:\n");
         dumpBits(WTF::dataFile());
@@ -312,10 +312,10 @@ void BlockDirectory::assertNoUnswept()
 {
     if (!ASSERT_ENABLED)
         return;
-
+    
     if (m_bits.unswept().isEmpty())
         return;
-
+    
     dataLog("Assertion failed: unswept not empty in ", *this, ".\n");
     dumpBits();
     ASSERT_NOT_REACHED();
@@ -329,7 +329,7 @@ RefPtr<SharedTask<MarkedBlock::Handle*()>> BlockDirectory::parallelNotEmptyBlock
             : m_directory(directory)
         {
         }
-
+        
         MarkedBlock::Handle* run() final
         {
             if (m_done)
@@ -342,14 +342,14 @@ RefPtr<SharedTask<MarkedBlock::Handle*()>> BlockDirectory::parallelNotEmptyBlock
             }
             return m_directory.m_blocks[m_index++];
         }
-
+        
     private:
         BlockDirectory& m_directory WTF_GUARDED_BY_LOCK(m_lock);
         size_t m_index WTF_GUARDED_BY_LOCK(m_lock) { 0 };
         Lock m_lock;
         bool m_done { false };
     };
-
+    
     return adoptRef(new Task(*this));
 }
 
@@ -368,7 +368,7 @@ void BlockDirectory::dumpBits(PrintStream& out)
             unsigned length = strlen(name);
             maxNameLength = std::max(maxNameLength, length);
         });
-
+    
     forEachBitVectorWithName(
         NoLockingNecessary,
         [&](auto vectorRef, const char* name) {

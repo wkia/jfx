@@ -40,7 +40,7 @@ public:
     String fileTextValue() const;
 
     HTMLInputElement& inputElement() const;
-
+    
 private:
     void element() const = delete;
 
@@ -54,7 +54,7 @@ private:
     void paintObject(PaintInfo&, const LayoutPoint&) override;
 
     int maxFilenameWidth() const;
-
+    
     VisiblePosition positionForPoint(const LayoutPoint&, const RenderFragmentContainer*) override;
 
     HTMLInputElement* uploadButton() const;

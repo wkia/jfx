@@ -82,9 +82,9 @@ class BytecodeLivenessAnalysis : private BytecodeLivenessPropagation {
 public:
     friend class BytecodeLivenessPropagation;
     BytecodeLivenessAnalysis(CodeBlock*);
-
+    
     FastBitVector getLivenessInfoAtInstruction(CodeBlock* codeBlock, BytecodeIndex bytecodeIndex) { return BytecodeLivenessPropagation::getLivenessInfoAtInstruction(codeBlock, codeBlock->instructions(), m_graph, bytecodeIndex); }
-
+    
     std::unique_ptr<FullBytecodeLiveness> computeFullLiveness(CodeBlock*);
 
     BytecodeGraph& graph() { return m_graph; }

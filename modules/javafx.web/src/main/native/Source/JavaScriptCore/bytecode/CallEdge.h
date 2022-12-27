@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -33,19 +33,19 @@ class CallEdge {
 public:
     CallEdge();
     CallEdge(CallVariant, uint32_t);
-
+    
     bool operator!() const { return !m_callee; }
-
+    
     CallVariant callee() const { return m_callee; }
     uint32_t count() const { return m_count; }
-
+    
     CallEdge despecifiedClosure() const
     {
         return CallEdge(m_callee.despecifiedClosure(), m_count);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     CallVariant m_callee;
     uint32_t m_count;

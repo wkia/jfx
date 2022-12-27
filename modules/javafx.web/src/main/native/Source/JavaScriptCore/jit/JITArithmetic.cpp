@@ -151,7 +151,7 @@ void JIT::emit_op_unsigned(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpUnsigned>();
     VirtualRegister result = bytecode.m_dst;
     VirtualRegister op1 = bytecode.m_operand;
-
+    
     emitGetVirtualRegister(op1, regT0);
     emitJumpSlowCaseIfNotInt(regT0);
     addSlowCase(branch32(LessThan, regT0, TrustedImm32(0)));
@@ -492,7 +492,7 @@ void JIT::emit_compareAndJump(const Instruction* instruction, RelationalConditio
         addSlowCase(failures);
         addJump(branch32(condition, regT0, Imm32(asString(getConstantOperand(op2))->tryGetValue()[0])), target);
         return;
-    }
+    } 
     if (isOperandConstantInt(op1)) {
         emitLoad(op2, regT3, regT2);
         notInt32Op2.append(branchIfNotInt32(regT3));
@@ -994,9 +994,9 @@ void JIT::emitMathICFast(JITBinaryMathIC<Generator>* mathIC, const Instruction* 
     RELEASE_ASSERT(!leftOperand.isConst() || !rightOperand.isConst());
 
     mathIC->m_generator = Generator(leftOperand, rightOperand, resultRegs, leftRegs, rightRegs, fpRegT0, fpRegT1, scratchGPR);
-
+    
     ASSERT(!(Generator::isLeftOperandValidConstant(leftOperand) && Generator::isRightOperandValidConstant(rightOperand)));
-
+    
     if (!Generator::isLeftOperandValidConstant(leftOperand))
         emitGetVirtualRegister(op1, leftRegs);
     if (!Generator::isRightOperandValidConstant(rightOperand))
@@ -1099,7 +1099,7 @@ void JIT::emitMathICSlow(JITBinaryMathIC<Generator>* mathIC, const Instruction* 
     JSValueRegs rightRegs = JSValueRegs(regT3, regT2);
     JSValueRegs resultRegs = leftRegs;
 #endif
-
+    
     SnippetOperand leftOperand(bytecode.m_operandTypes.first());
     SnippetOperand rightOperand(bytecode.m_operandTypes.second());
 

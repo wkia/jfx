@@ -124,7 +124,7 @@ public:
     bool requiresBalancing() const;
 
     LayoutPoint columnTranslationForOffset(const LayoutUnit&) const;
-
+    
     void paintColumnRules(PaintInfo&, const LayoutPoint& paintOffset) override;
 
     enum ColumnHitTestTranslationMode {
@@ -134,7 +134,7 @@ public:
     LayoutPoint translateFragmentPointToFragmentedFlow(const LayoutPoint & logicalPoint, ColumnHitTestTranslationMode = DoNotClampHitTestTranslationToColumns) const;
 
     void updateHitTestResult(HitTestResult&, const LayoutPoint&) override;
-
+    
     LayoutRect columnRectAt(unsigned index) const;
     unsigned columnCount() const;
 
@@ -142,7 +142,7 @@ public:
 
 private:
     void addOverflowFromChildren() override;
-
+    
     bool isRenderMultiColumnSet() const override { return true; }
     void layout() override;
 

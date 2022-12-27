@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -45,9 +45,9 @@ void JITToDFGDeferredCompilationCallback::compilationDidBecomeReadyAsynchronousl
 {
     ASSERT_UNUSED(profiledDFGCodeBlock, !profiledDFGCodeBlock);
     ASSERT(codeBlock->alternative()->jitType() == JITType::BaselineJIT);
-
+    
     dataLogLnIf(Options::verboseOSR(), "Optimizing compilation of ", *codeBlock, " did become ready.");
-
+    
     codeBlock->alternative()->forceOptimizationSlowPathConcurrently();
 }
 
@@ -56,12 +56,12 @@ void JITToDFGDeferredCompilationCallback::compilationDidComplete(
 {
     ASSERT(!profiledDFGCodeBlock);
     ASSERT(codeBlock->alternative()->jitType() == JITType::BaselineJIT);
-
+    
     dataLogLnIf(Options::verboseOSR(), "Optimizing compilation of ", *codeBlock, " result: ", result);
-
+    
     if (result == CompilationSuccessful)
         codeBlock->ownerExecutable()->installCode(codeBlock);
-
+    
     codeBlock->alternative()->setOptimizationThresholdBasedOnCompilationResult(result);
 
     DeferredCompilationCallback::compilationDidComplete(codeBlock, profiledDFGCodeBlock, result);

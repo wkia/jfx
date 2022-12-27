@@ -135,7 +135,7 @@ public:
     DateComponentsType dateType() const;
 
     HTMLElement* containerElement() const;
-
+    
     RefPtr<TextControlInnerTextElement> innerTextElement() const final;
     RenderStyle createInnerTextStyle(const RenderStyle&) final;
 

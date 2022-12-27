@@ -47,10 +47,10 @@ void JITBitAndGenerator::generateFastPath(CCallHelpers& jit)
     if (m_leftOperand.isConstInt32() || m_rightOperand.isConstInt32()) {
         JSValueRegs var = m_leftOperand.isConstInt32() ? m_right : m_left;
         SnippetOperand& constOpr = m_leftOperand.isConstInt32() ? m_leftOperand : m_rightOperand;
-
+        
         // Try to do intVar & intConstant.
         m_slowPathJumpList.append(jit.branchIfNotInt32(var));
-
+        
         jit.moveValueRegs(var, m_result);
         if (constOpr.asConstInt32() != static_cast<int32_t>(0xffffffff)) {
 #if USE(JSVALUE64)
@@ -64,7 +64,7 @@ void JITBitAndGenerator::generateFastPath(CCallHelpers& jit)
 
     } else {
         ASSERT(!m_leftOperand.isConstInt32() && !m_rightOperand.isConstInt32());
-
+        
         // Try to do intVar & intVar.
 #if USE(JSVALUE64)
         jit.move(m_left.payloadGPR(), m_scratchGPR);

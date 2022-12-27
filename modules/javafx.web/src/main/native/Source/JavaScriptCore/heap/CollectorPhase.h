@@ -39,24 +39,24 @@ namespace JSC {
 enum class CollectorPhase : uint8_t {
     // We use this phase when the collector is not running at all. After this state is Begin.
     NotRunning,
-
+    
     // This is everything from when the collector begins to when it first yields to the mutator for
     // marking. After this is Fixpoint.
     Begin,
-
+    
     // This means that we should try to do some progress with the world stopped. This usually means
     // doing an iteration of MarkingConstraintSet::executeConvergence, but it could also mean marking
     // with the world stopped. After this is either Concurrent or End.
     Fixpoint,
-
+    
     // In this state the collector is relying on the parallel helpers and incremental mutator work to
     // make progress. After this is Reloop, once marking stalls.
     Concurrent,
-
+        
     // We did some concurrent marking and now we ran out of work. This phase prepares the GC for another
     // Fixpoint. After this is Fixpoint.
     Reloop,
-
+    
     // The collector is trying to finish up. After this state is NotRunning.
     End
 };

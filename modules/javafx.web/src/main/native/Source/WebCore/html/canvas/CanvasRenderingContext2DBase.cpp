@@ -265,7 +265,7 @@ void CanvasRenderingContext2DBase::reset()
     m_stateStack.first() = State();
     m_path.clear();
     m_unrealizedSaveCount = 0;
-
+    
     m_recordingContext = nullptr;
 }
 
@@ -553,7 +553,7 @@ void CanvasRenderingContext2DBase::setLineCap(const String& stringValue)
         cap = CanvasLineCap::Square;
     else
         return;
-
+    
     setLineCap(cap);
 }
 
@@ -1060,7 +1060,7 @@ void CanvasRenderingContext2DBase::fillInternal(const Path& path, CanvasFillRule
         repaintEntireCanvas = true;
     } else
         c->fillPath(path);
-
+    
     if (isEntireBackingStoreDirty())
         didDraw(std::nullopt);
     else if (repaintEntireCanvas)
@@ -1133,7 +1133,7 @@ void CanvasRenderingContext2DBase::beginCompositeLayer()
 void CanvasRenderingContext2DBase::endCompositeLayer()
 {
 #if !USE(CAIRO)
-    drawingContext()->endTransparencyLayer();
+    drawingContext()->endTransparencyLayer();    
 #endif
 }
 
@@ -1999,21 +1999,21 @@ ExceptionOr<RefPtr<CanvasPattern>> CanvasRenderingContext2DBase::createPattern(C
 
     if (!copiedImage)
         return Exception { InvalidStateError };
-
+    
     auto nativeImage = copiedImage->nativeImage();
     if (!nativeImage)
         return Exception { InvalidStateError };
 
     return RefPtr<CanvasPattern> { CanvasPattern::create(nativeImage.releaseNonNull(), repeatX, repeatY, canvas.originClean()) };
 }
-
+    
 #if ENABLE(VIDEO)
 
 ExceptionOr<RefPtr<CanvasPattern>> CanvasRenderingContext2DBase::createPattern(HTMLVideoElement& videoElement, bool repeatX, bool repeatY)
 {
     if (videoElement.readyState() < HTMLMediaElement::HAVE_CURRENT_DATA)
         return nullptr;
-
+    
     checkOrigin(&videoElement);
     bool originClean = canvasBase().originClean();
 
@@ -2028,7 +2028,7 @@ ExceptionOr<RefPtr<CanvasPattern>> CanvasRenderingContext2DBase::createPattern(H
         return nullptr;
 
     videoElement.paintCurrentFrameInContext(imageBuffer->context(), FloatRect(FloatPoint(), size(videoElement)));
-
+    
     return RefPtr<CanvasPattern> { CanvasPattern::create(ImageBuffer::sinkIntoNativeImage(WTFMove(imageBuffer)).releaseNonNull(), repeatX, repeatY, originClean) };
 }
 
@@ -2186,7 +2186,7 @@ ExceptionOr<Ref<ImageData>> CanvasRenderingContext2DBase::getImageData(int sx, i
     if (sw < 0) {
         sx += sw;
         sw = -sw;
-    }
+    }    
     if (sh < 0) {
         sy += sh;
         sh = -sh;
@@ -2356,8 +2356,6 @@ bool CanvasRenderingContext2DBase::canDrawText(double x, double y, bool fill, st
 {
     if (!fontProxy()->realized())
         return false;
-
-    ScriptDisallowedScope::InMainThread scriptDisallowedScope;
 
     auto* c = drawingContext();
     if (!c)

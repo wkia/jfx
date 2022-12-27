@@ -37,7 +37,7 @@ public:
     {
         m_heap.m_mutatorState = MutatorState::Sweeping;
     }
-
+    
     ~SweepingScope()
     {
         m_heap.m_mutatorState = m_oldState;

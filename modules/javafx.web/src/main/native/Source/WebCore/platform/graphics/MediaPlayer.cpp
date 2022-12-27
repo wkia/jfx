@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -81,12 +81,7 @@
 
 #if PLATFORM(WIN) && USE(AVFOUNDATION) && !USE(GSTREAMER)
 #include "MediaPlayerPrivateAVFoundationCF.h"
-#endif // USE(AVFOUNDATION)
-
-#if PLATFORM(JAVA)
-#include "MediaPlayerPrivateJava.h"
-#define PlatformMediaEngineClassName MediaPlayerPrivate
-#endif  // PLATFORM(JAVA)
+#endif
 
 #if USE(EXTERNAL_HOLEPUNCH)
 #include "MediaPlayerPrivateHolePunch.h"
@@ -348,7 +343,7 @@ static const MediaPlayerFactory* bestMediaEngineForSupportParameters(const Media
         return nullptr;
 
     // 4.8.10.3 MIME types - In the absence of a specification to the contrary, the MIME type "application/octet-stream"
-    // when used with parameters, e.g. "application/octet-stream;codecs=theora", is a type that the user agent knows
+    // when used with parameters, e.g. "application/octet-stream;codecs=theora", is a type that the user agent knows 
     // it cannot render.
     if (parameters.type.containerType() == applicationOctetStream()) {
         if (!parameters.type.codecs().isEmpty())
@@ -384,7 +379,7 @@ const MediaPlayerFactory* MediaPlayer::nextMediaEngine(const MediaPlayerFactory*
     if (engines.isEmpty())
         return nullptr;
 
-    if (!current)
+    if (!current) 
         return engines.first().get();
 
     auto currentIndex = engines.findMatching([current] (auto& engine) {
@@ -543,7 +538,7 @@ void MediaPlayer::reloadAndResumePlaybackIfNeeded()
 
 void MediaPlayer::loadWithNextMediaEngine(const MediaPlayerFactory* current)
 {
-#if ENABLE(MEDIA_SOURCE)
+#if ENABLE(MEDIA_SOURCE) 
 #define MEDIASOURCE m_mediaSource
 #else
 #define MEDIASOURCE 0
@@ -632,7 +627,7 @@ void MediaPlayer::prepareForRendering()
 void MediaPlayer::cancelLoad()
 {
     m_private->cancelLoad();
-}
+}    
 
 void MediaPlayer::prepareToPlay()
 {
@@ -679,7 +674,7 @@ void MediaPlayer::keyAdded()
 }
 
 #endif
-
+    
 #if ENABLE(ENCRYPTED_MEDIA)
 
 void MediaPlayer::cdmInstanceAttached(CDMInstance& instance)
@@ -804,7 +799,7 @@ PlatformLayer* MediaPlayer::platformLayer() const
 {
     return m_private->platformLayer();
 }
-
+    
 #if ENABLE(VIDEO_PRESENTATION_MODE)
 
 RetainPtr<PlatformLayer> MediaPlayer::createVideoFullscreenLayer()
@@ -1002,7 +997,7 @@ void MediaPlayer::didLoadingProgress(DidLoadingProgressCompletionHandler&& callb
 }
 
 void MediaPlayer::setSize(const IntSize& size)
-{
+{ 
     m_size = size;
     m_private->setSize(size);
 }
@@ -1063,7 +1058,7 @@ RefPtr<NativeImage> MediaPlayer::nativeImageForCurrentTime()
 
 MediaPlayer::SupportsType MediaPlayer::supportsType(const MediaEngineSupportParameters& parameters)
 {
-    // 4.8.10.3 MIME types - The canPlayType(type) method must return the empty string if type is a type that the
+    // 4.8.10.3 MIME types - The canPlayType(type) method must return the empty string if type is a type that the 
     // user agent knows it cannot render or is the type "application/octet-stream"
     AtomString containerType = parameters.type.containerType();
     if (containerType == applicationOctetStream())
@@ -1087,7 +1082,7 @@ void MediaPlayer::getSupportedTypes(HashSet<String, ASCIICaseInsensitiveHash>& t
         engine->getSupportedTypes(engineTypes);
         types.add(engineTypes.begin(), engineTypes.end());
     }
-}
+} 
 
 bool MediaPlayer::isAvailable()
 {
@@ -1247,7 +1242,7 @@ static void addToHash(HashSet<T>& toHash, HashSet<T>&& fromHash)
     else
         toHash.add(fromHash.begin(), fromHash.end());
 }
-
+    
 HashSet<SecurityOriginData> MediaPlayer::originsInMediaCache(const String& path)
 {
     HashSet<SecurityOriginData> origins;
@@ -1557,7 +1552,7 @@ String MediaPlayer::languageOfPrimaryAudioTrack() const
 {
     if (!m_private)
         return emptyString();
-
+    
     return m_private->languageOfPrimaryAudioTrack();
 }
 
@@ -1573,7 +1568,7 @@ unsigned long long MediaPlayer::fileSize() const
 {
     if (!m_private)
         return 0;
-
+    
     return m_private->fileSize();
 }
 

@@ -52,7 +52,7 @@ bool KHRParallelShaderCompile::supported(const WebGLRenderingContextBase& contex
 {
     return context.graphicsContextGL()->getExtensions().supports("GL_KHR_parallel_shader_compile"_s);
 }
-
+    
 } // namespace WebCore
 
 #endif // ENABLE(WEBGL)

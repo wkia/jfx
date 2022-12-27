@@ -90,5 +90,5 @@ HTMLFormElement* HTMLLegendElement::form() const
         return nullptr;
     return downcast<HTMLFieldSetElement>(*fieldset).form();
 }
-
+    
 } // namespace

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 
@@ -358,7 +358,7 @@ static std::pair<FloatPoint, FloatPoint> startAndEndPointsForCorner(const FloatP
 {
     FloatPoint startPoint;
     FloatPoint endPoint;
-
+    
     FloatSize fromEdgeVector = *fromEdge.second - *fromEdge.first;
     FloatSize toEdgeVector = *toEdge.second - *toEdge.first;
 
@@ -463,7 +463,7 @@ static FloatRoundedRect::Radii adjustedtRadiiForHuggingCurve(const FloatSize& to
     radii.setBottomLeft(adjustedRadius(bottomLeftRadius));
     return radii;
 }
-
+    
 static std::optional<FloatRect> rectFromPolygon(const FloatPointGraph::Polygon& poly)
 {
     if (poly.size() != 4)

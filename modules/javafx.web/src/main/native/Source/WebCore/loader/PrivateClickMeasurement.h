@@ -64,12 +64,12 @@ public:
             : id { id }
         {
         }
-
+        
         bool isValid() const
         {
             return id <= MaxEntropy;
         }
-
+        
         uint32_t id { 0 };
     };
 
@@ -110,7 +110,7 @@ public:
         {
             return sourceSite.registrableDomain.hash();
         }
-
+        
         static bool equal(const SourceSite& a, const SourceSite& b)
         {
             return a == b;
@@ -156,7 +156,7 @@ public:
         {
             return destinationSite.registrableDomain.hash();
         }
-
+        
         static bool equal(const AttributionDestinationSite& a, const AttributionDestinationSite& b)
         {
             return a == b;
@@ -172,15 +172,15 @@ public:
         : value { value }
         {
         }
-
+        
         PriorityValue value;
     };
-
+    
     struct AttributionTriggerData {
         static constexpr uint32_t MaxEntropy = 15;
 
         enum class WasSent : bool { No, Yes };
-
+        
         AttributionTriggerData(uint32_t data, Priority priority, WasSent wasSent = WasSent::No)
             : data { data }
             , priority { priority.value }
@@ -192,7 +192,7 @@ public:
         {
             return data <= MaxEntropy && priority <= Priority::MaxEntropy;
         }
-
+        
         uint32_t data;
         PriorityValue priority;
         WasSent wasSent = WasSent::No;
@@ -441,27 +441,27 @@ std::optional<PrivateClickMeasurement> PrivateClickMeasurement::decode(Decoder& 
     decoder >> sourceID;
     if (!sourceID)
         return std::nullopt;
-
+    
     std::optional<RegistrableDomain> sourceRegistrableDomain;
     decoder >> sourceRegistrableDomain;
     if (!sourceRegistrableDomain)
         return std::nullopt;
-
+    
     std::optional<RegistrableDomain> destinationRegistrableDomain;
     decoder >> destinationRegistrableDomain;
     if (!destinationRegistrableDomain)
         return std::nullopt;
-
+    
     std::optional<String> sourceDescription;
     decoder >> sourceDescription;
     if (!sourceDescription)
         return std::nullopt;
-
+    
     std::optional<String> purchaser;
     decoder >> purchaser;
     if (!purchaser)
         return std::nullopt;
-
+    
     std::optional<WallTime> timeOfAdClick;
     decoder >> timeOfAdClick;
     if (!timeOfAdClick)
@@ -481,12 +481,12 @@ std::optional<PrivateClickMeasurement> PrivateClickMeasurement::decode(Decoder& 
     decoder >> attributionTriggerData;
     if (!attributionTriggerData)
         return std::nullopt;
-
+    
     std::optional<AttributionTimeToSendData> timesToSend;
     decoder >> timesToSend;
     if (!timesToSend)
         return std::nullopt;
-
+    
     PrivateClickMeasurement attribution {
         SourceID { WTFMove(*sourceID) },
         SourceSite { WTFMove(*sourceRegistrableDomain) },
@@ -499,7 +499,7 @@ std::optional<PrivateClickMeasurement> PrivateClickMeasurement::decode(Decoder& 
     attribution.m_ephemeralSourceNonce = WTFMove(*ephemeralSourceNonce);
     attribution.m_attributionTriggerData = WTFMove(*attributionTriggerData);
     attribution.m_timesToSend = WTFMove(*timesToSend);
-
+    
     return attribution;
 }
 
@@ -516,7 +516,7 @@ std::optional<PrivateClickMeasurement::EphemeralSourceNonce> PrivateClickMeasure
     decoder >> nonce;
     if (!nonce)
         return std::nullopt;
-
+    
     return EphemeralSourceNonce { WTFMove(*nonce) };
 }
 
@@ -533,17 +533,17 @@ std::optional<PrivateClickMeasurement::AttributionTriggerData> PrivateClickMeasu
     decoder >> data;
     if (!data)
         return std::nullopt;
-
+    
     std::optional<PriorityValue> priority;
     decoder >> priority;
     if (!priority)
         return std::nullopt;
-
+    
     std::optional<WasSent> wasSent;
     decoder >> wasSent;
     if (!wasSent)
         return std::nullopt;
-
+    
     return AttributionTriggerData { WTFMove(*data), Priority { *priority }, *wasSent };
 }
 

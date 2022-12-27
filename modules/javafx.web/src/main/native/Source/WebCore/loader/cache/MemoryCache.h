@@ -48,7 +48,7 @@ class SecurityOrigin;
 
 // This cache holds subresources used by Web pages: images, scripts, stylesheets, etc.
 
-// The cache keeps a flexible but bounded window of dead resources that grows/shrinks
+// The cache keeps a flexible but bounded window of dead resources that grows/shrinks 
 // depending on the live resource load. Here's an example of cache growth over time,
 // with a min dead resource capacity of 25% and a max dead resource capacity of 50%:
 
@@ -75,12 +75,12 @@ public:
             , size(0)
             , liveSize(0)
             , decodedSize(0)
-        {
+        { 
         }
 
         void addResource(CachedResource&);
     };
-
+    
     struct Statistics {
         TypeStatistic images;
         TypeStatistic cssStyleSheets;
@@ -146,7 +146,7 @@ public:
 
     // Function to collect cache statistics for the caches window in the Safari Debug menu.
     WEBCORE_EXPORT Statistics getStatistics();
-
+    
     void resourceAccessed(CachedResource&);
     bool inLiveDecodedResourcesList(CachedResource& resource) const { return m_liveDecodedResources.contains(&resource); }
 
@@ -200,11 +200,11 @@ private:
     // more resources than the cached resource map, since it can also hold "stale" multiple versions of objects that are
     // waiting to die when the clients referencing them go away.
     Vector<std::unique_ptr<LRUList>, 32> m_allResources;
-
+    
     // List just for live resources with decoded data.  Access to this list is based off of painting the resource.
     LRUList m_liveDecodedResources;
-
-    // A URL-based map of all resources that are in the cache (including the freshest version of objects that are currently being
+    
+    // A URL-based map of all resources that are in the cache (including the freshest version of objects that are currently being 
     // referenced by a Web page).
     typedef HashMap<PAL::SessionID, std::unique_ptr<CachedResourceMap>> SessionCachedResourceMap;
     SessionCachedResourceMap m_sessionResources;

@@ -44,7 +44,7 @@ static void copyStackPage(void* dst, void* src, size_t size)
 {
     ASSERT(roundUpToMultipleOf<sizeof(uintptr_t)>(dst) == dst);
     ASSERT(roundUpToMultipleOf<sizeof(uintptr_t)>(src) == src);
-
+    
     uintptr_t* dstPointer = reinterpret_cast<uintptr_t*>(dst);
     uintptr_t* srcPointer = reinterpret_cast<uintptr_t*>(src);
     for (; size; size -= sizeof(uintptr_t))

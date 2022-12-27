@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,7 +37,7 @@ struct Node;
 
 struct NodeOrigin {
     NodeOrigin() { }
-
+    
     NodeOrigin(CodeOrigin semantic, CodeOrigin forExit, bool exitOK)
         : semantic(semantic)
         , forExit(forExit)
@@ -50,12 +50,12 @@ struct NodeOrigin {
         ASSERT(semantic.isSet() == forExit.isSet());
         return semantic.isSet();
     }
-
+    
     NodeOrigin withSemantic(CodeOrigin semantic) const
     {
         if (!isSet())
             return NodeOrigin();
-
+        
         NodeOrigin result = *this;
         if (semantic.isSet())
             result.semantic = semantic;
@@ -66,7 +66,7 @@ struct NodeOrigin {
     {
         if (!isSet())
             return NodeOrigin();
-
+        
         NodeOrigin result = *this;
         if (forExit.isSet())
             result.forExit = forExit;
@@ -90,14 +90,14 @@ struct NodeOrigin {
     {
         return withExitOK(exitOK & std::exchange(canExit, false));
     }
-
+    
     NodeOrigin withWasHoisted() const
     {
         NodeOrigin result = *this;
         result.wasHoisted = true;
         return result;
     }
-
+    
     NodeOrigin forInsertingAfter(Graph& graph, Node* node) const
     {
         NodeOrigin result = *this;

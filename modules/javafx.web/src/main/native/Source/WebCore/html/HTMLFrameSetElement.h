@@ -46,7 +46,7 @@ public:
     const Length* colLengths() const { return m_colLengths.get(); }
 
     static RefPtr<HTMLFrameSetElement> findContaining(Element* descendant);
-
+    
     Vector<AtomString> supportedPropertyNames() const;
     WindowProxy* namedItem(const AtomString&);
 
@@ -60,7 +60,7 @@ private:
     void willAttachRenderers() final;
     bool rendererIsNeeded(const RenderStyle&) final;
     RenderPtr<RenderElement> createElementRenderer(RenderStyle&&, const RenderTreePosition&) final;
-
+    
     void defaultEventHandler(Event&) final;
 
     void willRecalcStyle(Style::Change) final;
@@ -73,10 +73,10 @@ private:
 
     int m_totalRows;
     int m_totalCols;
-
+    
     int m_border;
     bool m_borderSet;
-
+    
     bool m_borderColorSet;
 
     bool m_frameborder;

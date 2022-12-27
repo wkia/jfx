@@ -741,7 +741,7 @@ bool XSSAuditor::isLikelySafeResource(const String& url)
     // request, ignoring scheme and port considerations. If the resource has a
     // query string, we're more suspicious, however, because that's pretty rare
     // and the attacker might be able to trick a server-side script into doing
-    // something dangerous with the query string.
+    // something dangerous with the query string.  
     if (m_documentURL.host().isEmpty())
         return false;
 

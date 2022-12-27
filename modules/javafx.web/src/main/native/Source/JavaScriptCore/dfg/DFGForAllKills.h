@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -54,9 +54,9 @@ void forAllKilledOperands(Graph& graph, Node* nodeBefore, Node* nodeAfter, const
         graph.forAllLiveInBytecode(before, functor);
         return;
     }
-
+    
     CodeOrigin after = nodeAfter->origin.forExit;
-
+    
     Operand alreadyNoted;
     // If we MovHint something that is live at the time, then we kill the old value.
     if (nodeAfter->containsMovHint()) {
@@ -66,10 +66,10 @@ void forAllKilledOperands(Graph& graph, Node* nodeBefore, Node* nodeAfter, const
             alreadyNoted = operand;
         }
     }
-
+    
     if (before == after)
         return;
-
+    
     // It's easier to do this if the inline call frames are the same. This is way faster than the
     // other loop, below.
     auto* beforeInlineCallFrame = before.inlineCallFrame();
@@ -99,7 +99,7 @@ void forAllKilledOperands(Graph& graph, Node* nodeBefore, Node* nodeAfter, const
         FullBytecodeLiveness& fullLiveness = graph.livenessFor(codeBlock);
         const FastBitVector& liveBefore = fullLiveness.getLiveness(before.bytecodeIndex(), LivenessCalculationPoint::BeforeUse);
         const FastBitVector& liveAfter = fullLiveness.getLiveness(after.bytecodeIndex(), LivenessCalculationPoint::BeforeUse);
-
+        
         (liveBefore & ~liveAfter).forEachSetBit(
             [&] (size_t relativeLocal) {
                 functor(remapOperand(beforeInlineCallFrame, virtualRegisterForLocal(relativeLocal)));
@@ -121,7 +121,7 @@ void forAllKilledOperands(Graph& graph, Node* nodeBefore, Node* nodeAfter, const
             functor(operand);
         });
 }
-
+    
 // Tells you all of the nodes that would no longer be live across the node at this nodeIndex.
 template<typename Functor>
 void forAllKilledNodesAtNodeIndex(
@@ -134,7 +134,7 @@ void forAllKilledNodesAtNodeIndex(
 
     ASSERT(nodeIndex);
     Node* node = block->at(nodeIndex);
-
+    
     graph.doToChildren(
         node,
         [&] (Edge edge) {
@@ -178,7 +178,7 @@ void forAllKillsInBlock(
 {
     for (Node* node : combinedLiveness.liveAtTail[block])
         functor(block->size(), node);
-
+    
     LocalOSRAvailabilityCalculator localAvailability(graph);
     localAvailability.beginBlock(block);
     // Start at the second node, because the functor is expected to only inspect nodes from the start of

@@ -274,7 +274,7 @@ void SliderThumbElement::setPositionFromPoint(const LayoutPoint& absolutePoint)
 
     bool isVertical = hasVerticalAppearance(*input);
     bool isLeftToRightDirection = thumbRenderer->style().isLeftToRightDirection();
-
+    
     auto offset = inputRenderer->absoluteToLocal(absolutePoint, UseTransforms);
     auto trackBoundingBox = trackRenderer->localToContainerQuad(FloatRect { { }, trackRenderer->size() }, inputRenderer).enclosingBoundingBox();
 

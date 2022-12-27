@@ -84,7 +84,7 @@ public:
     // The height of the graphics context should be
     // (pageSizeInPixels.height() + 1) * number-of-pages - 1
     WEBCORE_EXPORT static void spoolAllPagesWithBoundaries(Frame&, GraphicsContext&, const FloatSize& pageSizeInPixels);
-
+    
     // By imaging to a width a little wider than the available pixels,
     // thin pages will be scaled down a little, matching the way they
     // print in IE and Camino. This lets them use fewer sheets than they

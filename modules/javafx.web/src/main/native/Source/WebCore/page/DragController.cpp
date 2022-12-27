@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -120,7 +120,7 @@ bool isDraggableLink(const Element& element)
 }
 
 #if ENABLE(DRAG_SUPPORT)
-
+    
 static PlatformMouseEvent createMouseEvent(const DragData& dragData)
 {
     bool shiftKey = false;
@@ -207,7 +207,7 @@ void DragController::dragEnded()
     m_documentUnderMouse = nullptr;
     clearDragCaret();
     removeAllDroppedImagePlaceholders();
-
+    
     client().dragEnded();
 }
 
@@ -433,14 +433,14 @@ DragHandlingMethod DragController::tryDocumentDrag(const DragData& dragData, Opt
         Element* element = elementUnderMouse(m_documentUnderMouse.get(), point);
         if (!element)
             return DragHandlingMethod::None;
-
+        
         HTMLInputElement* elementAsFileInput = asFileInput(*element);
         if (m_fileInputElementUnderMouse != elementAsFileInput) {
             if (m_fileInputElementUnderMouse)
                 m_fileInputElementUnderMouse->setCanReceiveDroppedFiles(false);
             m_fileInputElementUnderMouse = elementAsFileInput;
         }
-
+        
         if (!m_fileInputElementUnderMouse)
             m_page.dragCaretController().setCaretPosition(m_documentUnderMouse->frame()->visiblePositionForPoint(point));
         else
@@ -459,7 +459,7 @@ DragHandlingMethod DragController::tryDocumentDrag(const DragData& dragData, Opt
                 m_numberOfItemsToBeAccepted = 0;
             else
                 m_numberOfItemsToBeAccepted = 1;
-
+            
             if (!m_numberOfItemsToBeAccepted)
                 dragOperation = std::nullopt;
             m_fileInputElementUnderMouse->setCanReceiveDroppedFiles(m_numberOfItemsToBeAccepted);
@@ -477,7 +477,7 @@ DragHandlingMethod DragController::tryDocumentDrag(const DragData& dragData, Opt
 
         return DragHandlingMethod::EditPlainText;
     }
-
+    
     // We are not over an editable region. Make sure we're clearing any prior drag cursor.
     clearDragCaret();
     if (m_fileInputElementUnderMouse)
@@ -709,7 +709,7 @@ static std::optional<DragOperation> defaultOperationForDrag(OptionSet<DragOperat
         return DragOperation::Copy;
     if (sourceOperationMask.contains(DragOperation::Link))
         return DragOperation::Link;
-
+    
     // FIXME: Does IE really return "generic" even if no operations were allowed by the source?
     return DragOperation::Generic;
 }
@@ -1197,9 +1197,9 @@ bool DragController::startDrag(Frame& src, const DragState& state, OptionSet<Dra
             }
 #endif
         }
-
+        
         client().willPerformDragSourceAction(DragSourceAction::Attachment, dragOrigin, dataTransfer);
-
+        
         if (!dragImage) {
             TextIndicatorData textIndicator;
             if (attachmentRenderer)

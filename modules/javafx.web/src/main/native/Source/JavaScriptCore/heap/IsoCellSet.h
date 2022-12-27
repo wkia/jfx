@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,15 +44,15 @@ class IsoCellSet : public PackedRawSentinelNode<IsoCellSet> {
 public:
     IsoCellSet(IsoSubspace& subspace);
     ~IsoCellSet();
-
+    
     bool add(HeapCell* cell); // Returns true if the cell was newly added.
-
+    
     bool remove(HeapCell* cell); // Returns true if the cell was previously present and got removed.
-
+    
     bool contains(HeapCell* cell) const;
-
+    
     JS_EXPORT_PRIVATE Ref<SharedTask<MarkedBlock::Handle*()>> parallelNotEmptyMarkedBlockSource();
-
+    
     // This will have to do a combined search over whatever Subspace::forEachMarkedCell uses and
     // our m_blocksWithBits.
     template<typename Func>
@@ -60,28 +60,28 @@ public:
 
     template<typename Visitor, typename Func>
     Ref<SharedTask<void(Visitor&)>> forEachMarkedCellInParallel(const Func&);
-
+    
     template<typename Func>
     void forEachLiveCell(const Func&);
-
+    
 private:
     friend class IsoSubspace;
-
+    
     Bitmap<MarkedBlock::atomsPerBlock>* addSlow(unsigned blockIndex);
-
+    
     void didResizeBits(unsigned newSize);
     void didRemoveBlock(unsigned blockIndex);
     void sweepToFreeList(MarkedBlock::Handle*);
     void clearLowerTierCell(unsigned);
-
+    
     Bitmap<MarkedBlock::maxNumberOfLowerTierCells> m_lowerTierBits;
 
     IsoSubspace& m_subspace;
-
+    
     // Idea: sweeping to free-list clears bits for those cells that were free-listed. The first time
     // we add a cell in a block, that block gets a free-list. Unless we do something that obviously
     // clears all bits for a block, we keep it set in blocksWithBits.
-
+    
     FastBitVector m_blocksWithBits;
     ConcurrentVector<std::unique_ptr<Bitmap<MarkedBlock::atomsPerBlock>>> m_bits;
 };

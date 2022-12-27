@@ -44,7 +44,7 @@ WebGLExtension::ExtensionName EXTsRGB::getName() const
 {
     return EXTsRGBName;
 }
-
+    
 } // namespace WebCore
 
 #endif // ENABLE(WEBGL)

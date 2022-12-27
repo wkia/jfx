@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -75,7 +75,7 @@ void JITCode::reconstruct(CallFrame* callFrame, CodeBlock* codeBlock, CodeOrigin
 {
     Operands<ValueRecovery> recoveries;
     reconstruct(codeBlock, codeOrigin, streamIndex, recoveries);
-
+    
     result = Operands<std::optional<JSValue>>(OperandsLike, recoveries);
     for (size_t i = result.size(); i--;)
         result[i] = recoveries[i].recover(callFrame);
@@ -201,7 +201,7 @@ void JITCode::setOSREntryBlock(VM& vm, const JSCell* owner, CodeBlock* osrEntryB
 }
 
 void JITCode::clearOSREntryBlockAndResetThresholds(CodeBlock *dfgCodeBlock)
-{
+{ 
     ASSERT(m_osrEntryBlock);
 
     BytecodeIndex osrEntryBytecode = m_osrEntryBlock->jitCode()->ftlForOSREntry()->bytecodeIndex();
@@ -215,12 +215,12 @@ void JITCode::clearOSREntryBlockAndResetThresholds(CodeBlock *dfgCodeBlock)
 void JITCode::validateReferences(const TrackedReferences& trackedReferences)
 {
     common.validateReferences(trackedReferences);
-
+    
     for (OSREntryData& entry : m_osrEntry) {
         for (unsigned i = entry.m_expectedValues.size(); i--;)
             entry.m_expectedValues[i].validateReferences(trackedReferences);
     }
-
+    
     minifiedDFG.validateReferences(trackedReferences);
 }
 

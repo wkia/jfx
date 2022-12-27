@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -153,8 +153,6 @@ private:
     void concatCTM(const AffineTransform&) final;
     void setCTM(const AffineTransform&) final;
     AffineTransform getCTM(GraphicsContext::IncludeDeviceScale) const final;
-#if ENABLE(VIDEO)
-#endif
 
     void beginTransparencyLayer(float opacity) final;
     void endTransparencyLayer() final;
@@ -211,7 +209,7 @@ private:
     void appendStateChangeItem(const GraphicsContextStateChange&, GraphicsContextState::StateChangeFlags);
 
     FloatRect extentFromLocalBounds(const FloatRect&) const;
-
+    
     const AffineTransform& ctm() const;
 
     struct ContextState {
@@ -219,14 +217,14 @@ private:
         FloatRect clipBounds;
         GraphicsContextStateChange stateChange;
         GraphicsContextState lastDrawingState;
-
+        
         ContextState(const GraphicsContextState& state, const AffineTransform& transform, const FloatRect& clip)
             : ctm(transform)
             , clipBounds(clip)
             , lastDrawingState(state)
         {
         }
-
+        
         ContextState cloneForSave() const
         {
             ContextState state(lastDrawingState, ctm, clipBounds);
@@ -247,7 +245,7 @@ private:
         void concatCTM(const AffineTransform&);
         void setCTM(const AffineTransform&);
     };
-
+    
     const ContextState& currentState() const;
     ContextState& currentState();
 

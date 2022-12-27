@@ -82,7 +82,7 @@ void RenderLineBoxList::deleteLineBoxTree()
 void RenderLineBoxList::extractLineBox(LegacyInlineFlowBox* box)
 {
     checkConsistency();
-
+    
     m_lastLineBox = box->prevLineBox();
     if (box == m_firstLineBox)
         m_firstLineBox = 0;
@@ -166,7 +166,7 @@ bool RenderLineBoxList::rangeIntersectsRect(RenderBoxModelObject* renderer, Layo
 
     LayoutUnit physicalExtent = absoluteValue(physicalEnd - physicalStart);
     physicalStart = std::min(physicalStart, physicalEnd);
-
+    
     if (renderer->style().isHorizontalWritingMode()) {
         physicalStart += offset.y();
         if (physicalStart >= rect.maxY() || physicalStart + physicalExtent <= rect.y())
@@ -176,7 +176,7 @@ bool RenderLineBoxList::rangeIntersectsRect(RenderBoxModelObject* renderer, Layo
         if (physicalStart >= rect.maxX() || physicalStart + physicalExtent <= rect.x())
             return false;
     }
-
+    
     return true;
 }
 
@@ -380,7 +380,7 @@ void RenderLineBoxList::dirtyLinesFromChangedChild(RenderBoxModelObject& contain
         if (LegacyRootInlineBox* prevBox = box->prevRootBox())
             prevBox->markDirty();
 
-        // FIXME: We shouldn't need to always dirty the next line. This is only strictly
+        // FIXME: We shouldn't need to always dirty the next line. This is only strictly 
         // necessary some of the time, in situations involving BRs.
         if (LegacyRootInlineBox* nextBox = box->nextRootBox()) {
             nextBox->markDirty();

@@ -29,7 +29,7 @@
 namespace WebCore {
 
 namespace RFC7230 {
-
+    
 bool isTokenCharacter(UChar c)
 {
     return isASCIIAlpha(c) || isASCIIDigit(c)
@@ -118,7 +118,7 @@ static bool isValidValue(StringView value)
     State state = State::OptionalWhitespace;
     size_t commentDepth = 0;
     bool hadNonWhitespace = false;
-
+    
     for (size_t i = 0; i < value.length(); ++i) {
         UChar c = value[i];
         switch (state) {
@@ -141,7 +141,7 @@ static bool isValidValue(StringView value)
                 continue;
             }
             return false;
-
+            
         case State::Token:
             if (isTokenCharacter(c))
                 continue;
@@ -187,7 +187,7 @@ static bool isValidValue(StringView value)
             continue;
         }
     }
-
+    
     switch (state) {
     case State::OptionalWhitespace:
     case State::Token:

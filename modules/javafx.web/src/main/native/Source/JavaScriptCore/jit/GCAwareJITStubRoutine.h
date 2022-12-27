@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -71,14 +71,14 @@ public:
     {
         markRequiredObjectsInternal(visitor);
     }
-
+    
     void deleteFromGC();
 
     void makeGCAware(VM&);
-
+    
 protected:
     void observeZeroRefCount() override;
-
+    
     virtual void markRequiredObjectsInternal(AbstractSlotVisitor&) { }
     virtual void markRequiredObjectsInternal(SlotVisitor&) { }
 
@@ -126,7 +126,7 @@ public:
     MarkingGCAwareJITStubRoutine(
         const MacroAssemblerCodeRef<JITStubRoutinePtrTag>&, VM&, FixedVector<RefPtr<AccessCase>>&&, FixedVector<StructureID>&&, const JSCell* owner, const Vector<JSCell*>&, Bag<CallLinkInfo>&&);
     ~MarkingGCAwareJITStubRoutine() override;
-
+    
 protected:
     template<typename Visitor> void markRequiredObjectsInternalImpl(Visitor&);
     void markRequiredObjectsInternal(AbstractSlotVisitor&) final;
@@ -164,7 +164,7 @@ private:
 // GCAwareJITStubRoutine, or an ObjectMarkingGCAwareJITStubRoutine as
 // appropriate. Generally you only need to pass pointers that will be used
 // after the first call to C++ or JS.
-//
+// 
 // Ref<PolymorphicAccessJITStubRoutine> createICJITStubRoutine(
 //    const MacroAssemblerCodeRef<JITStubRoutinePtrTag>& code,
 //    VM& vm,

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -52,17 +52,17 @@ public:
     {
         assertClear();
     }
-
+    
     void sortFree()
     {
         std::sort(m_free.begin(), m_free.end());
     }
-
+    
     void assertClear()
     {
         if (!ASSERT_ENABLED)
             return;
-
+        
         // For every entry in the used list the use count of the virtual register should be zero, or max, due to it being a preserved local.
         for (size_t i = 0; i < m_used.size(); ++i)
             RELEASE_ASSERT(!m_used[i] || m_used[i] == max());
@@ -118,7 +118,7 @@ public:
     {
         use(child.node());
     }
-
+    
     void useIfHasResult(Edge child)
     {
         if (!child)
@@ -132,7 +132,7 @@ public:
     {
         return m_highWatermark;
     }
-
+    
 #ifndef NDEBUG
     void dump()
     {
@@ -162,10 +162,10 @@ public:
 
 private:
     static uint32_t max() { return std::numeric_limits<uint32_t>::max(); }
-
+    
     // The size of the span of virtual registers that this code block will use.
     unsigned m_highWatermark;
-
+    
     // For every virtual register that has been allocated (either currently alive, or in
     // the free list), we keep a count of the number of remaining uses until it is dead
     // (0, in the case of entries in the free list). Since there is an entry for every

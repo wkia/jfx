@@ -111,7 +111,7 @@ bool HandleSet::isLiveNode(Node* node)
         return false;
     if (node->next()->prev() != node)
         return false;
-
+        
     return true;
 }
 #endif // ENABLE(GC_VALIDATION) || ASSERT_ENABLED

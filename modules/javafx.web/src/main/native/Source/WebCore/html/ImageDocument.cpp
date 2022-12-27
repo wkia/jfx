@@ -19,7 +19,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -179,7 +179,7 @@ void ImageDocument::finishedParsing()
 
     HTMLDocument::finishedParsing();
 }
-
+    
 inline ImageDocument& ImageDocumentParser::document() const
 {
     // Only used during parsing, so document is guaranteed to be non-null.
@@ -209,7 +209,7 @@ ImageDocument::ImageDocument(Frame& frame, const URL& url)
     setCompatibilityMode(DocumentCompatibilityMode::QuirksMode);
     lockCompatibilityMode();
 }
-
+    
 Ref<DocumentParser> ImageDocument::createParser()
 {
     return ImageDocumentParser::create(*this);
@@ -232,7 +232,7 @@ void ImageDocument::createDocumentStructure()
     if (MIMETypeRegistry::isPDFMIMEType(document().loader()->responseMIMEType()))
         body->setInlineStyleProperty(CSSPropertyBackgroundColor, "white");
     rootElement->appendChild(body);
-
+    
     auto imageElement = ImageDocumentElement::create(*this);
     if (m_shouldShrinkImage)
         imageElement->setAttribute(styleAttr, "-webkit-user-select:none; display:block; margin:auto; padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);");
@@ -242,7 +242,7 @@ void ImageDocument::createDocumentStructure()
     imageElement->setSrc(url().string());
     imageElement->cachedImage()->setResponse(loader()->response());
     body->appendChild(imageElement);
-
+    
     if (m_shouldShrinkImage) {
 #if PLATFORM(IOS_FAMILY)
         // Set the viewport to be in device pixels (rather than the default of 980).

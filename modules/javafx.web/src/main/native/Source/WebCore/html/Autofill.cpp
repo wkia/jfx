@@ -173,7 +173,7 @@ AutofillData AutofillData::createFromHTMLFormControlElement(const HTMLFormContro
     auto defaultLabel = [&] () -> AutofillData {
         if (element.autofillMantle() == AutofillMantle::Anchor)
             return { emptyString(), emptyString() };
-
+        
         auto form = element.form();
         if (form && form->autocomplete() == off)
             return { off, emptyString() };
@@ -193,7 +193,7 @@ AutofillData AutofillData::createFromHTMLFormControlElement(const HTMLFormContro
     // 3. If tokens is empty, then jump to the step labeled default.
     if (tokens.isEmpty())
         return defaultLabel();
-
+    
     // 4. Let index be the index of the last token in tokens
     unsigned index = tokens.size() - 1;
 
@@ -208,7 +208,7 @@ AutofillData AutofillData::createFromHTMLFormControlElement(const HTMLFormContro
     auto it = map.find(tokens[index]);
     if (it == map.end())
         return defaultLabel();
-
+    
     auto category = it->value.category;
 
     if (tokens.size() > maxTokensForAutofillFieldCategory(category))

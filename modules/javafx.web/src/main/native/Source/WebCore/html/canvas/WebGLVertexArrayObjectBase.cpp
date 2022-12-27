@@ -48,20 +48,20 @@ void WebGLVertexArrayObjectBase::setElementArrayBuffer(const AbstractLocker& loc
     if (m_boundElementArrayBuffer)
         m_boundElementArrayBuffer->onDetached(locker, context()->graphicsContextGL());
     m_boundElementArrayBuffer = buffer;
-
+    
 }
 
 void WebGLVertexArrayObjectBase::setVertexAttribState(const AbstractLocker& locker, GCGLuint index, GCGLsizei bytesPerElement, GCGLint size, GCGLenum type, GCGLboolean normalized, GCGLsizei stride, GCGLintptr offset, bool isInteger, WebGLBuffer* buffer)
 {
     GCGLsizei validatedStride = stride ? stride : bytesPerElement;
-
+    
     auto& state = m_vertexAttribState[index];
-
+    
     if (buffer)
         buffer->onAttached();
     if (state.bufferBinding)
         state.bufferBinding->onDetached(locker, context()->graphicsContextGL());
-
+    
     state.bufferBinding = buffer;
     state.bytesPerElement = bytesPerElement;
     state.size = size;
@@ -79,12 +79,12 @@ void WebGLVertexArrayObjectBase::unbindBuffer(const AbstractLocker& locker, WebG
         m_boundElementArrayBuffer->onDetached(locker, context()->graphicsContextGL());
         m_boundElementArrayBuffer = nullptr;
     }
-
+    
     for (size_t i = 0; i < m_vertexAttribState.size(); ++i) {
         auto& state = m_vertexAttribState[i];
         if (state.bufferBinding == &buffer) {
             buffer.onDetached(locker, context()->graphicsContextGL());
-
+            
 #if !USE(ANGLE)
             if (!i && !context()->isGLES2Compliant()) {
                 state.bufferBinding = context()->m_vertexAttrib0Buffer;

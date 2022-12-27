@@ -42,10 +42,10 @@ ALWAYS_INLINE void SlotVisitor::appendUnbarriered(JSCell* cell)
 {
     // This needs to be written in a very specific way to ensure that it gets inlined
     // properly. In particular, it appears that using templates here breaks ALWAYS_INLINE.
-
+    
     if (!cell)
         return;
-
+    
     Dependency dependency;
     if (UNLIKELY(cell->isPreciseAllocation())) {
         if (LIKELY(cell->preciseAllocation().isMarked())) {
@@ -60,7 +60,7 @@ ALWAYS_INLINE void SlotVisitor::appendUnbarriered(JSCell* cell)
                 return;
         }
     }
-
+    
     appendSlow(cell, dependency);
 }
 
@@ -80,10 +80,10 @@ ALWAYS_INLINE void SlotVisitor::appendHiddenUnbarriered(JSCell* cell)
 {
     // This needs to be written in a very specific way to ensure that it gets inlined
     // properly. In particular, it appears that using templates here breaks ALWAYS_INLINE.
-
+    
     if (!cell)
         return;
-
+    
     Dependency dependency;
     if (UNLIKELY(cell->isPreciseAllocation())) {
         if (LIKELY(cell->preciseAllocation().isMarked()))
@@ -94,7 +94,7 @@ ALWAYS_INLINE void SlotVisitor::appendHiddenUnbarriered(JSCell* cell)
         if (LIKELY(block.isMarked(cell, dependency)))
             return;
     }
-
+    
     appendHiddenSlow(cell, dependency);
 }
 

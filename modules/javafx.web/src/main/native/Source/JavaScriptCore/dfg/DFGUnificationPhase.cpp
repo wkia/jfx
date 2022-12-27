@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,19 +40,19 @@ public:
         : Phase(graph, "unification")
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == ThreadedCPS);
         ASSERT(m_graph.m_unificationState == LocallyUnified);
-
+        
         // Ensure that all Phi functions are unified.
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
             ASSERT(block->isReachable);
-
+            
             for (unsigned phiIndex = block->phis.size(); phiIndex--;) {
                 Node* phi = block->phis[phiIndex];
                 for (unsigned childIdx = 0; childIdx < AdjacencyList::Size; ++childIdx) {
@@ -65,7 +65,7 @@ public:
                 }
             }
         }
-
+        
         // Ensure that all predictions are fixed up based on the unification.
         for (unsigned i = 0; i < m_graph.m_variableAccessData.size(); ++i) {
             VariableAccessData* data = &m_graph.m_variableAccessData[i];
@@ -76,7 +76,7 @@ public:
             data->find()->mergeIsLoadedFrom(data->isLoadedFrom());
             data->find()->mergeIsProfitableToUnbox(data->isProfitableToUnbox());
         }
-
+        
         m_graph.m_unificationState = GloballyUnified;
         return true;
     }

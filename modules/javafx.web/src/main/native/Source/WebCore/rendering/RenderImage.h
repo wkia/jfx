@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- *           (C) 2006 Allan Sandfeld Jensen (kde@carewolf.com)
+ *           (C) 2006 Allan Sandfeld Jensen (kde@carewolf.com) 
  *           (C) 2006 Samuel Weinig (sam.weinig@gmail.com)
  * Copyright (C) 2004, 2005, 2006, 2007, 2009, 2010, 2011 Apple Inc. All rights reserved.
  *
@@ -54,7 +54,7 @@ public:
 
     HTMLMapElement* imageMap() const;
     void areaElementFocusChanged(HTMLAreaElement*);
-
+    
 #if PLATFORM(IOS_FAMILY)
     void collectSelectionGeometries(Vector<SelectionGeometry>&, unsigned, unsigned) override;
 #endif
@@ -71,7 +71,7 @@ public:
 
     void setHasShadowControls(bool hasShadowControls) { m_hasShadowControls = hasShadowControls; }
     void setHasImageOverlay() { m_hasImageOverlay = true; }
-
+    
     bool isShowingMissingOrImageError() const;
     bool isShowingAltText() const;
 
@@ -130,7 +130,7 @@ private:
     void updateInnerContentRect();
 
     void paintAreaElementFocusRing(PaintInfo&, const LayoutPoint& paintOffset);
-
+    
     void layoutShadowContent(const LayoutSize& oldSize);
 
     bool hasShadowContent() const { return m_hasShadowControls || m_hasImageOverlay; }

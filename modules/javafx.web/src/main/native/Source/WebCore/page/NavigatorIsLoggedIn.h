@@ -43,11 +43,11 @@ public:
     static void setLoggedOut(Navigator&, Ref<DeferredPromise>&&);
     static void isLoggedIn(Navigator&, Ref<DeferredPromise>&&);
 
-private:
+private:    
     void setLoggedIn(Ref<DeferredPromise>&&);
     void setLoggedOut(Ref<DeferredPromise>&&);
     void isLoggedIn(Ref<DeferredPromise>&&);
-
+    
     static NavigatorIsLoggedIn* from(Navigator&);
     static const char* supplementName();
 

@@ -37,10 +37,6 @@
 #include <wtf/MathExtras.h>
 #include <wtf/text/TextStream.h>
 
-#if PLATFORM(JAVA)
-#include <wtf/java/JavaMath.h>
-#endif
-
 #if CPU(X86_64)
 #include <emmintrin.h>
 #endif
@@ -257,11 +253,7 @@ static void v4MulPointByMatrix(const Vector4 p, const TransformationMatrix::Matr
 
 static double v3Length(Vector3 a)
 {
-#if PLATFORM(JAVA)
-    return javamath::hypot(a[0], a[1], a[2]);
-#else
     return std::hypot(a[0], a[1], a[2]);
-#endif
 }
 
 static void v3Scale(Vector3 v, double desiredLength)
@@ -595,7 +587,7 @@ TransformationMatrix TransformationMatrix::fromQuaternion(double qx, double qy, 
     double yy = qy * qy;
     double zz = qz * qz;
     double xz = qx * qz;
-    double xy = qx * qy;
+    double xy = qx * qy; 
     double yz = qy * qz;
     double xw = qw * qx;
     double yw = qw * qy;
@@ -918,11 +910,7 @@ TransformationMatrix& TransformationMatrix::scale3d(double sx, double sy, double
 TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double z, double angle)
 {
     // Normalize the axis of rotation
-#if PLATFORM(JAVA)
-    double length = javamath::hypot(x, y, z);
-#else
     double length = std::hypot(x, y, z);
-#endif
     if (length == 0) {
         // A direction vector that cannot be normalized, such as [0, 0, 0], will cause the rotation to not be applied.
         return *this;

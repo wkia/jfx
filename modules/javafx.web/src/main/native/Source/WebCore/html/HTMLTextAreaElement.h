@@ -55,7 +55,7 @@ public:
     bool tooShort() const final;
     bool tooLong() const final;
     bool isValidValue(const String&) const;
-
+    
     WEBCORE_EXPORT RefPtr<TextControlInnerTextElement> innerTextElement() const final;
     RenderStyle createInnerTextStyle(const RenderStyle&) final;
     void copyNonAttributePropertiesFromElement(const Element&) final;
@@ -94,7 +94,7 @@ private:
     bool isRequiredFormControl() const final { return isRequired(); }
 
     void defaultEventHandler(Event&) final;
-
+    
     void subtreeHasChanged() final;
 
     bool isEnumeratable() const final { return true; }

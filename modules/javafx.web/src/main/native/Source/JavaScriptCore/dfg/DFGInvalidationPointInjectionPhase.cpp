@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,36 +38,36 @@ namespace JSC { namespace DFG {
 
 class InvalidationPointInjectionPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     InvalidationPointInjectionPhase(Graph& graph)
         : Phase(graph, "invalidation point injection")
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form != SSA);
-
+        
         BlockSet blocksThatNeedInvalidationPoints;
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             m_originThatHadFire = CodeOrigin();
-
+            
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex)
                 handle(nodeIndex, block->at(nodeIndex));
-
+            
             // Note: this assumes that control flow occurs at bytecode instruction boundaries.
             if (m_originThatHadFire.isSet()) {
                 for (unsigned i = block->numSuccessors(); i--;)
                     blocksThatNeedInvalidationPoints.add(block->successor(i));
             }
-
+            
             m_insertionSet.execute(block);
         }
 
@@ -75,7 +75,7 @@ public:
             insertInvalidationCheck(0, block->at(0));
             m_insertionSet.execute(block);
         }
-
+        
         return true;
     }
 
@@ -86,16 +86,16 @@ private:
             insertInvalidationCheck(nodeIndex, node);
             m_originThatHadFire = CodeOrigin();
         }
-
+        
         if (writesOverlap(m_graph, node, Watchpoint_fire))
             m_originThatHadFire = node->origin.forExit;
     }
-
+    
     void insertInvalidationCheck(unsigned nodeIndex, Node* node)
     {
         m_insertionSet.insertNode(nodeIndex, SpecNone, InvalidationPoint, node->origin);
     }
-
+    
     CodeOrigin m_originThatHadFire;
     InsertionSet m_insertionSet;
 };

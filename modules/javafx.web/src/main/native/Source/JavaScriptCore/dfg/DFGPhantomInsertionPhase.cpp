@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -49,28 +49,28 @@ public:
         , m_values(OperandsLike, graph.block(0)->variablesAtHead)
     {
     }
-
+    
     bool run()
     {
         // We assume that DCE has already run. If we run before DCE then we think that all
         // SetLocals execute, which is inaccurate. That causes us to insert too few Phantoms.
         DFG_ASSERT(m_graph, nullptr, m_graph.m_refCountState == ExactRefCount);
-
+        
         if (verbose) {
             dataLog("Graph before Phantom insertion:\n");
             m_graph.dump();
         }
-
+        
         m_graph.clearEpochs();
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder())
             handleBlock(block);
-
+        
         if (verbose) {
             dataLog("Graph after Phantom insertion:\n");
             m_graph.dump();
         }
-
+        
         return true;
     }
 
@@ -90,7 +90,7 @@ private:
         // cause a fill.
         //
         // https://bugs.webkit.org/show_bug.cgi?id=144524
-
+        
         m_values.fill(nullptr);
 
         Epoch currentEpoch = Epoch::first();
@@ -99,18 +99,18 @@ private:
             Node* node = block->at(nodeIndex);
             if (verbose)
                 dataLog("Considering ", node, "\n");
-
+            
             switch (node->op()) {
             case MovHint:
                 m_values.operand(node->unlinkedOperand()) = node->child1().node();
                 break;
-
+                
             case GetLocal:
             case SetArgumentDefinitely:
             case SetArgumentMaybe:
                 m_values.operand(node->operand()) = nullptr;
                 break;
-
+                
             default:
                 break;
             }
@@ -120,14 +120,14 @@ private:
                 currentEpoch.bump();
                 lastExitingIndex = nodeIndex;
             }
-
+            
             m_graph.doToChildren(
                 node,
                 [&] (Edge edge) {
                     dataLogLnIf(verbose, "Updating epoch for ", edge, " to ", currentEpoch);
                     edge->setEpoch(currentEpoch);
                 });
-
+            
             node->setEpoch(currentEpoch);
 
             Operand alreadyKilled;
@@ -140,32 +140,32 @@ private:
                     dataLogLnIf(verbose, "    Operand ", operand, " already killed by set local");
                     return;
                 }
-
-                Node* killedNode = m_values.operand(operand);
+                
+                Node* killedNode = m_values.operand(operand); 
                 if (!killedNode) {
                     dataLogLnIf(verbose, "    Operand ", operand, " was not defined in this block.");
                     return;
                 }
 
                 m_values.operand(operand) = nullptr;
-
+                
                 // We only need to insert a Phantom if the node hasn't been used since the last
                 // exit, and was born before the last exit.
                 if (killedNode->epoch() == currentEpoch) {
                     dataLogLnIf(verbose, "    Operand ", operand, " has current epoch ", currentEpoch);
                     return;
                 }
-
+                
                 dataLogLnIf(verbose,
                     "    Inserting Phantom on ", killedNode, " after ",
                     block->at(lastExitingIndex));
-
+                
                 // We have exact ref counts, so creating a new use means that we have to
                 // increment the ref count.
                 killedNode->postfixRef();
 
                 Node* lastExitingNode = block->at(lastExitingIndex);
-
+                
                 m_insertionSet.insertNode(
                     lastExitingIndex + 1, SpecNone, Phantom,
                     lastExitingNode->origin.forInsertingAfter(m_graph, lastExitingNode),
@@ -185,16 +185,16 @@ private:
 
             forAllKilledOperands(m_graph, node, block->tryAt(nodeIndex + 1), processKilledOperand);
         }
-
+        
         m_insertionSet.execute(block);
     }
-
+    
     InsertionSet m_insertionSet;
     Operands<Node*> m_values;
 };
 
 } // anonymous namespace
-
+    
 bool performPhantomInsertion(Graph& graph)
 {
     return runPhase<PhantomInsertionPhase>(graph);

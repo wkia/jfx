@@ -221,12 +221,12 @@ public:
     void setIsAccessibilityIsolatedTreeEnabled(bool isEnabled) { m_accessibilityIsolatedTree = isEnabled; }
     bool isAccessibilityIsolatedTreeEnabled() const { return m_accessibilityIsolatedTree; }
 #endif
-
+    
 #if HAVE(INCREMENTAL_PDF_APIS)
     void setIncrementalPDFLoadingEnabled(bool isEnabled) { m_incrementalPDFLoadingEnabled = isEnabled; }
     bool incrementalPDFLoadingEnabled() const { return m_incrementalPDFLoadingEnabled; }
 #endif
-
+    
 #if ENABLE(WEBM_FORMAT_READER)
     void setWebMFormatReaderEnabled(bool isEnabled) { m_webMFormatReaderEnabled = isEnabled; }
     bool webMFormatReaderEnabled() const { return m_webMFormatReaderEnabled; }

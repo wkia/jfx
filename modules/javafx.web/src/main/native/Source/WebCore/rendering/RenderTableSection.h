@@ -73,7 +73,7 @@ public:
     RenderTable* table() const { return downcast<RenderTable>(parent()); }
 
     struct CellStruct {
-        Vector<RenderTableCell*, 1> cells;
+        Vector<RenderTableCell*, 1> cells; 
         bool inColSpan { false }; // true for columns after the first in a colspan
 
         RenderTableCell* primaryCell() { return hasCells() ? cells[cells.size() - 1] : 0; }
@@ -144,7 +144,7 @@ public:
 
     static RenderPtr<RenderTableSection> createAnonymousWithParentRenderer(const RenderTable&);
     RenderPtr<RenderBox> createAnonymousBoxWithSameTypeAs(const RenderBox&) const override;
-
+    
     void paint(PaintInfo&, const LayoutPoint&) override;
 
     void willInsertTableRow(RenderTableRow& child, RenderObject* beforeChild);
@@ -186,7 +186,7 @@ private:
     void ensureRows(unsigned);
 
     void relayoutCellIfFlexed(RenderTableCell&, int rowIndex, int rowHeight);
-
+    
     void distributeExtraLogicalHeightToPercentRows(LayoutUnit& extraLogicalHeight, int totalPercent);
     void distributeExtraLogicalHeightToAutoRows(LayoutUnit& extraLogicalHeight, unsigned autoRowsCount);
     void distributeRemainingExtraLogicalHeight(LayoutUnit& extraLogicalHeight);

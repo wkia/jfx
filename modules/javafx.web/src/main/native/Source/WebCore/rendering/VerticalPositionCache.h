@@ -37,7 +37,7 @@ class VerticalPositionCache {
 public:
     VerticalPositionCache()
     { }
-
+    
     bool get(RenderObject* renderer, FontBaseline baselineType, LayoutUnit& result) const
     {
         const HashMap<RenderObject*, LayoutUnit>& mapToCheck = baselineType == AlphabeticBaseline ? m_alphabeticPositions : m_ideographicPositions;
@@ -48,7 +48,7 @@ public:
         result = it->value;
         return true;
     }
-
+    
     void set(RenderObject* renderer, FontBaseline baselineType, LayoutUnit position)
     {
         if (baselineType == AlphabeticBaseline)

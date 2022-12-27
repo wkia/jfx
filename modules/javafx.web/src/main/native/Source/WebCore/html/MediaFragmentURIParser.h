@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -35,7 +35,7 @@ namespace WebCore {
 
 class MediaFragmentURIParser final {
 public:
-
+    
     MediaFragmentURIParser(const URL&);
 
     MediaTime startTime();
@@ -44,7 +44,7 @@ public:
 private:
 
     void parseFragments();
-
+    
     enum TimeFormat { None, Invalid, NormalPlayTime, SMPTETimeCode, WallClockTimeCode };
     void parseTimeFragment();
     bool parseNPTFragment(const LChar*, unsigned length, MediaTime& startTime, MediaTime& endTime);

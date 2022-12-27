@@ -452,12 +452,12 @@ HTMLPictureElement* HTMLImageElement::pictureElement() const
 {
     return m_pictureElement.get();
 }
-
+    
 void HTMLImageElement::setPictureElement(HTMLPictureElement* pictureElement)
 {
     m_pictureElement = makeWeakPtr(pictureElement);
 }
-
+    
 unsigned HTMLImageElement::width(bool ignorePendingStylesheets)
 {
     if (!renderer()) {
@@ -660,7 +660,7 @@ DecodingMode HTMLImageElement::decodingMode() const
         return DecodingMode::Asynchronous;
     return DecodingMode::Auto;
 }
-
+    
 void HTMLImageElement::decode(Ref<DeferredPromise>&& promise)
 {
     return m_imageLoader->decode(WTFMove(promise));

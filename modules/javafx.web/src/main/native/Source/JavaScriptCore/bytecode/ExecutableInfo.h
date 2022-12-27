@@ -28,7 +28,7 @@
 #include "ParserModes.h"
 
 namespace JSC {
-
+    
 enum class DerivedContextType : uint8_t { None, DerivedConstructorContext, DerivedMethodContext };
 enum class EvalContextType    : uint8_t { None, FunctionEvalContext, InstanceFieldEvalContext };
 enum class NeedsClassFieldInitializer : uint8_t { No, Yes };

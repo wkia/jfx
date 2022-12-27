@@ -47,7 +47,7 @@ ColorComponents<float, 4> converColorComponents(ColorSpace inputColorSpace, Colo
 //    template<> struct ColorConversion<`ColorType`<float>::Reference, `ColorType`<float>> {
 //        WEBCORE_EXPORT static `ColorType`<float>::Reference convert(const `ColorType`<float>&);
 //    };
-//
+//    
 //    template<> struct ColorConversion<`ColorType`<float>, `ColorType`<float>::Reference> {
 //        WEBCORE_EXPORT static `ColorType`<float> convert(const `ColorType`<float>::Reference&);
 //    };
@@ -289,7 +289,7 @@ private:
 
         // This handles conversions between linear color types that can be converted using pre-defined
         // 3x3 matrices.
-
+        
         // FIXME: Pre-compute (using constexpr) the concatenation of the matrices prior to applying them
         // to reduce number of matrix multiplications to a minimum. This will likely give subtly different
         // results (due to floating point effects) so if this optimization is considered we should ensure we

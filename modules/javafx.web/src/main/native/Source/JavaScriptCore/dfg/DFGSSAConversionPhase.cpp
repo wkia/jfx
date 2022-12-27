@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,20 +50,20 @@ namespace JSC { namespace DFG {
 
 class SSAConversionPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     SSAConversionPhase(Graph& graph)
         : Phase(graph, "SSA conversion")
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         RELEASE_ASSERT(m_graph.m_form == ThreadedCPS);
         RELEASE_ASSERT(!m_graph.m_isInSSAConversion);
         m_graph.m_isInSSAConversion = true;
-
+        
         m_graph.clearReplacements();
         m_graph.clearCPSCFGData();
 
@@ -75,7 +75,7 @@ public:
         for (unsigned entrypointIndex = 0; entrypointIndex < m_graph.m_numberOfEntrypoints; ++entrypointIndex) {
             BasicBlock* oldRoot = m_graph.m_roots[entrypointIndex];
             entrypointIndexToArgumentsBlock.add(entrypointIndex, oldRoot);
-
+            
             NodeOrigin origin = oldRoot->at(0)->origin;
             m_insertionSet.insertNode(
                 0, SpecNone, InitializeEntrypointArguments, origin, OpInfo(entrypointIndex));
@@ -114,11 +114,11 @@ public:
 
             blockInsertionSet.execute();
         }
-
+        
         SSACalculator calculator(m_graph);
 
         m_graph.ensureSSADominators();
-
+        
         if (verbose) {
             dataLog("Graph before SSA transformation:\n");
             m_graph.dump();
@@ -128,29 +128,29 @@ public:
         for (VariableAccessData& variable : m_graph.m_variableAccessData) {
             if (!variable.isRoot())
                 continue;
-
+            
             SSACalculator::Variable* ssaVariable = calculator.newVariable();
             ASSERT(ssaVariable->index() == m_variableForSSAIndex.size());
             m_variableForSSAIndex.append(&variable);
             m_ssaVariableForVariable.add(&variable, ssaVariable);
         }
-
+        
         // Find all SetLocals and create Defs for them. We handle SetArgumentDefinitely by creating a
         // GetLocal, and recording the flush format.
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             // Must process the block in forward direction because we want to see the last
             // assignment for every local.
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                 Node* node = block->at(nodeIndex);
                 if (node->op() != SetLocal && node->op() != SetArgumentDefinitely)
                     continue;
-
+                
                 VariableAccessData* variable = node->variableAccessData();
-
+                
                 Node* childNode;
                 if (node->op() == SetLocal)
                     childNode = node->child1().node();
@@ -164,20 +164,20 @@ public:
                         m_argumentGetters.add(childNode);
                     m_argumentMapping.add(node, childNode);
                 }
-
+                
                 calculator.newDef(
                     m_ssaVariableForVariable.get(variable), block, childNode);
             }
-
+            
             m_insertionSet.execute(block);
         }
-
+        
         // Decide where Phis are to be inserted. This creates the Phi's but doesn't insert them
         // yet. We will later know where to insert based on where SSACalculator tells us to.
         calculator.computePhis(
             [&] (SSACalculator::Variable* ssaVariable, BasicBlock* block) -> Node* {
                 VariableAccessData* variable = m_variableForSSAIndex[ssaVariable->index()];
-
+                
                 // Prune by liveness. This doesn't buy us much other than compile times.
                 Node* headNode = block->variablesAtHead.operand(variable->operand());
                 if (!headNode)
@@ -210,7 +210,7 @@ public:
                 // https://bugs.webkit.org/show_bug.cgi?id=136641
                 if (headNode->variableAccessData() != variable)
                     return nullptr;
-
+                
                 Node* phiNode = m_graph.addNode(
                     variable->prediction(), Phi, block->at(0)->origin.withInvalidExit());
                 FlushFormat format = variable->flushFormat();
@@ -218,7 +218,7 @@ public:
                 phiNode->mergeFlags(result);
                 return phiNode;
             });
-
+        
         if (verbose) {
             dataLog("Computed Phis, about to transform the graph.\n");
             dataLog("\n");
@@ -231,7 +231,7 @@ public:
             dataLog("\n");
             dataLog("SSA calculator: ", calculator, "\n");
         }
-
+        
         // Do the bulk of the SSA conversion. For each block, this tracks the operand->Node
         // mapping based on a combination of what the SSACalculator tells us, and us walking over
         // the block in forward order. We use our own data structure, valueForOperand, for
@@ -267,7 +267,7 @@ public:
         Operands<Node*> valueForOperand(OperandsLike, m_graph.block(0)->variablesAtHead);
         for (BasicBlock* block : m_graph.blocksInPreOrder()) {
             valueForOperand.clear();
-
+            
             // CPS will claim that the root block has all arguments live. But we have already done
             // the first step of SSA conversion: argument locals are no longer live at head;
             // instead we have GetStack nodes for extracting the values of arguments. So, we
@@ -277,12 +277,12 @@ public:
                     Node* nodeAtHead = block->variablesAtHead[i];
                     if (!nodeAtHead)
                         continue;
-
+                    
                     VariableAccessData* variable = nodeAtHead->variableAccessData();
-
+                    
                     if (verbose)
                         dataLog("Considering live variable ", VariableAccessDataDump(m_graph, variable), " at head of block ", *block, "\n");
-
+                    
                     SSACalculator::Variable* ssaVariable = m_ssaVariableForVariable.get(variable);
                     SSACalculator::Def* def = calculator.reachingDefAtHead(block, ssaVariable);
                     if (!def) {
@@ -290,7 +290,7 @@ public:
                         // at head.
                         continue;
                     }
-
+                    
                     Node* node = def->value();
                     if (node->replacement()) {
                         // This will occur when a SetLocal had a GetLocal as its source. The
@@ -305,17 +305,17 @@ public:
                     valueForOperand[i] = node;
                 }
             }
-
+            
             // Insert Phis by asking the calculator what phis there are in this block. Also update
             // valueForOperand with those Phis. For Phis associated with variables that are not
             // flushed, we also insert a MovHint.
             size_t phiInsertionPoint = 0;
             for (SSACalculator::Def* phiDef : calculator.phisForBlock(block)) {
                 VariableAccessData* variable = m_variableForSSAIndex[phiDef->variable()->index()];
-
+                
                 m_insertionSet.insert(phiInsertionPoint, phiDef->value());
                 valueForOperand.operand(variable->operand()) = phiDef->value();
-
+                
                 m_insertionSet.insertNode(
                     phiInsertionPoint, SpecNone, MovHint, block->at(0)->origin.withInvalidExit(),
                     OpInfo(variable->operand()), phiDef->value()->defaultEdge());
@@ -323,17 +323,17 @@ public:
 
             if (block->at(0)->origin.exitOK)
                 m_insertionSet.insertNode(phiInsertionPoint, SpecNone, ExitOK, block->at(0)->origin);
-
+            
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                 Node* node = block->at(nodeIndex);
-
+                
                 if (verbose) {
                     dataLog("Processing node ", node, ":\n");
                     m_graph.dump(WTF::dataFile(), "    ", node);
                 }
-
+                
                 m_graph.performSubstitution(node);
-
+                
                 switch (node->op()) {
                 case MovHint: {
                     m_insertionSet.insertNode(
@@ -342,47 +342,47 @@ public:
                     node->origin.exitOK = false; // KillStack clobbers exit.
                     break;
                 }
-
+                    
                 case SetLocal: {
                     VariableAccessData* variable = node->variableAccessData();
                     Node* child = node->child1().node();
-
+                    
                     if (!!(node->flags() & NodeIsFlushed)) {
                         node->convertToPutStack(
                             m_graph.m_stackAccessData.add(
                                 variable->operand(), variable->flushFormat()));
                     } else
                         node->remove(m_graph);
-
+                    
                     if (verbose)
                         dataLog("Mapping: ", variable->operand(), " -> ", child, "\n");
                     valueForOperand.operand(variable->operand()) = child;
                     break;
                 }
-
+                    
                 case GetStack: {
                     ASSERT(m_argumentGetters.contains(node));
                     valueForOperand.operand(node->stackAccessData()->operand) = node;
                     break;
                 }
-
+                    
                 case GetLocal: {
                     VariableAccessData* variable = node->variableAccessData();
                     node->children.reset();
-
+                    
                     node->remove(m_graph);
                     if (verbose)
                         dataLog("Replacing node ", node, " with ", valueForOperand.operand(variable->operand()), "\n");
                     node->setReplacement(valueForOperand.operand(variable->operand()));
                     break;
                 }
-
+                    
                 case Flush: {
                     node->children.reset();
                     node->remove(m_graph);
                     break;
                 }
-
+                    
                 case PhantomLocal: {
                     ASSERT(node->child1().useKind() == UntypedUse);
                     VariableAccessData* variable = node->variableAccessData();
@@ -390,7 +390,7 @@ public:
                     node->remove(m_graph);
                     break;
                 }
-
+                    
                 case SetArgumentDefinitely: {
                     node->remove(m_graph);
                     break;
@@ -400,12 +400,12 @@ public:
                     node->remove(m_graph);
                     break;
                 }
-
+                    
                 default:
                     break;
                 }
             }
-
+            
             // We want to insert Upsilons just before the end of the block. On the surface this
             // seems dangerous because the Upsilon will have a checking UseKind. But, we will not
             // actually be performing the check at the point of the Upsilon; the check will
@@ -427,7 +427,7 @@ public:
                     UseKind useKind = uncheckedUseKindFor(format);
 
                     dataLogLnIf(verbose, "Inserting Upsilon for ", variable->operand(), " propagating ", valueForOperand.operand(variable->operand()), " to ", phiNode);
-
+                    
                     m_insertionSet.insertNode(
                         upsilonInsertionPoint, SpecNone, Upsilon, upsilonOrigin,
                         OpInfo(phiNode), Edge(
@@ -435,10 +435,10 @@ public:
                             useKind));
                 }
             }
-
+            
             m_insertionSet.execute(block);
         }
-
+        
         // Free all CPS phis and reset variables vectors.
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);

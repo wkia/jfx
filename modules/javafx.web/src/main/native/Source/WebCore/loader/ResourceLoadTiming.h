@@ -42,7 +42,7 @@ public:
         // All members are wrapping POD types.
         return *this;
     }
-
+    
 private:
     MonotonicTime m_startTime;
     MonotonicTime m_endTime;

@@ -57,15 +57,15 @@ public:
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     bool virtualRegisterIsLive(VirtualRegister reg, BytecodeIndex bytecodeIndex, LivenessCalculationPoint point) const
     {
         return virtualRegisterIsAlwaysLive(reg) || virtualRegisterThatIsNotAlwaysLiveIsLive(getLiveness(bytecodeIndex, point), reg);
     }
-
+    
 private:
     friend class BytecodeLivenessAnalysis;
-
+    
     static size_t toIndex(BytecodeIndex bytecodeIndex) { return bytecodeIndex.offset() + bytecodeIndex.checkpoint(); }
 
     // FIXME: Use FastBitVector's view mechanism to make them compact.

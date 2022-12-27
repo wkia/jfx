@@ -83,7 +83,7 @@ public:
             return;
         weakClearSlowCase(m_impl);
     }
-
+    
 private:
     static inline WeakImpl* hashTableDeletedValue();
 

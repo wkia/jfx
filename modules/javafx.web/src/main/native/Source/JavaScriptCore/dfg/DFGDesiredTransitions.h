@@ -29,7 +29,7 @@
 
 #if ENABLE(DFG_JIT)
 
-namespace JSC {
+namespace JSC { 
 
 class CodeBlock;
 class ScriptExecutable;

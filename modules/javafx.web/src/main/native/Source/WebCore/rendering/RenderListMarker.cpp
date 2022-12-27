@@ -129,7 +129,7 @@ template<typename CharacterType, size_t size> static String toNumeric(int number
 }
 
 template<typename CharacterType, size_t size> static String toSymbolic(int number, const CharacterType(&alphabet)[size])
-{
+{    
     return toSymbolic(number, alphabet, size);
 }
 
@@ -1579,7 +1579,7 @@ void RenderListMarker::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffse
 {
     if (paintInfo.phase != PaintPhase::Foreground)
         return;
-
+    
     if (style().visibility() != Visibility::Visible)
         return;
 
@@ -1590,7 +1590,7 @@ void RenderListMarker::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffse
         return;
 
     LayoutRect box(boxOrigin, size());
-
+    
     auto markerRect = relativeMarkerRect();
     markerRect.moveBy(boxOrigin);
     if (markerRect.isEmpty())
@@ -1774,7 +1774,7 @@ void RenderListMarker::layout()
         m_lineOffsetForListItem = m_listItem->logicalLeftOffsetForLine(blockOffset, DoNotIndentText, 0_lu);
     else
         m_lineOffsetForListItem = m_listItem->logicalRightOffsetForLine(blockOffset, DoNotIndentText, 0_lu);
-
+ 
     if (isImage()) {
         updateMarginsAndContent();
         setWidth(m_image->imageSize(this, style().effectiveZoom()).width());
@@ -1994,7 +1994,7 @@ LayoutRect RenderListMarker::selectionRectForRepaint(const RenderLayerModelObjec
 
     LegacyRootInlineBox& rootBox = inlineBoxWrapper()->root();
     LayoutRect rect(0_lu, rootBox.selectionTop() - y(), width(), rootBox.selectionHeight());
-
+            
     if (clipToVisibleContent)
         return computeRectForRepaint(rect, repaintContainer);
     return localToContainerQuad(FloatRect(rect), repaintContainer).enclosingBoundingBox();

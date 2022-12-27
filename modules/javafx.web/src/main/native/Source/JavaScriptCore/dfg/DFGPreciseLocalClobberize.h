@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,7 +44,7 @@ public:
         , m_def(def)
     {
     }
-
+    
     void read(AbstractHeap heap)
     {
         if (heap.kind() == Stack) {
@@ -52,17 +52,17 @@ public:
                 readTop();
                 return;
             }
-
+            
             callIfAppropriate(m_read, heap.operand());
             return;
         }
-
+        
         if (heap.overlaps(Stack)) {
             readTop();
             return;
         }
     }
-
+    
     void write(AbstractHeap heap)
     {
         // We expect stack writes to already be precisely characterized by DFG::clobberize().
@@ -71,38 +71,38 @@ public:
             callIfAppropriate(m_unconditionalWrite, heap.operand());
             return;
         }
-
+        
         RELEASE_ASSERT(!heap.overlaps(Stack));
     }
-
+    
     void def(PureValue)
     {
         // PureValue defs never have anything to do with locals, so ignore this.
     }
-
+    
     void def(HeapLocation location, LazyNode node)
     {
         if (location.kind() != StackLoc)
             return;
-
+        
         RELEASE_ASSERT(location.heap().kind() == Stack);
-
+        
         m_def(location.heap().operand(), node);
     }
-
+    
 private:
     template<typename Functor>
     void callIfAppropriate(const Functor& functor, Operand operand)
     {
         if (operand.isLocal() && static_cast<unsigned>(operand.toLocal()) >= m_graph.block(0)->variablesAtHead.numberOfLocals())
             return;
-
+        
         if (operand.isArgument() && !operand.isHeader() && static_cast<unsigned>(operand.toArgument()) >= m_graph.block(0)->variablesAtHead.numberOfArguments())
             return;
-
+        
         functor(operand);
     }
-
+    
     void readTop()
     {
         auto readWorld = [&] (Node* node) {
@@ -137,7 +137,7 @@ private:
                 m_read(VirtualRegister(CallFrameSlot::argumentCountIncludingThis));
                 return;
             }
-
+            
             for (unsigned i = numberOfArgumentsToSkip; i < inlineCallFrame->m_argumentsWithFixup.size(); i++)
                 m_read(VirtualRegister(inlineCallFrame->stackOffset + virtualRegisterForArgumentIncludingThis(i).offset()));
             if (inlineCallFrame->isVarargs())
@@ -209,7 +209,7 @@ private:
 
             if (isPhantomNode && m_graph.m_plan.isFTL())
                 break;
-
+            
             if (isForwardingNode && m_node->hasArgumentsChild() && m_node->argumentsChild()
                 && (m_node->argumentsChild()->op() == PhantomNewArrayWithSpread || m_node->argumentsChild()->op() == PhantomSpread)) {
                 if (m_node->argumentsChild()->op() == PhantomNewArrayWithSpread)
@@ -236,11 +236,11 @@ private:
 
             break;
         }
-
+        
         case Spread:
             readSpread(m_node);
             break;
-
+        
         case NewArrayWithSpread: {
             readNewArrayWithSpreadNode(m_node);
             break;
@@ -262,13 +262,13 @@ private:
             m_read(VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::argumentCountIncludingThis));
             break;
         }
-
+            
         default: {
             readWorld(m_node);
             break;
         } }
     }
-
+    
     Graph& m_graph;
     Node* m_node;
     const ReadFunctor& m_read;

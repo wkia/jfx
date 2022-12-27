@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -140,15 +140,15 @@ void CommonData::validateReferences(const TrackedReferences& trackedReferences)
                 if (recovery.isConstant())
                     trackedReferences.check(recovery.constant());
             }
-
+            
             if (CodeBlock* baselineCodeBlock = inlineCallFrame->baselineCodeBlock.get())
                 trackedReferences.check(baselineCodeBlock);
-
+            
             if (inlineCallFrame->calleeRecovery.isConstant())
                 trackedReferences.check(inlineCallFrame->calleeRecovery.constant());
         }
     }
-
+    
     for (auto& watchpoint : m_adaptiveStructureWatchpoints)
         watchpoint.key().validateReferences(trackedReferences);
 }

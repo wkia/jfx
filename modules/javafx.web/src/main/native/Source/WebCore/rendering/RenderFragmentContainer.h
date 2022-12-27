@@ -96,7 +96,7 @@ public:
 
     // Whether or not this fragment is a set.
     virtual bool isRenderFragmentContainerSet() const { return false; }
-
+    
     virtual void repaintFragmentedFlowContent(const LayoutRect& repaintRect);
 
     virtual void collectLayerFragments(LayerFragments&, const LayoutRect&, const LayoutRect&) { }
@@ -111,7 +111,7 @@ public:
     LayoutRect visualOverflowRectForBoxForPropagation(const RenderBoxModelObject&);
 
     LayoutRect rectFlowPortionForBox(const RenderBox*, const LayoutRect&) const;
-
+    
     void setFragmentObjectsFragmentStyle();
     void restoreFragmentObjectsOriginalStyle();
 

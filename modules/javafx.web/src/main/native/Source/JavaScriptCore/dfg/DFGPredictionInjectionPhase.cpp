@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,16 +40,16 @@ public:
         : Phase(graph, "prediction injection")
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == ThreadedCPS);
         ASSERT(m_graph.m_unificationState == GloballyUnified);
-
+        
         ASSERT(codeBlock()->numParameters() >= 1);
         {
             ConcurrentJSLocker locker(profiledBlock()->m_lock);
-
+            
             // We only do this for the arguments at the first block. The arguments from
             // other entrypoints have already been populated with their predictions.
             auto& arguments = m_graph.m_rootToArguments.find(m_graph.block(0))->value;
@@ -60,7 +60,7 @@ public:
                     profile.computeUpdatedPrediction(locker));
             }
         }
-
+        
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
@@ -82,7 +82,7 @@ public:
                 node->variableAccessData()->predict(speculationFromValue(value.value()));
             }
         }
-
+        
         return true;
     }
 };

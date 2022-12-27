@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,22 +37,22 @@ struct FreeCell {
     {
         return bitwise_cast<uintptr_t>(cell) ^ secret;
     }
-
+    
     static FreeCell* descramble(uintptr_t cell, uintptr_t secret)
     {
         return bitwise_cast<FreeCell*>(cell ^ secret);
     }
-
+    
     void setNext(FreeCell* next, uintptr_t secret)
     {
         scrambledNext = scramble(next, secret);
     }
-
+    
     FreeCell* next(uintptr_t secret) const
     {
         return descramble(scrambledNext, secret);
     }
-
+    
     static ptrdiff_t offsetOfScrambledNext() { return OBJECT_OFFSETOF(FreeCell, scrambledNext); }
 
     uint64_t preservedBitsForCrashAnalysis;
@@ -63,23 +63,23 @@ class FreeList {
 public:
     FreeList(unsigned cellSize);
     ~FreeList();
-
+    
     void clear();
-
+    
     JS_EXPORT_PRIVATE void initializeList(FreeCell* head, uintptr_t secret, unsigned bytes);
     JS_EXPORT_PRIVATE void initializeBump(char* payloadEnd, unsigned remaining);
-
+    
     bool allocationWillFail() const { return !head() && !m_remaining; }
     bool allocationWillSucceed() const { return !allocationWillFail(); }
-
+    
     template<typename Func>
     HeapCell* allocate(const Func& slowPath);
-
+    
     bool contains(HeapCell*) const;
-
+    
     template<typename Func>
     void forEach(const Func&) const;
-
+    
     unsigned originalSize() const { return m_originalSize; }
 
     static ptrdiff_t offsetOfScrambledHead() { return OBJECT_OFFSETOF(FreeList, m_scrambledHead); }
@@ -88,14 +88,14 @@ public:
     static ptrdiff_t offsetOfRemaining() { return OBJECT_OFFSETOF(FreeList, m_remaining); }
     static ptrdiff_t offsetOfOriginalSize() { return OBJECT_OFFSETOF(FreeList, m_originalSize); }
     static ptrdiff_t offsetOfCellSize() { return OBJECT_OFFSETOF(FreeList, m_cellSize); }
-
+    
     JS_EXPORT_PRIVATE void dump(PrintStream&) const;
 
     unsigned cellSize() const { return m_cellSize; }
-
+    
 private:
     FreeCell* head() const { return FreeCell::descramble(m_scrambledHead, m_secret); }
-
+    
     uintptr_t m_scrambledHead { 0 };
     uintptr_t m_secret { 0 };
     char* m_payloadEnd { nullptr };

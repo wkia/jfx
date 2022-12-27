@@ -65,10 +65,10 @@ void ProcessWarming::initializeNames()
 void ProcessWarming::prewarmGlobally()
 {
     initializeNames();
-
+    
     // Prewarms user agent stylesheet.
     Style::UserAgentStyle::initDefaultStyleSheet();
-
+    
     // Prewarms JS VM.
     commonVM();
 

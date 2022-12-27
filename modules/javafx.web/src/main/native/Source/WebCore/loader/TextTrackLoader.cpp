@@ -45,7 +45,7 @@
 #include <wtf/NeverDestroyed.h>
 
 namespace WebCore {
-
+    
 TextTrackLoader::TextTrackLoader(TextTrackLoaderClient& client, Document& document)
     : m_client(client)
     , m_document(document)

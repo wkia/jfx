@@ -47,7 +47,7 @@ public:
 
 private:
     void updateQuotesUpTo(RenderQuote*);
-
+    
     bool needsPseudoElement(const Style::ElementUpdate*);
 
     RenderTreeUpdater& m_updater;

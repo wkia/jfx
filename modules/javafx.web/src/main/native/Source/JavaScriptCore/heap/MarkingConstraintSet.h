@@ -41,9 +41,9 @@ class MarkingConstraintSet {
 public:
     MarkingConstraintSet(Heap&);
     ~MarkingConstraintSet();
-
+    
     void didStartMarking();
-
+    
     void add(
         CString abbreviatedName,
         CString name,
@@ -51,7 +51,7 @@ public:
         ConstraintVolatility,
         ConstraintConcurrency = ConstraintConcurrency::Concurrent,
         ConstraintParallelism = ConstraintParallelism::Sequential);
-
+    
     void add(
         CString abbreviatedName, CString name,
         MarkingConstraintExecutorPair&& executors,
@@ -60,7 +60,7 @@ public:
     {
         add(abbreviatedName, name, WTFMove(executors), volatility, ConstraintConcurrency::Concurrent, parallelism);
     }
-
+    
     void add(std::unique_ptr<MarkingConstraint>);
 
     // The following functions are only used by the real GC via the MarkingConstraintSolver.
@@ -70,7 +70,7 @@ public:
     // not the wavefront is advancing.
     bool isWavefrontAdvancing(SlotVisitor&);
     bool isWavefrontRetreating(SlotVisitor& visitor) { return !isWavefrontAdvancing(visitor); }
-
+    
     // Returns true if this executed all constraints and none of them produced new work. This
     // assumes that you've alraedy visited roots and drained from there.
     bool executeConvergence(SlotVisitor&);
@@ -85,7 +85,7 @@ private:
     friend class MarkingConstraintSolver;
 
     bool executeConvergenceImpl(SlotVisitor&);
-
+    
     Heap& m_heap;
     BitVector m_unexecutedRoots;
     BitVector m_unexecutedOutgrowths;

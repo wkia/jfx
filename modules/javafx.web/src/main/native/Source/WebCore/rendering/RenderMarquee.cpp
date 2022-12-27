@@ -110,13 +110,13 @@ MarqueeDirection RenderMarquee::direction() const
         result = (dir == TextDirection::LTR) ? MarqueeDirection::Right : MarqueeDirection::Left;
     if (result == MarqueeDirection::Backward)
         result = (dir == TextDirection::LTR) ? MarqueeDirection::Left : MarqueeDirection::Right;
-
+    
     // Now we have the real direction.  Next we check to see if the increment is negative.
     // If so, then we reverse the direction.
     Length increment = m_layer->renderer().style().marqueeIncrement();
     if (increment.isNegative())
         result = reverseDirection(result);
-
+    
     return result;
 }
 
@@ -218,26 +218,26 @@ void RenderMarquee::updateMarqueePosition()
 void RenderMarquee::updateMarqueeStyle()
 {
     auto& style = m_layer->renderer().style();
-
+    
     if (m_direction != style.marqueeDirection() || (m_totalLoops != style.marqueeLoopCount() && m_currentLoop >= m_totalLoops))
         m_currentLoop = 0; // When direction changes or our loopCount is a smaller number than our current loop, reset our loop.
-
+    
     m_totalLoops = style.marqueeLoopCount();
     m_direction = style.marqueeDirection();
-
+    
     if (m_layer->renderer().isHTMLMarquee()) {
         // Hack for WinIE.  In WinIE, a value of 0 or lower for the loop count for SLIDE means to only do
         // one loop.
         if (m_totalLoops <= 0 && style.marqueeBehavior() == MarqueeBehavior::Slide)
             m_totalLoops = 1;
     }
-
+    
     if (speed() != marqueeSpeed()) {
         m_speed = marqueeSpeed();
         if (m_timer.isActive())
             m_timer.startRepeating(1_ms * speed());
     }
-
+    
     // Check the loop count to see if we should now stop.
     bool activate = (m_totalLoops <= 0 || m_currentLoop < m_totalLoops);
     if (activate && !m_timer.isActive())
@@ -262,15 +262,15 @@ void RenderMarquee::timerFired()
             scrollableArea->scrollToYOffset(m_start);
         return;
     }
-
+    
     const RenderStyle& style = m_layer->renderer().style();
-
+    
     int endPoint = m_end;
     int range = m_end - m_start;
     int newPos;
     if (range == 0)
         newPos = m_end;
-    else {
+    else {  
         bool addIncrement = direction() == MarqueeDirection::Up || direction() == MarqueeDirection::Left;
         bool isReversed = style.marqueeBehavior() == MarqueeBehavior::Alternate && m_currentLoop % 2;
         if (isReversed) {
@@ -297,7 +297,7 @@ void RenderMarquee::timerFired()
         else if (style.marqueeBehavior() != MarqueeBehavior::Alternate)
             m_reset = true;
     }
-
+    
     if (isHorizontal())
         scrollableArea->scrollToXOffset(newPos);
     else

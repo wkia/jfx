@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -66,7 +66,7 @@ inline CapabilityLevel evalCapabilityLevel(CodeBlock* codeBlock)
 {
     if (!mightCompileEval(codeBlock))
         return CannotCompile;
-
+    
     return capabilityLevel(codeBlock);
 }
 
@@ -74,7 +74,7 @@ inline CapabilityLevel programCapabilityLevel(CodeBlock* codeBlock)
 {
     if (!mightCompileProgram(codeBlock))
         return CannotCompile;
-
+    
     return capabilityLevel(codeBlock);
 }
 
@@ -110,7 +110,7 @@ inline CapabilityLevel inlineFunctionForCallCapabilityLevel(CodeBlock* codeBlock
 {
     if (!mightInlineFunctionForCall(codeBlock))
         return CannotCompile;
-
+    
     return capabilityLevel(codeBlock);
 }
 
@@ -118,7 +118,7 @@ inline CapabilityLevel inlineFunctionForClosureCallCapabilityLevel(CodeBlock* co
 {
     if (!mightInlineFunctionForClosureCall(codeBlock))
         return CannotCompile;
-
+    
     return capabilityLevel(codeBlock);
 }
 
@@ -126,7 +126,7 @@ inline CapabilityLevel inlineFunctionForConstructCapabilityLevel(CodeBlock* code
 {
     if (!mightInlineFunctionForConstruct(codeBlock))
         return CannotCompile;
-
+    
     return capabilityLevel(codeBlock);
 }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 #include "config.h"
 #include "WebCoreTextRenderer.h"
@@ -106,12 +106,12 @@ bool WebCoreShouldUseFontSmoothing()
 
 void WebCoreSetAlwaysUsesComplexTextCodePath(bool complex)
 {
-    FontCascade::setCodePath(complex ? FontCascade::Complex : FontCascade::Auto);
+    FontCascade::setCodePath(complex ? FontCascade::CodePath::Complex : FontCascade::CodePath::Auto);
 }
 
 bool WebCoreAlwaysUsesComplexTextCodePath()
 {
-    return FontCascade::codePath() == FontCascade::Complex;
+    return FontCascade::codePath() == FontCascade::CodePath::Complex;
 }
 
 } // namespace WebCore

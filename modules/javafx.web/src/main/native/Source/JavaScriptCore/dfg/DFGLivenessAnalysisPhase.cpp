@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -128,7 +128,7 @@ private:
                 bool newEntry = m_workset->add(m_indexing.index(edge.node()));
                 edge.setKillStatus(newEntry ? DoesKill : DoesNotKill);
             };
-
+            
             switch (node->op()) {
             case Upsilon: {
                 ASSERT_WITH_MESSAGE(!m_workset->contains(node->index()), "Upsilon should not be used as defs by other nodes.");
@@ -178,7 +178,7 @@ private:
 
     // Blocks with new live values at tail.
     BitVector m_dirtyBlocks;
-
+    
     FlowIndexing& m_indexing;
 
     // Live values per block edge.

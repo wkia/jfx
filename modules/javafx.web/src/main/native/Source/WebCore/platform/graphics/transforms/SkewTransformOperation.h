@@ -61,7 +61,7 @@ private:
     Ref<TransformOperation> blend(const TransformOperation* from, const BlendingContext&, bool blendToIdentity = false) override;
 
     void dump(WTF::TextStream&) const final;
-
+    
     SkewTransformOperation(double angleX, double angleY, OperationType type)
         : TransformOperation(type)
         , m_angleX(angleX)
@@ -69,7 +69,7 @@ private:
     {
         ASSERT(isSkewTransformOperationType());
     }
-
+    
     double m_angleX;
     double m_angleY;
 };

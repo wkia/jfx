@@ -116,7 +116,7 @@ std::unique_ptr<LegacyInlineTextBox> RenderSVGInlineText::createTextBox()
 {
     auto box = makeUnique<SVGInlineTextBox>(*this);
     box->setHasVirtualLogicalHeight();
-    return box;
+    return box; 
 }
 
 FloatRect RenderSVGInlineText::floatLinesBoundingBox() const

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -52,14 +52,14 @@ struct MinifiedGenerationInfo {
     bool alive;
     VariableRepresentation u;
     DataFormat format;
-
+    
     MinifiedGenerationInfo()
         : filled(false)
         , alive(false)
         , format(DataFormatNone)
     {
     }
-
+    
     void update(const VariableEvent& event)
     {
         switch (event.kind()) {
@@ -83,7 +83,7 @@ struct MinifiedGenerationInfo {
         default:
             return;
         }
-
+        
         u = event.variableRepresentation();
         format = event.dataFormat();
     }
@@ -95,22 +95,22 @@ static bool tryToSetConstantRecovery(ValueRecovery& recovery, MinifiedNode* node
 {
     if (!node)
         return false;
-
+    
     if (node->hasConstant()) {
         recovery = ValueRecovery::constant(node->constant());
         return true;
     }
-
+    
     if (node->isPhantomDirectArguments()) {
         recovery = ValueRecovery::directArgumentsThatWereNotCreated(node->id());
         return true;
     }
-
+    
     if (node->isPhantomClonedArguments()) {
         recovery = ValueRecovery::clonedArgumentsThatWereNotCreated(node->id());
         return true;
     }
-
+    
     return false;
 }
 
@@ -158,7 +158,7 @@ unsigned VariableEventStream::reconstruct(
         numVariables = baselineCodeBlock->numCalleeLocals();
         numTmps = baselineCodeBlock->numTmps();
     }
-
+    
     // Crazy special case: if we're at index == 0 then this must be an argument check
     // failure, in which case all variables are already set up. The recoveries should
     // reflect this.
@@ -171,12 +171,12 @@ unsigned VariableEventStream::reconstruct(
         }
         return numVariables;
     }
-
+    
     // Step 1: Find the last checkpoint, and figure out the number of virtual registers as we go.
     unsigned startIndex = index - 1;
     while (at(startIndex).kind() != Reset)
         startIndex--;
-
+    
     // Step 2: Create a mock-up of the DFG's state and execute the events.
     Operands<ValueSource> operandSources(codeBlock->numParameters(), numVariables, numTmps);
     for (unsigned i = operandSources.size(); i--;)
@@ -220,7 +220,7 @@ unsigned VariableEventStream::reconstruct(
     }
 
     dataLogLnIf(verbose, "Operand sources: ", operandSources);
-
+    
     // Step 3: Compute value recoveries!
     valueRecoveries = Operands<ValueRecovery>(OperandsLike, operandSources);
     for (unsigned i = 0; i < operandSources.size(); ++i) {
@@ -235,7 +235,7 @@ unsigned VariableEventStream::reconstruct(
             }
             continue;
         }
-
+        
         ASSERT(source.kind() == HaveNode);
         MinifiedNode* node = graph.at(source.id());
         MinifiedGenerationInfo info = generationInfos.get(source.id());
@@ -257,7 +257,7 @@ unsigned VariableEventStream::reconstruct(
             }
             continue;
         }
-
+        
         ASSERT(info.format != DataFormatNone);
         if (style == ReconstructionStyle::Separated)
             flushUndefinedOperandSpan(i);
@@ -276,7 +276,7 @@ unsigned VariableEventStream::reconstruct(
             valueRecoveries[i] = ValueRecovery::inGPR(info.u.gpr, info.format);
             continue;
         }
-
+        
         valueRecoveries[i] =
             ValueRecovery::displacedInJSStack(info.u.operand.virtualRegister(), info.format);
     }

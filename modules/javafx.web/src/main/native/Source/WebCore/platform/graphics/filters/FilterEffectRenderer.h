@@ -33,7 +33,7 @@ namespace WebCore {
 
 class FilterEffectRenderer {
     WTF_MAKE_FAST_ALLOCATED;
-
+    
 public:
     static std::unique_ptr<FilterEffectRenderer> tryCreate(bool, FilterEffect&);
     virtual void applyEffects(FilterEffect&) = 0;
@@ -41,9 +41,9 @@ public:
     virtual ImageBuffer* output() const = 0;
     virtual FloatRect destRect(const FilterEffect&) const = 0;
     virtual void clearResult() = 0;
-
+    
     virtual ~FilterEffectRenderer() = default;
-
+    
 protected:
     FilterEffectRenderer() = default;
     virtual void renderToImageBuffer(FilterEffect&) = 0;

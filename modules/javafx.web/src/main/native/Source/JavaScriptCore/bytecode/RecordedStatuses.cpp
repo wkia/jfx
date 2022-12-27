@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -61,7 +61,7 @@ GetByStatus* RecordedStatuses::addGetByStatus(const CodeOrigin& codeOrigin, cons
     gets.append(std::make_pair(codeOrigin, WTFMove(statusPtr)));
     return result;
 }
-
+    
 PutByStatus* RecordedStatuses::addPutByStatus(const CodeOrigin& codeOrigin, const PutByStatus& status)
 {
     auto statusPtr = makeUnique<PutByStatus>(status);
@@ -147,7 +147,7 @@ void RecordedStatuses::finalizeWithoutDeleting(VM& vm)
     // some compiler thread that points to the statuses. That thread is stopped at a safepoint so
     // it's OK to edit its data structure, but it's not OK to delete them. Hence we don't remove
     // anything from the vector or delete the unique_ptrs.
-
+    
     auto finalize = [&] (auto& vector) {
         for (auto& pair : vector) {
             if (!pair.second->finalize(vm))

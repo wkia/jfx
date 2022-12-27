@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,22 +40,22 @@ class IsoSubspacePerVM final {
 public:
     struct SubspaceParameters {
         SubspaceParameters() { }
-
+        
         SubspaceParameters(CString name, HeapCellType* heapCellType, size_t size)
             : name(WTFMove(name))
             , heapCellType(heapCellType)
             , size(size)
         {
         }
-
+        
         CString name;
         HeapCellType* heapCellType { nullptr };
         size_t size { 0 };
     };
-
+    
     JS_EXPORT_PRIVATE IsoSubspacePerVM(Function<SubspaceParameters(VM&)>);
     JS_EXPORT_PRIVATE ~IsoSubspacePerVM();
-
+    
     JS_EXPORT_PRIVATE IsoSubspace& forVM(VM&);
 
 private:

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -49,21 +49,21 @@ void handleExitCounts(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
     }
 
     jit.add32(AssemblyHelpers::TrustedImm32(1), AssemblyHelpers::AbsoluteAddress(&exit.m_count));
-
+    
     jit.move(AssemblyHelpers::TrustedImmPtr(jit.codeBlock()), GPRInfo::regT3);
-
+    
     AssemblyHelpers::Jump tooFewFails;
-
+    
     jit.load32(AssemblyHelpers::Address(GPRInfo::regT3, CodeBlock::offsetOfOSRExitCounter()), GPRInfo::regT2);
     jit.add32(AssemblyHelpers::TrustedImm32(1), GPRInfo::regT2);
     jit.store32(GPRInfo::regT2, AssemblyHelpers::Address(GPRInfo::regT3, CodeBlock::offsetOfOSRExitCounter()));
-
+    
     jit.move(AssemblyHelpers::TrustedImmPtr(jit.baselineCodeBlock()), GPRInfo::regT0);
     AssemblyHelpers::Jump reoptimizeNow = jit.branch32(
         AssemblyHelpers::GreaterThanOrEqual,
         AssemblyHelpers::Address(GPRInfo::regT0, CodeBlock::offsetOfJITExecuteCounter()),
         AssemblyHelpers::TrustedImm32(0));
-
+    
     // We want to figure out if there's a possibility that we're in a loop. For the outermost
     // code block in the inline stack, we handle this appropriately by having the loop OSR trigger
     // check the exit count of the replacement of the CodeBlock from which we are OSRing. The
@@ -71,9 +71,9 @@ void handleExitCounts(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
     // don't know where to look for the exit count. Figure out if those loops are severe enough
     // that we had tried to OSR enter. If so, then we should use the loop reoptimization trigger.
     // Otherwise, we should use the normal reoptimization trigger.
-
+    
     AssemblyHelpers::JumpList loopThreshold;
-
+    
     for (InlineCallFrame* inlineCallFrame = exit.m_codeOrigin.inlineCallFrame(); inlineCallFrame; inlineCallFrame = inlineCallFrame->directCaller.inlineCallFrame()) {
         loopThreshold.append(
             jit.branchTest8(
@@ -81,11 +81,11 @@ void handleExitCounts(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
                 AssemblyHelpers::AbsoluteAddress(
                     inlineCallFrame->baselineCodeBlock->ownerExecutable()->addressOfDidTryToEnterInLoop())));
     }
-
+    
     jit.move(
         AssemblyHelpers::TrustedImm32(jit.codeBlock()->exitCountThresholdForReoptimization()),
         GPRInfo::regT1);
-
+    
     if (!loopThreshold.empty()) {
         AssemblyHelpers::Jump done = jit.jump();
 
@@ -94,22 +94,22 @@ void handleExitCounts(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
             AssemblyHelpers::TrustedImm32(
                 jit.codeBlock()->exitCountThresholdForReoptimizationFromLoop()),
             GPRInfo::regT1);
-
+        
         done.link(&jit);
     }
-
+    
     tooFewFails = jit.branch32(AssemblyHelpers::BelowOrEqual, GPRInfo::regT2, GPRInfo::regT1);
-
+    
     reoptimizeNow.link(&jit);
-
+    
     jit.setupArguments<decltype(operationTriggerReoptimizationNow)>(GPRInfo::regT0, GPRInfo::regT3, AssemblyHelpers::TrustedImmPtr(&exit));
     jit.prepareCallOperation(vm);
     jit.move(AssemblyHelpers::TrustedImmPtr(tagCFunction<OperationPtrTag>(operationTriggerReoptimizationNow)), GPRInfo::nonArgGPR0);
     jit.call(GPRInfo::nonArgGPR0, OperationPtrTag);
     AssemblyHelpers::Jump doneAdjusting = jit.jump();
-
+    
     tooFewFails.link(&jit);
-
+    
     // Adjust the execution counter such that the target is to only optimize after a while.
     int32_t activeThreshold =
         jit.baselineCodeBlock()->adjustedCounterValue(
@@ -134,7 +134,7 @@ void handleExitCounts(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
     jit.store32(AssemblyHelpers::TrustedImm32(-clippedValue), AssemblyHelpers::Address(GPRInfo::regT0, CodeBlock::offsetOfJITExecuteCounter()));
     jit.store32(AssemblyHelpers::TrustedImm32(activeThreshold), AssemblyHelpers::Address(GPRInfo::regT0, CodeBlock::offsetOfJITExecutionActiveThreshold()));
     jit.store32(AssemblyHelpers::TrustedImm32(formattedTotalExecutionCount(clippedValue)), AssemblyHelpers::Address(GPRInfo::regT0, CodeBlock::offsetOfJITExecutionTotalCount()));
-
+    
     doneAdjusting.link(&jit);
 }
 
@@ -352,7 +352,7 @@ static void osrWriteBarrier(VM& vm, CCallHelpers& jit, GPRReg owner, GPRReg scra
 void adjustAndJumpToTarget(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
 {
     jit.memoryFence();
-
+    
     jit.move(
         AssemblyHelpers::TrustedImmPtr(
             jit.codeBlock()->baselineAlternative()), GPRInfo::argumentGPR1);
@@ -391,7 +391,7 @@ void adjustAndJumpToTarget(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
         MacroAssemblerCodePtr<JSEntryPtrTag> destination;
         if (bytecodeIndex.checkpoint())
             destination = LLInt::checkpointOSRExitTrampolineThunk().code();
-        else
+        else 
             destination = LLInt::normalOSRExitTrampolineThunk().code();
 
         if (exit.isExceptionHandler()) {
@@ -425,7 +425,7 @@ void adjustAndJumpToTarget(VM& vm, CCallHelpers& jit, const OSRExitBase& exit)
         // Since we're jumping to op_catch, we need to set callFrameForCatch.
         jit.storePtr(GPRInfo::callFrameRegister, vm.addressOfCallFrameForCatch());
     }
-
+    
     jit.move(AssemblyHelpers::TrustedImmPtr(jumpTarget), GPRInfo::regT2);
     jit.farJump(GPRInfo::regT2, OSRExitPtrTag);
 }

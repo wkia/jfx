@@ -64,7 +64,7 @@ public:
     bool willRespondToMouseClickEvents() final;
 
     bool hasRel(Relation) const;
-
+    
     SharedStringHash visitedLinkHash() const;
 
     WEBCORE_EXPORT DOMTokenList& relList();

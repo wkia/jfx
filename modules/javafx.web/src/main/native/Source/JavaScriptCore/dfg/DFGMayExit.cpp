@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -41,7 +41,7 @@ template<typename StateType>
 ExitMode mayExitImpl(Graph& graph, Node* node, StateType& state)
 {
     ExitMode result = DoesNotExit;
-
+    
     switch (node->op()) {
     // This is a carefully curated list of nodes that definitely do not exit. We try to be very
     // conservative when maintaining this list, because adding new node types to it doesn't
@@ -153,7 +153,7 @@ ExitMode mayExitImpl(Graph& graph, Node* node, StateType& state)
         // If in doubt, return true.
         return Exits;
     }
-
+    
     graph.doToChildren(
         node,
         [&] (Edge& edge) {
@@ -177,7 +177,7 @@ ExitMode mayExitImpl(Graph& graph, Node* node, StateType& state)
                     return;
                 }
             }
-
+            
             switch (edge.useKind()) {
             // These are shady because nodes that have these use kinds will typically exit for
             // unrelated reasons. For example CompareEq doesn't usually exit, but if it uses
@@ -186,7 +186,7 @@ ExitMode mayExitImpl(Graph& graph, Node* node, StateType& state)
             case ObjectOrOtherUse:
                 result = Exits;
                 break;
-
+                
             default:
                 break;
             }

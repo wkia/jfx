@@ -46,7 +46,7 @@ public:
     WrappedImagePtr data() const final { return m_cachedImage.get(); }
 
     Ref<CSSValue> cssValue() const final;
-
+    
     bool canRender(const RenderElement*, float multiplier) const final;
     bool isPending() const final;
     void load(CachedResourceLoader&, const ResourceLoaderOptions&) final;

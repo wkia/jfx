@@ -103,7 +103,7 @@ void HTMLLabelElement::setHovered(bool over, Style::InvalidationScope invalidati
 {
     if (over == hovered())
         return;
-
+        
     // Update our status first.
     HTMLElement::setHovered(over, invalidationScope);
 

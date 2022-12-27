@@ -59,7 +59,7 @@ public:
     {
         return !(*this == o);
     }
-
+    
     LayoutUnit x() const { return m_location.x(); }
     LayoutUnit y() const { return m_location.y(); }
     LayoutPoint location() const { return m_location; }

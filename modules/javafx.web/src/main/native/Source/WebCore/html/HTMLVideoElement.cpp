@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -90,7 +90,7 @@ Ref<HTMLVideoElement> HTMLVideoElement::create(Document& document)
 
 bool HTMLVideoElement::rendererIsNeeded(const RenderStyle& style)
 {
-    return HTMLElement::rendererIsNeeded(style);
+    return HTMLElement::rendererIsNeeded(style); 
 }
 
 RenderPtr<RenderElement> HTMLVideoElement::createElementRenderer(RenderStyle&& style, const RenderTreePosition&)
@@ -149,7 +149,7 @@ void HTMLVideoElement::parseAttribute(const QualifiedName& name, const AtomStrin
         mediaSession().setWirelessVideoPlaybackDisabled(true);
 #endif
     else {
-        HTMLMediaElement::parseAttribute(name, value);
+        HTMLMediaElement::parseAttribute(name, value);    
 
 #if PLATFORM(IOS_FAMILY) && ENABLE(WIRELESS_PLAYBACK_TARGET)
         if (name == webkitairplayAttr) {
@@ -166,7 +166,7 @@ bool HTMLVideoElement::supportsFullscreen(HTMLMediaElementEnums::VideoFullscreen
 {
     if (!player())
         return false;
-
+    
     if (videoFullscreenMode == HTMLMediaElementEnums::VideoFullscreenModePictureInPicture) {
         if (!mediaSession().allowsPictureInPicture())
             return false;
@@ -175,7 +175,7 @@ bool HTMLVideoElement::supportsFullscreen(HTMLMediaElementEnums::VideoFullscreen
     }
 
     Page* page = document().page();
-    if (!page)
+    if (!page) 
         return false;
 
     if (!player()->supportsFullscreen())
@@ -295,7 +295,7 @@ void HTMLVideoElement::paintCurrentFrameInContext(GraphicsContext& context, cons
     RefPtr<MediaPlayer> player = HTMLMediaElement::player();
     if (!player)
         return;
-
+    
     player->setVisibleForCanvas(true); // Make player visible or it won't draw.
     context.paintFrameForMedia(*player, destRect);
 }
@@ -304,7 +304,7 @@ bool HTMLVideoElement::hasAvailableVideoFrame() const
 {
     if (!player())
         return false;
-
+    
     return player()->hasVideo() && player()->hasAvailableVideoFrame();
 }
 
@@ -322,7 +322,7 @@ ExceptionOr<void> HTMLVideoElement::webkitEnterFullscreen()
     if (isFullscreen())
         return { };
 
-    // Generate an exception if this isn't called in response to a user gesture, or if the
+    // Generate an exception if this isn't called in response to a user gesture, or if the 
     // element does not support fullscreen, or the element is changing fullscreen mode.
     if (!mediaSession().fullscreenPermitted() || !supportsFullscreen(HTMLMediaElementEnums::VideoFullscreenModeStandard) || isChangingVideoFullscreenMode())
         return Exception { InvalidStateError };

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -49,54 +49,54 @@ public:
 
     const char* name() const { return m_name.data(); }
     MarkedSpace& space() const { return m_space; }
-
+    
     const CellAttributes& attributes() const;
     HeapCellType* heapCellType() const { return m_heapCellType; }
     AlignedMemoryAllocator* alignedMemoryAllocator() const { return m_alignedMemoryAllocator; }
-
+    
     void finishSweep(MarkedBlock::Handle&, FreeList*);
     void destroy(VM&, JSCell*);
 
     virtual Allocator allocatorFor(size_t, AllocatorForMode) = 0;
     virtual void* allocate(VM&, size_t, GCDeferralContext*, AllocationFailureMode) = 0;
-
+    
     void prepareForAllocation();
-
+    
     void didCreateFirstDirectory(BlockDirectory* directory) { m_directoryForEmptyAllocation = directory; }
-
+    
     // Finds an empty block from any Subspace that agrees to trade blocks with us.
     MarkedBlock::Handle* findEmptyBlockToSteal();
-
+    
     template<typename Func>
     void forEachDirectory(const Func&);
-
+    
     Ref<SharedTask<BlockDirectory*()>> parallelDirectorySource();
-
+    
     template<typename Func>
     void forEachMarkedBlock(const Func&);
-
+    
     template<typename Func>
     void forEachNotEmptyMarkedBlock(const Func&);
-
+    
     JS_EXPORT_PRIVATE Ref<SharedTask<MarkedBlock::Handle*()>> parallelNotEmptyMarkedBlockSource();
-
+    
     template<typename Func>
     void forEachPreciseAllocation(const Func&);
-
+    
     template<typename Func>
     void forEachMarkedCell(const Func&);
-
+    
     template<typename Visitor, typename Func>
     Ref<SharedTask<void(Visitor&)>> forEachMarkedCellInParallel(const Func&);
 
     template<typename Func>
     void forEachLiveCell(const Func&);
-
+    
     void sweepBlocks();
-
+    
     Subspace* nextSubspaceInAlignedMemoryAllocator() const { return m_nextSubspaceInAlignedMemoryAllocator; }
     void setNextSubspaceInAlignedMemoryAllocator(Subspace* subspace) { m_nextSubspaceInAlignedMemoryAllocator = subspace; }
-
+    
     virtual void didResizeBits(unsigned newSize);
     virtual void didRemoveBlock(unsigned blockIndex);
     virtual void didBeginSweepingToFreeList(MarkedBlock::Handle*);
@@ -105,12 +105,12 @@ public:
 
 protected:
     void initialize(HeapCellType*, AlignedMemoryAllocator*);
-
+    
     MarkedSpace& m_space;
-
+    
     HeapCellType* m_heapCellType { nullptr };
     AlignedMemoryAllocator* m_alignedMemoryAllocator { nullptr };
-
+    
     BlockDirectory* m_firstDirectory { nullptr };
     BlockDirectory* m_directoryForEmptyAllocation { nullptr }; // Uses the MarkedSpace linked list of blocks.
     SentinelLinkedList<PreciseAllocation, PackedRawSentinelNode<PreciseAllocation>> m_preciseAllocations;

@@ -75,7 +75,7 @@ bool StyleFillData::operator==(const StyleFillData& other) const
         && visitedLinkPaintUri == other.visitedLinkPaintUri
         && paintType == other.paintType
         && visitedLinkPaintType == other.visitedLinkPaintType;
-
+    
 }
 
 StyleStrokeData::StyleStrokeData()

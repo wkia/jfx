@@ -41,7 +41,7 @@ public:
     static void handleKeypressEvent(HTMLInputElement&, KeyboardEvent&);
     static void handleKeyupEvent(InputType&, KeyboardEvent&);
     static bool accessKeyAction(HTMLInputElement&, bool sendMouseEvents);
-
+    
 protected:
     explicit BaseClickableWithKeyInputType(Type type, HTMLInputElement& element) : InputType(type, element) { }
 

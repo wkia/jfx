@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -410,7 +410,7 @@ private:
 
     // This stores the current recoveries present in registers. A null
     // CachedRecovery means we can trash the current value as we don't
-    // care about it.
+    // care about it. 
     RegisterMap<CachedRecovery*> m_registers;
 
 #if USE(JSVALUE64)
@@ -573,7 +573,7 @@ private:
         ensureRegister(
             [this] (const CachedRecovery& cachedRecovery) {
                 if (cachedRecovery.recovery().isInGPR()) {
-                    return !m_lockedRegisters.get(cachedRecovery.recovery().gpr())
+                    return !m_lockedRegisters.get(cachedRecovery.recovery().gpr()) 
                         && !m_newRegisters[cachedRecovery.recovery().gpr()];
                 }
 #if USE(JSVALUE32_64)
@@ -796,7 +796,7 @@ private:
     // It returns false if it was unable to perform some safe writes
     // due to high register pressure.
     bool performSafeWrites();
-
+    
     unsigned m_numPassedArgs { UINT_MAX };
 };
 

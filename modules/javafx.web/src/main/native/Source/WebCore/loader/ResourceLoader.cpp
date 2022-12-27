@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -100,7 +100,7 @@ void ResourceLoader::finishNetworkLoad()
 void ResourceLoader::releaseResources()
 {
     ASSERT(!m_reachedTerminalState);
-
+    
     // It's possible that when we release the handle, it will be
     // deallocated and release the last reference to this object.
     // We need to retain to avoid accessing the object after it
@@ -109,7 +109,7 @@ void ResourceLoader::releaseResources()
 
     m_frame = nullptr;
     m_documentLoader = nullptr;
-
+    
     // We need to set reachedTerminalState to true before we release
     // the resources to prevent a double dealloc of WebView <rdar://problem/4372628>
     m_reachedTerminalState = true;
@@ -137,7 +137,7 @@ void ResourceLoader::init(ResourceRequest&& clientRequest, CompletionHandler<voi
     ASSERT(m_request.isNull());
     ASSERT(m_deferredRequest.isNull());
     ASSERT(!m_documentLoader->isSubstituteLoadPending(this));
-
+    
     m_loadTiming.markStartTime();
 
     m_defersLoading = m_options.defersLoadingPolicy == DefersLoadingPolicy::AllowDefersLoading && m_frame->page()->defersLoading();
@@ -278,7 +278,7 @@ void ResourceLoader::loadDataURL()
     ASSERT(url.protocolIsData());
 
     DataURLDecoder::ScheduleContext scheduleContext;
-#if USE(COCOA_EVENT_LOOP) && !PLATFORM(JAVA)
+#if USE(COCOA_EVENT_LOOP)
     if (auto page = m_frame->page())
         scheduleContext.scheduledPairs = *page->scheduledRunLoopPairs();
 #endif
@@ -341,7 +341,7 @@ void ResourceLoader::addDataOrBuffer(const uint8_t* data, unsigned length, Share
             m_resourceData = SharedBuffer::create(data, length);
         return;
     }
-
+    
     if (buffer)
         m_resourceData->append(*buffer);
     else
@@ -639,22 +639,22 @@ void ResourceLoader::cancel(const ResourceError& error)
     // If the load has already completed - succeeded, failed, or previously cancelled - do nothing.
     if (m_reachedTerminalState)
         return;
-
+       
     ResourceError nonNullError = error.isNull() ? cancelledError() : error;
-
-    // willCancel() and didFailToLoad() both call out to clients that might do
+    
+    // willCancel() and didFailToLoad() both call out to clients that might do 
     // something causing the last reference to this object to go away.
     Ref<ResourceLoader> protectedThis(*this);
-
-    // If we re-enter cancel() from inside willCancel(), we want to pick up from where we left
+    
+    // If we re-enter cancel() from inside willCancel(), we want to pick up from where we left 
     // off without re-running willCancel()
     if (m_cancellationStatus == NotCancelled) {
         m_cancellationStatus = CalledWillCancel;
-
+        
         willCancel(nonNullError);
     }
 
-    // If we re-enter cancel() from inside didFailToLoad(), we want to pick up from where we
+    // If we re-enter cancel() from inside didFailToLoad(), we want to pick up from where we 
     // left off without redoing any of this work.
     if (m_cancellationStatus == CalledWillCancel) {
         m_cancellationStatus = Cancelled;
@@ -829,7 +829,7 @@ bool ResourceLoader::canAuthenticateAgainstProtectionSpace(const ProtectionSpace
 }
 
 #endif
-
+    
 #if PLATFORM(IOS_FAMILY)
 
 RetainPtr<CFDictionaryRef> ResourceLoader::connectionProperties(ResourceHandle*)

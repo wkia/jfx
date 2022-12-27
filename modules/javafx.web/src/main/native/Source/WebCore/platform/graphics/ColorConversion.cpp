@@ -107,7 +107,7 @@ SRGBA<float> ColorConversion<SRGBA<float>, HSLA<float>>::convert(const HSLA<floa
 
     float temp2 = normalizedLightness <= 0.5f ? normalizedLightness * (1.0f + normalizedSaturation) : normalizedLightness + normalizedSaturation - normalizedLightness * normalizedSaturation;
     float temp1 = 2.0f * normalizedLightness - temp2;
-
+    
     // Hue is in the range 0-6, other args in 0-1.
     auto hueToRGB = [](float temp1, float temp2, float hue) {
         if (hue < 1.0f)
@@ -135,7 +135,7 @@ HWBA<float> ColorConversion<HWBA<float>, SRGBA<float>>::convert(const SRGBA<floa
     auto [hue, min, max, chroma] = calculateHSLHue(color);
     auto whiteness = min * 100.0f;
     auto blackness = (1.0f - max) * 100.0f;
-
+    
     return { hue, whiteness, blackness, color.alpha };
 }
 

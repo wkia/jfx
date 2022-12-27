@@ -60,7 +60,7 @@ public:
 
     static bool isLeftOperandValidConstant(SnippetOperand leftOperand) { return leftOperand.isPositiveConstInt32(); }
     static bool isRightOperandValidConstant(SnippetOperand rightOperand) { return rightOperand.isPositiveConstInt32(); }
-
+    
 private:
     SnippetOperand m_leftOperand;
     SnippetOperand m_rightOperand;

@@ -25,7 +25,7 @@
 #include "Filter.h"
 
 namespace WebCore {
-
+    
 class FETile : public FilterEffect {
 public:
     static Ref<FETile> create(Filter&);

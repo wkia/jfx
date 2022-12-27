@@ -105,7 +105,7 @@ public:
         ASSERT(m_representation == PlatformLayerRepresentation);
         return makePlatformLayerTyped(m_typelessPlatformLayer);
     }
-
+    
     GraphicsLayer::PlatformLayerID layerID() const
     {
         return m_layerID;
@@ -164,7 +164,7 @@ public:
         ASSERT_NOT_REACHED();
         return true;
     }
-
+    
     LayerRepresentation toRepresentation(Type representation) const
     {
         switch (representation) {
@@ -184,7 +184,7 @@ public:
 
     bool representsGraphicsLayer() const { return m_representation == GraphicsLayerRepresentation; }
     bool representsPlatformLayerID() const { return m_representation == PlatformLayerIDRepresentation; }
-
+    
 private:
     WEBCORE_EXPORT static void retainPlatformLayer(void* typelessPlatformLayer);
     WEBCORE_EXPORT static void releasePlatformLayer(void* typelessPlatformLayer);
@@ -201,7 +201,7 @@ class ScrollingStateNode : public ThreadSafeRefCounted<ScrollingStateNode> {
     WTF_MAKE_FAST_ALLOCATED;
 public:
     virtual ~ScrollingStateNode();
-
+    
     ScrollingNodeType nodeType() const { return m_nodeType; }
 
     bool isFixedNode() const { return m_nodeType == ScrollingNodeType::Fixed; }
@@ -269,7 +269,7 @@ public:
         // ScrollingStateOverflowScrollProxyNode
         OverflowScrollingNode                       = 1LLU << 43,
     };
-
+    
     bool hasChangedProperties() const { return !m_changedProperties.isEmpty(); }
     bool hasChangedProperty(Property property) const { return m_changedProperties.contains(property); }
     void resetChangedProperties() { m_changedProperties = { }; }
@@ -279,7 +279,7 @@ public:
 
     OptionSet<Property> changedProperties() const { return m_changedProperties; }
     void setChangedProperties(OptionSet<Property> changedProperties) { m_changedProperties = changedProperties; }
-
+    
     virtual void reconcileLayerPositionForViewportRect(const LayoutRect& /*viewportRect*/, ScrollingLayerPositionAction) { }
 
     const LayerRepresentation& layer() const { return m_layer; }

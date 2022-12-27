@@ -255,7 +255,7 @@ void ScrollingTree::traverseScrollingTreeRecursive(ScrollingTreeNode& node, cons
 void ScrollingTree::mainFrameViewportChangedViaDelegatedScrolling(const FloatPoint& scrollPosition, const FloatRect& layoutViewport, double)
 {
     LOG_WITH_STREAM(Scrolling, stream << "ScrollingTree::viewportChangedViaDelegatedScrolling - layoutViewport " << layoutViewport);
-
+    
     if (!m_rootNode)
         return;
 
@@ -331,7 +331,7 @@ void ScrollingTree::updateTreeFromStateNodeRecursive(const ScrollingStateNode* s
         m_rootNode = nullptr;
         return;
     }
-
+    
     ScrollingNodeID nodeID = stateNode->scrollingNodeID();
     ScrollingNodeID parentNodeID = stateNode->parentNodeID();
 
@@ -348,7 +348,7 @@ void ScrollingTree::updateTreeFromStateNodeRecursive(const ScrollingStateNode* s
             ASSERT(stateNode->isFrameScrollingNode());
             m_rootNode = downcast<ScrollingTreeFrameScrollingNode>(node.get());
             removeAllNodes();
-        }
+        } 
         m_nodeMap.set(nodeID, node.get());
     }
 
@@ -373,7 +373,7 @@ void ScrollingTree::updateTreeFromStateNodeRecursive(const ScrollingStateNode* s
     }
 
     node->commitStateBeforeChildren(*stateNode);
-
+    
     // Move all children into the orphanNodes map. Live ones will get added back as we recurse over children.
     for (auto& childScrollingNode : node->children()) {
         childScrollingNode->setParent(nullptr);
@@ -450,12 +450,12 @@ ScrollingTreeNode* ScrollingTree::nodeForID(ScrollingNodeID nodeID) const
 void ScrollingTree::notifyRelatedNodesAfterScrollPositionChange(ScrollingTreeScrollingNode& changedNode)
 {
     Vector<ScrollingNodeID> additionalUpdateRoots;
-
+    
     if (is<ScrollingTreeOverflowScrollingNode>(changedNode))
         additionalUpdateRoots = overflowRelatedNodes().get(changedNode.scrollingNodeID());
 
     notifyRelatedNodesRecursive(changedNode);
-
+    
     for (auto positionedNodeID : additionalUpdateRoots) {
         auto* positionedNode = nodeForID(positionedNodeID);
         if (positionedNode)
@@ -544,7 +544,7 @@ bool ScrollingTree::isUserScrollInProgressForNode(ScrollingNodeID nodeID)
     Locker locker { m_treeStateLock };
     return m_treeState.nodesWithActiveUserScrolls.contains(nodeID);
 }
-
+    
 void ScrollingTree::setUserScrollInProgressForNode(ScrollingNodeID nodeID, bool isScrolling)
 {
     ASSERT(nodeID);
@@ -570,7 +570,7 @@ bool ScrollingTree::isScrollSnapInProgressForNode(ScrollingNodeID nodeID)
     Locker locker { m_treeStateLock };
     return m_treeState.nodesWithActiveScrollSnap.contains(nodeID);
 }
-
+    
 void ScrollingTree::setNodeScrollSnapInProgress(ScrollingNodeID nodeID, bool isScrollSnapping)
 {
     ASSERT(nodeID);
@@ -632,14 +632,14 @@ Vector<ScrollingTree::ScrollUpdate> ScrollingTree::takePendingScrollUpdates()
 void ScrollingTree::setScrollPinningBehavior(ScrollPinningBehavior pinning)
 {
     Locker locker { m_swipeStateLock };
-
+    
     m_swipeState.scrollPinningBehavior = pinning;
 }
 
 ScrollPinningBehavior ScrollingTree::scrollPinningBehavior()
 {
     Locker locker { m_swipeStateLock };
-
+    
     return m_swipeState.scrollPinningBehavior;
 }
 
@@ -690,7 +690,7 @@ bool ScrollingTree::hasProcessedWheelEventsRecently()
 {
     Locker locker { m_lastWheelEventTimeLock };
     constexpr auto activityInterval = 50_ms; // Duration of a few frames so that we stay active for sequence of wheel events.
-
+    
     return (MonotonicTime::now() - m_lastWheelEventTime) < activityInterval;
 }
 
@@ -721,12 +721,12 @@ String ScrollingTree::scrollingTreeAsText(ScrollingStateTreeAsTextBehavior behav
 
         if (!m_treeState.mainFrameScrollPosition.isZero())
             ts.dumpProperty("main frame scroll position", m_treeState.mainFrameScrollPosition);
-
+        
         if (m_rootNode) {
             TextStream::GroupScope scope(ts);
             m_rootNode->dump(ts, behavior | ScrollingStateTreeAsTextBehaviorIncludeLayerPositions);
         }
-
+        
         if (behavior & ScrollingStateTreeAsTextBehaviorIncludeNodeIDs) {
             if (!m_overflowRelatedNodesMap.isEmpty()) {
                 TextStream::GroupScope scope(ts);

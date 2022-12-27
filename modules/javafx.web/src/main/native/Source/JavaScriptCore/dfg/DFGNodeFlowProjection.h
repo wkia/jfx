@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -38,85 +38,85 @@ public:
         Primary,
         Shadow
     };
-
+    
     NodeFlowProjection() { }
-
+    
     NodeFlowProjection(Node* node)
         : m_word(bitwise_cast<uintptr_t>(node))
     {
         ASSERT(kind() == Primary);
     }
-
+    
     NodeFlowProjection(Node* node, Kind kind)
         : m_word(bitwise_cast<uintptr_t>(node) | (kind == Shadow ? shadowBit : 0))
     {
         ASSERT(this->kind() == kind);
     }
-
+    
     NodeFlowProjection(WTF::HashTableDeletedValueType)
         : m_word(shadowBit)
     {
     }
-
+    
     explicit operator bool() const { return !!m_word; }
-
+    
     Kind kind() const { return (m_word & shadowBit) ? Shadow : Primary; }
-
+    
     Node* node() const { return bitwise_cast<Node*>(m_word & ~shadowBit); }
-
+    
     Node& operator*() const { return *node(); }
     Node* operator->() const { return node(); }
-
+    
     unsigned hash() const
     {
         return m_word;
     }
-
+    
     bool operator==(NodeFlowProjection other) const
     {
         return m_word == other.m_word;
     }
-
+    
     bool operator!=(NodeFlowProjection other) const
     {
         return !(*this == other);
     }
-
+    
     bool operator<(NodeFlowProjection other) const
     {
         if (kind() != other.kind())
             return kind() < other.kind();
         return node() < other.node();
     }
-
+    
     bool operator>(NodeFlowProjection other) const
     {
         return other < *this;
     }
-
+    
     bool operator<=(NodeFlowProjection other) const
     {
         return !(*this > other);
     }
-
+    
     bool operator>=(NodeFlowProjection other) const
     {
         return !(*this < other);
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return *this == NodeFlowProjection(WTF::HashTableDeletedValue);
     }
-
+    
     // Phi shadow projections can become invalid because the Phi might be folded to something else.
     bool isStillValid() const
     {
         return *this && (kind() == Primary || node()->op() == Phi);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
     template<typename Func>
     static void forEach(Node* node, const Func& func)
     {
@@ -124,10 +124,10 @@ public:
         if (node->op() == Phi)
             func(NodeFlowProjection(node, Shadow));
     }
-
+    
 public:
     static constexpr uintptr_t shadowBit = 1;
-
+    
     uintptr_t m_word { 0 };
 };
 

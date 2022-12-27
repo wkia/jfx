@@ -98,9 +98,9 @@ bool MarkingConstraintSet::executeConvergenceImpl(SlotVisitor& visitor)
 {
     SuperSamplerScope superSamplerScope(false);
     MarkingConstraintSolver solver(*this);
-
+    
     unsigned iteration = m_iteration++;
-
+    
     dataLogIf(Options::logGC(), "i#", iteration, ":");
 
     if (iteration == 1) {
@@ -109,12 +109,12 @@ bool MarkingConstraintSet::executeConvergenceImpl(SlotVisitor& visitor)
         solver.drain(m_unexecutedRoots);
         return false;
     }
-
+    
     if (iteration == 2) {
         solver.drain(m_unexecutedOutgrowths);
         return false;
     }
-
+    
     // We want to keep preferring the outgrowth constraints - the ones that need to be fixpointed
     // even in a stop-the-world GC - until they stop producing. They have a tendency to go totally
     // silent at some point during GC, at which point it makes sense not to run them again until
@@ -130,38 +130,38 @@ bool MarkingConstraintSet::executeConvergenceImpl(SlotVisitor& visitor)
     // run first. Choosing the constraints that are the most likely to produce means running fewer
     // constraints before returning.
     bool isWavefrontAdvancing = this->isWavefrontAdvancing(visitor);
-
+    
     std::sort(
         m_ordered.begin(), m_ordered.end(),
         [&] (MarkingConstraint* a, MarkingConstraint* b) -> bool {
             // Remember: return true if a should come before b.
-
+            
             auto volatilityScore = [] (MarkingConstraint* constraint) -> unsigned {
                 return constraint->volatility() == ConstraintVolatility::GreyedByMarking ? 1 : 0;
             };
-
+            
             unsigned aVolatilityScore = volatilityScore(a);
             unsigned bVolatilityScore = volatilityScore(b);
-
+            
             if (aVolatilityScore != bVolatilityScore) {
                 if (isWavefrontAdvancing)
                     return aVolatilityScore > bVolatilityScore;
                 else
                     return aVolatilityScore < bVolatilityScore;
             }
-
+            
             double aWorkEstimate = a->workEstimate(visitor);
             double bWorkEstimate = b->workEstimate(visitor);
-
+            
             if (aWorkEstimate != bWorkEstimate)
                 return aWorkEstimate > bWorkEstimate;
-
+            
             // This causes us to use SeldomGreyed vs GreyedByExecution as a final tie-breaker.
             return a->volatility() > b->volatility();
         });
-
+    
     solver.converge(m_ordered);
-
+    
     // Return true if we've converged. That happens if we did not visit anything.
     return !solver.didVisitSomething();
 }

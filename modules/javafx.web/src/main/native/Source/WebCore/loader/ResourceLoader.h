@@ -6,13 +6,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -86,7 +86,7 @@ public:
     ResourceError blockedError();
     ResourceError blockedByContentBlockerError();
     ResourceError cannotShowURLError();
-
+    
     virtual void setDefersLoading(bool);
     bool defersLoading() const { return m_defersLoading; }
 
@@ -99,7 +99,7 @@ public:
 
     SharedBuffer* resourceData() const { return m_resourceData.get(); }
     void clearResourceData();
-
+    
     virtual bool isSubresourceLoader() const;
 
     virtual void willSendRequest(ResourceRequest&&, const ResourceResponse& redirectResponse, CompletionHandler<void(ResourceRequest&&)>&& callback);
@@ -131,7 +131,7 @@ public:
     bool shouldSniffContentEncoding() const { return m_options.sniffContentEncoding == ContentEncodingSniffingPolicy::Sniff; }
     WEBCORE_EXPORT bool isAllowedToAskUserForCredentials() const;
     WEBCORE_EXPORT bool shouldIncludeCertificateInfo() const;
-
+    
     virtual CachedResource* cachedResource() const { return nullptr; }
 
     bool reachedTerminalState() const { return m_reachedTerminalState; }
@@ -166,7 +166,7 @@ protected:
     bool wasCancelled() const { return m_cancellationStatus >= Cancelled; }
 
     void didReceiveDataOrBuffer(const uint8_t*, unsigned, RefPtr<SharedBuffer>&&, long long encodedDataLength, DataPayloadType);
-
+    
     void setReferrerPolicy(ReferrerPolicy referrerPolicy) { m_options.referrerPolicy = referrerPolicy; }
     ReferrerPolicy referrerPolicy() const { return m_options.referrerPolicy; }
 
@@ -227,7 +227,7 @@ private:
     ResourceRequest m_request;
     ResourceRequest m_originalRequest; // Before redirects.
     RefPtr<SharedBuffer> m_resourceData;
-
+    
     unsigned long m_identifier { 0 };
 
     bool m_reachedTerminalState { false };

@@ -73,10 +73,10 @@ inline void ConservativeRoots::genericAddPointer(void* p, HeapVersion markingVer
         [&] (void* p, HeapCell::Kind cellKind) {
             if (isJSCellKind(cellKind))
                 markHook.markKnownJSCell(static_cast<JSCell*>(p));
-
+            
             if (m_size == m_capacity)
                 grow();
-
+            
             m_roots[m_size++] = bitwise_cast<HeapCell*>(p);
         });
 }
@@ -121,12 +121,12 @@ public:
         , m_codeBlocksLocker(locker)
     {
     }
-
+    
     void mark(void* address)
     {
         m_stubRoutines.mark(address);
     }
-
+    
     void markKnownJSCell(JSCell* cell)
     {
         if (cell->type() == CodeBlockType)

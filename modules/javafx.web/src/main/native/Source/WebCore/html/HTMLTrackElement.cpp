@@ -49,14 +49,14 @@ using namespace HTMLNames;
 static String urlForLoggingTrack(const URL& url)
 {
     static const unsigned maximumURLLengthForLogging = 128;
-
+    
     if (url.string().length() < maximumURLLengthForLogging)
         return url.string();
     return url.string().substring(0, maximumURLLengthForLogging) + "...";
 }
 
 #endif
-
+    
 inline HTMLTrackElement::HTMLTrackElement(const QualifiedName& tagName, Document& document)
     : HTMLElement(tagName, document)
     , ActiveDOMObject(document)
@@ -247,10 +247,10 @@ void HTMLTrackElement::didCompleteLoad(LoadStatus status)
     auto wrapperProtector = makePendingActivity(*this);
 
     // 4.8.10.12.3 Sourcing out-of-band text tracks (continued)
-
+    
     // 4. Download: ...
-    // If the fetching algorithm fails for any reason (network error, the server returns an error
-    // code, a cross-origin check fails, etc), or if URL is the empty string or has the wrong origin
+    // If the fetching algorithm fails for any reason (network error, the server returns an error 
+    // code, a cross-origin check fails, etc), or if URL is the empty string or has the wrong origin 
     // as determined by the condition at the start of this step, or if the fetched resource is not in
     // a supported format, then queue a task to first change the text track readiness state to failed
     // to load and then fire a simple event named error at the track element; and then, once that task
@@ -267,7 +267,7 @@ void HTMLTrackElement::didCompleteLoad(LoadStatus status)
     //     1. Change the text track readiness state to loaded.
     setReadyState(HTMLTrackElement::LOADED);
 
-    //     2. If the file was successfully processed, fire a simple event named load at the
+    //     2. If the file was successfully processed, fire a simple event named load at the 
     //        track element.
     dispatchEvent(Event::create(eventNames().loadEvent, Event::CanBubble::No, Event::IsCancelable::No));
 }
@@ -320,19 +320,19 @@ void HTMLTrackElement::textTrackAddCues(TextTrack& track, const TextTrackCueList
     if (auto parent = mediaElement())
         parent->textTrackAddCues(track, cues);
 }
-
+    
 void HTMLTrackElement::textTrackRemoveCues(TextTrack& track, const TextTrackCueList& cues)
 {
     if (auto parent = mediaElement())
         parent->textTrackRemoveCues(track, cues);
 }
-
+    
 void HTMLTrackElement::textTrackAddCue(TextTrack& track, TextTrackCue& cue)
 {
     if (auto parent = mediaElement())
         parent->textTrackAddCue(track, cue);
 }
-
+    
 void HTMLTrackElement::textTrackRemoveCue(TextTrack& track, TextTrackCue& cue)
 {
     if (auto parent = mediaElement())

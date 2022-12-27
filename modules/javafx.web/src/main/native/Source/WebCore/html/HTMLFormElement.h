@@ -124,11 +124,11 @@ public:
     StringPairVector textFieldValues() const;
 
     static HTMLFormElement* findClosestFormAncestor(const Element&);
-
+    
     enum class IsMultipartForm : bool { No, Yes };
-
+    
     RefPtr<DOMFormData> constructEntryList(Ref<DOMFormData>&&, StringPairVector*, IsMultipartForm);
-
+    
 private:
     HTMLFormElement(const QualifiedName&, Document&);
 

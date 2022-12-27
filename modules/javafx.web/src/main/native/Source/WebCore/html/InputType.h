@@ -96,7 +96,7 @@ public:
         Week            = 1 << 20,
         Text            = 1 << 21,
     };
-
+    
     static constexpr OptionSet<Type> textTypes = {
         Type::Email,
         Type::Password,

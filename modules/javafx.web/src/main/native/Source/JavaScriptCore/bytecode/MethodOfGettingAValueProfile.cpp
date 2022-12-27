@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -51,21 +51,21 @@ void MethodOfGettingAValueProfile::emitReportValue(CCallHelpers& jit, JSValueReg
     switch (m_kind) {
     case None:
         return;
-
+        
     case Ready:
         jit.storeValue(regs, u.profile->specFailBucket(0));
         return;
-
+        
     case LazyOperand: {
         LazyOperandValueProfileKey key(u.lazyOperand.bytecodeOffset, u.lazyOperand.operand);
-
+        
         ConcurrentJSLocker locker(u.lazyOperand.codeBlock->m_lock);
         LazyOperandValueProfile* profile =
             u.lazyOperand.codeBlock->lazyOperandValueProfiles(locker).add(locker, key);
         jit.storeValue(regs, profile->specFailBucket(0));
         return;
     }
-
+        
     case UnaryArithProfileReady: {
         u.unaryArithProfile->emitObserveResult(jit, regs, tempGPR, mode);
         return;
@@ -76,7 +76,7 @@ void MethodOfGettingAValueProfile::emitReportValue(CCallHelpers& jit, JSValueReg
         return;
     }
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

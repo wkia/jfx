@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -101,7 +101,7 @@ void WatchpointSet::add(Watchpoint* watchpoint)
 void WatchpointSet::fireAllSlow(VM& vm, const FireDetail& detail)
 {
     ASSERT(state() == IsWatched);
-
+    
     WTF::storeStoreFence();
     m_state = IsInvalidated; // Do this first. Needed for adaptive watchpoints.
     fireAllWatchpoints(vm, detail);
@@ -135,11 +135,11 @@ void WatchpointSet::fireAllWatchpoints(VM& vm, const FireDetail& detail)
     // This GC could also destroy us, and we're not in a safe state to be destroyed.
     // The safest thing to do is to DeferGCForAWhile to prevent this GC from happening.
     DeferGCForAWhile deferGC(vm.heap);
-
+    
     while (!m_set.isEmpty()) {
         Watchpoint* watchpoint = m_set.begin();
         ASSERT(watchpoint->isOnList());
-
+        
         // Removing the Watchpoint before firing it makes it possible to implement watchpoints
         // that add themselves to a different set when they fire. This kind of "adaptive"
         // watchpoint can be used to track some semantic property that is more fine-graiend than
@@ -152,7 +152,7 @@ void WatchpointSet::fireAllWatchpoints(VM& vm, const FireDetail& detail)
         watchpoint->remove();
         ASSERT(m_set.begin() != watchpoint);
         ASSERT(!watchpoint->isOnList());
-
+        
         watchpoint->fire(vm, detail);
         // After we fire the watchpoint, the watchpoint pointer may be a dangling pointer. That's
         // fine, because we have no use for the pointer anymore.

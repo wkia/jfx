@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,7 +48,7 @@ public:
         : Phase(graph, "PutStack sinking")
     {
     }
-
+    
     bool run()
     {
         // FIXME: One of the problems of this approach is that it will create a duplicate Phi graph
@@ -61,48 +61,48 @@ public:
         // if there is already a Phi that does what we want. Because PutStackSinkingPhase runs just
         // after SSA conversion, we have almost a guarantee that the Phi graph we produce here would
         // be trivially redundant to the one we already have.
-
+        
         // FIXME: This phase doesn't adequately use KillStacks. KillStack can be viewed as a def.
         // This is mostly inconsequential; it would be a bug to have a local live at a KillStack.
         // More important is that KillStack should swallow any deferral. After a KillStack, the
         // local should behave like a TOP deferral because it would be invalid for anyone to trust
         // the stack. It's not clear to me if this is important or not.
         // https://bugs.webkit.org/show_bug.cgi?id=145296
-
+        
         if (verbose) {
             dataLog("Graph before PutStack sinking:\n");
             m_graph.dump();
         }
 
         m_graph.ensureSSADominators();
-
+        
         SSACalculator ssaCalculator(m_graph);
         InsertionSet insertionSet(m_graph);
-
+        
         // First figure out where various locals are live.
         BlockMap<Operands<bool>> liveAtHead(m_graph);
         BlockMap<Operands<bool>> liveAtTail(m_graph);
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             liveAtHead[block] = Operands<bool>(OperandsLike, block->variablesAtHead, false);
             liveAtTail[block] = Operands<bool>(OperandsLike, block->variablesAtHead, false);
         }
-
+        
         bool changed;
         do {
             changed = false;
-
+            
             for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
                 BasicBlock* block = m_graph.block(blockIndex);
                 if (!block)
                     continue;
-
+                
                 Operands<bool> live = liveAtTail[block];
                 for (unsigned nodeIndex = block->size(); nodeIndex--;) {
                     Node* node = block->at(nodeIndex);
                     if (verbose)
                         dataLog("Live at ", node, ": ", live, "\n");
-
+                    
                     Vector<Operand, 4> reads;
                     Vector<Operand, 4> writes;
                     auto escapeHandler = [&] (Operand operand) {
@@ -130,21 +130,21 @@ public:
                     for (Operand operand : reads)
                         live.operand(operand) = true;
                 }
-
+                
                 if (live == liveAtHead[block])
                     continue;
-
+                
                 liveAtHead[block] = live;
                 changed = true;
-
+                
                 for (BasicBlock* predecessor : block->predecessors) {
                     for (size_t i = live.size(); i--;)
                         liveAtTail[predecessor][i] |= live[i];
                 }
             }
-
+            
         } while (changed);
-
+        
         // All of the arguments should be live at head of root. Note that we may find that some
         // locals are live at head of root. This seems wrong but isn't. This will happen for example
         // if the function accesses closure variable #42 for some other function and we either don't
@@ -157,7 +157,7 @@ public:
         // may not do as much Phi pruning as we wanted.
         for (size_t i = liveAtHead.atIndex(0).numberOfArguments(); i--;)
             DFG_ASSERT(m_graph, nullptr, liveAtHead.atIndex(0).argument(i));
-
+        
         // Next identify where we would want to sink PutStacks to. We say that there is a deferred
         // flush if we had a PutStack with a given FlushFormat but it hasn't been materialized yet.
         // Deferrals have the following lattice; but it's worth noting that the TOP part of the
@@ -167,7 +167,7 @@ public:
         // needs to be executed) or there isn't one (because we've alraedy executed it).
         //
         // Bottom:
-        //     Represented as DeadFlush.
+        //     Represented as DeadFlush. 
         //     Means that all previous PutStacks have been executed so there is nothing deferred.
         //     During merging this is subordinate to the other kinds of deferrals, because it
         //     represents the fact that we've already executed all necessary PutStacks. This implies
@@ -202,7 +202,7 @@ public:
         //     identified an operation that would have observed that PutStack.
         //
         // We need to be precise about liveness in this phase because not doing so
-        // could cause us to insert a PutStack before a node we thought may escape a
+        // could cause us to insert a PutStack before a node we thought may escape a 
         // value that it doesn't really escape. Sinking this PutStack above such a node may
         // cause us to insert a GetStack that we forward to the Phi we're feeding into the
         // sunken PutStack. Inserting such a GetStack could cause us to load garbage and
@@ -210,7 +210,7 @@ public:
         // it really won't).
         BlockMap<Operands<FlushFormat>> deferredAtHead(m_graph);
         BlockMap<Operands<FlushFormat>> deferredAtTail(m_graph);
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             deferredAtHead[block] =
                 Operands<FlushFormat>(OperandsLike, block->variablesAtHead);
@@ -220,17 +220,17 @@ public:
 
         for (unsigned local = deferredAtHead.atIndex(0).numberOfLocals(); local--;)
             deferredAtHead.atIndex(0).local(local) = ConflictingFlush;
-
+        
         do {
             changed = false;
-
+            
             for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
                 Operands<FlushFormat> deferred = deferredAtHead[block];
-
+                
                 for (Node* node : *block) {
                     if (verbose)
                         dataLog("Deferred at ", node, ":", deferred, "\n");
-
+                    
                     if (node->op() == GetStack) {
                         // Handle the case that the input doesn't match our requirements. This is
                         // really a bug, but it's a benign one if we simply don't run this phase.
@@ -256,7 +256,7 @@ public:
 
                         bool isConflicting =
                             deferred.operand(node->stackAccessData()->operand) == ConflictingFlush;
-
+                        
                         if (validationEnabled())
                             DFG_ASSERT(m_graph, node, !isConflicting);
 
@@ -280,7 +280,7 @@ public:
                         deferred.operand(node->unlinkedOperand()) = ConflictingFlush;
                         continue;
                     }
-
+                    
                     auto escapeHandler = [&] (Operand operand) {
                         if (verbose)
                             dataLog("For ", node, " escaping ", operand, "\n");
@@ -298,18 +298,18 @@ public:
                         dataLogLnIf(verbose, "Writing dead flush for ", node, " at operand ", operand);
                         deferred.operand(operand) = DeadFlush;
                     };
-
+                    
                     preciseLocalClobberize(
                         m_graph, node, escapeHandler, writeHandler,
                         [&] (Operand, LazyNode) { });
                 }
-
+                
                 if (deferred == deferredAtTail[block])
                     continue;
-
+                
                 deferredAtTail[block] = deferred;
                 changed = true;
-
+                
                 for (BasicBlock* successor : block->successors()) {
                     for (size_t i = deferred.size(); i--;) {
                         if (verbose)
@@ -317,15 +317,15 @@ public:
 
                         deferredAtHead[successor][i] =
                             merge(deferredAtHead[successor][i], deferred[i]);
-
+                        
                         if (verbose)
                             dataLog(deferredAtHead[successor][i], "\n");
                     }
                 }
             }
-
+            
         } while (changed);
-
+        
         // We wish to insert PutStacks at all of the materialization points, which are defined
         // implicitly as the places where we set deferred to Dead while it was previously not Dead.
         // To do this, we may need to build some Phi functions to handle stuff like this:
@@ -348,7 +348,7 @@ public:
         //
         // This means that we have an SSACalculator::Variable for each local, and a Def is any
         // PutStack in the original program. The original PutStacks will simply vanish.
-
+        
         Operands<SSACalculator::Variable*> operandToVariable(
             OperandsLike, m_graph.block(0)->variablesAtHead);
         Vector<Operand> indexToOperand;
@@ -360,9 +360,9 @@ public:
             ASSERT(indexToOperand.size() == variable->index());
             indexToOperand.append(operand);
         }
-
+        
         HashSet<Node*> putStacksToSink;
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             for (Node* node : *block) {
                 switch (node->op()) {
@@ -382,14 +382,14 @@ public:
                 }
             }
         }
-
+        
         ssaCalculator.computePhis(
             [&] (SSACalculator::Variable* variable, BasicBlock* block) -> Node* {
                 Operand operand = indexToOperand[variable->index()];
-
+                
                 if (!liveAtHead[block].operand(operand))
                     return nullptr;
-
+                
                 FlushFormat format = deferredAtHead[block].operand(operand);
 
                 // We could have an invalid deferral because liveness is imprecise.
@@ -398,47 +398,47 @@ public:
 
                 if (verbose)
                     dataLog("Adding Phi for ", operand, " at ", pointerDump(block), "\n");
-
+                
                 Node* phiNode = m_graph.addNode(SpecHeapTop, Phi, block->at(0)->origin.withInvalidExit());
                 phiNode->mergeFlags(resultFor(format));
                 return phiNode;
             });
-
+        
         Operands<Node*> mapping(OperandsLike, m_graph.block(0)->variablesAtHead);
         Operands<FlushFormat> deferred;
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             mapping.fill(nullptr);
-
+            
             for (size_t i = mapping.size(); i--;) {
                 Operand operand(mapping.operandForIndex(i));
-
+                
                 SSACalculator::Variable* variable = operandToVariable.operand(operand);
                 SSACalculator::Def* def = ssaCalculator.reachingDefAtHead(block, variable);
                 if (!def)
                     continue;
-
+                
                 mapping.operand(operand) = def->value();
             }
-
+            
             if (verbose)
                 dataLog("Mapping at top of ", pointerDump(block), ": ", mapping, "\n");
-
+            
             for (SSACalculator::Def* phiDef : ssaCalculator.phisForBlock(block)) {
                 Operand operand = indexToOperand[phiDef->variable()->index()];
-
+                
                 insertionSet.insert(0, phiDef->value());
-
+                
                 if (verbose)
                     dataLog("   Mapping ", operand, " to ", phiDef->value(), "\n");
                 mapping.operand(operand) = phiDef->value();
             }
-
+            
             deferred = deferredAtHead[block];
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                 Node* node = block->at(nodeIndex);
                 if (verbose)
                     dataLog("Deferred at ", node, ":", deferred, "\n");
-
+                
                 switch (node->op()) {
                 case PutStack: {
                     StackAccessData* data = node->stackAccessData();
@@ -449,7 +449,7 @@ public:
                     mapping.operand(operand) = node->child1().node();
                     break;
                 }
-
+                    
                 case GetStack: {
                     StackAccessData* data = node->stackAccessData();
                     FlushFormat format = deferred.operand(data->operand);
@@ -457,20 +457,20 @@ public:
                         DFG_ASSERT(
                             m_graph, node,
                             deferred.operand(data->operand) != ConflictingFlush, deferred.operand(data->operand));
-
+                        
                         // This means there is no deferral. No deferral means that the most
                         // authoritative value for this stack slot is what is stored in the stack. So,
                         // keep the GetStack.
                         mapping.operand(data->operand) = node;
                         break;
                     }
-
+                    
                     // We have a concrete deferral, which means a PutStack that hasn't executed yet. It
                     // would have stored a value with a certain format. That format must match our
                     // format. But more importantly, we can simply use the value that the PutStack would
                     // have stored and get rid of the GetStack.
                     DFG_ASSERT(m_graph, node, format == data->format, format, data->format);
-
+                    
                     Node* incoming = mapping.operand(data->operand);
                     node->child1() = incoming->defaultEdge();
                     node->convertToIdentity();
@@ -481,7 +481,7 @@ public:
                     deferred.operand(node->unlinkedOperand()) = ConflictingFlush;
                     break;
                 }
-
+                
                 default: {
                     auto escapeHandler = [&] (Operand operand) {
                         if (verbose)
@@ -489,26 +489,26 @@ public:
 
                         if (operand.isHeader())
                             return;
-
+                    
                         FlushFormat format = deferred.operand(operand);
                         if (!isConcrete(format)) {
                             // It's dead now, rather than conflicting.
                             deferred.operand(operand) = DeadFlush;
                             return;
                         }
-
+                    
                         // Gotta insert a PutStack.
                         if (verbose)
                             dataLog("Inserting a PutStack for ", operand, " at ", node, "\n");
 
                         Node* incoming = mapping.operand(operand);
                         DFG_ASSERT(m_graph, node, incoming);
-
+                    
                         insertionSet.insertNode(
                             nodeIndex, SpecNone, PutStack, node->origin,
                             OpInfo(m_graph.m_stackAccessData.add(operand, format)),
                             Edge(incoming, uncheckedUseKindFor(format)));
-
+                    
                         deferred.operand(operand) = DeadFlush;
                     };
 
@@ -516,8 +516,8 @@ public:
                         if (operand.isHeader())
                             return;
                         // LoadVarargs and ForwardVarargs are unconditional writes to the stack
-                        // locations they claim to write to. They do not read from the stack
-                        // locations they write to. This makes those stack locations dead right
+                        // locations they claim to write to. They do not read from the stack 
+                        // locations they write to. This makes those stack locations dead right 
                         // before a LoadVarargs/ForwardVarargs. This means we should never sink
                         // PutStacks right to this point.
                         RELEASE_ASSERT(node->op() == VarargsLength || node->op() == LoadVarargs || node->op() == ForwardVarargs);
@@ -530,7 +530,7 @@ public:
                     break;
                 } }
             }
-
+            
             NodeAndIndex terminal = block->findTerminal();
             size_t upsilonInsertionPoint = terminal.index;
             NodeOrigin upsilonOrigin = terminal.node->origin;
@@ -544,7 +544,7 @@ public:
                     FlushFormat format = deferredAtHead[successorBlock].operand(operand);
                     DFG_ASSERT(m_graph, nullptr, isConcrete(format), format);
                     UseKind useKind = uncheckedUseKindFor(format);
-
+                    
                     // We need to get a value for the stack slot. This phase doesn't really have a
                     // good way of determining if a stack location got clobbered. It just knows if
                     // there is a deferral. The lack of a deferral might mean that a PutStack or
@@ -563,38 +563,38 @@ public:
                             OpInfo(m_graph.m_stackAccessData.add(operand, format)));
                         incoming->setResult(resultFor(format));
                     }
-
+                    
                     insertionSet.insertNode(
                         upsilonInsertionPoint, SpecNone, Upsilon, upsilonOrigin,
                         OpInfo(phiNode), Edge(incoming, useKind));
                 }
             }
-
+            
             insertionSet.execute(block);
         }
-
+        
         // Finally eliminate the sunken PutStacks by turning them into Checks. This keeps whatever
         // type check they were doing.
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             for (auto* node : *block) {
                 if (!putStacksToSink.contains(node))
                     continue;
-
+                
                 node->remove(m_graph);
             }
         }
-
+        
         if (verbose) {
             dataLog("Graph after PutStack sinking:\n");
             m_graph.dump();
         }
-
+        
         return true;
     }
 };
 
 } // anonymous namespace
-
+    
 bool performPutStackSinking(Graph& graph)
 {
     return runPhase<PutStackSinkingPhase>(graph);

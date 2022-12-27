@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -65,7 +65,7 @@ struct AbstractValue {
         }
 #endif
     }
-
+    
     void clear()
     {
         m_type = SpecNone;
@@ -74,25 +74,25 @@ struct AbstractValue {
         m_value = JSValue();
         checkConsistency();
     }
-
+    
     bool isClear() const { return m_type == SpecNone; }
     bool operator!() const { return isClear(); }
-
+    
     void makeHeapTop()
     {
         makeTop(SpecHeapTop);
     }
-
+    
     void makeBytecodeTop()
     {
         makeTop(SpecBytecodeTop);
     }
-
+    
     void makeFullTop()
     {
         makeTop(SpecFullTop);
     }
-
+    
     void clobberStructures()
     {
         if (m_type & SpecCell) {
@@ -104,12 +104,12 @@ struct AbstractValue {
         }
         checkConsistency();
     }
-
+    
     ALWAYS_INLINE void fastForwardFromTo(AbstractValueClobberEpoch oldEpoch, AbstractValueClobberEpoch newEpoch)
     {
         if (newEpoch == oldEpoch)
             return;
-
+        
         if (!(m_type & SpecCell))
             return;
 
@@ -120,12 +120,12 @@ struct AbstractValue {
 
         checkConsistency();
     }
-
+    
     ALWAYS_INLINE void fastForwardTo(AbstractValueClobberEpoch newEpoch)
     {
         if (newEpoch == m_effectEpoch)
             return;
-
+        
         if (!(m_type & SpecCell)) {
             m_effectEpoch = newEpoch;
             return;
@@ -133,7 +133,7 @@ struct AbstractValue {
 
         fastForwardToSlow(newEpoch);
     }
-
+    
     void observeTransition(RegisteredStructure from, RegisteredStructure to)
     {
         if (m_type & SpecCell) {
@@ -142,9 +142,9 @@ struct AbstractValue {
         }
         checkConsistency();
     }
-
+    
     void observeTransitions(const TransitionVector& vector);
-
+    
     class TransitionObserver {
     public:
         TransitionObserver(RegisteredStructure from, RegisteredStructure to)
@@ -152,7 +152,7 @@ struct AbstractValue {
             , m_to(to)
         {
         }
-
+        
         void operator()(AbstractValue& value)
         {
             value.observeTransition(m_from, m_to);
@@ -161,14 +161,14 @@ struct AbstractValue {
         RegisteredStructure m_from;
         RegisteredStructure m_to;
     };
-
+    
     class TransitionsObserver {
     public:
         TransitionsObserver(const TransitionVector& vector)
             : m_vector(vector)
         {
         }
-
+        
         void operator()(AbstractValue& value)
         {
             value.observeTransitions(m_vector);
@@ -176,12 +176,12 @@ struct AbstractValue {
     private:
         const TransitionVector& m_vector;
     };
-
+    
     void clobberValue()
     {
         m_value = JSValue();
     }
-
+    
     bool isHeapTop() const
     {
         return (m_type | SpecHeapTop) == m_type
@@ -197,7 +197,7 @@ struct AbstractValue {
             && m_arrayModes == ALL_ARRAY_MODES
             && !m_value;
     }
-
+    
     bool valueIsTop() const
     {
         return !m_value && m_type;
@@ -207,51 +207,51 @@ struct AbstractValue {
     {
         return !(m_type & ~SpecInt52Any);
     }
-
+    
     JSValue value() const
     {
         return m_value;
     }
-
+    
     static AbstractValue heapTop()
     {
         AbstractValue result;
         result.makeHeapTop();
         return result;
     }
-
+    
     static AbstractValue bytecodeTop()
     {
         AbstractValue result;
         result.makeBytecodeTop();
         return result;
     }
-
+    
     static AbstractValue fullTop()
     {
         AbstractValue result;
         result.makeFullTop();
         return result;
     }
-
+    
     void set(Graph&, const AbstractValue& other)
     {
         *this = other;
     }
-
+    
     void set(Graph&, AbstractValue&& other)
     {
         *this = WTFMove(other);
     }
-
+    
     void set(Graph&, const FrozenValue&, StructureClobberState);
     void set(Graph&, Structure*);
     void set(Graph&, RegisteredStructure);
     void set(Graph&, const RegisteredStructureSet&);
-
+    
     // Set this value to represent the given set of types as precisely as possible.
     void setType(Graph&, SpeculatedType);
-
+    
     // As above, but only valid for non-cell types.
     ALWAYS_INLINE void setNonCellType(SpeculatedType type)
     {
@@ -265,7 +265,7 @@ struct AbstractValue {
 
     void fixTypeForRepresentation(Graph&, NodeFlags representation, Node* = nullptr);
     void fixTypeForRepresentation(Graph&, Node*);
-
+    
     bool operator==(const AbstractValue& other) const
     {
         return m_type == other.m_type
@@ -277,12 +277,12 @@ struct AbstractValue {
     {
         return !(*this == other);
     }
-
+    
     ALWAYS_INLINE bool merge(const AbstractValue& other)
     {
         if (other.isClear())
             return false;
-
+        
 #if ASSERT_ENABLED
         AbstractValue oldMe = *this;
 #endif
@@ -303,13 +303,13 @@ struct AbstractValue {
         ASSERT(result == (*this != oldMe));
         return result;
     }
-
+    
     bool mergeOSREntryValue(Graph&, JSValue, VariableAccessData*, Node*);
-
+    
     void merge(SpeculatedType type)
     {
         mergeSpeculation(m_type, type);
-
+        
         if (type & SpecCell) {
             m_structure.makeTop();
             m_arrayModes = ALL_ARRAY_MODES;
@@ -318,12 +318,12 @@ struct AbstractValue {
 
         checkConsistency();
     }
-
+    
     bool couldBeType(SpeculatedType desiredType) const
     {
         return !!(m_type & desiredType);
     }
-
+    
     bool isType(SpeculatedType desiredType) const
     {
         return !(m_type & ~desiredType);
@@ -335,14 +335,14 @@ struct AbstractValue {
     // use admittedTypes to preserve some non-cell types. Note that it's wrong for admittedTypes to overlap
     // with SpecCell.
     FiltrationResult filter(Graph&, const RegisteredStructureSet&, SpeculatedType admittedTypes = SpecNone);
-
+    
     FiltrationResult filterArrayModes(ArrayModes, SpeculatedType admittedTypes = SpecNone);
 
     ALWAYS_INLINE FiltrationResult filter(SpeculatedType type)
     {
         if ((m_type & type) == m_type)
             return FiltrationOK;
-
+    
         // Fast path for the case that we don't even have a cell.
         if (!(m_type & SpecCell)) {
             m_type &= type;
@@ -355,10 +355,10 @@ struct AbstractValue {
             checkConsistency();
             return result;
         }
-
+        
         return filterSlow(type);
     }
-
+    
     FiltrationResult filterByValue(const FrozenValue& value);
     FiltrationResult filter(const AbstractValue&);
     FiltrationResult filterClassInfo(Graph&, const ClassInfo*);
@@ -367,7 +367,7 @@ struct AbstractValue {
     {
         if (m_type & SpecCell)
             return fastForwardToAndFilterSlow(newEpoch, type);
-
+        
         m_effectEpoch = newEpoch;
         m_type &= type;
         FiltrationResult result;
@@ -381,14 +381,14 @@ struct AbstractValue {
     }
 
     FiltrationResult changeStructure(Graph&, const RegisteredStructureSet&);
-
+    
     bool contains(RegisteredStructure) const;
 
     bool validateOSREntryValue(JSValue value, FlushFormat format) const
     {
         if (isBytecodeTop())
             return true;
-
+        
         if (format == FlushedInt52) {
             if (!isInt52Any())
                 return false;
@@ -405,32 +405,32 @@ struct AbstractValue {
         } else {
             if (!!m_value && m_value != value)
                 return false;
-
+        
             if (mergeSpeculations(m_type, speculationFromValue(value)) != m_type)
                 return false;
-
+            
             if (value.isEmpty()) {
                 ASSERT(m_type & SpecEmpty);
                 return true;
             }
         }
-
+        
         if (!!value && value.isCell()) {
             ASSERT(m_type & SpecCell);
             Structure* structure = value.asCell()->structure();
             return m_structure.contains(structure)
                 && (m_arrayModes & arrayModesFromStructure(structure));
         }
-
+        
         return true;
     }
-
+    
     bool hasClobberableState() const
     {
         return m_structure.isNeitherClearNorTop()
             || !arrayModesAreClearOrTop(m_arrayModes);
     }
-
+    
 #if ASSERT_ENABLED
     JS_EXPORT_PRIVATE void checkConsistency() const;
     void assertIsRegistered(Graph&) const;
@@ -443,9 +443,9 @@ struct AbstractValue {
 
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
     void validateReferences(const TrackedReferences&);
-
+    
     // This is a proven constraint on the structures that this value can have right
     // now. The structure of the current value must belong to this set. The set may
     // be TOP, indicating that it is the set of all possible structures, in which
@@ -459,7 +459,7 @@ struct AbstractValue {
     // TOP (i.e. claiming that we have proved that this value may have any
     // structure).
     StructureAbstractValue m_structure;
-
+    
     // This is a proven constraint on the possible types that this value can have
     // now or any time in the future, unless it is reassigned. This field is
     // impervious to side-effects. The relationship between this field, and the
@@ -473,14 +473,14 @@ struct AbstractValue {
     // m_structure is [0x12345] then this abstract value corresponds to the set of
     // all integers unified with the set of all objects with structure 0x12345.
     SpeculatedType m_type;
-
+    
     // This is a proven constraint on the possible indexing types that this value
     // can have right now. It also implicitly constraints the set of structures
     // that the value may have right now, since a structure has an immutable
     // indexing type. This is subject to change upon reassignment, or any side
     // effect that makes non-obvious changes to the heap.
     ArrayModes m_arrayModes;
-
+    
     // The effect epoch is usually ignored. This field is used by InPlaceAbstractState.
     //
     // InPlaceAbstractState needs to be able to clobberStructures() for all values it tracks. That
@@ -493,7 +493,7 @@ struct AbstractValue {
     // One reason why it's here is to steal the 32-bit hole between m_arrayModes and m_value on
     // 64-bit systems.
     AbstractValueClobberEpoch m_effectEpoch;
-
+    
     // This is a proven constraint on the possible values that this value can
     // have now or any time in the future, unless it is reassigned. Note that this
     // implies nothing about the structure. Oddly, JSValue() (i.e. the empty value)
@@ -513,18 +513,18 @@ private:
         // could have in the future. For now, just do the simple thing.
         m_arrayModes = ALL_ARRAY_MODES;
     }
-
+    
     void observeIndexingTypeTransition(ArrayModes from, ArrayModes to)
     {
         if (m_arrayModes & from)
             m_arrayModes |= to;
     }
-
+    
     bool validateTypeAcceptingBoxedInt52(JSValue value) const
     {
         if (isBytecodeTop())
             return true;
-
+        
         if (m_type & SpecInt52Any) {
             if (mergeSpeculations(m_type, int52AwareSpeculationFromValue(value)) == m_type)
                 return true;
@@ -532,10 +532,10 @@ private:
 
         if (mergeSpeculations(m_type, speculationFromValue(value)) != m_type)
             return false;
-
+        
         return true;
     }
-
+    
     void makeTop(SpeculatedType top)
     {
         m_type = top;
@@ -544,18 +544,18 @@ private:
         m_value = JSValue();
         checkConsistency();
     }
-
+    
     void fastForwardToSlow(AbstractValueClobberEpoch);
     FiltrationResult filterSlow(SpeculatedType);
     FiltrationResult fastForwardToAndFilterSlow(AbstractValueClobberEpoch, SpeculatedType);
-
+    
     void filterValueByType();
     void filterArrayModesByType();
 
 #if USE(JSVALUE64) && !defined(NDEBUG)
     JS_EXPORT_PRIVATE void ensureCanInitializeWithZeros();
 #endif
-
+    
     bool shouldBeClear() const;
     FiltrationResult normalizeClarity();
     FiltrationResult normalizeClarity(Graph&);

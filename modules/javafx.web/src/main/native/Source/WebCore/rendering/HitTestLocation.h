@@ -46,7 +46,7 @@ public:
     bool isRectBasedTest() const { return m_isRectBased; }
     bool isRectilinear() const { return m_isRectilinear; }
     LayoutRect boundingBox() const { return m_boundingBox; }
-
+    
     int topPadding() const { return roundedPoint().y() - m_boundingBox.y(); }
     int rightPadding() const { return m_boundingBox.maxX() - roundedPoint().x() - 1; }
     int bottomPadding() const { return m_boundingBox.maxY() - roundedPoint().y() - 1; }

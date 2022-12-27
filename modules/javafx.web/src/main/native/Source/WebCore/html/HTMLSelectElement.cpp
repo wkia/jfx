@@ -138,7 +138,7 @@ void HTMLSelectElement::optionSelectedByUser(int optionIndex, bool fireOnChangeN
 bool HTMLSelectElement::hasPlaceholderLabelOption() const
 {
     // The select element has no placeholder label option if it has an attribute "multiple" specified or a display size of non-1.
-    //
+    // 
     // The condition "size() > 1" is not compliant with the HTML5 spec as of Dec 3, 2010. "size() != 1" is correct.
     // Using "size() > 1" here because size() may be 0 in WebKit.
     // See the discussion at https://bugs.webkit.org/show_bug.cgi?id=43887
@@ -434,7 +434,7 @@ ExceptionOr<void> HTMLSelectElement::setItem(unsigned index, HTMLOptionElement* 
         index = maxSelectItems - 1;
 
     int diff = index - length();
-
+    
     RefPtr<HTMLOptionElement> before;
     // Out of array bounds? First insert empty dummies.
     if (diff > 0) {
@@ -1062,7 +1062,7 @@ bool HTMLSelectElement::appendFormData(DOMFormData& formData, bool)
     // will be submitted (!successful). We won't send a unselected non-disabled
     // option as fallback. This behavior matches to other browsers.
     return successful;
-}
+} 
 
 void HTMLSelectElement::reset()
 {
@@ -1523,7 +1523,7 @@ void HTMLSelectElement::defaultEventHandler(Event& event)
 
     if (renderer->isMenuList())
         menuListDefaultEventHandler(event);
-    else
+    else 
         listBoxDefaultEventHandler(event);
 #else
     menuListDefaultEventHandler(event);
@@ -1591,11 +1591,11 @@ Node::InsertedIntoAncestorResult HTMLSelectElement::insertedIntoAncestor(Inserti
 }
 
 void HTMLSelectElement::accessKeySetSelectedIndex(int index)
-{
+{    
     // First bring into focus the list box.
     if (!focused())
         accessKeyAction(false);
-
+    
     // If this index is already selected, unselect. otherwise update the selected index.
     auto& items = listItems();
     int listIndex = optionToListIndex(index);

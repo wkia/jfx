@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -57,7 +57,7 @@ public:
     {
         u.value = value;
     }
-
+    
     static LazyJSValue singleCharacterString(UChar character)
     {
         LazyJSValue result;
@@ -65,7 +65,7 @@ public:
         result.u.character = character;
         return result;
     }
-
+    
     static LazyJSValue knownStringImpl(StringImpl* string)
     {
         LazyJSValue result;
@@ -78,22 +78,22 @@ public:
 
     LazinessKind kind() const { return m_kind; }
     SpeculatedType speculatedType() const { return kind() == KnownValue ? SpecBytecodeTop : SpecString; }
-
+    
     FrozenValue* tryGetValue(Graph&) const
     {
         if (m_kind == KnownValue)
             return value();
         return nullptr;
     }
-
+    
     JSValue getValue(VM&) const;
-
+    
     FrozenValue* value() const
     {
         ASSERT(m_kind == KnownValue);
         return u.value;
     }
-
+    
     UChar character() const
     {
         ASSERT(m_kind == SingleCharacterString);
@@ -101,9 +101,9 @@ public:
     }
 
     const StringImpl* tryGetStringImpl(VM&) const;
-
+    
     String tryGetString(Graph&) const;
-
+    
     StringImpl* stringImpl() const
     {
         ASSERT(m_kind == KnownStringImpl || m_kind == NewStringImpl);
@@ -111,14 +111,14 @@ public:
     }
 
     TriState strictEqual(const LazyJSValue& other) const;
-
+    
     uintptr_t switchLookupValue(SwitchKind) const;
 
     void emit(CCallHelpers&, JSValueRegs) const;
-
+    
     void dump(PrintStream&) const;
     void dumpInContext(PrintStream&, DumpContext*) const;
-
+    
 private:
     union {
         FrozenValue* value;

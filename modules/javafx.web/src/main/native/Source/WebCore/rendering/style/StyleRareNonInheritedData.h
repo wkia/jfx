@@ -85,7 +85,7 @@ public:
     static Ref<StyleRareNonInheritedData> create() { return adoptRef(*new StyleRareNonInheritedData); }
     Ref<StyleRareNonInheritedData> copy() const;
     ~StyleRareNonInheritedData();
-
+    
     bool operator==(const StyleRareNonInheritedData&) const;
     bool operator!=(const StyleRareNonInheritedData& other) const { return !(*this == other); }
 
@@ -113,7 +113,7 @@ public:
     Length perspectiveOriginY;
 
     LineClampValue lineClamp; // An Apple extension.
-
+    
     IntSize initialLetter;
 
     DataRef<StyleDeprecatedFlexibleBoxData> deprecatedFlexibleBox; // Flexible box properties
@@ -146,7 +146,7 @@ public:
     std::unique_ptr<ShadowData> boxShadow; // For box-shadow decorations.
 
     RefPtr<WillChangeData> willChange; // Null indicates 'auto'.
-
+    
     RefPtr<StyleReflection> boxReflect;
 
     RefPtr<AnimationList> animations;
@@ -219,7 +219,7 @@ public:
 #endif
 
     unsigned objectFit : 3; // ObjectFit
-
+    
     unsigned breakBefore : 4; // BreakBetween
     unsigned breakAfter : 4;
     unsigned breakInside : 3; // BreakInside

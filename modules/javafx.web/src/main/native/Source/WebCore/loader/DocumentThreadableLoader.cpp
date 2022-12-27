@@ -563,7 +563,7 @@ void DocumentThreadableLoader::loadRequest(ResourceRequest&& request, SecurityCh
         ResourceLoaderOptions options = m_options;
         options.clientCredentialPolicy = m_sameOriginRequest ? ClientCredentialPolicy::MayAskClientForCredentials : ClientCredentialPolicy::CannotAskClientForCredentials;
         options.contentSecurityPolicyImposition = ContentSecurityPolicyImposition::SkipPolicyCheck;
-
+        
         // If there is integrity metadata to validate, we must buffer.
         if (!m_options.integrity.isEmpty())
             options.dataBufferingPolicy = DataBufferingPolicy::BufferData;

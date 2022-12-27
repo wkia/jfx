@@ -246,7 +246,7 @@ void RenderLayoutState::establishLineGrid(const FrameViewLayoutContext::LayoutSt
             }
         }
     }
-
+    
     // We didn't find an already-established grid with this identifier. Our render object establishes the grid.
     m_lineGrid = makeWeakPtr(renderer);
     m_lineGridOffset = m_layoutOffset;

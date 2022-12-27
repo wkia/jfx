@@ -39,7 +39,7 @@ class JSCell;
 class CalleeBits {
 public:
     CalleeBits() = default;
-    CalleeBits(void* ptr) : m_ptr(ptr) { }
+    CalleeBits(void* ptr) : m_ptr(ptr) { } 
 
     CalleeBits& operator=(JSCell* cell)
     {
@@ -82,7 +82,7 @@ public:
 #endif
 
     void* rawPtr() const { return m_ptr; }
-
+    
 private:
     void* m_ptr { nullptr };
 };

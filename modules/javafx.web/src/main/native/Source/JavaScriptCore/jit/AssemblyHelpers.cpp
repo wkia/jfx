@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -78,7 +78,7 @@ void AssemblyHelpers::decrementSuperSamplerCount()
 {
     sub32(TrustedImm32(1), AbsoluteAddress(bitwise_cast<const void*>(&g_superSamplerCount)));
 }
-
+    
 void AssemblyHelpers::purifyNaN(FPRReg fpr)
 {
     MacroAssembler::Jump notNaN = branchIfNotNaN(fpr);
@@ -152,7 +152,7 @@ void AssemblyHelpers::jitAssertTagsInPlace()
     abortWithReason(AHNumberTagNotInPlace);
     breakpoint();
     ok.link(this);
-
+    
     ok = branch64(Equal, GPRInfo::notCellMaskRegister, TrustedImm64(JSValue::NotCellMask));
     abortWithReason(AHNotCellMaskNotInPlace);
     ok.link(this);
@@ -282,20 +282,20 @@ AssemblyHelpers::Jump AssemblyHelpers::emitExceptionCheck(VM& vm, ExceptionCheck
 
     if (width == FarJumpWidth)
         kind = (kind == NormalExceptionCheck ? InvertedExceptionCheck : NormalExceptionCheck);
-
+    
     Jump result;
 #if USE(JSVALUE64)
     result = branchTest64(kind == NormalExceptionCheck ? NonZero : Zero, AbsoluteAddress(vm.addressOfException()));
 #elif USE(JSVALUE32_64)
     result = branch32(kind == NormalExceptionCheck ? NotEqual : Equal, AbsoluteAddress(vm.addressOfException()), TrustedImm32(0));
 #endif
-
+    
     if (width == NormalJumpWidth)
         return result;
 
     PatchableJump realJump = patchableJump();
     result.link(this);
-
+    
     return realJump.m_jump;
 }
 
@@ -310,7 +310,7 @@ AssemblyHelpers::Jump AssemblyHelpers::emitNonPatchableExceptionCheck(VM& vm)
 #elif USE(JSVALUE32_64)
     result = branch32(NotEqual, AbsoluteAddress(vm.addressOfException()), TrustedImm32(0));
 #endif
-
+    
     return result;
 }
 
@@ -346,21 +346,21 @@ void AssemblyHelpers::emitStoreStructureWithTypeInfo(AssemblyHelpers& jit, Trust
 void AssemblyHelpers::loadProperty(GPRReg object, GPRReg offset, JSValueRegs result)
 {
     Jump isInline = branch32(LessThan, offset, TrustedImm32(firstOutOfLineOffset));
-
+    
     loadPtr(Address(object, JSObject::butterflyOffset()), result.payloadGPR());
     neg32(offset);
     signExtend32ToPtr(offset, offset);
     Jump ready = jump();
-
+    
     isInline.link(this);
     addPtr(
         TrustedImm32(
             static_cast<int32_t>(sizeof(JSObject)) -
             (static_cast<int32_t>(firstOutOfLineOffset) - 2) * static_cast<int32_t>(sizeof(EncodedJSValue))),
         object, result.payloadGPR());
-
+    
     ready.link(this);
-
+    
     loadValue(
         BaseIndex(
             result.payloadGPR(), offset, TimesEight, (firstOutOfLineOffset - 2) * sizeof(EncodedJSValue)),
@@ -538,7 +538,7 @@ void AssemblyHelpers::emitAllocateWithNonNullAllocator(GPRReg resultGPR, const J
 
     Jump popPath;
     Jump done;
-
+    
     if (allocator.isConstant())
         move(TrustedImmPtr(allocator.allocator().localAllocator()), allocatorGPR);
 
@@ -556,18 +556,18 @@ void AssemblyHelpers::emitAllocateWithNonNullAllocator(GPRReg resultGPR, const J
     addPtr(payloadEndAddr, resultGPR);
 
     done = jump();
-
+        
     popPath.link(this);
-
+        
     loadPtr(Address(allocatorGPR, LocalAllocator::offsetOfFreeList() + FreeList::offsetOfScrambledHead()), resultGPR);
     xorPtr(Address(allocatorGPR, LocalAllocator::offsetOfFreeList() + FreeList::offsetOfSecret()), resultGPR);
     slowPath.append(branchTestPtr(Zero, resultGPR));
-
+        
     // The object is half-allocated: we have what we know is a fresh object, but
     // it's still on the GC's free list.
     loadPtr(Address(resultGPR, FreeCell::offsetOfScrambledNext()), scratchGPR);
     storePtr(scratchGPR, Address(allocatorGPR, LocalAllocator::offsetOfFreeList() + FreeList::offsetOfScrambledHead()));
-
+        
     done.link(this);
 }
 
@@ -586,15 +586,15 @@ void AssemblyHelpers::emitAllocate(GPRReg resultGPR, const JITAllocator& allocat
 void AssemblyHelpers::emitAllocateVariableSized(GPRReg resultGPR, CompleteSubspace& subspace, GPRReg allocationSize, GPRReg scratchGPR1, GPRReg scratchGPR2, JumpList& slowPath)
 {
     static_assert(!(MarkedSpace::sizeStep & (MarkedSpace::sizeStep - 1)), "MarkedSpace::sizeStep must be a power of two.");
-
+    
     unsigned stepShift = getLSBSet(MarkedSpace::sizeStep);
-
+    
     add32(TrustedImm32(MarkedSpace::sizeStep - 1), allocationSize, scratchGPR1);
     urshift32(TrustedImm32(stepShift), scratchGPR1);
     slowPath.append(branch32(Above, scratchGPR1, TrustedImm32(MarkedSpace::largeCutoff >> stepShift)));
     move(TrustedImmPtr(subspace.allocatorForSizeStep()), scratchGPR2);
     loadPtr(BaseIndex(scratchGPR2, scratchGPR1, ScalePtr), scratchGPR1);
-
+    
     emitAllocate(resultGPR, JITAllocator::variable(), scratchGPR1, scratchGPR2, slowPath);
 }
 
@@ -640,7 +640,7 @@ void AssemblyHelpers::restoreCalleeSavesFromEntryFrameCalleeSavesBuffer(EntryFra
         }
     }
     ASSERT(scratch != InvalidGPRReg);
-
+    
     RegisterSet skipList;
     skipList.set(dontRestoreRegisters);
 
@@ -1237,7 +1237,7 @@ void AssemblyHelpers::emitRestoreCalleeSavesFor(const RegisterAtOffsetList* call
 {
     RegisterSet dontRestoreRegisters = RegisterSet(RegisterSet::stackRegisters());
     unsigned registerCount = calleeSaves->size();
-
+    
     LoadRegSpooler spooler(*this, framePointerRegister);
 
     unsigned i = 0;

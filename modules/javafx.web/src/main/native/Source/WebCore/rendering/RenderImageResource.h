@@ -66,7 +66,7 @@ public:
 protected:
     RenderElement* renderer() const { return m_renderer.get(); }
     void initialize(RenderElement&, CachedImage*);
-
+    
 private:
     virtual LayoutSize imageSize(float multiplier, CachedImage::SizeType) const;
 

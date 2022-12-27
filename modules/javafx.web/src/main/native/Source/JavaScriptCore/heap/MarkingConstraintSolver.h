@@ -44,51 +44,51 @@ class MarkingConstraintSet;
 class MarkingConstraintSolver {
     WTF_MAKE_NONCOPYABLE(MarkingConstraintSolver);
     WTF_MAKE_FAST_ALLOCATED;
-
+    
 public:
     MarkingConstraintSolver(MarkingConstraintSet&);
     ~MarkingConstraintSolver();
-
+    
     bool didVisitSomething() const;
-
+    
     enum SchedulerPreference {
         ParallelWorkFirst,
         NextConstraintFirst
     };
 
     void execute(SchedulerPreference, ScopedLambda<std::optional<unsigned>()> pickNext);
-
+    
     void drain(BitVector& unexecuted);
-
+    
     void converge(const Vector<MarkingConstraint*>& order);
-
+    
     void execute(MarkingConstraint&);
-
+    
     // Parallel constraints can add parallel tasks.
     void addParallelTask(RefPtr<SharedTask<void(SlotVisitor&)>>, MarkingConstraint&);
-
+    
 private:
     void runExecutionThread(SlotVisitor&, SchedulerPreference, ScopedLambda<std::optional<unsigned>()> pickNext);
-
+    
     struct TaskWithConstraint {
         TaskWithConstraint() { }
-
+        
         TaskWithConstraint(RefPtr<SharedTask<void(SlotVisitor&)>> task, MarkingConstraint* constraint)
             : task(WTFMove(task))
             , constraint(constraint)
         {
         }
-
+        
         bool operator==(const TaskWithConstraint& other) const
         {
             return task == other.task
                 && constraint == other.constraint;
         }
-
+        
         RefPtr<SharedTask<void(SlotVisitor&)>> task;
         MarkingConstraint* constraint { nullptr };
     };
-
+    
     Heap& m_heap;
     SlotVisitor& m_mainVisitor;
     MarkingConstraintSet& m_set;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -64,7 +64,7 @@ public:
 #endif
     {
     }
-
+    
     explicit CodeOrigin(BytecodeIndex bytecodeIndex, InlineCallFrame* inlineCallFrame = nullptr)
 #if CPU(ADDRESS64)
         : m_compositeValue(buildCompositeValue(inlineCallFrame, bytecodeIndex))
@@ -78,14 +78,14 @@ public:
         ASSERT(!(bitwise_cast<uintptr_t>(inlineCallFrame) & ~s_maskCompositeValueForPointer));
 #endif
     }
-
+    
 #if CPU(ADDRESS64)
     CodeOrigin& operator=(const CodeOrigin& other)
     {
         if (this != &other) {
             if (UNLIKELY(isOutOfLine()))
                 delete outOfLineCodeOrigin();
-
+            
             if (UNLIKELY(other.isOutOfLine()))
                 m_compositeValue = buildCompositeValue(other.inlineCallFrame(), other.bytecodeIndex());
             else
@@ -124,7 +124,7 @@ public:
             delete outOfLineCodeOrigin();
     }
 #endif
-
+    
     bool isSet() const
     {
 #if CPU(ADDRESS64)
@@ -134,7 +134,7 @@ public:
 #endif
     }
     explicit operator bool() const { return isSet(); }
-
+    
     bool isHashTableDeletedValue() const
     {
 #if CPU(ADDRESS64)
@@ -143,35 +143,35 @@ public:
         return m_bytecodeIndex.isHashTableDeletedValue() && !!m_inlineCallFrame;
 #endif
     }
-
+    
     // The inline depth is the depth of the inline stack, so 1 = not inlined,
     // 2 = inlined one deep, etc.
     unsigned inlineDepth() const;
-
+    
     // If the code origin corresponds to inlined code, gives you the heap object that
     // would have owned the code if it had not been inlined. Otherwise returns 0.
     CodeBlock* codeOriginOwner() const;
-
+    
     int stackOffset() const;
-
+    
     unsigned hash() const;
     bool operator==(const CodeOrigin& other) const;
     bool operator!=(const CodeOrigin& other) const { return !(*this == other); }
-
+    
     // This checks if the two code origins correspond to the same stack trace snippets,
     // but ignore whether the InlineCallFrame's are identical.
     bool isApproximatelyEqualTo(const CodeOrigin& other, InlineCallFrame* terminal = nullptr) const;
-
+    
     unsigned approximateHash(InlineCallFrame* terminal = nullptr) const;
 
     template <typename Function>
     void walkUpInlineStack(const Function&) const;
 
     inline bool inlineStackContainsActiveCheckpoint() const;
-
+    
     // Get the inline stack. This is slow, and is intended for debugging only.
     Vector<CodeOrigin> inlineStack() const;
-
+    
     JS_EXPORT_PRIVATE void dump(PrintStream&) const;
     void dumpInContext(PrintStream&, DumpContext*) const;
 
@@ -209,14 +209,14 @@ private:
     public:
         InlineCallFrame* inlineCallFrame;
         BytecodeIndex bytecodeIndex;
-
+        
         OutOfLineCodeOrigin(InlineCallFrame* inlineCallFrame, BytecodeIndex bytecodeIndex)
             : inlineCallFrame(inlineCallFrame)
             , bytecodeIndex(bytecodeIndex)
         {
         }
     };
-
+    
     bool isOutOfLine() const
     {
         return m_compositeValue & s_maskIsOutOfLine;

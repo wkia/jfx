@@ -44,7 +44,7 @@ public:
 
     bool needsWidgetUpdate() const { return m_needsWidgetUpdate; }
     void setNeedsWidgetUpdate(bool needsWidgetUpdate) { m_needsWidgetUpdate = needsWidgetUpdate; }
-
+    
 protected:
     HTMLPlugInImageElement(const QualifiedName& tagName, Document&);
 

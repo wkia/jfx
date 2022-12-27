@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -217,7 +217,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         changed |= phase(dfg);                                   \
     } while (false);                                             \
 
-
+    
     // By this point the DFG bytecode parser will have potentially mutated various tables
     // in the CodeBlock. This is a good time to perform an early shrink, which is more
     // powerful than a late one. It's safe to do so because we haven't generated any code
@@ -229,7 +229,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
 
     if (validationEnabled())
         validate(dfg);
-
+    
     if (Options::dumpGraphAfterParsing()) {
         dataLog("Graph after parsing:\n");
         dfg.dump();
@@ -240,7 +240,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
     RUN_PHASE(performCPSRethreading);
     RUN_PHASE(performUnification);
     RUN_PHASE(performPredictionInjection);
-
+    
     RUN_PHASE(performStaticExecutionCountEstimation);
 
     if (m_mode == JITCompilationMode::FTLForOSREntry) {
@@ -251,10 +251,10 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         }
         RUN_PHASE(performCPSRethreading);
     }
-
+    
     if (validationEnabled())
         validate(dfg);
-
+    
     RUN_PHASE(performBackwardsPropagation);
     RUN_PHASE(performPredictionPropagation);
     RUN_PHASE(performFixup);
@@ -270,7 +270,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
     // not fixpointing accomplishes; and the fourth tier shouldn't need a fixpoint.
     if (validationEnabled())
         validate(dfg);
-
+        
     RUN_PHASE(performStrengthReduction);
     RUN_PHASE(performCPSRethreading);
     RUN_PHASE(performCFA);
@@ -278,10 +278,10 @@ Plan::CompilationPath Plan::compileInThreadImpl()
     changed = false;
     RUN_PHASE(performCFGSimplification);
     RUN_PHASE(performLocalCSE);
-
+    
     if (validationEnabled())
         validate(dfg);
-
+    
     RUN_PHASE(performCPSRethreading);
     if (!isFTL()) {
         // Only run this if we're not FTLing, because currently for a LoadVarargs that is forwardable and
@@ -302,7 +302,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         // But, it's not super valuable to enable those optimizations, since the FTL
         // ArgumentsEliminationPhase does everything that this phase does, and it doesn't introduce this
         // pathology.
-
+        
         RUN_PHASE(performVarargsForwarding); // Do this after CFG simplification and CPS rethreading.
     }
     if (changed) {
@@ -310,7 +310,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         RUN_PHASE(performConstantFolding);
         RUN_PHASE(performCFGSimplification);
     }
-
+    
     // If we're doing validation, then run some analyses, to give them an opportunity
     // to self-validate. Now is as good a time as any to do this.
     if (validationEnabled()) {
@@ -334,7 +334,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         RUN_PHASE(performVirtualRegisterAllocation);
         RUN_PHASE(performWatchpointCollection);
         dumpAndVerifyGraph(dfg, "Graph after optimization:");
-
+        
         {
             CompilerTimingScope timingScope("DFG", "machine code generation");
 
@@ -344,10 +344,10 @@ Plan::CompilationPath Plan::compileInThreadImpl()
             else
                 dataFlowJIT.compile();
         }
-
+        
         return DFGPath;
     }
-
+    
     case JITCompilationMode::FTL:
     case JITCompilationMode::FTLForOSREntry: {
 #if ENABLE(FTL_JIT)
@@ -355,7 +355,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
             m_finalizer = makeUnique<FailedFinalizer>(*this);
             return FailPath;
         }
-
+        
         RUN_PHASE(performCleanUp); // Reduce the graph size a bit.
         RUN_PHASE(performCriticalEdgeBreaking);
         if (Options::createPreHeaders())
@@ -363,12 +363,12 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         RUN_PHASE(performCPSRethreading);
         RUN_PHASE(performSSAConversion);
         RUN_PHASE(performSSALowering);
-
+        
         // Ideally, these would be run to fixpoint with the object allocation sinking phase.
         RUN_PHASE(performArgumentsElimination);
         if (Options::usePutStackSinking())
             RUN_PHASE(performPutStackSinking);
-
+        
         RUN_PHASE(performConstantHoisting);
         RUN_PHASE(performGlobalCSE);
         RUN_PHASE(performLivenessAnalysis);
@@ -392,7 +392,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
             RUN_PHASE(performConstantFolding);
             RUN_PHASE(performCFGSimplification);
         }
-
+        
         // Currently, this relies on pre-headers still being valid. That precludes running CFG
         // simplification before it, unless we re-created the pre-headers. There wouldn't be anything
         // wrong with running LICM earlier, if we wanted to put other CFG transforms above this point.
@@ -411,7 +411,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         // Ideally, the dependencies should be explicit. See https://bugs.webkit.org/show_bug.cgi?id=157534.
         RUN_PHASE(performLivenessAnalysis);
         RUN_PHASE(performIntegerRangeOptimization);
-
+        
         RUN_PHASE(performCleanUp);
         RUN_PHASE(performIntegerCheckCombining);
         RUN_PHASE(performGlobalCSE);
@@ -430,7 +430,7 @@ Plan::CompilationPath Plan::compileInThreadImpl()
         RUN_PHASE(performLivenessAnalysis);
         RUN_PHASE(performOSRAvailabilityAnalysis);
         RUN_PHASE(performWatchpointCollection);
-
+        
         if (FTL::canCompile(dfg) == FTL::CannotCompile) {
             m_finalizer = makeUnique<FailedFinalizer>(*this);
             return FailPath;
@@ -453,40 +453,40 @@ Plan::CompilationPath Plan::compileInThreadImpl()
 
         if (UNLIKELY(computeCompileTimes()))
             m_timeBeforeFTL = MonotonicTime::now();
-
+        
         if (UNLIKELY(Options::b3AlwaysFailsBeforeCompile())) {
             FTL::fail(state);
             return FTLPath;
         }
-
+        
         FTL::compile(state, safepointResult);
         if (safepointResult.didGetCancelled())
             return CancelPath;
-
+        
         if (UNLIKELY(Options::b3AlwaysFailsBeforeLink())) {
             FTL::fail(state);
             return FTLPath;
         }
-
+        
         if (state.allocationFailed) {
             FTL::fail(state);
             return FTLPath;
         }
 
         FTL::link(state);
-
+        
         if (state.allocationFailed) {
             FTL::fail(state);
             return FTLPath;
         }
-
+        
         return FTLPath;
 #else
         RELEASE_ASSERT_NOT_REACHED();
         return FailPath;
 #endif // ENABLE(FTL_JIT)
     }
-
+        
     default:
         RELEASE_ASSERT_NOT_REACHED();
         return FailPath;
@@ -520,7 +520,7 @@ void Plan::reallyAdd(CommonData* commonData)
     m_watchpoints.reallyAdd(m_codeBlock, m_identifiers, commonData);
     {
         ConcurrentJSLocker locker(m_codeBlock->m_lock);
-    commonData->recordedStatuses = WTFMove(m_recordedStatuses);
+        commonData->recordedStatuses = WTFMove(m_recordedStatuses);
     }
 }
 

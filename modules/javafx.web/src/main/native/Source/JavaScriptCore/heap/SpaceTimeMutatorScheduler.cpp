@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -41,11 +41,11 @@ public:
         m_now = MonotonicTime::now();
         m_bytesAllocatedThisCycle = scheduler.bytesAllocatedThisCycleImpl();
     }
-
+    
     MonotonicTime now() const { return m_now; }
-
+    
     double bytesAllocatedThisCycle() const { return m_bytesAllocatedThisCycle; }
-
+    
 private:
     MonotonicTime m_now;
     double m_bytesAllocatedThisCycle;
@@ -73,7 +73,7 @@ void SpaceTimeMutatorScheduler::beginCollection()
     m_startTime = MonotonicTime::now();
 
     m_bytesAllocatedThisCycleAtTheBeginning = m_heap.m_bytesAllocatedThisCycle;
-    m_bytesAllocatedThisCycleAtTheEnd =
+    m_bytesAllocatedThisCycleAtTheEnd = 
         Options::concurrentGCMaxHeadroom() *
         std::max<double>(m_bytesAllocatedThisCycleAtTheBeginning, m_heap.m_maxEdenSize);
 }
@@ -114,7 +114,7 @@ MonotonicTime SpaceTimeMutatorScheduler::timeToStop()
             return snapshot.now();
         return snapshot.now() - elapsedInPeriod(snapshot) + m_period;
     } }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return MonotonicTime();
 }
@@ -131,7 +131,7 @@ MonotonicTime SpaceTimeMutatorScheduler::timeToResume()
             return snapshot.now();
         return snapshot.now() - elapsedInPeriod(snapshot) + m_period * collectorUtilization(snapshot);
     } }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return MonotonicTime();
 }
@@ -174,7 +174,7 @@ double SpaceTimeMutatorScheduler::headroomFullness(const Snapshot& snapshot)
     // headroomFullness can be NaN and other interesting things if
     // bytesAllocatedThisCycleAtTheBeginning is zero. We see that in debug tests. This code
     // defends against all floating point dragons.
-
+    
     if (!(result >= 0))
         result = 0;
     if (!(result <= 1))
@@ -186,14 +186,14 @@ double SpaceTimeMutatorScheduler::headroomFullness(const Snapshot& snapshot)
 double SpaceTimeMutatorScheduler::mutatorUtilization(const Snapshot& snapshot)
 {
     double mutatorUtilization = 1 - headroomFullness(snapshot);
-
+    
     // Scale the mutator utilization into the permitted window.
     mutatorUtilization =
         Options::minimumMutatorUtilization() +
         mutatorUtilization * (
             Options::maximumMutatorUtilization() -
             Options::minimumMutatorUtilization());
-
+    
     return mutatorUtilization;
 }
 

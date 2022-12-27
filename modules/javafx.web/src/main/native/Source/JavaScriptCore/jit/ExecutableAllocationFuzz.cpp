@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -52,20 +52,20 @@ ExecutableAllocationFuzzResult doExecutableAllocationFuzzing()
 
         static Lock fuzzingLock;
         Locker locker { fuzzingLock };
-
+        
         if (random->returnTrueWithProbability(Options::fireExecutableAllocationFuzzRandomlyProbability()))
             return PretendToFailExecutableAllocation;
 
         return AllowNormalExecutableAllocation;
     }
-
+    
     unsigned oldValue;
     unsigned newValue;
     do {
         oldValue = s_numberOfExecutableAllocationFuzzChecks.load();
         newValue = oldValue + 1;
     } while (!s_numberOfExecutableAllocationFuzzChecks.compareExchangeWeak(oldValue, newValue));
-
+    
     if (newValue == Options::fireExecutableAllocationFuzzAt()) {
         if (Options::verboseExecutableAllocationFuzz()) {
             dataLog("Will pretend to fail executable allocation.\n");
@@ -73,7 +73,7 @@ ExecutableAllocationFuzzResult doExecutableAllocationFuzzing()
         }
         return PretendToFailExecutableAllocation;
     }
-
+    
     if (Options::fireExecutableAllocationFuzzAtOrAfter()
         && newValue >= Options::fireExecutableAllocationFuzzAtOrAfter()) {
         if (Options::verboseExecutableAllocationFuzz()) {
@@ -82,7 +82,7 @@ ExecutableAllocationFuzzResult doExecutableAllocationFuzzing()
         }
         return PretendToFailExecutableAllocation;
     }
-
+    
     return AllowNormalExecutableAllocation;
 }
 

@@ -34,7 +34,7 @@
 #include <wtf/Locker.h>
 
 namespace WebCore {
-
+    
 Ref<WebGLQuery> WebGLQuery::create(WebGLRenderingContextBase& ctx)
 {
     return adoptRef(*new WebGLQuery(ctx));

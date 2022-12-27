@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -33,15 +33,15 @@ namespace JSC {
 
 struct CellAttributes {
     CellAttributes() { }
-
+    
     CellAttributes(DestructionMode destruction, HeapCell::Kind cellKind)
         : destruction(destruction)
         , cellKind(cellKind)
     {
     }
-
+    
     JS_EXPORT_PRIVATE void dump(PrintStream& out) const;
-
+    
     DestructionMode destruction { DoesNotNeedDestruction };
     HeapCell::Kind cellKind { HeapCell::JSCell };
 };

@@ -399,7 +399,7 @@ std::optional<MonotonicTime> DOMTimer::alignedFireTime(MonotonicTime fireTime) c
     Seconds alignmentInterval = scriptExecutionContext()->domTimerAlignmentInterval(m_nestingLevel >= maxTimerNestingLevel);
     if (!alignmentInterval)
         return std::nullopt;
-
+    
     static const double randomizedProportion = randomNumber();
 
     // Force alignment to randomizedAlignment fraction of the way between alignemntIntervals, e.g.

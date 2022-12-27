@@ -43,7 +43,7 @@ class SourceGraphic;
 
 class FilterEffectRendererCoreImage : public FilterEffectRenderer {
     WTF_MAKE_FAST_ALLOCATED;
-
+    
 public:
     static std::unique_ptr<FilterEffectRendererCoreImage> tryCreate(FilterEffect&);
     RetainPtr<CIContext> sharedCIContext();
@@ -53,17 +53,17 @@ public:
     FloatRect destRect(const FilterEffect&) const final;
     void clearResult() final;
     FilterEffectRendererCoreImage();
-
+    
 private:
     RetainPtr<CIImage> connectCIFilters(FilterEffect&);
     void renderToImageBuffer(FilterEffect&) final;
     static bool supportsCoreImageRendering(FilterEffect&);
     static bool canRenderUsingCIFilters(FilterEffect&);
-
+    
     RetainPtr<CIImage> imageForSourceGraphic(SourceGraphic&);
     RetainPtr<CIImage> imageForFEColorMatrix(const FEColorMatrix&, const Vector<RetainPtr<CIImage>>&);
     RetainPtr<CIImage> imageForFEComponentTransfer(const FEComponentTransfer&, Vector<RetainPtr<CIImage>>&);
-
+    
     RefPtr<IOSurfaceImageBuffer> m_outputImageBuffer;
     RetainPtr<CIImage> m_outputImage;
 };

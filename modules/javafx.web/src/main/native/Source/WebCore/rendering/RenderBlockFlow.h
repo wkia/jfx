@@ -54,12 +54,12 @@ public:
     RenderBlockFlow(Element&, RenderStyle&&);
     RenderBlockFlow(Document&, RenderStyle&&);
     virtual ~RenderBlockFlow();
-
+        
     void layoutBlock(bool relayoutChildren, LayoutUnit pageLogicalHeight = 0_lu) override;
 
 protected:
     void willBeDestroyed() override;
-
+    
     // This method is called at the start of layout to wipe away all of the floats in our floating objects list. It also
     // repopulates the list with any floats that intrude from previous siblings or parents. Floats that were added by
     // descendants are gone when this call completes and will get added back later on after the children have gotten
@@ -93,17 +93,17 @@ public:
             , m_negativeMarginAfter(afterNeg)
         {
         }
-
+        
         LayoutUnit positiveMarginBefore() const { return m_positiveMarginBefore; }
         LayoutUnit negativeMarginBefore() const { return m_negativeMarginBefore; }
         LayoutUnit positiveMarginAfter() const { return m_positiveMarginAfter; }
         LayoutUnit negativeMarginAfter() const { return m_negativeMarginAfter; }
-
+        
         void setPositiveMarginBefore(LayoutUnit pos) { m_positiveMarginBefore = pos; }
         void setNegativeMarginBefore(LayoutUnit neg) { m_negativeMarginBefore = neg; }
         void setPositiveMarginAfter(LayoutUnit pos) { m_positiveMarginAfter = pos; }
         void setNegativeMarginAfter(LayoutUnit neg) { m_negativeMarginAfter = neg; }
-
+    
     private:
         LayoutUnit m_positiveMarginBefore;
         LayoutUnit m_negativeMarginBefore;
@@ -122,15 +122,15 @@ public:
             , m_discardMarginBefore(false)
             , m_discardMarginAfter(false)
             , m_didBreakAtLineToAvoidWidow(false)
-        {
+        { 
         }
 
         static LayoutUnit positiveMarginBeforeDefault(const RenderBlock& block)
-        {
+        { 
             return std::max<LayoutUnit>(block.marginBefore(), 0);
         }
         static LayoutUnit negativeMarginBeforeDefault(const RenderBlock& block)
-        {
+        { 
             return std::max<LayoutUnit>(-block.marginBefore(), 0);
         }
         static LayoutUnit positiveMarginAfterDefault(const RenderBlock& block)
@@ -141,13 +141,13 @@ public:
         {
             return std::max<LayoutUnit>(-block.marginAfter(), 0);
         }
-
+        
         MarginValues m_margins;
         int m_lineBreakToAvoidWidow;
         std::unique_ptr<LegacyRootInlineBox> m_lineGridBox;
 
         WeakPtr<RenderMultiColumnFlow> m_multiColumnFlow;
-
+        
         bool m_discardMarginBefore : 1;
         bool m_discardMarginAfter : 1;
         bool m_didBreakAtLineToAvoidWidow : 1;
@@ -164,9 +164,9 @@ public:
         // also have a custom style property for Safari RSS to deal with TypePad blog articles.
         bool m_quirkContainer : 1;
 
-        // This flag tracks whether we are still looking at child margins that can all collapse together at the beginning of a block.
+        // This flag tracks whether we are still looking at child margins that can all collapse together at the beginning of a block.  
         // They may or may not collapse with the top margin of the block (|m_canCollapseTopWithChildren| tells us that), but they will
-        // always be collapsing with one another. This variable can remain set to true through multiple iterations
+        // always be collapsing with one another. This variable can remain set to true through multiple iterations 
         // as long as we keep encountering self-collapsing blocks.
         bool m_atBeforeSideOfBlock : 1;
 
@@ -401,14 +401,14 @@ public:
     void adjustSizeContainmentChildForPagination(RenderBox& child, LayoutUnit offset);
 
     void addFloatsToNewParent(RenderBlockFlow& toBlockFlow) const;
-
+    
     LayoutUnit endPaddingWidthForCaret() const;
 
 protected:
     bool shouldResetLogicalHeightBeforeLayout() const override { return true; }
 
     void computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const override;
-
+    
     bool pushToNextPageWithMinimumLogicalHeight(LayoutUnit& adjustment, LayoutUnit logicalOffset, LayoutUnit minimumLogicalHeight) const;
 
     // If the child is unsplittable and can't fit on the current page, return the top of the next page/column.
@@ -456,19 +456,19 @@ protected:
     std::optional<LayoutUnit> inlineBlockBaseline(LineDirectionMode) const override;
 
     bool isMultiColumnBlockFlow() const override { return multiColumnFlow(); }
-
+    
     void setComputedColumnCountAndWidth(int, LayoutUnit);
 
     LayoutUnit computedColumnWidth() const;
     unsigned computedColumnCount() const;
-
+    
     bool isTopLayoutOverflowAllowed() const override;
     bool isLeftLayoutOverflowAllowed() const override;
 
     virtual void computeColumnCountAndWidth();
 
     virtual void cachePriorCharactersIfNeeded(const LazyLineBreakIterator&) {};
-
+    
 protected:
     // Called to lay out the legend for a fieldset or the ruby text of a ruby run. Also used by multi-column layout to handle
     // the flow thread child.
@@ -478,7 +478,7 @@ protected:
 private:
     bool recomputeLogicalWidthAndColumnWidth();
     LayoutUnit columnGap() const;
-
+    
     RenderBlockFlow* previousSiblingWithOverhangingFloats(bool& parentHasFloats) const;
 
     void checkForPaginationLogicalHeightChange(bool& relayoutChildren, LayoutUnit& pageLogicalHeight, bool& pageLogicalHeightChanged);
@@ -507,10 +507,10 @@ private:
     LayoutUnit logicalLeftOffsetForPositioningFloat(LayoutUnit logicalTop, LayoutUnit fixedOffset, bool applyTextIndent, LayoutUnit* heightRemaining) const;
 
     LayoutUnit lowestInitialLetterLogicalBottom() const;
-
+    
     LayoutUnit nextFloatLogicalBottomBelow(LayoutUnit) const;
     LayoutUnit nextFloatLogicalBottomBelowForBlock(LayoutUnit) const;
-
+    
     LayoutUnit addOverhangingFloats(RenderBlockFlow& child, bool makeChildPaintOtherFloats);
     bool hasOverhangingFloat(RenderBox&);
     void addIntrudingFloats(RenderBlockFlow* prev, RenderBlockFlow* container, LayoutUnit xoffset, LayoutUnit yoffset);
@@ -518,12 +518,12 @@ private:
     LayoutUnit getClearDelta(RenderBox& child, LayoutUnit yPos);
 
     void determineLogicalLeftPositionForChild(RenderBox& child, ApplyLayoutDeltaMode = DoNotApplyLayoutDelta);
-
+    
     bool hitTestFloats(const HitTestRequest&, HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset) override;
     bool hitTestInlineChildren(const HitTestRequest&, HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) override;
 
     void addOverflowFromInlineChildren() override;
-
+    
     void fitBorderToLinesIfNeeded(); // Shrink the box in which the border paints if border-fit is set.
     void adjustForBorderFit(LayoutUnit x, LayoutUnit& left, LayoutUnit& right) const;
 
@@ -531,7 +531,7 @@ private:
 
     GapRects inlineSelectionGaps(RenderBlock& rootBlock, const LayoutPoint& rootBlockPhysicalPosition, const LayoutSize& offsetFromRootBlock,
         LayoutUnit& lastLogicalTop, LayoutUnit& lastLogicalLeft, LayoutUnit& lastLogicalRight, const LogicalSelectionOffsetCaches&, const PaintInfo*) override;
-
+    
     VisiblePosition positionForPointWithInlineChildren(const LayoutPoint& pointInLogicalContents, const RenderFragmentContainer*) override;
     void addFocusRingRectsForInlineChildren(Vector<LayoutRect>& rects, const LayoutPoint& additionalOffset, const RenderLayerModelObject*) override;
 

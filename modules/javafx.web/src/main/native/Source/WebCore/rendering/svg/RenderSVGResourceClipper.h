@@ -49,7 +49,7 @@ public:
     FloatRect resourceBoundingBox(const RenderObject&) override;
 
     RenderSVGResourceType resourceType() const override { return ClipperResourceType; }
-
+    
     bool hitTestClipContent(const FloatRect&, const FloatPoint&);
 
     SVGUnitTypes::SVGUnitType clipPathUnits() const { return clipPathElement().clipPathUnits(); }
@@ -61,7 +61,7 @@ private:
         FloatRect objectBoundingBox;
         AffineTransform absoluteTransform;
         RefPtr<ImageBuffer> imageBuffer;
-
+        
         ClipperData() = default;
         ClipperData(RefPtr<ImageBuffer>&& buffer, const FloatRect& boundingBox, const AffineTransform& transform)
             : objectBoundingBox(boundingBox)

@@ -89,7 +89,7 @@ private:
         , m_f(t.f())
     {
     }
-
+    
     double m_a;
     double m_b;
     double m_c;

@@ -154,7 +154,7 @@ void PlatformTextTrackData::encode(Encoder& encoder) const
 class PlatformTextTrackClient {
 public:
     virtual ~PlatformTextTrackClient() = default;
-
+    
     virtual TextTrack* publicTrack() = 0;
     virtual InbandTextTrackPrivate* privateTrack() { return 0; }
 };
@@ -170,14 +170,14 @@ public:
     {
         return adoptRef(*new PlatformTextTrack(nullptr, label, language, url, mode, kind, PlatformTextTrackData::TrackType::OutOfBand, uniqueId, isDefault));
     }
-
+    
     static Ref<PlatformTextTrack> create(PlatformTextTrackData&& data)
     {
         return adoptRef(*new PlatformTextTrack(WTFMove(data)));
     }
 
     virtual ~PlatformTextTrack() = default;
-
+    
     PlatformTextTrackData::TrackType type() const { return m_trackData.m_type; }
     PlatformTextTrackData::TrackKind kind() const { return m_trackData.m_kind; }
     PlatformTextTrackData::TrackMode mode() const { return m_trackData.m_mode; }
@@ -187,7 +187,7 @@ public:
     int uniqueId() const { return m_trackData.m_uniqueId; }
     bool isDefault() const { return m_trackData.m_isDefault; }
     PlatformTextTrackClient* client() const { return m_client; }
-
+    
     PlatformTextTrackData data() const { return m_trackData; }
 
 protected:
@@ -205,7 +205,7 @@ protected:
             isDefault,
         };
     }
-
+    
     PlatformTextTrack(PlatformTextTrackData&& data)
         : m_trackData(WTFMove(data))
     {

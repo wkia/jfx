@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -57,30 +57,26 @@ GDIObject<HBITMAP> allocImage(HDC dc, IntSize size, CGContextRef *targetRef)
     if (!targetRef || !hbmp)
         return hbmp;
 
-    CGContextRef bitmapContext = CGBitmapContextCreate(bits, bmpInfo.bmiHeader.biWidth, bmpInfo.bmiHeader.biHeight, 8,
-                                                       bmpInfo.bmiHeader.biWidth * 4, sRGBColorSpaceRef(),
-                                                       kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst);
+    auto bitmapContext = adoptCF(CGBitmapContextCreate(bits, bmpInfo.bmiHeader.biWidth, bmpInfo.bmiHeader.biHeight, 8, bmpInfo.bmiHeader.biWidth * 4, sRGBColorSpaceRef(), kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst));
     if (!bitmapContext)
         return GDIObject<HBITMAP>();
 
-    *targetRef = bitmapContext;
+    *targetRef = bitmapContext.leakRef();
     return hbmp;
 }
 
-static CGContextRef createCgContextFromBitmap(HBITMAP bitmap)
+static RetainPtr<CGContextRef> createCgContextFromBitmap(HBITMAP bitmap)
 {
     BITMAP info;
     GetObject(bitmap, sizeof(info), &info);
     ASSERT(info.bmBitsPixel == 32);
 
-    CGContextRef bitmapContext = CGBitmapContextCreate(info.bmBits, info.bmWidth, info.bmHeight, 8,
-                                                       info.bmWidthBytes, sRGBColorSpaceRef(), kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst);
-    return bitmapContext;
+    return adoptCF(CGBitmapContextCreate(info.bmBits, info.bmWidth, info.bmHeight, 8, info.bmWidthBytes, sRGBColorSpaceRef(), kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst));
 }
 
 DragImageRef scaleDragImage(DragImageRef imageRef, FloatSize scale)
 {
-    // FIXME: due to the way drag images are done on windows we need
+    // FIXME: due to the way drag images are done on windows we need 
     // to preprocess the alpha channel <rdar://problem/5015946>
     if (!imageRef)
         return 0;
@@ -88,36 +84,37 @@ DragImageRef scaleDragImage(DragImageRef imageRef, FloatSize scale)
     GDIObject<HBITMAP> hbmp;
     auto image = adoptGDIObject(imageRef);
 
+    auto returnHbmp = [&hbmp, &image] {
+        if (!hbmp)
+            hbmp.swap(image);
+        return hbmp.leak();
+    };
+
     IntSize srcSize = dragImageSize(image.get());
     IntSize dstSize(static_cast<int>(srcSize.width() * scale.width()), static_cast<int>(srcSize.height() * scale.height()));
 
     HWndDC dc(0);
     auto dstDC = adoptGDIObject(::CreateCompatibleDC(dc));
     if (!dstDC)
-        goto exit;
+        return returnHbmp();
 
     CGContextRef targetContext;
     hbmp = allocImage(dstDC.get(), dstSize, &targetContext);
     if (!hbmp)
-        goto exit;
+        return returnHbmp();
 
-    CGContextRef srcContext = createCgContextFromBitmap(image.get());
-    CGImageRef srcImage = CGBitmapContextCreateImage(srcContext);
+    auto srcContext = createCgContextFromBitmap(image.get());
+    auto srcImage = adoptCF(CGBitmapContextCreateImage(srcContext.get()));
     CGRect rect;
     rect.origin.x = 0;
     rect.origin.y = 0;
     rect.size = dstSize;
-    CGContextDrawImage(targetContext, rect, srcImage);
-    CGImageRelease(srcImage);
-    CGContextRelease(srcContext);
+    CGContextDrawImage(targetContext, rect, srcImage.get());
     CGContextRelease(targetContext);
 
-exit:
-    if (!hbmp)
-        hbmp.swap(image);
-    return hbmp.leak();
+    return returnHbmp();
 }
-
+    
 DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
 {
     HWndDC dc(0);
@@ -139,14 +136,16 @@ DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
     CGContextSetFillColor(drawContext, white);
     CGContextFillRect(drawContext, rect);
     if (auto srcImage = img->nativeImage()) {
-        CGContextSetBlendMode(drawContext, kCGBlendModeNormal);
-        CGContextDrawImage(drawContext, rect, srcImage.get());
+        if (auto platformImage = srcImage->platformImage()) {
+            CGContextSetBlendMode(drawContext, kCGBlendModeNormal);
+            CGContextDrawImage(drawContext, rect, platformImage.get());
+        }
     }
     CGContextRelease(drawContext);
 
     return hbmp.leak();
 }
-
+    
 }
 
 #endif

@@ -359,7 +359,7 @@ void CachedResource::error(CachedResource::Status status)
     setLoading(false);
     checkNotify({ });
 }
-
+    
 void CachedResource::cancelLoad()
 {
     if (!isLoading() && !stillNeedsLoad())
@@ -450,7 +450,7 @@ void CachedResource::redirectReceived(ResourceRequest&& request, const ResourceR
 
     m_requestedFromNetworkingLayer = true;
     if (!response.isNull())
-    updateRedirectChainStatus(m_redirectChainCacheStatus, response);
+        updateRedirectChainStatus(m_redirectChainCacheStatus, response);
 
     completionHandler(WTFMove(request));
 }
@@ -652,12 +652,12 @@ void CachedResource::setDecodedSize(unsigned size)
         MemoryCache::singleton().removeFromLRUList(*this);
 
     m_decodedSize = size;
-
+   
     if (allowsCaching() && inCache()) {
         auto& memoryCache = MemoryCache::singleton();
         // Now insert into the new LRU list.
         memoryCache.insertInLRUList(*this);
-
+        
         // Insert into or remove from the live decoded list if necessary.
         // When inserting into the LiveDecodedResourcesList it is possible
         // that the m_lastDecodedAccessTime is still zero or smaller than
@@ -700,7 +700,7 @@ void CachedResource::setEncodedSize(unsigned size)
 void CachedResource::didAccessDecodedData(MonotonicTime timeStamp)
 {
     m_lastDecodedAccessTime = timeStamp;
-
+    
     if (allowsCaching() && inCache()) {
         auto& memoryCache = MemoryCache::singleton();
         if (memoryCache.inLiveDecodedResourcesList(*this)) {
@@ -710,9 +710,9 @@ void CachedResource::didAccessDecodedData(MonotonicTime timeStamp)
         memoryCache.pruneSoon();
     }
 }
-
-void CachedResource::setResourceToRevalidate(CachedResource* resource)
-{
+    
+void CachedResource::setResourceToRevalidate(CachedResource* resource) 
+{ 
     ASSERT(resource);
     ASSERT(!m_resourceToRevalidate);
     ASSERT(resource != this);
@@ -726,7 +726,7 @@ void CachedResource::setResourceToRevalidate(CachedResource* resource)
     m_resourceToRevalidate = resource;
 }
 
-void CachedResource::clearResourceToRevalidate()
+void CachedResource::clearResourceToRevalidate() 
 {
     ASSERT(m_resourceToRevalidate);
     ASSERT(m_resourceToRevalidate->m_proxyResource == this);
@@ -741,7 +741,7 @@ void CachedResource::clearResourceToRevalidate()
     m_resourceToRevalidate = nullptr;
     deleteIfPossible();
 }
-
+    
 void CachedResource::switchClientsToRevalidatedResource()
 {
     ASSERT(m_resourceToRevalidate);
@@ -826,7 +826,7 @@ bool CachedResource::canUseCacheValidator() const
 }
 
 CachedResource::RevalidationDecision CachedResource::makeRevalidationDecision(CachePolicy cachePolicy) const
-{
+{    
     switch (cachePolicy) {
     case CachePolicy::HistoryBuffer:
         return RevalidationDecision::No;
@@ -910,7 +910,7 @@ void CachedResource::tryReplaceEncodedData(SharedBuffer& newBuffer)
 {
     if (!m_data)
         return;
-
+    
     if (!mayTryReplaceEncodedData())
         return;
 

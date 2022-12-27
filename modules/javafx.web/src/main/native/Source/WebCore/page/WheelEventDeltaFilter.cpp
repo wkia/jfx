@@ -35,7 +35,7 @@
 #endif
 
 namespace WebCore {
-
+    
 WheelEventDeltaFilter::WheelEventDeltaFilter() = default;
 
 WheelEventDeltaFilter::~WheelEventDeltaFilter() = default;
@@ -76,11 +76,11 @@ void BasicWheelEventDeltaFilter::updateFromDelta(const FloatSize& delta)
     m_currentFilteredDelta = delta;
     if (!m_isFilteringDeltas)
         return;
-
+    
     m_recentWheelEventDeltas.append(delta);
     if (m_recentWheelEventDeltas.size() > basicWheelEventDeltaFilterWindowSize)
         m_recentWheelEventDeltas.removeFirst();
-
+    
     DominantScrollGestureDirection scrollDirection = dominantScrollGestureDirection();
     if (scrollDirection == DominantScrollGestureDirection::Vertical)
         m_currentFilteredDelta.setWidth(0);
@@ -109,19 +109,19 @@ DominantScrollGestureDirection BasicWheelEventDeltaFilter::dominantScrollGesture
 {
     bool allVertical = m_recentWheelEventDeltas.size();
     bool allHorizontal = m_recentWheelEventDeltas.size();
-
+    
     for (const auto& delta : m_recentWheelEventDeltas) {
         bool isVertical = deltaIsPredominantlyVertical(delta);
         allVertical &= isVertical;
         allHorizontal &= !isVertical;
     }
-
+    
     if (allVertical)
         return DominantScrollGestureDirection::Vertical;
-
+    
     if (allHorizontal)
         return DominantScrollGestureDirection::Horizontal;
-
+    
     return DominantScrollGestureDirection::None;
 }
 

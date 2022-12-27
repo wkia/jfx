@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,7 +43,7 @@ public:
         : Phase(graph, "OSR entrypoint creation")
     {
     }
-
+    
     bool run()
     {
         RELEASE_ASSERT(m_graph.m_plan.mode() == JITCompilationMode::FTLForOSREntry);
@@ -55,9 +55,9 @@ public:
 
         // Needed by createPreHeader().
         m_graph.ensureCPSDominators();
-
+        
         CodeBlock* baseline = m_graph.m_profiledBlock;
-
+        
         BasicBlock* target = nullptr;
         for (unsigned blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
@@ -80,9 +80,9 @@ public:
             // compilation is a failure.
             return false;
         }
-
+        
         BlockInsertionSet insertionSet(m_graph);
-
+        
         // We say that the execution count of the entry block is 1, because we know for sure
         // that this must be the case. Under our definition of executionCount, "1" means "once
         // per invocation". We could have said NaN here, since that would ask any clients of
@@ -92,7 +92,7 @@ public:
 
         // We'd really like to use an unset origin, but ThreadedCPS won't allow that.
         NodeOrigin origin = NodeOrigin(CodeOrigin(BytecodeIndex(0)), CodeOrigin(BytecodeIndex(0)), false);
-
+        
         Vector<Node*> locals(baseline->numCalleeLocals());
         for (unsigned local = 0; local < baseline->numCalleeLocals(); ++local) {
             Node* previousHead = target->variablesAtHead.local(local);
@@ -102,7 +102,7 @@ public:
             locals[local] = newRoot->appendNode(
                 m_graph, variable->prediction(), ExtractOSREntryLocal, origin,
                 OpInfo(variable->operand().virtualRegister()));
-
+            
             newRoot->appendNode(
                 m_graph, SpecNone, MovHint, origin, OpInfo(variable->operand().virtualRegister()),
                 Edge(locals[local]));
@@ -111,7 +111,7 @@ public:
         // Now use the origin of the target, since it's not OK to exit, and we will probably hoist
         // type checks to here.
         origin = target->at(0)->origin;
-
+        
         ArgumentsVector newArguments = m_graph.m_rootToArguments.find(m_graph.block(0))->value;
         for (unsigned argument = 0; argument < baseline->numParameters(); ++argument) {
             Node* oldNode = target->variablesAtHead.argument(argument);
@@ -134,11 +134,11 @@ public:
             newRoot->appendNode(
                 m_graph, SpecNone, SetLocal, origin, OpInfo(variable), Edge(node));
         }
-
+        
         newRoot->appendNode(
             m_graph, SpecNone, Jump, origin,
             OpInfo(createPreHeader(m_graph, insertionSet, target)));
-
+        
         insertionSet.execute();
 
         RELEASE_ASSERT(m_graph.m_roots.size() == 1);

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -66,7 +66,7 @@ CombinedLiveness::CombinedLiveness(Graph& graph)
     : liveAtHead(graph)
     , liveAtTail(graph)
 {
-    // First compute
+    // First compute 
     // - The liveAtHead for each block.
     // - The liveAtTail for blocks that won't properly propagate
     //   the information based on their empty successor list.
@@ -87,7 +87,7 @@ CombinedLiveness::CombinedLiveness(Graph& graph)
             liveAtTail[block] = seen;
         }
     }
-
+    
     // Now compute the liveAtTail by unifying the liveAtHead of the successors.
     for (BasicBlock* block : graph.blocksInNaturalOrder()) {
         for (BasicBlock* successor : block->successors()) {

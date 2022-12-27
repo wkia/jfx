@@ -201,7 +201,7 @@ VTTRegion::RegionSetting VTTRegion::scanSettingName(VTTScanner& input)
 
 static inline bool parsedEntireRun(const VTTScanner& input, const VTTScanner::Run& run)
 {
-    return input.isAt(run.end());
+    return input.isAt(run.end()); 
 }
 
 void VTTRegion::parseSettingValue(RegionSetting setting, VTTScanner& input)

@@ -31,7 +31,7 @@
 #include "SnippetParams.h"
 
 namespace JSC { namespace DFG {
-
+    
 class SpeculativeJIT;
 
 class SnippetParams final : public JSC::SnippetParams {

@@ -36,7 +36,7 @@
 namespace WebCore {
 
 class FlexItem;
-
+    
 class RenderFlexibleBox : public RenderBlock {
     WTF_MAKE_ISO_ALLOCATED(RenderFlexibleBox);
 public:
@@ -68,21 +68,21 @@ public:
     bool isLeftLayoutOverflowAllowed() const override;
 
     virtual bool isFlexibleBoxImpl() const { return false; };
-
+    
     bool useChildOverridingLogicalHeightForPercentageResolution(const RenderBox&);
-
+    
     void clearCachedMainSizeForChild(const RenderBox& child);
-
+    
     LayoutUnit cachedChildIntrinsicContentLogicalHeight(const RenderBox& child) const;
     void setCachedChildIntrinsicContentLogicalHeight(const RenderBox& child, LayoutUnit);
     void clearCachedChildIntrinsicContentLogicalHeight(const RenderBox& child);
 
     LayoutUnit staticMainAxisPositionForPositionedChild(const RenderBox&);
     LayoutUnit staticCrossAxisPositionForPositionedChild(const RenderBox&);
-
+    
     LayoutUnit staticInlinePositionForPositionedChild(const RenderBox&);
     LayoutUnit staticBlockPositionForPositionedChild(const RenderBox&);
-
+    
     // Returns true if the position changed. In that case, the child will have to
     // be laid out again.
     bool setStaticPositionForPositionedLayout(const RenderBox&);
@@ -97,16 +97,16 @@ private:
         PositiveFlexibility,
         NegativeFlexibility,
     };
-
+    
     enum ChildLayoutType { LayoutIfNeeded, ForceLayout, NeverLayout };
-
+    
     enum class SizeDefiniteness { Definite, Indefinite, Unknown };
-
+    
     // Use an inline capacity of 8, since flexbox containers usually have less than 8 children.
     typedef Vector<LayoutRect, 8> ChildFrameRects;
 
     struct LineContext;
-
+    
     bool mainAxisIsChildInlineAxis(const RenderBox&) const;
     bool isColumnFlow() const;
     bool isColumnOrRowReverse() const;
@@ -171,20 +171,20 @@ private:
     bool updateAutoMarginsInCrossAxis(RenderBox& child, LayoutUnit availableAlignmentSpace);
     void repositionLogicalHeightDependentFlexItems(Vector<LineContext>&, LayoutUnit gapBetweenLines);
     LayoutUnit clientLogicalBottomAfterRepositioning();
-
+    
     LayoutUnit availableAlignmentSpaceForChild(LayoutUnit lineCrossAxisExtent, const RenderBox& child);
     LayoutUnit marginBoxAscentForChild(const RenderBox& child);
-
+    
     LayoutUnit computeChildMarginValue(Length margin);
     void prepareOrderIteratorAndMargins();
     std::pair<LayoutUnit, LayoutUnit> computeFlexItemMinMaxSizes(RenderBox& child);
     LayoutUnit adjustChildSizeForAspectRatioCrossAxisMinAndMax(const RenderBox& child, LayoutUnit childSize);
     FlexItem constructFlexItem(RenderBox&, bool relayoutChildren);
-
+    
     void freezeInflexibleItems(FlexSign, Vector<FlexItem>& children, LayoutUnit& remainingFreeSpace, double& totalFlexGrow, double& totalFlexShrink, double& totalWeightedFlexShrink);
     bool resolveFlexibleLengths(FlexSign, Vector<FlexItem>&, LayoutUnit initialFreeSpace, LayoutUnit& remainingFreeSpace, double& totalFlexGrow, double& totalFlexShrink, double& totalWeightedFlexShrink);
     void freezeViolations(Vector<FlexItem*>&, LayoutUnit& availableFreeSpace, double& totalFlexGrow, double& totalFlexShrink, double& totalWeightedFlexShrink);
-
+    
     void resetAutoMarginsAndLogicalTopInCrossAxis(RenderBox& child);
     void setOverridingMainSizeForChild(RenderBox&, LayoutUnit);
     void prepareChildForPositionedLayout(RenderBox& child);
@@ -195,7 +195,7 @@ private:
     void applyStretchAlignmentToChild(RenderBox& child, LayoutUnit lineCrossAxisExtent);
     void flipForRightToLeftColumn(const Vector<LineContext>& lineContexts);
     void flipForWrapReverse(const Vector<LineContext>&, LayoutUnit crossAxisStartEdge);
-
+    
     void appendChildFrameRects(ChildFrameRects&);
     void repaintChildrenDuringLayoutIfMoved(const ChildFrameRects&);
 
@@ -207,7 +207,7 @@ private:
     // This is used to cache the preferred size for orthogonal flow children so we
     // don't have to relayout to get it
     HashMap<const RenderBox*, LayoutUnit> m_intrinsicSizeAlongMainAxis;
-
+    
     // This is used to cache the intrinsic size on the cross axis to avoid
     // relayouts when stretching.
     HashMap<const RenderBox*, LayoutUnit> m_intrinsicContentLogicalHeights;
@@ -218,10 +218,10 @@ private:
     // the first layout likely did not use the correct value for percentage
     // sizing of children.
     HashSet<const RenderBox*> m_relaidOutChildren;
-
+    
     mutable OrderIterator m_orderIterator { *this };
     int m_numberOfInFlowChildrenOnFirstLine { -1 };
-
+    
     // This is SizeIsUnknown outside of layoutBlock()
     SizeDefiniteness m_hasDefiniteHeight { SizeDefiniteness::Unknown };
     bool m_inLayout { false };

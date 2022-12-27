@@ -56,7 +56,7 @@ void StyleMultiImage::load(CachedResourceLoader& loader, const ResourceLoaderOpt
         m_selectedImage = StyleGeneratedImage::create(downcast<CSSImageGeneratorValue>(*imageWithScale.value.get()));
         m_selectedImage->load(loader, options);
     }
-
+    
     if (is<CSSImageValue>(imageWithScale.value)) {
         m_selectedImage = StyleCachedImage::create(downcast<CSSImageValue>(*imageWithScale.value.get()), imageWithScale.scaleFactor);
         if (m_selectedImage->isPending())

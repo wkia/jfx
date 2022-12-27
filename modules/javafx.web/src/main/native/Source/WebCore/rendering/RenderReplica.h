@@ -43,7 +43,7 @@ public:
     bool requiresLayer() const override { return true; }
 
     void layout() override;
-
+    
     void paint(PaintInfo&, const LayoutPoint&) override;
 
 private:

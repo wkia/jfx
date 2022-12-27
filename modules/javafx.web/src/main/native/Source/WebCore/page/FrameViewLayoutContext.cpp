@@ -121,7 +121,7 @@ public :
         for (auto* descendant = m_layoutRoot.firstChild(); descendant; descendant = descendant->nextInPreOrder(&m_layoutRoot)) {
             if (!descendant->needsLayout())
                 continue;
-
+            
             reportNeedsLayoutError(*descendant);
             return;
         }
@@ -142,12 +142,12 @@ public:
     {
         m_view.setCurrentScrollType(ScrollType::Programmatic);
     }
-
+        
     ~LayoutScope()
     {
         m_view.setCurrentScrollType(m_previousScrollType);
     }
-
+        
 private:
     FrameView& m_view;
     SetForScope<FrameViewLayoutContext::LayoutNestedState> m_nestedState;
@@ -187,7 +187,7 @@ void FrameViewLayoutContext::layout()
     TraceScope tracingScope(LayoutStart, LayoutEnd);
     InspectorInstrumentation::willLayout(view().frame());
     WeakPtr<RenderElement> layoutRoot;
-
+    
     m_layoutTimer.stop();
     m_setNeedsLayoutWasDeferred = false;
 
@@ -550,7 +550,7 @@ bool FrameViewLayoutContext::handleLayoutWithFrameFlatteningIfNeeded()
 {
     if (!view().isInChildFrameWithFrameFlattening())
         return false;
-
+    
     startLayoutAtMainFrameViewIfNeeded();
     auto* layoutRoot = subtreeLayoutRoot() ? subtreeLayoutRoot() : frame().document()->renderView();
     return !layoutRoot || !layoutRoot->needsLayout();
@@ -586,13 +586,13 @@ LayoutSize FrameViewLayoutContext::layoutDelta() const
         return layoutState->layoutDelta();
     return { };
 }
-
+    
 void FrameViewLayoutContext::addLayoutDelta(const LayoutSize& delta)
 {
     if (auto* layoutState = this->layoutState())
         layoutState->addLayoutDelta(delta);
 }
-
+    
 #if ASSERT_ENABLED
 bool FrameViewLayoutContext::layoutDeltaMatches(const LayoutSize& delta)
 {
@@ -624,7 +624,7 @@ bool FrameViewLayoutContext::pushLayoutStateForPaginationIfNeeded(RenderBlockFlo
     m_layoutStateStack.append(makeUnique<RenderLayoutState>(layoutRoot, RenderLayoutState::IsPaginated::Yes));
     return true;
 }
-
+    
 bool FrameViewLayoutContext::pushLayoutState(RenderBox& renderer, const LayoutSize& offset, LayoutUnit pageHeight, bool pageHeightChanged)
 {
     // We push LayoutState even if layoutState is disabled because it stores layoutDelta too.
@@ -636,7 +636,7 @@ bool FrameViewLayoutContext::pushLayoutState(RenderBox& renderer, const LayoutSi
     }
     return false;
 }
-
+    
 void FrameViewLayoutContext::popLayoutState()
 {
     m_layoutStateStack.removeLast();

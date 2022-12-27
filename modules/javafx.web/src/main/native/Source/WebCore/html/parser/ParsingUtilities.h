@@ -40,7 +40,7 @@ template<typename CharacterType> inline bool isNotASCIISpace(CharacterType c)
 {
     return !isASCIISpace(c);
 }
-
+    
 template<typename CharacterType, typename DelimiterType> bool skipExactly(const CharacterType*& position, const CharacterType* end, DelimiterType delimiter)
 {
     if (position < end && *position == delimiter) {
@@ -171,7 +171,7 @@ template<bool characterPredicate(UChar)> void reverseSkipWhile(const UChar*& pos
 template<typename CharacterType, unsigned lowercaseLettersArraySize> bool skipExactlyIgnoringASCIICase(const CharacterType*& position, const CharacterType* end, const char (&lowercaseLetters)[lowercaseLettersArraySize])
 {
     constexpr auto lowercaseLettersLength = lowercaseLettersArraySize - 1;
-
+    
     if (position + lowercaseLettersLength > end)
         return false;
     if (!WTF::equalLettersIgnoringASCIICase(position, lowercaseLettersLength, lowercaseLetters))

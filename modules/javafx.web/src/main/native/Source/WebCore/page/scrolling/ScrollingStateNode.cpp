@@ -125,7 +125,7 @@ void ScrollingStateNode::insertChild(Ref<ScrollingStateNode>&& childNode, size_t
         m_children->append(WTFMove(childNode));
     } else
         m_children->insert(index, WTFMove(childNode));
-
+    
     setPropertyChanged(Property::ChildNodes);
 }
 
@@ -166,7 +166,7 @@ void ScrollingStateNode::setLayer(const LayerRepresentation& layerRepresentation
 {
     if (layerRepresentation == m_layer)
         return;
-
+    
     m_layer = layerRepresentation;
 
     setPropertyChanged(Property::Layer);
@@ -176,7 +176,7 @@ void ScrollingStateNode::dumpProperties(TextStream& ts, ScrollingStateTreeAsText
 {
     if (behavior & ScrollingStateTreeAsTextBehaviorIncludeNodeIDs)
         ts.dumpProperty("nodeID", scrollingNodeID());
-
+    
     if (behavior & ScrollingStateTreeAsTextBehaviorIncludeLayerIDs)
         ts.dumpProperty("layerID", layer().layerID());
 }

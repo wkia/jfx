@@ -34,7 +34,7 @@
 #include <wtf/Locker.h>
 
 namespace WebCore {
-
+    
 Ref<WebGLVertexArrayObject> WebGLVertexArrayObject::create(WebGLRenderingContextBase& context, Type type)
 {
     return adoptRef(*new WebGLVertexArrayObject(context, type));
@@ -67,10 +67,10 @@ void WebGLVertexArrayObject::deleteObjectImpl(const AbstractLocker& locker, Grap
         context3d->deleteVertexArray(object);
         break;
     }
-
+    
     if (m_boundElementArrayBuffer)
         m_boundElementArrayBuffer->onDetached(locker, context3d);
-
+    
     for (auto& state : m_vertexAttribState) {
         if (state.bufferBinding)
             state.bufferBinding->onDetached(locker, context3d);

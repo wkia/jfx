@@ -459,7 +459,7 @@ void SVGRenderSupport::applyStrokeStyleToContext(GraphicsContext& context, const
             if (float pathLength = downcast<SVGGeometryElement>(element)->pathLength())
                 scaleFactor = downcast<RenderSVGShape>(renderer).getTotalLength() / pathLength;
         }
-
+        
         for (auto& dash : dashes) {
             dashArray.uncheckedAppend(dash.value(lengthContext) * scaleFactor);
             if (dashArray.last() > 0)

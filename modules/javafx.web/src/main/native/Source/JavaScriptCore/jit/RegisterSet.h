@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,7 +47,7 @@ public:
     {
         setMany(regs...);
     }
-
+    
     JS_EXPORT_PRIVATE static RegisterSet stackRegisters();
     JS_EXPORT_PRIVATE static RegisterSet reservedHardwareRegisters();
     static RegisterSet runtimeTagRegisters();
@@ -71,13 +71,13 @@ public:
 
     static RegisterSet registersToNotSaveForJSCall();
     static RegisterSet registersToNotSaveForCCall();
-
+    
     void set(Reg reg, bool value = true)
     {
         ASSERT(!!reg);
         m_bits.set(reg.index(), value);
     }
-
+    
     void set(JSValueRegs regs, bool value = true)
     {
         if (regs.tagGPR() != InvalidGPRReg)
@@ -92,20 +92,20 @@ public:
         ASSERT(!!reg);
         set(reg, false);
     }
-
+    
     bool get(Reg reg) const
     {
         ASSERT(!!reg);
         return m_bits.get(reg.index());
     }
-
+    
     template<typename Iterable>
     void setAll(const Iterable& iterable)
     {
         for (Reg reg : iterable)
             set(reg);
     }
-
+    
     // Also allow add/remove/contains terminology, which means the same thing as set/clear/get.
     bool add(Reg reg)
     {
@@ -118,26 +118,26 @@ public:
         return m_bits.testAndClear(reg.index());
     }
     bool contains(Reg reg) const { return get(reg); }
-
+    
     void merge(const RegisterSet& other) { m_bits.merge(other.m_bits); }
     void filter(const RegisterSet& other) { m_bits.filter(other.m_bits); }
     void exclude(const RegisterSet& other) { m_bits.exclude(other.m_bits); }
-
+    
     bool subsumes(const RegisterSet& other) const { return m_bits.subsumes(other.m_bits); }
-
+    
     size_t numberOfSetGPRs() const;
     size_t numberOfSetFPRs() const;
     size_t numberOfSetRegisters() const { return m_bits.count(); }
-
+    
     bool isEmpty() const { return m_bits.isEmpty(); }
-
+    
     JS_EXPORT_PRIVATE void dump(PrintStream&) const;
-
+    
     bool operator==(const RegisterSet& other) const { return m_bits == other.m_bits; }
     bool operator!=(const RegisterSet& other) const { return m_bits != other.m_bits; }
-
+    
     unsigned hash() const { return m_bits.hash(); }
-
+    
     template<typename Func>
     void forEach(const Func& func) const
     {
@@ -146,43 +146,43 @@ public:
                 func(Reg::fromIndex(index));
             });
     }
-
+    
     class iterator {
     public:
         iterator()
         {
         }
-
+        
         iterator(const RegisterBitmap::iterator& iter)
             : m_iter(iter)
         {
         }
-
+        
         Reg operator*() const { return Reg::fromIndex(*m_iter); }
-
+        
         iterator& operator++()
         {
             ++m_iter;
             return *this;
         }
-
+        
         bool operator==(const iterator& other)
         {
             return m_iter == other.m_iter;
         }
-
+        
         bool operator!=(const iterator& other)
         {
             return !(*this == other);
         }
-
+        
     private:
         RegisterBitmap::iterator m_iter;
     };
-
+    
     iterator begin() const { return iterator(m_bits.begin()); }
     iterator end() const { return iterator(m_bits.end()); }
-
+    
 private:
     void setAny(Reg reg) { set(reg); }
     void setAny(JSValueRegs regs) { set(regs); }
@@ -198,7 +198,7 @@ private:
     // These offsets mirror the logic in Reg.h.
     static constexpr unsigned gprOffset = 0;
     static constexpr unsigned fprOffset = gprOffset + MacroAssembler::numGPRs;
-
+    
     RegisterBitmap m_bits;
 };
 

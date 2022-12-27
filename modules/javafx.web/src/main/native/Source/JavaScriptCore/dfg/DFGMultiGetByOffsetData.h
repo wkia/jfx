@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -46,12 +46,12 @@ public:
         Load,
         LoadFromPrototype
     };
-
+    
     GetByOffsetMethod()
         : m_kind(Invalid)
     {
     }
-
+    
     static GetByOffsetMethod constant(FrozenValue* value)
     {
         GetByOffsetMethod result;
@@ -59,7 +59,7 @@ public:
         result.u.constant = value;
         return result;
     }
-
+    
     static GetByOffsetMethod load(PropertyOffset offset)
     {
         GetByOffsetMethod result;
@@ -67,7 +67,7 @@ public:
         result.u.load.offset = offset;
         return result;
     }
-
+    
     static GetByOffsetMethod loadFromPrototype(FrozenValue* prototype, PropertyOffset offset)
     {
         GetByOffsetMethod result;
@@ -76,32 +76,32 @@ public:
         result.u.load.offset = offset;
         return result;
     }
-
+    
     bool operator!() const { return m_kind == Invalid; }
-
+    
     Kind kind() const { return m_kind; }
-
+    
     FrozenValue* constant() const
     {
         ASSERT(kind() == Constant);
         return u.constant;
     }
-
+    
     FrozenValue* prototype() const
     {
         ASSERT(kind() == LoadFromPrototype);
         return u.load.prototype;
     }
-
+    
     PropertyOffset offset() const
     {
         ASSERT(kind() == Load || kind() == LoadFromPrototype);
         return u.load.offset;
     }
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
 private:
     union {
         FrozenValue* constant;
@@ -118,17 +118,17 @@ public:
     MultiGetByOffsetCase()
     {
     }
-
+    
     MultiGetByOffsetCase(const RegisteredStructureSet& set, const GetByOffsetMethod& method)
         : m_set(set)
         , m_method(method)
     {
     }
-
+    
     RegisteredStructureSet& set() { return m_set; }
     const RegisteredStructureSet& set() const { return m_set; }
     const GetByOffsetMethod& method() const { return m_method; }
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
 

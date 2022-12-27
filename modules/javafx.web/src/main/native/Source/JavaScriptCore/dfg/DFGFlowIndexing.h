@@ -40,28 +40,28 @@ class FlowIndexing {
 public:
     FlowIndexing(Graph&);
     ~FlowIndexing();
-
+    
     void recompute();
-
+    
     Graph& graph() const { return m_graph; }
-
+    
     unsigned numIndices() const { return m_numIndices; }
-
+    
     unsigned index(unsigned nodeIndex) const { return nodeIndex; }
-
+    
     unsigned index(Node* node) const { return index(node->index()); }
-
+    
     unsigned shadowIndex(unsigned nodeIndex) const
     {
         return m_nodeIndexToShadowIndex[nodeIndex];
     }
-
+    
     unsigned shadowIndex(Node* node) const
     {
         DFG_ASSERT(m_graph, node, node->op() == Phi, node->op());
         return shadowIndex(node->index());
     }
-
+    
     unsigned index(unsigned nodeIndex, NodeFlowProjection::Kind kind) const
     {
         switch (kind) {
@@ -73,7 +73,7 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return 0;
     }
-
+    
     unsigned index(Node *node, NodeFlowProjection::Kind kind) const
     {
         switch (kind) {
@@ -85,12 +85,12 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return 0;
     }
-
+    
     unsigned index(NodeFlowProjection projection) const
     {
         return index(projection.node(), projection.kind());
     }
-
+    
     NodeFlowProjection nodeProjection(unsigned index) const
     {
         if (index < m_nodeIndexToShadowIndex.size())
@@ -99,7 +99,7 @@ public:
             m_graph.nodeAt(m_shadowIndexToNodeIndex[index - m_nodeIndexToShadowIndex.size()]),
             NodeFlowProjection::Shadow);
     }
-
+    
 private:
     Graph& m_graph;
     unsigned m_numIndices;

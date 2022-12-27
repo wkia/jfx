@@ -44,7 +44,7 @@ public:
     {
         return !(*this == other);
     }
-
+    
     bool hasTransform() const { return operations.size(); }
 
     LengthPoint originXY() const { return { x, y }; }

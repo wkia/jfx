@@ -53,7 +53,7 @@ struct CompositedClipData {
             && clipRect == other.clipRect
             && isOverflowScroll == other.isOverflowScroll;
     }
-
+    
     bool operator!=(const CompositedClipData& other) const
     {
         return !(*this == other);
@@ -74,10 +74,10 @@ public:
     ~LayerAncestorClippingStack() = default;
 
     bool hasAnyScrollingLayers() const;
-
+    
     bool equalToClipData(const Vector<CompositedClipData>&) const;
     bool updateWithClipData(ScrollingCoordinator*, Vector<CompositedClipData>&&);
-
+    
     Vector<CompositedClipData> compositedClipData() const;
 
     void clear(ScrollingCoordinator*);

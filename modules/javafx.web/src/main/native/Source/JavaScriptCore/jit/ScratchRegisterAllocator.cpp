@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -81,7 +81,7 @@ typename BankInfo::RegisterType ScratchRegisterAllocator::allocateScratch()
             return reg;
         }
     }
-
+    
     // Since that failed, try to allocate a register that is not yet
     // locked or used for scratch.
     for (unsigned i = 0; i < BankInfo::numberOfRegisters; ++i) {
@@ -92,7 +92,7 @@ typename BankInfo::RegisterType ScratchRegisterAllocator::allocateScratch()
             return reg;
         }
     }
-
+        
     // We failed.
     CRASH();
     // Make some silly compilers happy.
@@ -167,7 +167,7 @@ unsigned ScratchRegisterAllocator::preserveRegistersToStackForCall(AssemblyHelpe
     RELEASE_ASSERT(extraBytesAtTopOfStack % sizeof(void*) == 0);
     if (!usedRegisters.numberOfSetRegisters())
         return 0;
-
+    
     unsigned stackOffset = (usedRegisters.numberOfSetRegisters()) * sizeof(EncodedJSValue);
     stackOffset += extraBytesAtTopOfStack;
     stackOffset = WTF::roundUpToMultipleOf(stackAlignmentBytes(), stackOffset);

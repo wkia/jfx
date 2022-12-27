@@ -37,7 +37,7 @@ class StyleSurroundData : public RefCounted<StyleSurroundData> {
 public:
     static Ref<StyleSurroundData> create() { return adoptRef(*new StyleSurroundData); }
     Ref<StyleSurroundData> copy() const;
-
+    
     bool operator==(const StyleSurroundData& o) const;
     bool operator!=(const StyleSurroundData& o) const
     {
@@ -48,10 +48,10 @@ public:
     LengthBox margin;
     LengthBox padding;
     BorderData border;
-
+    
 private:
     StyleSurroundData();
-    StyleSurroundData(const StyleSurroundData&);
+    StyleSurroundData(const StyleSurroundData&);    
 };
 
 } // namespace WebCore

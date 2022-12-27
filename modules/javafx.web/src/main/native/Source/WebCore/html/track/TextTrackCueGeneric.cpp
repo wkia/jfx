@@ -52,9 +52,9 @@ class TextTrackCueGenericBoxElement final : public VTTCueBox {
     WTF_MAKE_ISO_ALLOCATED_INLINE(TextTrackCueGenericBoxElement);
 public:
     static Ref<TextTrackCueGenericBoxElement> create(Document&, TextTrackCueGeneric&);
-
+    
     void applyCSSProperties(const IntSize&) override;
-
+    
 private:
     TextTrackCueGenericBoxElement(Document&, VTTCue&);
 };
@@ -115,7 +115,7 @@ void TextTrackCueGenericBoxElement::applyCSSProperties(const IntSize& videoSize)
     }
 
     double maxSize = 100.0;
-
+    
     if (alignment == CSSValueEnd || alignment == CSSValueRight)
         maxSize = textPosition;
     else if (alignment == CSSValueStart || alignment == CSSValueLeft)
@@ -196,7 +196,7 @@ void TextTrackCueGeneric::setFontSize(int fontSize, const IntSize& videoSize, bo
 {
     if (!fontSize)
         return;
-
+    
     if (important || !hasDisplayTree() || !baseFontSizeRelativeToVideoHeight()) {
         VTTCue::setFontSize(fontSize, videoSize, important);
         return;

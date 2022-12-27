@@ -118,7 +118,7 @@ private:
 
     void dispatchFocusEvent(RefPtr<Element>&& oldFocusedElement, FocusDirection) final;
     void dispatchBlurEvent(RefPtr<Element>&& newFocusedElement) final;
-
+    
     bool canStartSelection() const final { return false; }
 
     bool isEnumeratable() const final { return true; }

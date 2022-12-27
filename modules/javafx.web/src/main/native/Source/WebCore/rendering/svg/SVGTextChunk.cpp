@@ -41,7 +41,7 @@ SVGTextChunk::SVGTextChunk(const Vector<SVGInlineTextBox*>& lineLayoutBoxes, uns
 
     if (style.isVerticalWritingMode())
         m_chunkStyle |= SVGTextChunk::VerticalText;
-
+    
     switch (svgStyle.textAnchor()) {
     case TextAnchor::Start:
         break;
@@ -151,7 +151,7 @@ void SVGTextChunk::processTextLengthSpacingCorrection() const
                 fragment.y += textLengthShift * atCharacter;
             else
                 fragment.x += textLengthShift * atCharacter;
-
+            
             atCharacter += fragment.length;
         }
     }

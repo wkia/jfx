@@ -46,15 +46,15 @@ public:
 
     const Length& width() const { return m_width; }
     const Length& height() const { return m_height; }
-
+    
     const Length& minWidth() const { return m_minWidth; }
     const Length& minHeight() const { return m_minHeight; }
-
+    
     const Length& maxWidth() const { return m_maxWidth; }
     const Length& maxHeight() const { return m_maxHeight; }
-
+    
     const Length& verticalAlign() const { return m_verticalAlign; }
-
+    
     int specifiedZIndex() const { return m_specifiedZIndex; }
     bool hasAutoSpecifiedZIndex() const { return m_hasAutoSpecifiedZIndex; }
 

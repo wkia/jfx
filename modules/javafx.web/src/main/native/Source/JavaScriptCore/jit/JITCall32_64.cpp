@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -83,7 +83,7 @@ void JIT::emitSlow_op_call_eval(const Instruction* currentInstruction, Vector<Sl
 {
     compileOpCallSlowCase<OpCallEval>(currentInstruction, iter, m_callLinkInfoIndex);
 }
-
+ 
 void JIT::emitSlow_op_call_varargs(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpCallVarargs>(currentInstruction, iter, m_callLinkInfoIndex++);
@@ -98,12 +98,12 @@ void JIT::emitSlow_op_tail_call_forward_arguments(const Instruction* currentInst
 {
     compileOpCallSlowCase<OpTailCallForwardArguments>(currentInstruction, iter, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emitSlow_op_construct_varargs(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpConstructVarargs>(currentInstruction, iter, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emitSlow_op_construct(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     compileOpCallSlowCase<OpConstruct>(currentInstruction, iter, m_callLinkInfoIndex++);
@@ -138,12 +138,12 @@ void JIT::emit_op_tail_call_forward_arguments(const Instruction* currentInstruct
 {
     compileOpCall<OpTailCallForwardArguments>(currentInstruction, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emit_op_construct_varargs(const Instruction* currentInstruction)
 {
     compileOpCall<OpConstructVarargs>(currentInstruction, m_callLinkInfoIndex++);
 }
-
+    
 void JIT::emit_op_construct(const Instruction* currentInstruction)
 {
     compileOpCall<OpConstruct>(currentInstruction, m_callLinkInfoIndex++);
@@ -211,12 +211,12 @@ JIT::compileSetupFrame(const Op& bytecode, CallLinkInfo* info)
     Jump notBiggest = branch32(Above, regT0, regT2);
     store32(regT2, info->addressOfMaxArgumentCountIncludingThis());
     notBiggest.link(this);
-
+    
     // Initialize 'this'.
     emitLoad(thisValue, regT2, regT0);
     store32(regT0, Address(regT1, PayloadOffset + (CallFrame::thisArgumentOffset() * static_cast<int>(sizeof(Register)))));
     store32(regT2, Address(regT1, TagOffset + (CallFrame::thisArgumentOffset() * static_cast<int>(sizeof(Register)))));
-
+    
     addPtr(TrustedImm32(sizeof(CallerFrameAndPC)), regT1, stackPointerRegister);
 }
 
@@ -289,7 +289,7 @@ void JIT::compileOpCall(const Instruction* instruction, unsigned callLinkInfoInd
         info = m_codeBlock->addCallLinkInfo(CodeOrigin(m_bytecodeIndex));
     compileSetupFrame(bytecode, info);
     // SP holds newCallFrame + sizeof(CallerFrameAndPC), with ArgumentCount initialized.
-
+    
     auto bytecodeIndex = m_codeBlock->bytecodeIndex(instruction);
     uint32_t locationBits = CallSiteIndex(bytecodeIndex).bits();
     store32(TrustedImm32(locationBits), tagFor(CallFrameSlot::argumentCountIncludingThis));
@@ -380,10 +380,10 @@ void JIT::emit_op_iterator_open(const Instruction* instruction)
     compileOpCall<OpIteratorOpen>(instruction, m_callLinkInfoIndex++);
 
     advanceToNextCheckpoint();
-
+    
     // call result (iterator) is in regT1 (tag)/regT0 (payload)
     const Identifier* ident = &vm().propertyNames->next;
-
+    
     emitJumpSlowCaseIfNotJSCell(regT1);
 
     GPRReg tagIteratorGPR = regT1;
@@ -405,7 +405,7 @@ void JIT::emit_op_iterator_open(const Instruction* instruction)
         nextRegs,
         InvalidGPRReg,
         AccessType::GetById);
-
+    
     gen.generateFastPath(*this);
     addSlowCase(gen.slowPathJump());
     m_getByIds.append(gen);
@@ -436,7 +436,7 @@ void JIT::emitSlow_op_iterator_open(const Instruction* instruction, Vector<SlowC
     UniquedStringImpl* ident = vm().propertyNames->next.impl();
 
     JITGetByIdGenerator& gen = m_getByIds[m_getByIdIndex++];
-
+    
     Label coldPathBegin = label();
 
     Call call = callOperationWithProfile(
@@ -447,7 +447,7 @@ void JIT::emitSlow_op_iterator_open(const Instruction* instruction, Vector<SlowC
         gen.stubInfo(), // arg2
         JSValueRegs(tagIteratorGPR, payloadIteratorGPR), // arg3
         CacheableIdentifier::createFromImmortalIdentifier(ident).rawBits()); // arg4
-
+    
     gen.reportSlowPathCall(coldPathBegin, call);
     auto done = jump();
 
@@ -486,7 +486,7 @@ void JIT::emit_op_iterator_next(const Instruction* instruction)
 
     GPRReg tagValueGPR = regT1;
     GPRReg payloadValueGPR = regT0;
-
+        
     GPRReg tagDoneGPR = regT5;
     GPRReg payloadDoneGPR = regT4;
 
@@ -495,7 +495,7 @@ void JIT::emit_op_iterator_next(const Instruction* instruction)
 
         GPRReg tagIterResultGPR = regT3;
         GPRReg payloadIterResultGPR = regT2;
-
+        
         // iterResultGPR will get trashed by the first get by id below.
         move(regT1, tagIterResultGPR);
         move(regT0, payloadIterResultGPR);
@@ -570,10 +570,10 @@ void JIT::emitSlow_op_iterator_next(const Instruction* instruction, Vector<SlowC
         VirtualRegister doneVReg = bytecode.m_done;
         GPRReg tagValueGPR = regT1;
         GPRReg payloadValueGPR = regT0;
-
+            
         GPRReg tagIterResultGPR = regT3;
         GPRReg payloadIterResultGPR = regT2;
-
+        
         GPRReg tagDoneGPR = regT5;
         GPRReg payloadDoneGPR = regT4;
 
@@ -584,7 +584,7 @@ void JIT::emitSlow_op_iterator_next(const Instruction* instruction, Vector<SlowC
 
         UniquedStringImpl* ident = vm().propertyNames->done.impl();
         JITGetByIdGenerator& gen = m_getByIds[m_getByIdIndex++];
-
+        
         Label coldPathBegin = label();
 
         Call call = callOperationWithProfile(
@@ -605,7 +605,7 @@ void JIT::emitSlow_op_iterator_next(const Instruction* instruction, Vector<SlowC
         callOperation(operationThrowIteratorResultIsNotObject, TrustedImmPtr(m_codeBlock->globalObject()));
     }
 
-    {
+    {   
         GPRReg tagIterResultGPR = regT1;
         GPRReg payloadIterResultGPR = regT0;
 

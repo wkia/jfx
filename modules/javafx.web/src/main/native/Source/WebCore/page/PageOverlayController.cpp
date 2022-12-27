@@ -144,7 +144,7 @@ GraphicsLayer& PageOverlayController::layerWithDocumentOverlays()
             layer.setIsInWindow(inWindow);
         });
         updateOverlayGeometry(overlay, layer.get());
-
+        
         if (!layer->parent())
             m_documentOverlayRootLayer->addChild(layer.copyRef());
     }
@@ -168,7 +168,7 @@ GraphicsLayer& PageOverlayController::layerWithViewOverlays()
             layer.setIsInWindow(inWindow);
         });
         updateOverlayGeometry(overlay, layer.get());
-
+        
         if (!layer->parent())
             m_viewOverlayRootLayer->addChild(layer.copyRef());
     }
@@ -373,7 +373,7 @@ bool PageOverlayController::copyAccessibilityAttributeBoolValueForPoint(String a
         if ((*it)->copyAccessibilityAttributeBoolValueForPoint(attribute, parameter, value))
             return true;
     }
-
+    
     return false;
 }
 

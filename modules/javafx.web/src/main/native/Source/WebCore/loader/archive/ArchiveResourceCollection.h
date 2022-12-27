@@ -47,11 +47,11 @@ public:
 
     void addResource(Ref<ArchiveResource>&&);
     void addAllResources(Archive&);
-
+    
     WEBCORE_EXPORT ArchiveResource* archiveResourceForURL(const URL&);
     RefPtr<Archive> popSubframeArchive(const String& frameName, const URL&);
-
-private:
+    
+private:    
     HashMap<String, RefPtr<ArchiveResource>> m_subresources;
     HashMap<String, RefPtr<Archive>> m_subframes;
 };

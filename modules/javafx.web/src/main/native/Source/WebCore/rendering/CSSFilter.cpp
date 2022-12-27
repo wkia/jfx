@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -119,7 +119,7 @@ RefPtr<FilterEffect> CSSFilter::buildReferenceFilter(RenderElement& renderer, Fi
         builder->add(effectElement.result(), effect);
         referenceEffects.append(*effect);
     }
-
+    
     m_effects.appendVector(WTFMove(referenceEffects));
     return effect;
 }
@@ -271,7 +271,7 @@ bool CSSFilter::build(RenderElement& renderer, const FilterOperations& operation
             float amount = narrowPrecisionToFloat(componentTransferOperation.amount());
             transferFunction.slope = amount;
             transferFunction.intercept = -0.5 * amount + 0.5;
-
+            
             ComponentTransferFunction nullFunction;
             effect = FEComponentTransfer::create(*this, transferFunction, transferFunction, transferFunction, nullFunction);
             break;
@@ -297,7 +297,7 @@ bool CSSFilter::build(RenderElement& renderer, const FilterOperations& operation
             // property applied here should not clip to their primitive subregions.
             effect->setClipsToBounds(consumer == FilterConsumer::FilterFunction);
             effect->setOperatingColorSpace(DestinationColorSpace::SRGB());
-
+            
             if (filterOperation.type() != FilterOperation::REFERENCE) {
                 effect->inputEffects() = { WTFMove(previousEffect) };
                 m_effects.append(*effect);
@@ -404,7 +404,7 @@ ImageBuffer* CSSFilter::output() const
 {
     if (m_filterRenderer && m_filterRenderer->hasResult())
         return m_filterRenderer->output();
-
+    
     return m_effects.last()->imageBufferResult();
 }
 
@@ -425,10 +425,10 @@ void CSSFilter::setMaxEffectRects(const FloatRect& effectRect)
 IntRect CSSFilter::outputRect() const
 {
     auto& lastEffect = m_effects.last().get();
-
+    
     if (lastEffect.hasResult() || (m_filterRenderer && m_filterRenderer->hasResult()))
         return lastEffect.requestedRegionOfInputPixelBuffer(IntRect { m_filterRegion });
-
+    
     return { };
 }
 

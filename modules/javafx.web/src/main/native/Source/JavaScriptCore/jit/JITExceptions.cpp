@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,7 +48,7 @@ void genericUnwind(VM& vm, CallFrame* callFrame)
         dataLog("In call frame ", RawPointer(topJSCallFrame), " for code block ", codeBlock, "\n");
         WTFBreakpointTrap();
     }
-
+    
     if (auto* shadowChicken = vm.shadowChicken())
         shadowChicken->log(vm, topJSCallFrame, ShadowChicken::Packet::throwPacket());
 
@@ -86,7 +86,7 @@ void genericUnwind(VM& vm, CallFrame* callFrame)
     vm.callFrameForCatch = callFrame;
     vm.targetMachinePCForThrow = catchRoutine;
     vm.targetInterpreterPCForThrow = catchPCForInterpreter;
-
+    
     RELEASE_ASSERT(catchRoutine);
 }
 

@@ -66,5 +66,5 @@ public:
     virtual Vector<String> dictationAlternatives(DictationContext) = 0;
 #endif
 };
-
+    
 } // namespace WebCore

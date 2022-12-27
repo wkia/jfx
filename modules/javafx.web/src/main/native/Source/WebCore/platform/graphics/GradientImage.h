@@ -50,7 +50,7 @@ private:
     void drawPattern(GraphicsContext&, const FloatRect& destRect, const FloatRect& srcRect, const AffineTransform& patternTransform, const FloatPoint& phase, const FloatSize& spacing, const ImagePaintingOptions& = { }) final;
     bool isGradientImage() const final { return true; }
     void dump(WTF::TextStream&) const final;
-
+    
     Ref<Gradient> m_gradient;
     RefPtr<Image> m_cachedImage;
     FloatSize m_cachedAdjustedSize;

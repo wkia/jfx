@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,7 +40,7 @@ ToThisStatus merge(ToThisStatus a, ToThisStatus b)
             return ToThisConflicted;
         return ToThisClearedByGC;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return ToThisConflicted;
 }
@@ -64,7 +64,7 @@ void printInternal(PrintStream& out, ToThisStatus status)
         out.print("ClearedByGC");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

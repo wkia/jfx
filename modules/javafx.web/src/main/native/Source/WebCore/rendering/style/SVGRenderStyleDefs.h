@@ -220,7 +220,7 @@ class StyleTextData : public RefCounted<StyleTextData> {
 public:
     static Ref<StyleTextData> create() { return adoptRef(*new StyleTextData); }
     Ref<StyleTextData> copy() const;
-
+    
     bool operator==(const StyleTextData& other) const;
     bool operator!=(const StyleTextData& other) const
     {

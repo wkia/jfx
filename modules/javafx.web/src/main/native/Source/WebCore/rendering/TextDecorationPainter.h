@@ -40,12 +40,12 @@ class RenderStyle;
 class RenderText;
 class ShadowData;
 class TextRun;
-
+    
 class TextDecorationPainter {
 public:
     struct Styles;
     TextDecorationPainter(GraphicsContext&, OptionSet<TextDecoration> decorations, const RenderText&, bool isFirstLine, const FontCascade&, std::optional<Styles> = std::nullopt);
-
+    
     void setTextRunIterator(LayoutIntegration::TextRunIterator textRun) { m_textRun = textRun; }
     void setIsHorizontal(bool isHorizontal) { m_isHorizontal = isHorizontal; }
     void setWidth(float width) { m_width = width; }
@@ -85,5 +85,5 @@ private:
     Styles m_styles;
     const RenderStyle& m_lineStyle;
 };
-
+    
 } // namespace WebCore

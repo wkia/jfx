@@ -43,11 +43,11 @@ AspectRatioEnabled:
   humanReadableDescription: "Enable aspect-ratio CSS property"
   defaultValue:
     WebKitLegacy:
-      default: false
+      default: true
     WebKit:
-      default: false
+      default: true
     WebCore:
-      default: false
+      default: true
 
 AspectRatioOfImgFromWidthAndHeightEnabled:
   type: bool
@@ -565,11 +565,11 @@ IntersectionObserverEnabled:
   condition: ENABLE(INTERSECTION_OBSERVER)
   defaultValue:
     WebKitLegacy:
-      default: true
+      default: false
     WebKit:
       default: true
     WebCore:
-      default: true
+      default: false
 
 # FIXME: The 'Is' prefix is inconsistent with most other preferences and should be removed.
 IsFirstPartyWebsiteDataRemovalDisabled:

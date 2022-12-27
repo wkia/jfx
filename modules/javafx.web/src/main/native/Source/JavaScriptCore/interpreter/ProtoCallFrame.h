@@ -65,7 +65,7 @@ public:
     void setPaddedArgCount(uint32_t argCount) { paddedArgCount = argCount; }
 
     void clearCurrentVPC() { argCountAndCodeOriginValue.tag() = 0; }
-
+    
     JSValue thisValue() const { return thisArg.Register::jsValue(); }
     void setThisValue(JSValue value) { thisArg = value; }
 

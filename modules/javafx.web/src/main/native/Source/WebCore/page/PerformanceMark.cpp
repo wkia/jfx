@@ -69,7 +69,7 @@ ExceptionOr<Ref<PerformanceMark>> PerformanceMark::create(JSC::JSGlobalObject& g
             startTime = *markOptions->startTime;
         } else
             startTime = performanceNow(scriptExecutionContext);
-
+        
         if (markOptions->detail.isUndefined())
             detail = JSC::jsNull();
         else

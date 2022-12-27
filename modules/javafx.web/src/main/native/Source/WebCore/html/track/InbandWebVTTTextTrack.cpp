@@ -82,7 +82,7 @@ void InbandWebVTTTextTrack::newCuesParsed()
         addCue(WTFMove(cue));
     }
 }
-
+    
 void InbandWebVTTTextTrack::newRegionsParsed()
 {
     for (auto& region : parser().takeRegions()) {

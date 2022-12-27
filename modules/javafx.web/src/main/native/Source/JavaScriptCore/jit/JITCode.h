@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -72,12 +72,12 @@ public:
     {
         return JITType::BaselineJIT;
     }
-
+    
     static JITType topTierJIT()
     {
         return JITType::FTLJIT;
     }
-
+    
     static JITType nextTierJIT(JITType jitType)
     {
         switch (jitType) {
@@ -90,7 +90,7 @@ public:
             return JITType::None;
         }
     }
-
+    
     static bool isExecutableScript(JITType jitType)
     {
         switch (jitType) {
@@ -101,7 +101,7 @@ public:
             return true;
         }
     }
-
+    
     static bool couldBeInterpreted(JITType jitType)
     {
         switch (jitType) {
@@ -112,7 +112,7 @@ public:
             return false;
         }
     }
-
+    
     static bool isJIT(JITType jitType)
     {
         switch (jitType) {
@@ -131,27 +131,27 @@ public:
         RELEASE_ASSERT(isExecutableScript(expectedHigher));
         return expectedLower < expectedHigher;
     }
-
+    
     static bool isHigherTier(JITType expectedHigher, JITType expectedLower)
     {
         return isLowerTier(expectedLower, expectedHigher);
     }
-
+    
     static bool isLowerOrSameTier(JITType expectedLower, JITType expectedHigher)
     {
         return !isHigherTier(expectedLower, expectedHigher);
     }
-
+    
     static bool isHigherOrSameTier(JITType expectedHigher, JITType expectedLower)
     {
         return isLowerOrSameTier(expectedLower, expectedHigher);
     }
-
+    
     static bool isOptimizingJIT(JITType jitType)
     {
         return jitType == JITType::DFGJIT || jitType == JITType::FTLJIT;
     }
-
+    
     static bool isBaselineCode(JITType jitType)
     {
         return jitType == JITType::InterpreterThunk || jitType == JITType::BaselineJIT;
@@ -167,7 +167,7 @@ public:
     }
 
     virtual const DOMJIT::Signature* signature() const { return nullptr; }
-
+    
     enum class ShareAttribute : uint8_t {
         NotShared,
         Shared
@@ -175,15 +175,15 @@ public:
 
 protected:
     JITCode(JITType, JITCode::ShareAttribute = JITCode::ShareAttribute::NotShared);
-
+    
 public:
     virtual ~JITCode();
-
+    
     JITType jitType() const
     {
         return m_jitType;
     }
-
+    
     template<typename PointerType>
     static JITType jitTypeFor(PointerType jitCode)
     {
@@ -191,27 +191,27 @@ public:
             return JITType::None;
         return jitCode->jitType();
     }
-
+    
     virtual CodePtr<JSEntryPtrTag> addressForCall(ArityCheckMode) = 0;
     virtual void* executableAddressAtOffset(size_t offset) = 0;
     void* executableAddress() { return executableAddressAtOffset(0); }
     virtual void* dataAddressAtOffset(size_t offset) = 0;
     virtual unsigned offsetOf(void* pointerIntoCode) = 0;
-
+    
     virtual DFG::CommonData* dfgCommon();
     virtual DFG::JITCode* dfg();
     virtual FTL::JITCode* ftl();
     virtual FTL::ForOSREntryJITCode* ftlForOSREntry();
     virtual void shrinkToFit(const ConcurrentJSLocker&);
-
+    
     virtual void validateReferences(const TrackedReferences&);
-
+    
     JSValue execute(VM*, ProtoCallFrame*);
-
+    
     void* start() { return dataAddressAtOffset(0); }
     virtual size_t size() = 0;
     void* end() { return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(start()) + size()); }
-
+    
     virtual bool contains(void*) = 0;
 
 #if ENABLE(JIT)
@@ -256,7 +256,7 @@ public:
     DirectJITCode(CodeRef<JSEntryPtrTag>, CodePtr<JSEntryPtrTag> withArityCheck, JITType, JITCode::ShareAttribute = JITCode::ShareAttribute::NotShared);
     DirectJITCode(CodeRef<JSEntryPtrTag>, CodePtr<JSEntryPtrTag> withArityCheck, JITType, Intrinsic, JITCode::ShareAttribute = JITCode::ShareAttribute::NotShared); // For generated thunk.
     ~DirectJITCode() override;
-
+    
     CodePtr<JSEntryPtrTag> addressForCall(ArityCheckMode) override;
 
 protected:

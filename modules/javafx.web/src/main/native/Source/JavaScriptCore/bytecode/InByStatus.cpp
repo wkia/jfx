@@ -79,10 +79,10 @@ InByStatus InByStatus::computeFor(
 {
     BytecodeIndex bytecodeIndex = codeOrigin.bytecodeIndex();
     ExitFlag didExit = hasBadCacheExitSite(profiledBlock, bytecodeIndex);
-
+    
     for (ICStatusContext* context : contextStack) {
         ICStatus status = context->get(codeOrigin);
-
+        
         auto bless = [&] (const InByStatus& result) -> InByStatus {
             if (!context->isInlined(codeOrigin)) {
                 InByStatus baselineResult = computeFor(
@@ -94,7 +94,7 @@ InByStatus InByStatus::computeFor(
                 return InByStatus(TakesSlowPath);
             return result;
         };
-
+        
 #if ENABLE(DFG_JIT)
         if (status.stubInfo) {
             InByStatus result;
@@ -106,11 +106,11 @@ InByStatus InByStatus::computeFor(
                 return bless(result);
         }
 #endif
-
+        
         if (status.inStatus)
             return bless(*status.inStatus);
     }
-
+    
     return computeFor(profiledBlock, baselineMap, bytecodeIndex, didExit);
 }
 #endif // ENABLE(JIT)
@@ -130,7 +130,7 @@ InByStatus InByStatus::computeForStubInfoWithoutExitSiteFeedback(const Concurren
     StubInfoSummary summary = StructureStubInfo::summary(vm, stubInfo);
     if (!isInlineable(summary))
         return InByStatus(summary);
-
+    
     // Finally figure out if we can derive an access strategy.
     InByStatus result;
     result.m_state = Simple;
@@ -225,12 +225,12 @@ void InByStatus::merge(const InByStatus& other)
 {
     if (other.m_state == NoInformation)
         return;
-
+    
     switch (m_state) {
     case NoInformation:
         *this = other;
         return;
-
+        
     case Simple:
         if (other.m_state != Simple) {
             *this = InByStatus(TakesSlowPath);
@@ -244,11 +244,11 @@ void InByStatus::merge(const InByStatus& other)
         }
         shrinkToFit();
         return;
-
+        
     case TakesSlowPath:
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

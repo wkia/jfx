@@ -171,7 +171,7 @@ static bool takeSnapshots(TextIndicatorData& data, Frame& frame, IntRect snapsho
         data.contentImageWithoutSelection = takeSnapshot(frame, snapshotRect, { { SnapshotFlags::PaintEverythingExcludingSelection }, PixelFormat::BGRA8, DestinationColorSpace::SRGB() }, snapshotScaleFactor, { });
         data.contentImageWithoutSelectionRectInRootViewCoordinates = frame.view()->contentsToRootView(snapshotRect);
     }
-
+    
     return true;
 }
 

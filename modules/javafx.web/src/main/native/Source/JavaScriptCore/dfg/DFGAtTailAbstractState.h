@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -34,53 +34,53 @@
 #include "DFGGraph.h"
 #include "DFGNodeFlowProjection.h"
 
-namespace JSC { namespace DFG {
+namespace JSC { namespace DFG { 
 
 class AtTailAbstractState {
 public:
     AtTailAbstractState(Graph&);
-
+    
     ~AtTailAbstractState();
-
+    
     explicit operator bool() const { return true; }
-
+    
     void initializeTo(BasicBlock* block)
     {
         m_block = block;
     }
-
+    
     void createValueForNode(NodeFlowProjection);
-
+    
     AbstractValue& fastForward(AbstractValue& value) { return value; }
-
+    
     AbstractValue& forNode(NodeFlowProjection);
     AbstractValue& forNode(Edge edge) { return forNode(edge.node()); }
-
+    
     ALWAYS_INLINE AbstractValue& forNodeWithoutFastForward(NodeFlowProjection node)
     {
         return forNode(node);
     }
-
+    
     ALWAYS_INLINE AbstractValue& forNodeWithoutFastForward(Edge edge)
     {
         return forNode(edge);
     }
-
+    
     ALWAYS_INLINE void fastForwardAndFilterUnproven(AbstractValue& value, SpeculatedType type)
     {
         value.filter(type);
     }
-
+    
     ALWAYS_INLINE void clearForNode(NodeFlowProjection node)
     {
         forNode(node).clear();
     }
-
+    
     ALWAYS_INLINE void clearForNode(Edge edge)
     {
         clearForNode(edge.node());
     }
-
+    
     template<typename... Arguments>
     ALWAYS_INLINE void setForNode(NodeFlowProjection node, Arguments&&... arguments)
     {
@@ -92,7 +92,7 @@ public:
     {
         setForNode(edge.node(), std::forward<Arguments>(arguments)...);
     }
-
+    
     template<typename... Arguments>
     ALWAYS_INLINE void setTypeForNode(NodeFlowProjection node, Arguments&&... arguments)
     {
@@ -104,7 +104,7 @@ public:
     {
         setTypeForNode(edge.node(), std::forward<Arguments>(arguments)...);
     }
-
+    
     template<typename... Arguments>
     ALWAYS_INLINE void setNonCellTypeForNode(NodeFlowProjection node, Arguments&&... arguments)
     {
@@ -116,27 +116,27 @@ public:
     {
         setNonCellTypeForNode(edge.node(), std::forward<Arguments>(arguments)...);
     }
-
+    
     ALWAYS_INLINE void makeBytecodeTopForNode(NodeFlowProjection node)
     {
         forNode(node).makeBytecodeTop();
     }
-
+    
     ALWAYS_INLINE void makeBytecodeTopForNode(Edge edge)
     {
         makeBytecodeTopForNode(edge.node());
     }
-
+    
     ALWAYS_INLINE void makeHeapTopForNode(NodeFlowProjection node)
     {
         forNode(node).makeHeapTop();
     }
-
+    
     ALWAYS_INLINE void makeHeapTopForNode(Edge edge)
     {
         makeHeapTopForNode(edge.node());
     }
-
+    
     unsigned size() const { return m_block->valuesAtTail.size(); }
     unsigned numberOfArguments() const { return m_block->valuesAtTail.numberOfArguments(); }
     unsigned numberOfLocals() const { return m_block->valuesAtTail.numberOfLocals(); }
@@ -146,23 +146,23 @@ public:
     AbstractValue& local(size_t index) { return m_block->valuesAtTail.local(index); }
     AbstractValue& argument(size_t index) { return m_block->valuesAtTail.argument(index); }
     AbstractValue& tmp(size_t index) { return m_block->valuesAtTail.tmp(index); }
-
+    
     void clobberStructures()
     {
         UNREACHABLE_FOR_PLATFORM();
     }
-
+    
     void observeInvalidationPoint()
     {
         UNREACHABLE_FOR_PLATFORM();
     }
-
+    
     BasicBlock* block() const { return m_block; }
-
+    
     bool isValid() { return m_block->cfaDidFinish; }
-
+    
     StructureClobberState structureClobberState() const { return m_block->cfaStructureClobberStateAtTail; }
-
+    
     void setClobberState(AbstractInterpreterClobberState) { }
     void mergeClobberState(AbstractInterpreterClobberState) { }
     void setStructureClobberState(StructureClobberState state) { RELEASE_ASSERT(state == m_block->cfaStructureClobberStateAtTail); }

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -68,7 +68,7 @@ GDIObject<HBITMAP> allocImage(HDC dc, IntSize size, PlatformContextDirect2D** pl
 
 DragImageRef scaleDragImage(DragImageRef imageRef, FloatSize scale)
 {
-    // FIXME: due to the way drag images are done on windows we need
+    // FIXME: due to the way drag images are done on windows we need 
     // to preprocess the alpha channel <rdar://problem/5015946>
     if (!imageRef)
         return nullptr;
@@ -99,7 +99,7 @@ DragImageRef createDragImageFromImage(Image* img, ImageOrientation)
     notImplemented();
     return nullptr;
 }
-
+    
 }
 
 #endif

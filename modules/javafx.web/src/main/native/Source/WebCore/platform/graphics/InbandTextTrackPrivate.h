@@ -130,3 +130,4 @@ template<> struct EnumTraits<WebCore::InbandTextTrackPrivate::Kind> {
 } // namespace WTF
 
 #endif // ENABLE(VIDEO)
+

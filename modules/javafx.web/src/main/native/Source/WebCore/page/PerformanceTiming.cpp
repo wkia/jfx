@@ -208,7 +208,7 @@ unsigned long long PerformanceTiming::secureConnectionStart() const
 
     auto* metrics = networkLoadMetrics();
     if (!metrics)
-        return 0;
+        return connectEnd();
 
     if (!metrics->secureConnectionStart
         || metrics->secureConnectionStart == reusedTLSConnectionSentinel)
@@ -226,7 +226,7 @@ unsigned long long PerformanceTiming::requestStart() const
     auto* metrics = networkLoadMetrics();
     if (!metrics || !metrics->requestStart)
         return connectEnd();
-
+    
     m_requestStart = monotonicTimeToIntegerMilliseconds(metrics->requestStart);
     return m_requestStart;
 }

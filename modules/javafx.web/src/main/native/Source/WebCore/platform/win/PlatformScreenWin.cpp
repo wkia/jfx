@@ -21,12 +21,13 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
 #include "PlatformScreen.h"
 
+#include "DestinationColorSpace.h"
 #include "FloatRect.h"
 #include "Frame.h"
 #include "FrameView.h"
@@ -104,12 +105,10 @@ FloatRect screenAvailableRect(Widget* widget)
     return monitorInfo.rcWork;
 }
 
-#if USE(CG)
-CGColorSpaceRef screenColorSpace(Widget*)
+DestinationColorSpace screenColorSpace(Widget*)
 {
-    return sRGBColorSpaceRef();
+    return DestinationColorSpace::SRGB();
 }
-#endif
 
 bool screenSupportsExtendedColor(Widget*)
 {

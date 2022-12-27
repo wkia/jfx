@@ -189,7 +189,7 @@ sub ProcessDocument
         $object->ProcessDictionaries($useDocument, $defines, $codeGenerator);
         return;
     }
-
+    
     if (@{$useDocument->enumerations}) {
         $object->ProcessEnumerations($useDocument, $defines, $codeGenerator);
         return;
@@ -245,7 +245,7 @@ sub ProcessInterfaces
 
     die "Multiple interfaces per document are not supported" if @{$useDocument->interfaces} > 1;
     my $interface = $useDocument->interfaces->[0];
-
+    
     if ($interface->isMixin || $interface->isPartial) {
         $object->GenerateEmptyHeaderAndCpp($useDocument, $codeGenerator);
         return;
@@ -388,7 +388,7 @@ sub ProcessInterfaceSupplementalDependencies
             unless (grep { fileparse($_, ".idl") eq $include->mixinIdentifier } @{$supplementalDependencies->{$targetFileName}}) {
                 die "included interface mixin " . $include->mixinIdentifier . " not in supplemental dependencies."
             }
-
+            
             $includesMap{$include->mixinIdentifier} = $include;
         }
     }
@@ -435,7 +435,7 @@ sub ProcessInterfaceSupplementalDependencies
 
                 # Add interface-wide extended attributes to each operation.
                 $object->MergeExtendedAttributesFromSupplemental($interface->extendedAttributes, $operation, "operation");
-
+                
                 push(@{$targetInterface->operations}, $operation);
             }
 
@@ -1242,12 +1242,12 @@ sub IsJSONType
             my $parentInterface = shift;
             $anyParentHasRegularToJSONOperation = 1 if $object->InterfaceHasRegularToJSONOperation($parentInterface);
         }, 0);
-
+        
         if ($anyParentHasRegularToJSONOperation) {
             return 1;
         }
     }
-
+    
     if ($type->isUnion) {
         # FIXME: Union types should be supported if all the member types are JSON types.
         die "Default toJSON is currently not supported for union types.\n";

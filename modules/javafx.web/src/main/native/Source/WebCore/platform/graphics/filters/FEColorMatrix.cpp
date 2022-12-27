@@ -101,7 +101,7 @@ template<ColorMatrixType filterType>
 bool effectApplyAccelerated(Uint8ClampedArray& pixelArray, const Vector<float>& values, float components[9], IntSize bufferSize)
 {
     ASSERT(pixelArray.length() == bufferSize.area() * 4);
-
+    
     if (filterType == FECOLORMATRIX_TYPE_MATRIX) {
         // vImageMatrixMultiply_ARGB8888 takes a 4x4 matrix, if any value in the last column of the FEColorMatrix 5x4 matrix
         // is not zero, fall back to non-vImage code.
@@ -117,7 +117,7 @@ bool effectApplyAccelerated(Uint8ClampedArray& pixelArray, const Vector<float>& 
     src.height = bufferSize.height();
     src.rowBytes = bufferSize.width() * 4;
     src.data = data;
-
+    
     vImage_Buffer dest;
     dest.width = bufferSize.width();
     dest.height = bufferSize.height();
@@ -203,7 +203,7 @@ bool effectApplyAccelerated(Uint8ClampedArray& pixelArray, const Vector<float>& 
         break;
     }
     }
-
+    
     return true;
 }
 #endif
@@ -295,14 +295,14 @@ void FEColorMatrix::platformApplySoftware()
     auto pixelArrayDimensions = pixelBuffer->size();
 
     Vector<float> values = normalizedFloats(m_values);
-
+    
     switch (m_type) {
     case FECOLORMATRIX_TYPE_UNKNOWN:
         break;
     case FECOLORMATRIX_TYPE_MATRIX:
         effectType<FECOLORMATRIX_TYPE_MATRIX>(pixelArray, values, pixelArrayDimensions);
         break;
-    case FECOLORMATRIX_TYPE_SATURATE:
+    case FECOLORMATRIX_TYPE_SATURATE: 
         effectType<FECOLORMATRIX_TYPE_SATURATE>(pixelArray, values, pixelArrayDimensions);
         break;
     case FECOLORMATRIX_TYPE_HUEROTATE:
@@ -351,13 +351,13 @@ TextStream& FEColorMatrix::externalRepresentation(TextStream& ts, Representation
         while (ptr < end) {
             ts << *ptr;
             ++ptr;
-            if (ptr < end)
+            if (ptr < end) 
                 ts << " ";
         }
         ts << "\"";
     }
     ts << "]\n";
-
+    
     TextStream::IndentScope indentScope(ts);
     inputEffect(0)->externalRepresentation(ts, representation);
     return ts;

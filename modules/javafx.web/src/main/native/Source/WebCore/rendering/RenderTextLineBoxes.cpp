@@ -159,11 +159,11 @@ LayoutRect RenderTextLineBoxes::visualOverflowBoundingBox(const RenderText& rend
         logicalLeftSide = std::min(logicalLeftSide, current->logicalLeftVisualOverflow());
         logicalRightSide = std::max(logicalRightSide, current->logicalRightVisualOverflow());
     }
-
+    
     auto logicalTop = m_first->logicalTopVisualOverflow();
     auto logicalWidth = logicalRightSide - logicalLeftSide;
     auto logicalHeight = m_last->logicalBottomVisualOverflow() - logicalTop;
-
+    
     LayoutRect rect(logicalLeftSide, logicalTop, logicalWidth, logicalHeight);
     if (!renderer.style().isHorizontalWritingMode())
         rect = rect.transposedRect();

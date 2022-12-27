@@ -485,7 +485,7 @@ public:
     bool shouldSuppressScrollbarAnimations() const { return m_suppressScrollbarAnimations; }
     WEBCORE_EXPORT void setShouldSuppressScrollbarAnimations(bool suppressAnimations);
     void lockAllOverlayScrollbarsToHidden(bool lockOverlayScrollbars);
-
+    
     WEBCORE_EXPORT void setVerticalScrollElasticity(ScrollElasticity);
     ScrollElasticity verticalScrollElasticity() const { return static_cast<ScrollElasticity>(m_verticalScrollElasticity); }
 
@@ -1004,7 +1004,7 @@ private:
 #if PLATFORM(IOS_FAMILY)
     bool m_enclosedInScrollableAncestorView { false };
 #endif
-
+    
     bool m_useSystemAppearance { false };
     bool m_useElevatedUserInterfaceLevel { false };
     bool m_useDarkAppearance { false };
@@ -1014,11 +1014,11 @@ private:
     float m_textAutosizingWidth { 0 };
 #endif
     float m_initialScaleIgnoringContentSize { 1.0f };
-
+    
     bool m_suppressScrollbarAnimations { false };
-
+    
     unsigned m_verticalScrollElasticity : 2; // ScrollElasticity
-    unsigned m_horizontalScrollElasticity : 2; // ScrollElasticity
+    unsigned m_horizontalScrollElasticity : 2; // ScrollElasticity    
 
     Pagination m_pagination;
     bool m_paginationLineGridEnabled { false };
@@ -1131,9 +1131,9 @@ private:
 
     Vector<OptionSet<RenderingUpdateStep>, 2> m_renderingUpdateRemainingSteps;
     OptionSet<RenderingUpdateStep> m_unfulfilledRequestedSteps;
-
+    
     UserInterfaceLayoutDirection m_userInterfaceLayoutDirection { UserInterfaceLayoutDirection::LTR };
-
+    
     // For testing.
     std::optional<EventThrottlingBehavior> m_eventThrottlingBehaviorOverride;
     std::optional<CompositingPolicy> m_compositingPolicyOverride;

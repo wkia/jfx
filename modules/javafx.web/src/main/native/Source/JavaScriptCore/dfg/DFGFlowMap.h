@@ -45,7 +45,7 @@ public:
     {
         resize();
     }
-
+    
     // Call this if the number of nodes in the graph has changed. Note that this does not reset any
     // entries.
     void resize()
@@ -54,29 +54,29 @@ public:
         if (m_graph.m_form == SSA)
             m_shadowMap.resize(m_graph.maxNodeCount());
     }
-
+    
     Graph& graph() const { return m_graph; }
-
+    
     ALWAYS_INLINE T& at(unsigned nodeIndex)
     {
         return m_map[nodeIndex];
     }
-
+    
     ALWAYS_INLINE T& at(Node* node)
     {
         return at(node->index());
     }
-
+    
     ALWAYS_INLINE T& atShadow(unsigned nodeIndex)
     {
         return m_shadowMap[nodeIndex];
     }
-
+    
     ALWAYS_INLINE T& atShadow(Node* node)
     {
         return atShadow(node->index());
     }
-
+    
     ALWAYS_INLINE T& at(unsigned nodeIndex, NodeFlowProjection::Kind kind)
     {
         switch (kind) {
@@ -88,17 +88,17 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return *bitwise_cast<T*>(nullptr);
     }
-
+    
     ALWAYS_INLINE T& at(Node* node, NodeFlowProjection::Kind kind)
     {
         return at(node->index(), kind);
     }
-
+    
     ALWAYS_INLINE T& at(NodeFlowProjection projection)
     {
         return at(projection.node(), projection.kind());
     }
-
+    
     ALWAYS_INLINE const T& at(unsigned nodeIndex) const { return const_cast<FlowMap*>(this)->at(nodeIndex); }
     ALWAYS_INLINE const T& at(Node* node) const { return const_cast<FlowMap*>(this)->at(node); }
     ALWAYS_INLINE const T& atShadow(unsigned nodeIndex) const { return const_cast<FlowMap*>(this)->atShadow(nodeIndex); }
@@ -106,7 +106,7 @@ public:
     ALWAYS_INLINE const T& at(unsigned nodeIndex, NodeFlowProjection::Kind kind) const { return const_cast<FlowMap*>(this)->at(nodeIndex, kind); }
     ALWAYS_INLINE const T& at(Node* node, NodeFlowProjection::Kind kind) const { return const_cast<FlowMap*>(this)->at(node, kind); }
     ALWAYS_INLINE const T& at(NodeFlowProjection projection) const { return const_cast<FlowMap*>(this)->at(projection); }
-
+    
 private:
     Graph& m_graph;
     Vector<T, 0, UnsafeVectorOverflow> m_map;

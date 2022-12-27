@@ -55,7 +55,7 @@ void JIT::emit_op_mov(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpMov>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister src = bytecode.m_src;
-
+    
     if (src.isConstant())
         emitStore(dst, getConstantOperand(src));
     else {
@@ -160,7 +160,7 @@ void JIT::emit_op_instanceof(const Instruction* currentInstruction)
     // Check that proto are cells. baseVal must be a cell - this is checked by the get_by_id for Symbol.hasInstance.
     emitJumpSlowCaseIfNotJSCell(value);
     emitJumpSlowCaseIfNotJSCell(proto);
-
+    
     JITInstanceOfGenerator gen(
         m_codeBlock, JITType::BaselineJIT, CodeOrigin(m_bytecodeIndex), CallSiteIndex(m_bytecodeIndex),
         RegisterSet::stubUnavailableRegisters(),
@@ -172,7 +172,7 @@ void JIT::emit_op_instanceof(const Instruction* currentInstruction)
     gen.generateFastPath(*this);
     addSlowCase(gen.slowPathJump());
     m_instanceOfs.append(gen);
-
+    
     emitStoreBool(dst, regT0);
 }
 
@@ -185,14 +185,14 @@ void JIT::emit_op_instanceof_custom(const Instruction*)
 void JIT::emitSlow_op_instanceof(const Instruction* currentInstruction, Vector<SlowCaseEntry>::iterator& iter)
 {
     linkAllSlowCases(iter);
-
+    
     auto bytecode = currentInstruction->as<OpInstanceof>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister value = bytecode.m_value;
     VirtualRegister proto = bytecode.m_prototype;
-
+    
     JITInstanceOfGenerator& gen = m_instanceOfs[m_instanceOfIndex++];
-
+    
     Label coldPathBegin = label();
     emitLoadTag(value, regT0);
     emitLoadTag(proto, regT3);
@@ -216,13 +216,13 @@ void JIT::emitSlow_op_instanceof_custom(const Instruction* currentInstruction, V
     callOperation(operationInstanceOfCustom, m_codeBlock->globalObject(), JSValueRegs(regT1, regT0), regT2, JSValueRegs(regT4, regT3));
     emitStoreBool(dst, returnValueGPR);
 }
-
+    
 void JIT::emit_op_is_empty(const Instruction* currentInstruction)
 {
     auto bytecode = currentInstruction->as<OpIsEmpty>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister value = bytecode.m_operand;
-
+    
     emitLoad(value, regT1, regT0);
     compare32(Equal, regT1, TrustedImm32(JSValue::EmptyValueTag), regT0);
 
@@ -234,18 +234,18 @@ void JIT::emit_op_typeof_is_undefined(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpTypeofIsUndefined>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister value = bytecode.m_operand;
-
+    
     emitLoad(value, regT1, regT0);
     Jump isCell = branchIfCell(regT1);
 
     compare32(Equal, regT1, TrustedImm32(JSValue::UndefinedTag), regT0);
     Jump done = jump();
-
+    
     isCell.link(this);
     Jump isMasqueradesAsUndefined = branchTest8(NonZero, Address(regT0, JSCell::typeInfoFlagsOffset()), TrustedImm32(MasqueradesAsUndefined));
     move(TrustedImm32(0), regT0);
     Jump notMasqueradesAsUndefined = jump();
-
+    
     isMasqueradesAsUndefined.link(this);
     loadPtr(Address(regT0, JSCell::structureIDOffset()), regT1);
     move(TrustedImmPtr(m_codeBlock->globalObject()), regT0);
@@ -275,7 +275,7 @@ void JIT::emit_op_is_boolean(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpIsBoolean>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister value = bytecode.m_operand;
-
+    
     emitLoadTag(value, regT0);
     compare32(Equal, regT0, TrustedImm32(JSValue::BooleanTag), regT0);
     emitStoreBool(dst, regT0);
@@ -286,7 +286,7 @@ void JIT::emit_op_is_number(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpIsNumber>();
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister value = bytecode.m_operand;
-
+    
     emitLoadTag(value, regT0);
     add32(TrustedImm32(1), regT0);
     compare32(Below, regT0, TrustedImm32(JSValue::LowestTag + 1), regT0);
@@ -1064,7 +1064,7 @@ void JIT::emit_op_debug(const Instruction* currentInstruction)
 void JIT::emit_op_enter(const Instruction* currentInstruction)
 {
     emitEnterOptimizationCheck();
-
+    
     // Even though JIT code doesn't use them, we initialize our constant
     // registers to zap stale pointers, to avoid unnecessarily prolonging
     // object lifetime and increasing GC pressure.

@@ -24,7 +24,6 @@
  */
 
 #include "config.h"
-
 #include "RenderModel.h"
 
 #if ENABLE(MODEL_ELEMENT)
@@ -65,7 +64,7 @@ void RenderModel::update()
 {
     if (renderTreeBeingDestroyed())
         return;
-
+    
     contentChanged(ModelChanged);
 }
 

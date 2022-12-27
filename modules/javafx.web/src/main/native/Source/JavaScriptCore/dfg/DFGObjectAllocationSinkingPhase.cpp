@@ -562,14 +562,14 @@ public:
             // o = {}
             // o2 = {}
             // jump #1
-            //
+            // 
             // #1
             // o.f = o2
             // effects()
             // x = o.f
             // escape(o)
             // branch #2, #1
-            //
+            // 
             // #2
             // x cannot be o2 here, it has to be TOP
             // ...
@@ -930,7 +930,7 @@ private:
         Allocation* result = &m_heap.newAllocation(node, Allocation::Kind::InternalFieldObject);
         writes.add(StructurePLoc, LazyNode(m_graph.freeze(node->structure().get())));
         auto initialValues = InternalFieldClass::initialValues();
-        static_assert(initialValues.size() == InternalFieldClass::numberOfInternalFields);
+        static_assert(initialValues.size() == InternalFieldClass::numberOfInternalFields);        
         for (unsigned index = 0; index < initialValues.size(); ++index)
             writes.add(PromotedLocationDescriptor(InternalFieldObjectPLoc, index), LazyNode(m_graph.freeze(initialValues[index])));
 
@@ -1255,7 +1255,7 @@ private:
         case PutHint:
             // Handled by OSR availability analysis
             break;
-
+            
         case FilterCallLinkStatus:
         case FilterGetByStatus:
         case FilterPutByStatus:
@@ -1433,7 +1433,7 @@ private:
             // stack walk (we do a stack walk when we GC). Conservatively, we say we're
             // still ok to move this allocation if we are moving within the same InlineCallFrame.
             // We could be more precise here and do an analysis of stack writes. However,
-            // this scenario is so rare that we just take the conservative-and-straight-forward
+            // this scenario is so rare that we just take the conservative-and-straight-forward 
             // approach of checking that we're in the same InlineCallFrame.
 
             forEachEscapee([&] (HashMap<Node*, Allocation>& escapees, Node* where) {
@@ -1712,7 +1712,7 @@ private:
         case Allocation::Kind::GeneratorFunction:
         case Allocation::Kind::Function: {
             FrozenValue* executable = allocation.identifier()->cellOperand();
-
+            
             NodeType nodeType;
             switch (allocation.kind()) {
             case Allocation::Kind::GeneratorFunction:
@@ -2251,7 +2251,7 @@ private:
             dataLog("    Materialization: ", materialization, "\n");
             dataLog("    Availability: ", availability, "\n");
         }
-
+        
         // We need to follow() the value in the heap.
         // Consider the following graph:
         //
@@ -2393,17 +2393,17 @@ private:
                 firstChild, m_graph.m_varArgChildren.size() - firstChild);
             break;
         }
-
+        
         case NewFunction:
         case NewGeneratorFunction:
         case NewAsyncGeneratorFunction:
         case NewAsyncFunction: {
             Vector<PromotedHeapLocation> locations = m_locationsForAllocation.get(escapee);
             ASSERT(locations.size() == 2);
-
+                
             PromotedHeapLocation executable(FunctionExecutablePLoc, allocation.identifier());
             ASSERT_UNUSED(executable, locations.contains(executable));
-
+                
             PromotedHeapLocation activation(FunctionActivationPLoc, allocation.identifier());
             ASSERT(locations.contains(activation));
 
@@ -2605,7 +2605,7 @@ private:
 
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     void removeICStatusFilters()
     {
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {

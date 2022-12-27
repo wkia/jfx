@@ -45,3 +45,4 @@ WEBCORE_EXPORT Vector<String> findImagesForTranscoding(const Vector<String>& pat
 WEBCORE_EXPORT Vector<String> transcodeImages(const Vector<String>& paths, const String& destinationUTI, const String& destinationExtension);
 
 } // namespace WebCore
+

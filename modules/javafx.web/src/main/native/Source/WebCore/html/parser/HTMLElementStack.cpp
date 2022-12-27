@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -139,14 +139,7 @@ bool HTMLElementStack::ElementRecord::isAbove(ElementRecord& other) const
     return false;
 }
 
-HTMLElementStack::~HTMLElementStack()
-{
-#if PLATFORM(JAVA) // RT-26487
-    while (m_top) {
-        m_top = m_top->releaseNext();
-    }
-#endif
-}
+HTMLElementStack::~HTMLElementStack() = default;
 
 bool HTMLElementStack::hasOnlyOneElement() const
 {
@@ -283,7 +276,7 @@ void HTMLElementStack::popUntilForeignContentScopeMarker()
     while (!isForeignContentScopeMarker(topStackItem()))
         pop();
 }
-
+    
 void HTMLElementStack::pushRootNode(Ref<HTMLStackItem>&& rootItem)
 {
     ASSERT(rootItem->isDocumentFragment());
@@ -295,7 +288,7 @@ void HTMLElementStack::pushHTMLHtmlElement(Ref<HTMLStackItem>&& item)
     ASSERT(item->hasTagName(HTMLNames::htmlTag));
     pushRootNodeCommon(WTFMove(item));
 }
-
+    
 void HTMLElementStack::pushRootNodeCommon(Ref<HTMLStackItem>&& rootItem)
 {
     ASSERT(!m_top);
@@ -528,7 +521,7 @@ Element& HTMLElementStack::bodyElement() const
     ASSERT(m_bodyElement);
     return *m_bodyElement;
 }
-
+    
 ContainerNode& HTMLElementStack::rootNode() const
 {
     ASSERT(m_rootNode);

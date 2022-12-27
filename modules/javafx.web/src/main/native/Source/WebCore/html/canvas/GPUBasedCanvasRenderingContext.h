@@ -56,7 +56,7 @@ protected:
     HTMLCanvasElement* htmlCanvas() const;
     void notifyCanvasContentChanged();
 };
-
+    
 } // namespace WebCore
 
 SPECIALIZE_TYPE_TRAITS_CANVASRENDERINGCONTEXT(WebCore::GPUBasedCanvasRenderingContext, isGPUBased())

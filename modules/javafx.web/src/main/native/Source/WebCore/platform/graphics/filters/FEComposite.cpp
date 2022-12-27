@@ -23,9 +23,8 @@
 
 #include "config.h"
 #include "FEComposite.h"
-#if !PLATFORM(JAVA) || HAVE(ARM_NEON_INTRINSICS)
+
 #include "FECompositeArithmeticNEON.h"
-#endif
 #include "Filter.h"
 #include "GraphicsContext.h"
 #include "PixelBuffer.h"
@@ -95,7 +94,7 @@ void FEComposite::correctFilterResultIfNeeded()
 
     forceValidPreMultipliedPixels();
 }
-
+    
 static unsigned char clampByte(int c)
 {
     unsigned char buff[] = { static_cast<unsigned char>(c), 255, 0 };
@@ -233,7 +232,7 @@ void FEComposite::platformApplySoftware()
         auto& destinationPixelBuffer = createPremultipliedImageResult();
         if (!destinationPixelBuffer)
             return;
-
+        
         auto& destinationPixelArray = destinationPixelBuffer->data();
 
         IntRect effectADrawingRect = requestedRegionOfInputPixelBuffer(in->absolutePaintRect());

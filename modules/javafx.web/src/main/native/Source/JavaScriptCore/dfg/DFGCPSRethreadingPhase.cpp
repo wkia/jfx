@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -41,14 +41,14 @@ public:
         : Phase(graph, "CPS rethreading")
     {
     }
-
+    
     bool run()
     {
         RELEASE_ASSERT(m_graph.m_refCountState == EverythingIsLive);
-
+        
         if (m_graph.m_form == ThreadedCPS)
             return false;
-
+        
         clearIsLoadedFrom();
         freeUnnecessaryNodes();
         m_graph.clearReplacements();
@@ -58,19 +58,19 @@ public:
         propagatePhis<OperandKind::Argument>();
         propagatePhis<OperandKind::Tmp>();
         computeIsFlushed();
-
+        
         m_graph.m_form = ThreadedCPS;
         return true;
     }
 
 private:
-
+    
     void clearIsLoadedFrom()
     {
         for (unsigned i = 0; i < m_graph.m_variableAccessData.size(); ++i)
             m_graph.m_variableAccessData[i].setIsLoadedFrom(false);
     }
-
+    
     void freeUnnecessaryNodes()
     {
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
@@ -78,7 +78,7 @@ private:
             if (!block)
                 continue;
             ASSERT(block->isReachable);
-
+            
             unsigned fromIndex = 0;
             unsigned toIndex = 0;
             while (fromIndex < block->size()) {
@@ -114,33 +114,33 @@ private:
                 block->at(toIndex++) = node;
             }
             block->resize(toIndex);
-
+            
             for (unsigned phiIndex = block->phis.size(); phiIndex--;)
                 m_graph.deleteNode(block->phis[phiIndex]);
             block->phis.resize(0);
         }
     }
-
+    
     template<OperandKind operandKind>
     void clearVariables()
     {
         ASSERT(
             m_block->variablesAtHead.sizeFor<operandKind>()
             == m_block->variablesAtTail.sizeFor<operandKind>());
-
+        
         for (unsigned i = m_block->variablesAtHead.sizeFor<operandKind>(); i--;) {
             m_block->variablesAtHead.atFor<operandKind>(i) = nullptr;
             m_block->variablesAtTail.atFor<operandKind>(i) = nullptr;
         }
     }
-
+    
     ALWAYS_INLINE Node* addPhiSilently(BasicBlock* block, const NodeOrigin& origin, VariableAccessData* variable)
     {
         Node* result = m_graph.addNode(Phi, origin, OpInfo(variable));
         block->phis.append(result);
         return result;
     }
-
+    
     template<OperandKind operandKind>
     ALWAYS_INLINE Node* addPhi(BasicBlock* block, const NodeOrigin& origin, VariableAccessData* variable, size_t index)
     {
@@ -148,21 +148,21 @@ private:
         phiStackFor<operandKind>().append(PhiStackEntry(block, index, result));
         return result;
     }
-
+    
     template<OperandKind operandKind>
     ALWAYS_INLINE Node* addPhi(const NodeOrigin& origin, VariableAccessData* variable, size_t index)
     {
         return addPhi<operandKind>(m_block, origin, variable, index);
     }
-
+    
     template<OperandKind operandKind>
     void canonicalizeGetLocalFor(Node* node, VariableAccessData* variable, size_t idx)
     {
         ASSERT(!node->child1());
-
+        
         if (Node* otherNode = m_block->variablesAtTail.atFor<operandKind>(idx)) {
             ASSERT(otherNode->variableAccessData() == variable);
-
+            
             switch (otherNode->op()) {
             case Flush:
             case PhantomLocal:
@@ -179,36 +179,36 @@ private:
             default:
                 break;
             }
-
+            
             ASSERT(otherNode->op() != SetArgumentMaybe);
             ASSERT(otherNode->op() == SetLocal || otherNode->op() == SetArgumentDefinitely || otherNode->op() == GetLocal);
             ASSERT(otherNode->variableAccessData() == variable);
-
+            
             if (otherNode->op() == SetArgumentDefinitely) {
                 variable->setIsLoadedFrom(true);
                 node->children.setChild1(Edge(otherNode));
                 m_block->variablesAtTail.atFor<operandKind>(idx) = node;
                 return;
             }
-
+            
             if (otherNode->op() == GetLocal) {
                 // Replace all references to this GetLocal with otherNode.
                 node->replaceWith(m_graph, otherNode);
                 return;
             }
-
+            
             ASSERT(otherNode->op() == SetLocal);
             node->replaceWith(m_graph, otherNode->child1().node());
             return;
         }
-
+        
         variable->setIsLoadedFrom(true);
         Node* phi = addPhi<operandKind>(node->origin, variable, idx);
         node->children.setChild1(Edge(phi));
         m_block->variablesAtHead.atFor<operandKind>(idx) = phi;
         m_block->variablesAtTail.atFor<operandKind>(idx) = node;
     }
-
+    
     void canonicalizeGetLocal(Node* node)
     {
         VariableAccessData* variable = node->variableAccessData();
@@ -227,15 +227,15 @@ private:
         }
         }
     }
-
+    
     template<NodeType nodeType, OperandKind operandKind>
     void canonicalizeFlushOrPhantomLocalFor(Node* node, VariableAccessData* variable, size_t idx)
     {
         ASSERT(!node->child1());
-
+        
         if (Node* otherNode = m_block->variablesAtTail.atFor<operandKind>(idx)) {
             ASSERT(otherNode->variableAccessData() == variable);
-
+            
             switch (otherNode->op()) {
             case Flush:
             case PhantomLocal:
@@ -246,9 +246,9 @@ private:
             default:
                 break;
             }
-
+            
             ASSERT(otherNode->op() == Phi || otherNode->op() == SetLocal || otherNode->op() == SetArgumentDefinitely || otherNode->op() == SetArgumentMaybe);
-
+            
             if (nodeType == PhantomLocal && otherNode->op() == SetLocal) {
                 // PhantomLocal(SetLocal) doesn't make sense. PhantomLocal means: at this
                 // point I know I would have been interested in the value of this variable
@@ -256,11 +256,11 @@ private:
                 // know that I would have read the value written by that SetLocal. This is
                 // redundant and inefficient, since really it just means that we want to
                 // keep the last MovHinted value of that local alive.
-
+                
                 node->remove(m_graph);
                 return;
             }
-
+            
             variable->setIsLoadedFrom(true);
             // There is nothing wrong with having redundant Flush's. It just needs to
             // be linked appropriately. Note that if there had already been a previous
@@ -271,7 +271,7 @@ private:
             node->children.setChild1(Edge(otherNode));
             return;
         }
-
+        
         variable->setIsLoadedFrom(true);
         node->children.setChild1(Edge(addPhi<operandKind>(node->origin, variable, idx)));
         m_block->variablesAtHead.atFor<operandKind>(idx) = node;
@@ -297,33 +297,33 @@ private:
         }
         }
     }
-
+    
     void canonicalizeSet(Node* node)
     {
         m_block->variablesAtTail.setOperand(node->operand(), node);
     }
-
+    
     void canonicalizeLocalsInBlock()
     {
         if (!m_block)
             return;
         ASSERT(m_block->isReachable);
-
+        
         clearVariables<OperandKind::Argument>();
         clearVariables<OperandKind::Local>();
         clearVariables<OperandKind::Tmp>();
-
+        
         // Assumes that all phi references have been removed. Assumes that things that
         // should be live have a non-zero ref count, but doesn't assume that the ref
         // counts are correct beyond that (more formally !!logicalRefCount == !!actualRefCount
         // but not logicalRefCount == actualRefCount). Assumes that it can break ref
         // counts.
-
+        
         for (auto* node : *m_block) {
             m_graph.performSubstitution(node);
-
+            
             // The rules for threaded CPS form:
-            //
+            // 
             // Head variable: describes what is live at the head of the basic block.
             // Head variable links may refer to Flush, PhantomLocal, Phi, or SetArgumentDefinitely/SetArgumentMaybe.
             // SetArgumentDefinitely/SetArgumentMaybe may only appear in the root block.
@@ -356,35 +356,35 @@ private:
             // and either using it directly (if it's a SetLocal, Phi, or SetArgumentDefinitely/SetArgumentMaybe) or
             // loading that nodes child (if it's a GetLocal, PhanomLocal, or Flush - all
             // of these will have children that are SetLocal, Phi, or SetArgumentDefinitely/SetArgumentMaybe).
-
+            
             switch (node->op()) {
             case GetLocal:
                 canonicalizeGetLocal(node);
                 break;
-
+                
             case SetLocal:
                 canonicalizeSet(node);
                 break;
-
+                
             case Flush:
                 canonicalizeFlushOrPhantomLocal<Flush>(node);
                 break;
-
+                
             case PhantomLocal:
                 canonicalizeFlushOrPhantomLocal<PhantomLocal>(node);
                 break;
-
+                
             case SetArgumentDefinitely:
             case SetArgumentMaybe:
                 canonicalizeSet(node);
                 break;
-
+                
             default:
                 break;
             }
         }
     }
-
+    
     void canonicalizeLocalsInBlocks()
     {
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
@@ -392,7 +392,7 @@ private:
             canonicalizeLocalsInBlock();
         }
     }
-
+    
     void specialCaseArguments()
     {
         // Normally, a SetArgumentDefinitely denotes the start of a live range for a local's value on the stack.
@@ -407,25 +407,25 @@ private:
                 entrypoint->variablesAtHead.setArgumentFirstTime(i, arguments[i]);
         }
     }
-
+    
     template<OperandKind operandKind>
     void propagatePhis()
     {
         Vector<PhiStackEntry, 128>& phiStack = phiStackFor<operandKind>();
-
+        
         // Ensure that attempts to use this fail instantly.
         m_block = nullptr;
-
+        
         while (!phiStack.isEmpty()) {
             PhiStackEntry entry = phiStack.last();
             phiStack.removeLast();
-
+            
             BasicBlock* block = entry.m_block;
             PredecessorList& predecessors = block->predecessors;
             Node* currentPhi = entry.m_phi;
             VariableAccessData* variable = currentPhi->variableAccessData();
             size_t index = entry.m_index;
-
+            
             if (verbose) {
                 dataLog(" Iterating on phi from block ", block, " ");
                 m_graph.dump(WTF::dataFile(), "", currentPhi);
@@ -433,7 +433,7 @@ private:
 
             for (size_t i = predecessors.size(); i--;) {
                 BasicBlock* predecessorBlock = predecessors[i];
-
+                
                 Node* variableInPrevious = predecessorBlock->variablesAtTail.atFor<operandKind>(index);
                 if (!variableInPrevious) {
                     variableInPrevious = addPhi<operandKind>(predecessorBlock, currentPhi->origin, variable, index);
@@ -453,13 +453,13 @@ private:
                         break;
                     }
                 }
-
+                
                 ASSERT(
                     variableInPrevious->op() == SetLocal
                     || variableInPrevious->op() == Phi
                     || variableInPrevious->op() == SetArgumentDefinitely
                     || variableInPrevious->op() == SetArgumentMaybe);
-
+          
                 if (verbose)
                     m_graph.dump(WTF::dataFile(), "    Adding new variable from predecessor ", variableInPrevious);
 
@@ -475,14 +475,14 @@ private:
                     currentPhi->children.setChild3(Edge(variableInPrevious));
                     continue;
                 }
-
+                
                 Node* newPhi = addPhiSilently(block, currentPhi->origin, variable);
                 newPhi->children = currentPhi->children;
                 currentPhi->children.initialize(newPhi, variableInPrevious, nullptr);
             }
         }
     }
-
+    
     struct PhiStackEntry {
         PhiStackEntry(BasicBlock* block, size_t index, Node* phi)
             : m_block(block)
@@ -490,12 +490,12 @@ private:
             , m_phi(phi)
         {
         }
-
+        
         BasicBlock* m_block;
         size_t m_index;
         Node* m_phi;
     };
-
+    
     template<OperandKind operandKind>
     Vector<PhiStackEntry, 128>& phiStackFor()
     {
@@ -506,11 +506,11 @@ private:
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     void computeIsFlushed()
     {
         m_graph.clearFlagsOnAllNodes(NodeIsFlushed);
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
@@ -529,7 +529,7 @@ private:
             case SetArgumentDefinitely:
             case SetArgumentMaybe:
                 break;
-
+                
             case Flush:
             case Phi:
                 ASSERT(node->flags() & NodeIsFlushed);
@@ -542,7 +542,7 @@ private:
             }
         }
     }
-
+    
     void addFlushedLocalOp(Node* node)
     {
         if (node->mergeFlags(NodeIsFlushed))

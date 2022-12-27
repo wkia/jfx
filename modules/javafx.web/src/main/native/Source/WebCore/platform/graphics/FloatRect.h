@@ -104,7 +104,7 @@ public:
 
     FloatPoint center() const { return location() + size() / 2; }
 
-    void move(const FloatSize& delta) { m_location += delta; }
+    void move(const FloatSize& delta) { m_location += delta; } 
     void moveBy(const FloatPoint& delta) { m_location.move(delta.x(), delta.y()); }
     void move(float dx, float dy) { m_location.move(dx, dy); }
 

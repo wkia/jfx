@@ -77,7 +77,7 @@ public:
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static InByStatus computeFor(CodeBlock*, ICStatusMap&, BytecodeIndex);
     static InByStatus computeFor(CodeBlock*, ICStatusMap&, BytecodeIndex, ExitFlag);
     static InByStatus computeFor(CodeBlock* baselineBlock, ICStatusMap& baselineMap, ICStatusContextStack&, CodeOrigin);
@@ -98,12 +98,12 @@ public:
     const InByVariant& operator[](size_t index) const { return at(index); }
 
     bool takesSlowPath() const { return m_state == TakesSlowPath; }
-
+    
     void merge(const InByStatus&);
 
     // Attempts to reduce the set of variants to fit the given structure set. This may be approximate.
     void filter(const StructureSet&);
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
     bool finalize(VM&);

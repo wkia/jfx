@@ -269,7 +269,7 @@ void HTMLPlugInElement::swapRendererTimerFired()
     ASSERT(displayState() == PreparingPluginReplacement);
     if (userAgentShadowRoot())
         return;
-
+    
     // Create a shadow root, which will trigger the code to add a snapshot container
     // and reattach, thus making a new Renderer.
     Ref<HTMLPlugInElement> protectedThis(*this);
@@ -292,7 +292,7 @@ void HTMLPlugInElement::didAddUserAgentShadowRoot(ShadowRoot& root)
 {
     if (!m_pluginReplacement || !document().page() || displayState() != PreparingPluginReplacement)
         return;
-
+    
     root.setResetStyleInheritance(true);
     auto result = m_pluginReplacement->installReplacement(root);
 
@@ -315,7 +315,7 @@ static Vector<ReplacementPlugin*>& registeredPluginReplacements()
 {
     static NeverDestroyed<Vector<ReplacementPlugin*>> registeredReplacements;
     static bool enginesQueried = false;
-
+    
     if (enginesQueried)
         return registeredReplacements;
     enginesQueried = true;
@@ -324,7 +324,7 @@ static Vector<ReplacementPlugin*>& registeredPluginReplacements()
     QuickTimePluginReplacement::registerPluginReplacement(registrar);
     YouTubePluginReplacement::registerPluginReplacement(registrar);
 #endif
-
+    
     return registeredReplacements;
 }
 
@@ -350,14 +350,14 @@ static ReplacementPlugin* pluginReplacementForType(const URL& url, const String&
     String type = mimeType;
     if (type.isEmpty() && url.protocolIsData())
         type = mimeTypeFromDataURL(url.string());
-
+    
     if (type.isEmpty() && !extension.isEmpty()) {
         for (auto* replacement : replacements) {
             if (replacement->supportsFileExtension(extension) && replacement->supportsURL(url))
                 return replacement;
         }
     }
-
+    
     if (type.isEmpty()) {
         if (extension.isEmpty())
             return nullptr;

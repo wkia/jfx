@@ -106,7 +106,7 @@ ExceptionOr<void> PointerCaptureController::releasePointerCapture(Element* captu
 
     // 3. For the specified pointerId, clear the pending pointer capture target override, if set.
     capturingData->pendingTargetOverride = nullptr;
-
+    
     // FIXME: This leaves value.targetOverride set: webkit.org/b/221342.
 
     updateHaveAnyCapturingElement();

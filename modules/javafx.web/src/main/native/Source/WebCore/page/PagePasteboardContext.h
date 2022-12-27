@@ -59,3 +59,4 @@ private:
 SPECIALIZE_TYPE_TRAITS_BEGIN(WebCore::PagePasteboardContext)
     static bool isType(const WebCore::PasteboardContext& context) { return context.isPagePasteboardContext(); }
 SPECIALIZE_TYPE_TRAITS_END()
+

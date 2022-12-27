@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -41,7 +41,7 @@ public:
     {
         m_heap.incrementDeferralDepth();
     }
-
+    
     ~DeferGC()
     {
         if constexpr (validateDFGDoesGC)
@@ -62,7 +62,7 @@ public:
     {
         m_heap.incrementDeferralDepth();
     }
-
+    
     ~DeferGCForAWhile()
     {
         m_heap.decrementDeferralDepth();
@@ -94,14 +94,14 @@ private:
     {
         *s_scopeReentryCount.get() = value;
     }
-
+    
     JS_EXPORT_PRIVATE static LazyNeverDestroyed<ThreadSpecific<unsigned, WTF::CanBeGCThread::True>> s_scopeReentryCount;
 
 #else
     ALWAYS_INLINE DisallowGC() { } // We need this to placate Clang due to unused warnings.
     ALWAYS_INLINE static void initialize() { }
 #endif // ASSERT_ENABLED
-
+    
     friend class DisallowScope<DisallowGC>;
 };
 

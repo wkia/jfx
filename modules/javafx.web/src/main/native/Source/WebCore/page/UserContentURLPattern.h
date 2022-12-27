@@ -20,9 +20,9 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
-
+ 
 #pragma once
 
 #include <wtf/Forward.h>
@@ -49,7 +49,7 @@ public:
     const String& path() const { return m_path; }
 
     bool matchSubdomains() const { return m_matchSubdomains; }
-
+    
     static bool matchesPatterns(const URL&, const Vector<String>& allowlist, const Vector<String>& blocklist);
 
 private:

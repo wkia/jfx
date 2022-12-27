@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -203,7 +203,7 @@ public:
         , m_didPerformFirstRunPruning(false)
     {
     }
-
+    
     StructureID* addressOfLastSeenStructureID() { return &m_lastSeenStructureID; }
     ArrayModes* addressOfArrayModes() { return &m_observedArrayModes; }
     bool* addressOfMayStoreToHole() { return &m_mayStoreToHole; }
@@ -213,32 +213,32 @@ public:
 
     void setOutOfBounds() { m_outOfBounds = true; }
     bool* addressOfOutOfBounds() { return &m_outOfBounds; }
-
+    
     void observeStructureID(StructureID structureID) { m_lastSeenStructureID = structureID; }
     void observeStructure(Structure* structure) { m_lastSeenStructureID = structure->id(); }
 
     void computeUpdatedPrediction(const ConcurrentJSLocker&, CodeBlock*);
     void computeUpdatedPrediction(const ConcurrentJSLocker&, CodeBlock*, Structure* lastSeenStructure);
-
+    
     void observeArrayMode(ArrayModes mode) { m_observedArrayModes |= mode; }
     void observeIndexedRead(VM&, JSCell*, unsigned index);
 
     ArrayModes observedArrayModes(const ConcurrentJSLocker&) const { return m_observedArrayModes; }
     bool mayInterceptIndexedAccesses(const ConcurrentJSLocker&) const { return m_mayInterceptIndexedAccesses; }
-
+    
     bool mayStoreToHole(const ConcurrentJSLocker&) const { return m_mayStoreToHole; }
     bool outOfBounds(const ConcurrentJSLocker&) const { return m_outOfBounds; }
-
+    
     bool usesOriginalArrayStructures(const ConcurrentJSLocker&) const { return m_usesOriginalArrayStructures; }
 
     CString briefDescription(const ConcurrentJSLocker&, CodeBlock*);
     CString briefDescriptionWithoutUpdating(const ConcurrentJSLocker&);
-
+    
 private:
     friend class LLIntOffsetsExtractor;
-
+    
     static Structure* polymorphicStructure() { return static_cast<Structure*>(reinterpret_cast<void*>(1)); }
-
+    
     StructureID m_lastSeenStructureID { 0 };
     bool m_mayStoreToHole { false }; // This flag may become overloaded to indicate other special cases that were encountered during array access, as it depends on indexing type. Since we currently have basically just one indexing type (two variants of ArrayStorage), this flag for now just means exactly what its name implies.
     bool m_outOfBounds { false };

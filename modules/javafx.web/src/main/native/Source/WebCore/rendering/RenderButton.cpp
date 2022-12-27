@@ -69,7 +69,7 @@ void RenderButton::setInnerRenderer(RenderBlock& innerRenderer)
     m_inner = makeWeakPtr(innerRenderer);
     updateAnonymousChildStyle(m_inner->mutableStyle());
 }
-
+    
 void RenderButton::updateAnonymousChildStyle(RenderStyle& childStyle) const
 {
     childStyle.setFlexGrow(1.0f);

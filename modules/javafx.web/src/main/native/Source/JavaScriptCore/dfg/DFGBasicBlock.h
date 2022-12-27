@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -52,10 +52,10 @@ struct BasicBlock : RefCounted<BasicBlock> {
         BytecodeIndex bytecodeBegin, unsigned numArguments, unsigned numLocals, unsigned numTmps,
         float executionCount);
     ~BasicBlock();
-
+    
     void ensureLocals(unsigned newNumLocals);
     void ensureTmps(unsigned newNumTmps);
-
+    
     size_t size() const { return m_nodes.size(); }
     bool isEmpty() const { return !size(); }
     Node*& at(size_t i) { return m_nodes[i]; }
@@ -73,7 +73,7 @@ struct BasicBlock : RefCounted<BasicBlock> {
         RELEASE_ASSERT(!!size());
         return at(size() - 1);
     }
-
+    
     // Use this to find both the index of the terminal and the terminal itself in one go. May
     // return a clear NodeAndIndex if the basic block currently lacks a terminal. That may happen
     // in the middle of IR transformations within a phase but should never be the case in between
@@ -107,15 +107,15 @@ struct BasicBlock : RefCounted<BasicBlock> {
         }
         return NodeAndIndex();
     }
-
+    
     ALWAYS_INLINE Node* terminal() const
     {
         return findTerminal().node;
     }
-
+    
     void resize(size_t size) { m_nodes.resize(size); }
     void grow(size_t size) { m_nodes.grow(size); }
-
+    
     void append(Node* node) { m_nodes.append(node); }
     void insertBeforeTerminal(Node* node)
     {
@@ -125,9 +125,9 @@ struct BasicBlock : RefCounted<BasicBlock> {
         else
             m_nodes.insert(result.index, node);
     }
-
+    
     void replaceTerminal(Graph&, Node*);
-
+    
     size_t numNodes() const { return phis.size() + size(); }
     Node* node(size_t i) const
     {
@@ -136,15 +136,15 @@ struct BasicBlock : RefCounted<BasicBlock> {
         return at(i - phis.size());
     }
     bool isPhiIndex(size_t i) const { return i < phis.size(); }
-
+    
     bool isInPhis(Node* node) const;
     bool isInBlock(Node* myNode) const;
-
+    
     BlockNodeList::iterator begin() { return m_nodes.begin(); }
     BlockNodeList::iterator end() { return m_nodes.end(); }
 
     unsigned numSuccessors() { return terminal()->numSuccessors(); }
-
+    
     BasicBlock*& successor(unsigned index)
     {
         return terminal()->successor(index);
@@ -158,32 +158,32 @@ struct BasicBlock : RefCounted<BasicBlock> {
     {
         return terminal()->successors();
     }
-
+    
     void removePredecessor(BasicBlock* block);
     void replacePredecessor(BasicBlock* from, BasicBlock* to);
 
     template<typename... Params>
     Node* appendNode(Graph&, SpeculatedType, Params...);
-
+    
     template<typename... Params>
     Node* appendNonTerminal(Graph&, SpeculatedType, Params...);
-
+    
     template<typename... Params>
     Node* replaceTerminal(Graph&, SpeculatedType, Params...);
-
+    
     void dump(PrintStream& out) const;
-
+    
     void didLink()
     {
 #if ASSERT_ENABLED
         isLinked = true;
 #endif
     }
-
+    
     // This value is used internally for block linking and OSR entry. It is mostly meaningless
     // for other purposes due to inlining.
     BytecodeIndex bytecodeBegin;
-
+    
     BlockIndex index;
 
     StructureClobberState cfaStructureClobberStateAtHead;
@@ -201,16 +201,16 @@ struct BasicBlock : RefCounted<BasicBlock> {
     bool isLinked;
 #endif
     bool isReachable;
-
+    
     Vector<Node*> phis;
     PredecessorList predecessors;
-
+    
     Operands<Node*> variablesAtHead;
     Operands<Node*> variablesAtTail;
-
+    
     Operands<AbstractValue> valuesAtHead;
     Operands<AbstractValue> valuesAtTail;
-
+    
     // The intersection of assumptions we have made previously at the head of this block. Note
     // that under normal circumstances, each time we run the CFA, we will get strictly more precise
     // results. But we don't actually require this to be the case. It's fine for the CFA to loosen
@@ -229,9 +229,9 @@ struct BasicBlock : RefCounted<BasicBlock> {
     // would not be a productive optimization: it would make setting up a basic block more
     // expensive and would only benefit bizarre pathological cases.
     Operands<AbstractValue> intersectionOfPastValuesAtHead;
-
+    
     float executionCount;
-
+    
     struct SSAData {
         WTF_MAKE_FAST_ALLOCATED;
     public:
@@ -250,19 +250,19 @@ struct BasicBlock : RefCounted<BasicBlock> {
         Vector<NodeFlowProjection> liveAtTail;
         Vector<NodeAbstractValuePair> valuesAtHead;
         Vector<NodeAbstractValuePair> valuesAtTail;
-
+        
         SSAData(BasicBlock*);
         ~SSAData();
     };
     std::unique_ptr<SSAData> ssa;
-
+    
 private:
     friend class InsertionSet;
     BlockNodeList m_nodes;
 };
 
 typedef Vector<BasicBlock*> BlockList;
-
+    
 static inline BytecodeIndex getBytecodeBeginForBlock(BasicBlock** basicBlock)
 {
     return (*basicBlock)->bytecodeBegin;

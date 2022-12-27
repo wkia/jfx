@@ -175,7 +175,7 @@ void CachedImage::addClientWaitingForAsyncDecoding(CachedImageClient& client)
     } else
         m_clientsWaitingForAsyncDecoding.add(&client);
 }
-
+    
 void CachedImage::removeAllClientsWaitingForAsyncDecoding()
 {
     if (m_clientsWaitingForAsyncDecoding.isEmpty() || !hasImage() || !is<BitmapImage>(image()))
@@ -238,8 +238,8 @@ Image* CachedImage::image()
 {
     if (errorOccurred() && m_shouldPaintBrokenImage) {
         // Returning the 1x broken image is non-ideal, but we cannot reliably access the appropriate
-        // deviceScaleFactor from here. It is critical that callers use CachedImage::brokenImage()
-        // when they need the real, deviceScaleFactor-appropriate broken image icon.
+        // deviceScaleFactor from here. It is critical that callers use CachedImage::brokenImage() 
+        // when they need the real, deviceScaleFactor-appropriate broken image icon. 
         return brokenImage(1).first;
     }
 
@@ -253,8 +253,8 @@ Image* CachedImage::imageForRenderer(const RenderObject* renderer)
 {
     if (errorOccurred() && m_shouldPaintBrokenImage) {
         // Returning the 1x broken image is non-ideal, but we cannot reliably access the appropriate
-        // deviceScaleFactor from here. It is critical that callers use CachedImage::brokenImage()
-        // when they need the real, deviceScaleFactor-appropriate broken image icon.
+        // deviceScaleFactor from here. It is critical that callers use CachedImage::brokenImage() 
+        // when they need the real, deviceScaleFactor-appropriate broken image icon. 
         return brokenImage(1).first;
     }
 
@@ -313,7 +313,7 @@ LayoutSize CachedImage::unclampedImageSizeForRenderer(const RenderElement* rende
     float widthScale = m_image->hasRelativeWidth() ? 1.0f : multiplier;
     float heightScale = m_image->hasRelativeHeight() ? 1.0f : multiplier;
     imageSize.scale(widthScale, heightScale);
-    return imageSize;
+    return imageSize;    
 }
 
 LayoutSize CachedImage::imageSizeForRenderer(const RenderElement* renderer, float multiplier, SizeType sizeType) const
@@ -645,11 +645,11 @@ void CachedImage::didDraw(const Image& image)
 {
     if (&image != m_image)
         return;
-
+    
     MonotonicTime timeStamp = FrameView::currentPaintTimeStamp();
     if (!timeStamp) // If didDraw is called outside of a Frame paint.
         timeStamp = MonotonicTime::now();
-
+    
     CachedResource::didAccessDecodedData(timeStamp);
 }
 

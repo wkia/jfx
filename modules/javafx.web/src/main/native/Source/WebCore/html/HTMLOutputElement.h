@@ -48,7 +48,7 @@ public:
     String defaultValue() const;
     void setDefaultValue(const String&);
     DOMTokenList& htmlFor();
-
+    
 private:
     HTMLOutputElement(const QualifiedName&, Document&, HTMLFormElement*);
 

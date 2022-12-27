@@ -22,7 +22,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+ 
 #include "config.h"
 #include "ScrollingStateTree.h"
 
@@ -243,7 +243,7 @@ void ScrollingStateTree::unparentChildrenAndDestroyNode(ScrollingNodeID nodeID)
             m_unparentedNodes.add(child->scrollingNodeID(), WTFMove(child));
         }
     }
-
+    
     protectedNode->removeFromParent();
     willRemoveNode(protectedNode.get());
 }
@@ -374,7 +374,7 @@ void ScrollingStateTree::reconcileLayerPositionsRecursive(ScrollingStateNode& cu
 
     if (!currNode.children())
         return;
-
+    
     for (auto& child : *currNode.children()) {
         // Never need to cross frame boundaries, since viewport rect reconciliation is per frame.
         if (is<ScrollingStateFrameScrollingNode>(child))
@@ -389,7 +389,7 @@ void ScrollingStateTree::reconcileViewportConstrainedLayerPositions(ScrollingNod
     auto* scrollingNode = stateNodeForID(scrollingNodeID);
     if (!scrollingNode)
         return;
-
+    
     reconcileLayerPositionsRecursive(*scrollingNode, layoutViewport, action);
 }
 

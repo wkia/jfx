@@ -188,7 +188,7 @@ Path pathFromGraphicsElement(const SVGElement* element)
 
     if (PathFromFunction pathFromFunction = map->get(element->localName().impl()))
         return (*pathFromFunction)(*element);
-
+    
     return { };
 }
 

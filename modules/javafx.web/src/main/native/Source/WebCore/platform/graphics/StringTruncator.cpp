@@ -6,13 +6,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -63,7 +63,7 @@ static unsigned centerTruncateToBuffer(const String& string, unsigned length, un
 {
     ASSERT_WITH_SECURITY_IMPLICATION(keepCount < length);
     ASSERT_WITH_SECURITY_IMPLICATION(keepCount < STRING_BUFFER_SIZE);
-
+    
     unsigned omitStart = (keepCount + 1) / 2;
     NonSharedCharacterBreakIterator it(StringView(string).substring(0, length));
     unsigned omitEnd = boundedTextBreakFollowing(it, omitStart + (length - keepCount) - 1, length);
@@ -239,15 +239,15 @@ static String truncateString(const String& string, float maxWidth, const FontCas
 
     unsigned keepCountForLargestKnownToFit = 0;
     float widthForLargestKnownToFit = currentEllipsisWidth;
-
+    
     unsigned keepCountForSmallestKnownToNotFit = keepCount;
     float widthForSmallestKnownToNotFit = width;
-
+    
     if (currentEllipsisWidth >= maxWidth) {
         keepCountForLargestKnownToFit = 1;
         keepCountForSmallestKnownToNotFit = 2;
     }
-
+    
     while (keepCountForLargestKnownToFit + 1 < keepCountForSmallestKnownToNotFit) {
         ASSERT_WITH_SECURITY_IMPLICATION(widthForLargestKnownToFit <= maxWidth);
         ASSERT_WITH_SECURITY_IMPLICATION(widthForSmallestKnownToNotFit > maxWidth);
@@ -255,12 +255,12 @@ static String truncateString(const String& string, float maxWidth, const FontCas
         float ratio = (keepCountForSmallestKnownToNotFit - keepCountForLargestKnownToFit)
             / (widthForSmallestKnownToNotFit - widthForLargestKnownToFit);
         keepCount = static_cast<unsigned>(maxWidth * ratio);
-
+        
         if (keepCount <= keepCountForLargestKnownToFit)
             keepCount = keepCountForLargestKnownToFit + 1;
         else if (keepCount >= keepCountForSmallestKnownToNotFit)
             keepCount = keepCountForSmallestKnownToNotFit - 1;
-
+        
         ASSERT_WITH_SECURITY_IMPLICATION(keepCount < length);
         ASSERT(keepCount > 0);
         ASSERT_WITH_SECURITY_IMPLICATION(keepCount < keepCountForSmallestKnownToNotFit);
@@ -281,16 +281,16 @@ static String truncateString(const String& string, float maxWidth, const FontCas
             widthForSmallestKnownToNotFit = width;
         }
     }
-
+    
     if (keepCountForLargestKnownToFit == 0) {
         keepCountForLargestKnownToFit = 1;
     }
-
+    
     if (keepCount != keepCountForLargestKnownToFit) {
         keepCount = keepCountForLargestKnownToFit;
         truncatedLength = truncateToBuffer(string, length, keepCount, stringBuffer, shouldInsertEllipsis);
     }
-
+    
     return String(stringBuffer, truncatedLength);
 }
 

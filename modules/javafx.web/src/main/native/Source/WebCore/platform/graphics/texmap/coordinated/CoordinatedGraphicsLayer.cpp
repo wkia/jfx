@@ -1407,7 +1407,7 @@ bool CoordinatedGraphicsLayer::addAnimation(const KeyframeValueList& valueList, 
         break;
     }
     case AnimatedPropertyTransform: {
-    bool ignoredHasBigRotation;
+        bool ignoredHasBigRotation;
         listsMatch = validateTransformOperations(valueList, ignoredHasBigRotation) >= 0;
         break;
     }

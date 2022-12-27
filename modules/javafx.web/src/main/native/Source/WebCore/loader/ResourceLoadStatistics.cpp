@@ -43,7 +43,7 @@ static void encodeHashSet(KeyedEncoder& encoder, const String& label,  const Str
 {
     if (hashSet.isEmpty())
         return;
-
+    
     encoder.encodeObjects(label, hashSet.begin(), hashSet.end(), [&key](KeyedEncoder& encoderInner, const RegistrableDomain& domain) {
         encoderInner.encodeString(key, domain.string());
     });
@@ -54,7 +54,7 @@ static void encodeOptionSet(KeyedEncoder& encoder, const String& label, const Op
 {
     if (optionSet.isEmpty())
         return;
-
+    
     uint64_t optionSetBitMask = optionSet.toRaw();
     encoder.encodeUInt64(label, optionSetBitMask);
 }
@@ -64,7 +64,7 @@ static void encodeHashSet(KeyedEncoder& encoder, const String& label,  const Str
 {
     if (hashSet.isEmpty())
         return;
-
+    
     encoder.encodeObjects(label, hashSet.begin(), hashSet.end(), [&key](KeyedEncoder& encoderInner, const String& origin) {
         encoderInner.encodeString(key, origin);
     });
@@ -74,7 +74,7 @@ static void encodeFontHashSet(KeyedEncoder& encoder, const String& label, const 
 {
     encodeHashSet(encoder, label, "font", hashSet);
 }
-
+    
 static void encodeCanvasActivityRecord(KeyedEncoder& encoder, const String& label, const CanvasActivityRecord& canvasActivityRecord)
 {
     encoder.encodeObject(label, canvasActivityRecord, [] (KeyedEncoder& encoderInner, const CanvasActivityRecord& canvasActivityRecord) {
@@ -109,7 +109,7 @@ void ResourceLoadStatistics::encode(KeyedEncoder& encoder) const
 
     // Subframe stats
     encodeHashSet(encoder, "subframeUnderTopFrameDomains"_s, "domain"_s, subframeUnderTopFrameDomains);
-
+    
     // Subresource stats
     encodeHashSet(encoder, "subresourceUnderTopFrameDomains"_s, "domain"_s, subresourceUnderTopFrameDomains);
     encodeHashSet(encoder, "subresourceUniqueRedirectsTo"_s, "domain"_s, subresourceUniqueRedirectsTo);
@@ -140,7 +140,7 @@ IGNORE_WARNINGS_BEGIN("unused-result")
     decoder.decodeObjects(label, ignored, [&hashCountedSet](KeyedDecoder& decoderInner, String& domain) {
         if (!decoderInner.decodeString("origin", domain))
             return false;
-
+        
         unsigned count;
         if (!decoderInner.decodeUInt32("count", count))
             return false;
@@ -158,7 +158,7 @@ IGNORE_WARNINGS_BEGIN("unused-result")
     decoder.decodeObjects(label, ignored, [&hashSet, &key](KeyedDecoder& decoderInner, String& domain) {
         if (!decoderInner.decodeString(key, domain))
             return false;
-
+        
         hashSet.add(RegistrableDomain::uncheckedCreateFromRegistrableDomainString(domain));
         return true;
     });
@@ -181,7 +181,7 @@ IGNORE_WARNINGS_BEGIN("unused-result")
     decoder.decodeObjects(label, ignore, [&hashSet, &key](KeyedDecoder& decoderInner, String& origin) {
         if (!decoderInner.decodeString(key, origin))
             return false;
-
+        
         hashSet.add(origin);
         return true;
     });
@@ -192,7 +192,7 @@ static void decodeFontHashSet(KeyedDecoder& decoder, const String& label, HashSe
 {
     decodeHashSet(decoder, label, "font", hashSet);
 }
-
+    
 static void decodeCanvasActivityRecord(KeyedDecoder& decoder, const String& label, CanvasActivityRecord& canvasActivityRecord)
 {
 IGNORE_WARNINGS_BEGIN("unused-result")
@@ -243,7 +243,7 @@ bool ResourceLoadStatistics::decode(KeyedDecoder& decoder, unsigned modelVersion
         decodeHashCountedSet(decoder, "topFrameUniqueRedirectsTo", topFrameUniqueRedirectsToCounted);
         for (auto& domain : topFrameUniqueRedirectsToCounted.values())
             topFrameUniqueRedirectsTo.add(domain);
-
+        
         HashCountedSet<RegistrableDomain> topFrameUniqueRedirectsFromCounted;
         decodeHashCountedSet(decoder, "topFrameUniqueRedirectsFrom", topFrameUniqueRedirectsFromCounted);
         for (auto& domain : topFrameUniqueRedirectsFromCounted.values())
@@ -358,7 +358,7 @@ static void appendHashSet(StringBuilder& builder, const String& label, const Has
 {
     if (hashSet.isEmpty())
         return;
-
+    
     builder.append("    ", label, ":\n");
     for (auto& entry : hashSet)
         builder.append("        ", entry.string(), '\n');
@@ -369,7 +369,7 @@ static void appendHashSet(StringBuilder& builder, const String& label, const Has
 {
     if (hashSet.isEmpty())
         return;
-
+    
     builder.append("    ", label, ":\n");
     for (auto& entry : hashSet)
         builder.append("        ", entry, '\n');
@@ -418,7 +418,7 @@ static ASCIILiteral screenAPIEnumToString(ResourceLoadStatistics::ScreenAPI scre
     ASSERT_NOT_REACHED();
     return "Invalid screen API"_s;
 }
-
+    
 static void appendNavigatorAPIOptionSet(StringBuilder& builder, const OptionSet<ResourceLoadStatistics::NavigatorAPI>& optionSet)
 {
     if (optionSet.isEmpty())
@@ -427,7 +427,7 @@ static void appendNavigatorAPIOptionSet(StringBuilder& builder, const OptionSet<
     for (auto navigatorAPI : optionSet)
         builder.append("        ", navigatorAPIEnumToString(navigatorAPI), '\n');
 }
-
+    
 static void appendScreenAPIOptionSet(StringBuilder& builder, const OptionSet<ResourceLoadStatistics::ScreenAPI>& optionSet)
 {
     if (optionSet.isEmpty())
@@ -470,7 +470,7 @@ String ResourceLoadStatistics::toString() const
 
     // Subframe stats
     appendHashSet(builder, "subframeUnderTopFrameDomains", subframeUnderTopFrameDomains);
-
+    
     // Subresource stats
     appendHashSet(builder, "subresourceUnderTopFrameDomains", subresourceUnderTopFrameDomains);
     appendHashSet(builder, "subresourceUniqueRedirectsTo", subresourceUniqueRedirectsTo);
@@ -519,7 +519,7 @@ void ResourceLoadStatistics::merge(const ResourceLoadStatistics& other)
 
     if (lastSeen < other.lastSeen)
         lastSeen = other.lastSeen;
-
+    
     if (!other.hadUserInteraction) {
         // If user interaction has been reset do so here too.
         // Else, do nothing.
@@ -546,7 +546,7 @@ void ResourceLoadStatistics::merge(const ResourceLoadStatistics& other)
 
     // Subframe stats
     mergeHashSet(subframeUnderTopFrameDomains, other.subframeUnderTopFrameDomains);
-
+    
     // Subresource stats
     mergeHashSet(subresourceUnderTopFrameDomains, other.subresourceUnderTopFrameDomains);
     mergeHashSet(subresourceUniqueRedirectsTo, other.subresourceUniqueRedirectsTo);
@@ -556,7 +556,7 @@ void ResourceLoadStatistics::merge(const ResourceLoadStatistics& other)
     isPrevalentResource |= other.isPrevalentResource;
     isVeryPrevalentResource |= other.isVeryPrevalentResource;
     dataRecordsRemoved = std::max(dataRecordsRemoved, other.dataRecordsRemoved);
-
+    
 #if ENABLE(WEB_API_STATISTICS)
     mergeHashSet(fontsFailedToLoad, other.fontsFailedToLoad);
     mergeHashSet(fontsSuccessfullyLoaded, other.fontsSuccessfullyLoaded);

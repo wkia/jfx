@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -39,28 +39,28 @@ public:
         : m_object(nullptr)
     {
     }
-
+    
     ObjectPropertyCondition(WTF::HashTableDeletedValueType token)
         : m_object(nullptr)
         , m_condition(token)
     {
     }
-
+    
     ObjectPropertyCondition(JSObject* object, const PropertyCondition& condition)
         : m_object(object)
         , m_condition(condition)
     {
     }
-
+    
     static ObjectPropertyCondition presenceWithoutBarrier(
         JSObject* object, UniquedStringImpl* uid, PropertyOffset offset, unsigned attributes)
     {
         ObjectPropertyCondition result;
         result.m_object = object;
-        result.m_condition = PropertyCondition::presenceWithoutBarrier(uid, offset, attributes);
+        result.m_condition = PropertyCondition::presenceWithoutBarrier(uid, offset, attributes); 
         return result;
     }
-
+    
     static ObjectPropertyCondition presence(
         VM& vm, JSCell* owner, JSObject* object, UniquedStringImpl* uid, PropertyOffset offset,
         unsigned attributes)
@@ -79,7 +79,7 @@ public:
         result.m_condition = PropertyCondition::absenceWithoutBarrier(uid, prototype);
         return result;
     }
-
+    
     static ObjectPropertyCondition absence(
         VM& vm, JSCell* owner, JSObject* object, UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -87,7 +87,7 @@ public:
             vm.heap.writeBarrier(owner);
         return absenceWithoutBarrier(object, uid, prototype);
     }
-
+    
     static ObjectPropertyCondition absenceOfSetEffectWithoutBarrier(
         JSObject* object, UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -96,7 +96,7 @@ public:
         result.m_condition = PropertyCondition::absenceOfSetEffectWithoutBarrier(uid, prototype);
         return result;
     }
-
+    
     static ObjectPropertyCondition absenceOfSetEffect(
         VM& vm, JSCell* owner, JSObject* object, UniquedStringImpl* uid, JSObject* prototype)
     {
@@ -104,7 +104,7 @@ public:
             vm.heap.writeBarrier(owner);
         return absenceOfSetEffectWithoutBarrier(object, uid, prototype);
     }
-
+    
     static ObjectPropertyCondition equivalenceWithoutBarrier(
         JSObject* object, UniquedStringImpl* uid, JSValue value)
     {
@@ -113,7 +113,7 @@ public:
         result.m_condition = PropertyCondition::equivalenceWithoutBarrier(uid, value);
         return result;
     }
-
+    
     static ObjectPropertyCondition equivalence(
         VM& vm, JSCell* owner, JSObject* object, UniquedStringImpl* uid, JSValue value)
     {
@@ -132,7 +132,7 @@ public:
             vm.heap.writeBarrier(owner);
         return result;
     }
-
+    
     static ObjectPropertyCondition hasPrototypeWithoutBarrier(JSObject* object, JSObject* prototype)
     {
         ObjectPropertyCondition result;
@@ -140,7 +140,7 @@ public:
         result.m_condition = PropertyCondition::hasPrototypeWithoutBarrier(prototype);
         return result;
     }
-
+    
     static ObjectPropertyCondition hasPrototype(
         VM& vm, JSCell* owner, JSObject* object, JSObject* prototype)
     {
@@ -150,10 +150,10 @@ public:
     }
 
     explicit operator bool() const { return !!m_condition; }
-
+    
     JSObject* object() const { return m_object; }
     PropertyCondition condition() const { return m_condition; }
-
+    
     PropertyCondition::Kind kind() const { return condition().kind(); }
     UniquedStringImpl* uid() const { return condition().uid(); }
     bool hasOffset() const { return condition().hasOffset(); }
@@ -164,26 +164,26 @@ public:
     JSObject* prototype() const { return condition().prototype(); }
     bool hasRequiredValue() const { return condition().hasRequiredValue(); }
     JSValue requiredValue() const { return condition().requiredValue(); }
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
     unsigned hash() const
     {
         return WTF::PtrHash<JSObject*>::hash(m_object) ^ m_condition.hash();
     }
-
+    
     bool operator==(const ObjectPropertyCondition& other) const
     {
         return m_object == other.m_object
             && m_condition == other.m_condition;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return !m_object && m_condition.isHashTableDeletedValue();
     }
-
+    
     // Two conditions are compatible if they are identical or if they speak of different uids or
     // different objects. If false is returned, you have to decide how to resolve the conflict -
     // for example if there is a Presence and an Equivalence then in some cases you'll want the
@@ -196,16 +196,16 @@ public:
             return false;
         return *this == other || uid() != other.uid() || object() != other.object();
     }
-
+    
     // These validity-checking methods can optionally take a Struture* instead of loading the
     // Structure* from the object. If you're in the concurrent JIT, then you must use the forms
     // that take an explicit Structure* because you want the compiler to optimize for the same
     // structure that you validated (i.e. avoid a TOCTOU race).
-
+    
     // Checks if the object's structure claims that the property won't be intercepted. Validity
     // does not require watchpoints on the object.
     bool structureEnsuresValidityAssumingImpurePropertyWatchpoint() const;
-
+    
     // Returns true if we need an impure property watchpoint to ensure validity even if
     // isStillValidAccordingToStructure() returned true.
     bool validityRequiresImpurePropertyWatchpoint(Structure*) const;
@@ -223,11 +223,11 @@ public:
     // use structureEnsuresValidity().
     bool isStillValid(Structure*) const;
     bool isStillValid() const;
-
+    
     // Shorthand for condition().isStillValid(structure).
     bool structureEnsuresValidity(Structure*) const;
     bool structureEnsuresValidity() const;
-
+    
     // This means that it's still valid and we could enforce validity by setting a transition
     // watchpoint on the structure and possibly an impure property watchpoint.
     bool isWatchableAssumingImpurePropertyWatchpoint(
@@ -243,7 +243,7 @@ public:
         PropertyCondition::WatchabilityEffort = PropertyCondition::MakeNoChanges) const;
     bool isWatchable(
         PropertyCondition::WatchabilityEffort = PropertyCondition::MakeNoChanges) const;
-
+    
     bool watchingRequiresStructureTransitionWatchpoint() const
     {
         return condition().watchingRequiresStructureTransitionWatchpoint();
@@ -259,10 +259,10 @@ public:
         functor(m_object);
         m_condition.forEachDependentCell(functor);
     }
-
+    
     // This means that the objects involved in this are still live.
     bool isStillLive(VM&) const;
-
+    
     void validateReferences(const TrackedReferences&) const;
 
     bool isValidValueForPresence(VM& vm, JSValue value) const

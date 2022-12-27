@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, 2008 Apple Inc. All rights reserved.
+ * Copyright (C) 2007-2020 Apple Inc. All rights reserved.
  * Copyright (C) 2012 Baidu Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,13 +40,13 @@
 
 namespace WebCore {
 
-DragData::DragData(const DragDataMap& data, const IntPoint& clientPosition, const IntPoint& globalPosition,
-    DragOperation sourceOperationMask, DragApplicationFlags flags)
+DragData::DragData(const DragDataMap& data, const IntPoint& clientPosition, const IntPoint& globalPosition, OptionSet<DragOperation> sourceOperationMask, OptionSet<DragApplicationFlags> flags, std::optional<PageIdentifier> pageID)
     : m_clientPosition(clientPosition)
     , m_globalPosition(globalPosition)
     , m_platformDragData(0)
     , m_draggingSourceOperationMask(sourceOperationMask)
     , m_applicationFlags(flags)
+    , m_pageID(pageID)
     , m_dragDataMap(data)
 {
 }
@@ -54,7 +54,7 @@ DragData::DragData(const DragDataMap& data, const IntPoint& clientPosition, cons
 bool DragData::containsURL(FilenameConversionPolicy filenamePolicy) const
 {
     if (m_platformDragData)
-        return SUCCEEDED(m_platformDragData->QueryGetData(urlWFormat()))
+        return SUCCEEDED(m_platformDragData->QueryGetData(urlWFormat())) 
             || SUCCEEDED(m_platformDragData->QueryGetData(urlFormat()))
             || (filenamePolicy == ConvertFilenames
                 && (SUCCEEDED(m_platformDragData->QueryGetData(filenameWFormat()))
@@ -78,7 +78,7 @@ const DragDataMap& DragData::dragDataMap()
         Vector<String> dataStrings;
         getClipboardData(m_platformDragData, &dataFormat, dataStrings);
         if (!dataStrings.isEmpty())
-            m_dragDataMap.set(dataFormat.cfFormat, dataStrings);
+            m_dragDataMap.set(dataFormat.cfFormat, dataStrings); 
     }
     return m_dragDataMap;
 }
@@ -148,7 +148,7 @@ Vector<String> DragData::asFilenames() const
         if (FAILED(m_platformDragData->GetData(cfHDropFormat(), &medium)))
             return result;
 
-        HDROP hdrop = reinterpret_cast<HDROP>(GlobalLock(medium.hGlobal));
+        HDROP hdrop = reinterpret_cast<HDROP>(GlobalLock(medium.hGlobal)); 
 
         if (!hdrop)
             return result;

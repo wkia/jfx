@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -65,7 +65,7 @@ class CodeBlock;
 //
 class LinkBuffer {
     WTF_MAKE_NONCOPYABLE(LinkBuffer); WTF_MAKE_FAST_ALLOCATED;
-
+    
     template<PtrTag tag> using CodePtr = MacroAssemblerCodePtr<tag>;
     template<PtrTag tag> using CodeRef = MacroAssemblerCodeRef<tag>;
     typedef MacroAssembler::Label Label;
@@ -154,7 +154,7 @@ public:
     }
 
     void runMainThreadFinalizationTasks();
-
+    
     bool didFailToAllocate() const
     {
         return !m_didAllocate;
@@ -171,7 +171,7 @@ public:
         m_isJumpIsland = true;
 #endif
     }
-
+    
     // These methods are used to link or set values at code generation time.
 
     template<PtrTag tag, typename Func, typename = std::enable_if_t<std::is_function<typename std::remove_pointer<Func>::type>::value>>
@@ -188,13 +188,13 @@ public:
         call.m_label = applyOffset(call.m_label);
         MacroAssembler::linkCall(code(), call, function);
     }
-
+    
     template<PtrTag tag>
     void link(Call call, CodeLocationLabel<tag> label)
     {
         link(call, FunctionPtr<tag>(label));
     }
-
+    
     template<PtrTag tag>
     void link(Jump jump, CodeLocationLabel<tag> label)
     {
@@ -223,7 +223,7 @@ public:
     }
 
     // These methods are used to obtain handles to allow the code to be relinked / repatched later.
-
+    
     template<PtrTag tag>
     CodeLocationLabel<tag> entrypoint()
     {
@@ -270,7 +270,7 @@ public:
     {
         return CodeLocationDataLabel32<tag>(getLinkerAddress<tag>(applyOffset(label.m_label)));
     }
-
+    
     template<PtrTag tag>
     CodeLocationDataLabelCompact<tag> locationOf(DataLabelCompact label)
     {
@@ -334,7 +334,7 @@ public:
     }
 
     size_t size() const { return m_size; }
-
+    
     bool wasAlreadyDisassembled() const { return m_alreadyDisassembled; }
     void didAlreadyDisassemble() { m_alreadyDisassembled = true; }
 
@@ -363,7 +363,7 @@ private:
         return bitwise_cast<int32_t*>(m_assemblerStorage.buffer())[location / sizeof(int32_t) - 1];
     }
 #endif
-
+    
     template <typename T> T applyOffset(T src)
     {
 #if ENABLE(BRANCH_COMPACTION)
@@ -377,7 +377,7 @@ private:
     {
         return m_code.dataLocation();
     }
-
+    
     void allocate(MacroAssembler&, JITCompilationEffort);
 
     template<PtrTag tag, typename T>
@@ -400,7 +400,7 @@ private:
 #if DUMP_LINK_STATISTICS
     static void dumpLinkStatistics(void* code, size_t initialSize, size_t finalSize);
 #endif
-
+    
 #if DUMP_CODE
     static void dumpCode(void* code, size_t);
 #endif

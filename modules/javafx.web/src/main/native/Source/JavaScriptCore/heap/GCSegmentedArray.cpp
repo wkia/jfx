@@ -31,3 +31,4 @@ namespace JSC {
 DEFINE_ALLOCATOR_WITH_HEAP_IDENTIFIER(GCSegmentedArray);
 
 } // namespace JSC
+

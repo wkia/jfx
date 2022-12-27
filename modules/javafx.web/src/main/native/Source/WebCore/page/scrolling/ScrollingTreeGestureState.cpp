@@ -54,7 +54,7 @@ bool ScrollingTreeGestureState::handleGestureCancel(const PlatformWheelEvent& ev
             m_scrollingTree.handleWheelEventPhase(*m_mayBeginNodeID, PlatformWheelEventPhase::Cancelled);
         return true;
     }
-
+    
     return false;
 }
 

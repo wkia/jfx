@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -96,7 +96,7 @@ Ref<SharedTask<void(Visitor&)>> Subspace::forEachMarkedCellInParallel(const Func
             , m_func(func)
         {
         }
-
+        
         void run(Visitor& visitor) final
         {
             while (MarkedBlock::Handle* handle = m_blockSource->run()) {
@@ -106,14 +106,14 @@ Ref<SharedTask<void(Visitor&)>> Subspace::forEachMarkedCellInParallel(const Func
                         return IterationStatus::Continue;
                     });
             }
-
+            
             {
                 Locker locker { m_lock };
                 if (!m_needToVisitPreciseAllocations)
                     return;
                 m_needToVisitPreciseAllocations = false;
             }
-
+            
             CellAttributes attributes = m_subspace.attributes();
             m_subspace.forEachPreciseAllocation(
                 [&] (PreciseAllocation* allocation) {
@@ -121,7 +121,7 @@ Ref<SharedTask<void(Visitor&)>> Subspace::forEachMarkedCellInParallel(const Func
                         m_func(visitor, allocation->cell(), attributes.cellKind);
                 });
         }
-
+        
     private:
         Subspace& m_subspace;
         Ref<SharedTask<MarkedBlock::Handle*()>> m_blockSource;
@@ -129,7 +129,7 @@ Ref<SharedTask<void(Visitor&)>> Subspace::forEachMarkedCellInParallel(const Func
         Lock m_lock;
         bool m_needToVisitPreciseAllocations { true };
     };
-
+    
     return adoptRef(*new Task(*this, func));
 }
 

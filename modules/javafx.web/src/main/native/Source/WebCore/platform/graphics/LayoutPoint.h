@@ -52,16 +52,16 @@ public:
     template<typename T> void setX(T x) { m_x = x; }
     template<typename T> void setY(T y) { m_y = y; }
 
-    void move(const LayoutSize& s) { move(s.width(), s.height()); }
+    void move(const LayoutSize& s) { move(s.width(), s.height()); } 
     void moveBy(const LayoutPoint& offset) { move(offset.x(), offset.y()); }
     template<typename T, typename U> void move(T dx, U dy) { m_x += dx; m_y += dy; }
-
+    
     void scale(float s)
     {
         m_x *= s;
         m_y *= s;
     }
-
+    
     void scale(float sx, float sy)
     {
         m_x *= sx;

@@ -229,7 +229,7 @@ struct BoundedGammaEncoded : RGBAType<T, D, BoundedGammaEncoded<T, D>, RGBModel<
 
     using LinearCounterpart = BoundedLinearEncoded<T, D>;
     using ExtendedCounterpart = ExtendedGammaEncoded<T, D>;
-
+    
     template<typename Replacement> using SelfWithReplacementComponent = BoundedGammaEncoded<Replacement, D>;
 };
 

@@ -147,14 +147,14 @@ static GlyphData glyphDataForCodePointOrFallbackGlyph(const RenderStyle& style, 
 {
     if (codePoint)
         return style.fontCascade().glyphDataForCharacter(codePoint, false);
-
+    
     GlyphData fallback;
-
+    
     if (fallbackGlyph) {
         fallback.glyph = fallbackGlyph;
         fallback.font = &style.fontCascade().primaryFont();
     }
-
+    
     return fallback;
 }
 

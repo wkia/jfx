@@ -50,7 +50,7 @@ RenderMultiColumnFlow::RenderMultiColumnFlow(Document& document, RenderStyle&& s
 RenderMultiColumnFlow::~RenderMultiColumnFlow() = default;
 
 const char* RenderMultiColumnFlow::renderName() const
-{
+{    
     return "RenderMultiColumnFlowThread";
 }
 
@@ -271,41 +271,41 @@ LayoutSize RenderMultiColumnFlow::offsetFromContainer(RenderElement& enclosingCo
 
     if (offsetDependsOnPoint)
         *offsetDependsOnPoint = true;
-
+    
     LayoutPoint translatedPhysicalPoint(physicalPoint);
     if (RenderFragmentContainer* fragment = physicalTranslationFromFlowToFragment(translatedPhysicalPoint))
         translatedPhysicalPoint.moveBy(fragment->topLeftLocation());
-
+    
     LayoutSize offset(translatedPhysicalPoint.x(), translatedPhysicalPoint.y());
     if (is<RenderBox>(enclosingContainer))
         offset -= toLayoutSize(downcast<RenderBox>(enclosingContainer).scrollPosition());
     return offset;
 }
-
+    
 void RenderMultiColumnFlow::mapAbsoluteToLocalPoint(OptionSet<MapCoordinatesMode> mode, TransformState& transformState) const
 {
     // First get the transform state's point into the block flow thread's physical coordinate space.
     parent()->mapAbsoluteToLocalPoint(mode, transformState);
     LayoutPoint transformPoint(transformState.mappedPoint());
-
+    
     // Now walk through each fragment.
     const RenderMultiColumnSet* candidateColumnSet = nullptr;
     LayoutPoint candidatePoint;
     LayoutSize candidateContainerOffset;
-
+    
     for (const auto& columnSet : childrenOfType<RenderMultiColumnSet>(*parent())) {
         candidateContainerOffset = columnSet.offsetFromContainer(*parent(), LayoutPoint());
-
+        
         candidatePoint = transformPoint - candidateContainerOffset;
         candidateColumnSet = &columnSet;
-
+        
         // We really have no clue what to do with overflow. We'll just use the closest fragment to the point in that case.
         LayoutUnit pointOffset = isHorizontalWritingMode() ? candidatePoint.y() : candidatePoint.x();
         LayoutUnit fragmentOffset = isHorizontalWritingMode() ? columnSet.topLeftLocation().y() : columnSet.topLeftLocation().x();
         if (pointOffset < fragmentOffset + columnSet.logicalHeight())
             break;
     }
-
+    
     // Once we have a good guess as to which fragment we hit tested through (and yes, this was just a heuristic, but it's
     // the best we could do), then we can map from the fragment into the flow thread.
     LayoutSize translationOffset = physicalTranslationFromFragmentToFlow(candidateColumnSet, candidatePoint) + candidateContainerOffset;
@@ -351,7 +351,7 @@ LayoutSize RenderMultiColumnFlow::physicalTranslationOffsetFromFlowToFragment(co
     // Now that we know which multicolumn set we hit, we need to get the appropriate translation offset for the column.
     const auto* columnSet = downcast<RenderMultiColumnSet>(fragmentContainer);
     LayoutPoint translationOffset = columnSet->columnTranslationForOffset(logicalOffset);
-
+    
     // Now we know how we want the rect to be translated into the fragment. At this point we're converting
     // back to physical coordinates.
     if (style().isFlippedBlocksWritingMode()) {
@@ -368,7 +368,7 @@ LayoutSize RenderMultiColumnFlow::physicalTranslationOffsetFromFlowToFragment(co
         else
             translationOffset.move(columnRect.x() - portionRect.x() - physicalDeltaFromPortionBottom, 0_lu);
     }
-
+    
     return LayoutSize(translationOffset.x(), translationOffset.y());
 }
 
@@ -376,22 +376,22 @@ RenderFragmentContainer* RenderMultiColumnFlow::physicalTranslationFromFlowToFra
 {
     if (!hasValidFragmentInfo())
         return nullptr;
-
+    
     // Put the physical point into the flow thread's coordinate space.
     LayoutPoint logicalPoint = flipForWritingMode(physicalPoint);
-
+    
     // Now get the fragment that we are in.
     LayoutUnit logicalOffset = isHorizontalWritingMode() ? logicalPoint.y() : logicalPoint.x();
     RenderFragmentContainer* fragmentContainer = fragmentAtBlockOffset(this, logicalOffset, true);
     if (!fragmentContainer)
         return nullptr;
-
+    
     // Translate to the coordinate space of the fragment.
     LayoutSize translationOffset = physicalTranslationOffsetFromFlowToFragment(fragmentContainer, logicalOffset);
-
+    
     // Now shift the physical point into the fragment's coordinate space.
     physicalPoint += translationOffset;
-
+    
     return fragmentContainer;
 }
 

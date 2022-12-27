@@ -293,7 +293,7 @@ StyleDifference RenderElement::adjustStyleDifference(StyleDifference diff, Optio
                 // then we actually need SimplifiedLayoutAndPositionedMovement.
                 diff = std::max(diff, (diff == StyleDifference::LayoutPositionedMovementOnly) ? StyleDifference::SimplifiedLayoutAndPositionedMovement : StyleDifference::SimplifiedLayout);
             }
-
+        
         } else
             diff = std::max(diff, StyleDifference::RecompositeLayer);
     }
@@ -314,12 +314,12 @@ StyleDifference RenderElement::adjustStyleDifference(StyleDifference diff, Optio
         else
             diff = std::max(diff, StyleDifference::Repaint);
     }
-
+    
     if (contextSensitiveProperties & StyleDifferenceContextSensitiveProperty::WillChange) {
         if (style().willChange() && style().willChange()->canTriggerCompositing())
             diff = std::max(diff, StyleDifference::RecompositeLayer);
     }
-
+    
     if ((contextSensitiveProperties & StyleDifferenceContextSensitiveProperty::Filter) && hasLayer()) {
         auto& layer = *downcast<RenderLayerModelObject>(*this).layer();
         if (!layer.isComposited() || layer.paintsWithFilters())
@@ -327,7 +327,7 @@ StyleDifference RenderElement::adjustStyleDifference(StyleDifference diff, Optio
         else
             diff = std::max(diff, StyleDifference::RecompositeLayer);
     }
-
+    
     // The answer to requiresLayer() for plugins, iframes, and canvas can change without the actual
     // style changing, since it depends on whether we decide to composite these elements. When the
     // layer status of one of these elements changes, we need to force a layout.
@@ -554,7 +554,7 @@ void RenderElement::setStyle(RenderStyle&& style, StyleDifference minimalStyleDi
     // Now that the layer (if any) has been updated, we need to adjust the diff again,
     // check whether we should layout now, and decide if we need to repaint.
     StyleDifference updatedDiff = adjustStyleDifference(diff, contextSensitiveProperties);
-
+    
     if (diff <= StyleDifference::LayoutPositionedMovementOnly) {
         if (updatedDiff == StyleDifference::Layout)
             setNeedsLayoutAndPrefWidthsRecalc();
@@ -768,7 +768,7 @@ bool RenderElement::layerCreationAllowedForSubtree() const
             return false;
         parentRenderer = parentRenderer->parent();
     }
-
+    
     return true;
 }
 
@@ -805,7 +805,7 @@ void RenderElement::propagateStyleToAnonymousChildren(StylePropagationType propa
             newStyle.setPosition(elementChild.style().position());
 
         updateAnonymousChildStyle(newStyle);
-
+        
         elementChild.setStyle(WTFMove(newStyle));
     }
 }
@@ -957,7 +957,7 @@ void RenderElement::styleDidChange(StyleDifference diff, const RenderStyle* oldS
 
     if (!m_parent)
         return;
-
+    
     if (diff == StyleDifference::Layout || diff == StyleDifference::SimplifiedLayout) {
         RenderCounter::rendererStyleChanged(*this, oldStyle, m_style);
 
@@ -1049,7 +1049,7 @@ inline void RenderElement::clearSubtreeLayoutRootIfNeeded() const
     // Normally when a renderer is detached from the tree, the appropriate dirty bits get set
     // which ensures that this renderer is no longer the layout root.
     ASSERT_NOT_REACHED();
-
+    
     // This indicates a failure to layout the child, which is why
     // the layout root is still set to |this|. Make sure to clear it
     // since we are getting destroyed.
@@ -1659,7 +1659,7 @@ bool RenderElement::getLeadingCorner(FloatPoint& point, bool& insideFixed) const
             return true;
         }
     }
-
+    
     // If the target doesn't have any children or siblings that could be used to calculate the scroll position, we must be
     // at the end of the document. Scroll to the bottom. FIXME: who said anything about scrolling?
     if (!o && document().view()) {
@@ -2215,7 +2215,7 @@ void RenderElement::adjustFragmentedFlowStateOnContainingBlockChangeIfNeeded()
         for (auto& descendant : descendantsOfType<RenderBlock>(*this))
             descendant.resetEnclosingFragmentedFlowAndChildInfoIncludingDescendants();
     }
-
+    
     // Adjust the flow tread state on the subtree.
     setFragmentedFlowState(RenderObject::computedFragmentedFlowState(*this));
     for (auto& descendant : descendantsOfType<RenderObject>(*this))

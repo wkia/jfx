@@ -80,18 +80,18 @@ public:
     // This method takes a logical offset and returns a physical translation that can be applied to map
     // a physical point (corresponding to the logical offset) into the fragment's physical coordinate space.
     LayoutSize physicalTranslationOffsetFromFlowToFragment(const RenderFragmentContainer*, const LayoutUnit) const;
-
+    
     // The point is physical, and the result is a physical location within the fragment.
     RenderFragmentContainer* physicalTranslationFromFlowToFragment(LayoutPoint&) const;
-
+    
     // This method is the inverse of the previous method and goes from fragment to flow.
     LayoutSize physicalTranslationFromFragmentToFlow(const RenderMultiColumnSet*, const LayoutPoint&) const;
-
+    
     bool nodeAtPoint(const HitTestRequest&, HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) override;
-
+    
     void mapAbsoluteToLocalPoint(OptionSet<MapCoordinatesMode>, TransformState&) const override;
     LayoutSize offsetFromContainer(RenderElement&, const LayoutPoint&, bool* offsetDependsOnPoint = nullptr) const override;
-
+    
     // FIXME: Eventually as column and fragment flow threads start nesting, this will end up changing.
     bool shouldCheckColumnBreaks() const override;
 
@@ -129,7 +129,7 @@ private:
     bool m_inLayout { false }; // Set while we're laying out the flow thread, during which colum set heights are unknown.
     bool m_inBalancingPass { false }; // Guard to avoid re-entering column balancing.
     bool m_needsHeightsRecalculation { false };
-
+    
     bool m_progressionIsInline { false };
     bool m_progressionIsReversed { false };
 };

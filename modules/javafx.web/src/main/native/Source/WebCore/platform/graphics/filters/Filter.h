@@ -56,7 +56,7 @@ public:
     virtual bool isCSSFilter() const { return false; }
 
     virtual FloatSize scaledByFilterResolution(FloatSize size) const { return size * m_filterResolution; }
-
+    
     virtual FloatRect sourceImageRect() const = 0;
     virtual FloatRect filterRegion() const = 0;
     virtual FloatRect filterRegionInUserSpace() const = 0;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -39,27 +39,27 @@ public:
         , m_userData(userData)
     {
     }
-
+    
     bool operator==(const HeapFinalizerCallback& other) const
     {
         return m_finalizer == other.m_finalizer
             && m_userData == other.m_userData;
     }
-
+    
     bool operator!=(const HeapFinalizerCallback& other) const
     {
         return !(*this == other);
     }
-
+    
     explicit operator bool() const
     {
         return *this != HeapFinalizerCallback();
     }
-
+    
     void dump(PrintStream&) const;
-
+    
     void run(VM&) const;
-
+    
 private:
     JSHeapFinalizer m_finalizer;
     void *m_userData;

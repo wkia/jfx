@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -69,10 +69,10 @@ void AbstractValue::set(Graph& graph, const FrozenValue& value, StructureClobber
         m_structure.clear();
         m_arrayModes = 0;
     }
-
+    
     m_type = speculationFromValue(value.value());
     m_value = value.value();
-
+    
     checkConsistency();
     assertIsRegistered(graph);
 }
@@ -85,12 +85,12 @@ void AbstractValue::set(Graph& graph, Structure* structure)
 void AbstractValue::set(Graph& graph, RegisteredStructure structure)
 {
     RELEASE_ASSERT(structure);
-
+    
     m_structure = structure;
     m_arrayModes = arrayModesFromStructure(structure.get());
     m_type = speculationFromStructure(structure.get());
     m_value = JSValue();
-
+    
     checkConsistency();
     assertIsRegistered(graph);
 }
@@ -101,7 +101,7 @@ void AbstractValue::set(Graph& graph, const RegisteredStructureSet& set)
     m_arrayModes = set.arrayModesFromStructures();
     m_type = set.speculationFromStructures();
     m_value = JSValue();
-
+    
     checkConsistency();
     assertIsRegistered(graph);
 }
@@ -171,7 +171,7 @@ void AbstractValue::fixTypeForRepresentation(Graph& graph, NodeFlags representat
         if (m_type & ~SpecBytecodeTop)
             DFG_CRASH(graph, node, toCString("Abstract value ", *this, " for value node has type outside SpecBytecodeTop.\n").data());
     }
-
+    
     checkConsistency();
 }
 
@@ -194,7 +194,7 @@ bool AbstractValue::mergeOSREntryValue(Graph& graph, JSValue value, VariableAcce
     }
 
     AbstractValue oldMe = *this;
-
+    
     if (isClear()) {
         FrozenValue* frozenValue = graph.freeze(value);
         if (frozenValue->pointsToHeap()) {
@@ -204,7 +204,7 @@ bool AbstractValue::mergeOSREntryValue(Graph& graph, JSValue value, VariableAcce
             m_structure.clear();
             m_arrayModes = 0;
         }
-
+        
         m_type = speculationFromValue(value);
         m_value = value;
     } else {
@@ -217,13 +217,13 @@ bool AbstractValue::mergeOSREntryValue(Graph& graph, JSValue value, VariableAcce
         if (m_value != value)
             m_value = JSValue();
     }
-
+    
     assertIsRegistered(graph);
 
     fixTypeForRepresentation(graph, resultFor(flushFormat), node);
 
     checkConsistency();
-
+    
     return oldMe != *this;
 }
 
@@ -231,25 +231,25 @@ FiltrationResult AbstractValue::filter(
     Graph& graph, const RegisteredStructureSet& other, SpeculatedType admittedTypes)
 {
     ASSERT(!(admittedTypes & SpecCell));
-
+    
     if (isClear())
         return FiltrationOK;
-
+    
     // FIXME: This could be optimized for the common case of m_type not
     // having structures, array modes, or a specific value.
     // https://bugs.webkit.org/show_bug.cgi?id=109663
-
+    
     m_type &= other.speculationFromStructures() | admittedTypes;
     m_arrayModes &= other.arrayModesFromStructures();
     m_structure.filter(other);
-
+    
     // It's possible that prior to the above two statements we had (Foo, TOP), where
     // Foo is a SpeculatedType that is disjoint with the passed RegisteredStructureSet. In that
     // case, we will now have (None, [someStructure]). In general, we need to make
     // sure that new information gleaned from the SpeculatedType needs to be fed back
     // into the information gleaned from the RegisteredStructureSet.
     m_structure.filter(m_type);
-
+    
     filterArrayModesByType();
     filterValueByType();
     return normalizeClarity(graph);
@@ -260,9 +260,9 @@ FiltrationResult AbstractValue::changeStructure(Graph& graph, const RegisteredSt
     m_type &= other.speculationFromStructures();
     m_arrayModes = other.arrayModesFromStructures();
     m_structure = other;
-
+    
     filterValueByType();
-
+    
     return normalizeClarity(graph);
 }
 
@@ -270,10 +270,10 @@ FiltrationResult AbstractValue::filterArrayModes(ArrayModes arrayModes, Speculat
 {
     ASSERT(arrayModes);
     ASSERT(!(admittedTypes & SpecCell));
-
+    
     if (isClear())
         return FiltrationOK;
-
+    
     m_type &= SpecCell | admittedTypes;
     m_arrayModes &= arrayModes;
     return normalizeClarity();
@@ -299,7 +299,7 @@ FiltrationResult AbstractValue::filterClassInfo(Graph& graph, const ClassInfo* c
 FiltrationResult AbstractValue::filterSlow(SpeculatedType type)
 {
     m_type &= type;
-
+    
     // It's possible that prior to this filter() call we had, say, (Final, TOP), and
     // the passed type is Array. At this point we'll have (None, TOP). The best way
     // to ensure that the structure filtering does the right thing is to filter on
@@ -314,7 +314,7 @@ FiltrationResult AbstractValue::fastForwardToAndFilterSlow(AbstractValueClobberE
 {
     if (newEpoch != m_effectEpoch)
         fastForwardToSlow(newEpoch);
-
+    
     return filterSlow(type);
 }
 
@@ -349,17 +349,17 @@ FiltrationResult AbstractValue::filter(const AbstractValue& other)
     m_structure.filter(m_type);
     filterArrayModesByType();
     filterValueByType();
-
+    
     if (normalizeClarity() == Contradiction)
         return Contradiction;
-
+    
     if (m_value == other.m_value)
         return FiltrationOK;
-
+    
     // Neither of us are BOTTOM, so an empty value means TOP.
     if (!m_value) {
         // We previously didn't prove a value but now we have done so.
-        m_value = other.m_value;
+        m_value = other.m_value; 
         // It is possible that SpeculatedType from other.m_value is broader than original m_type.
         // The filter operation can only keep m_type as is or make it narrower.
         // As a result, the SpeculatedType from m_value can become broader than m_type. This breaks an invariant.
@@ -367,12 +367,12 @@ FiltrationResult AbstractValue::filter(const AbstractValue& other)
         filterValueByType();
         return FiltrationOK;
     }
-
+    
     if (!other.m_value) {
         // We had proved a value but the other guy hadn't, so keep our proof.
         return FiltrationOK;
     }
-
+    
     // We both proved there to be a specific value but they are different.
     clear();
     return Contradiction;
@@ -404,7 +404,7 @@ void AbstractValue::filterArrayModesByType()
         m_arrayModes = 0;
     else if (!(m_type & ~SpecArray))
         m_arrayModes &= ALL_ARRAY_ARRAY_MODES;
-
+    
     // NOTE: If m_type doesn't have SpecArray set, that doesn't mean that the
     // array modes have to be a subset of ALL_NON_ARRAY_ARRAY_MODES, since
     // in the speculated type type-system, RegExpMatchesArry and ArrayPrototype
@@ -421,11 +421,11 @@ bool AbstractValue::shouldBeClear() const
 {
     if (m_type == SpecNone)
         return true;
-
+    
     if (!(m_type & ~SpecCell)
         && (!m_arrayModes || m_structure.isClear()))
         return true;
-
+    
     return false;
 }
 
@@ -433,9 +433,9 @@ FiltrationResult AbstractValue::normalizeClarity()
 {
     // It's useful to be able to quickly check if an abstract value is clear.
     // This normalizes everything to make that easy.
-
+    
     FiltrationResult result;
-
+    
     if (shouldBeClear()) {
         clear();
         result = Contradiction;
@@ -443,7 +443,7 @@ FiltrationResult AbstractValue::normalizeClarity()
         result = FiltrationOK;
 
     checkConsistency();
-
+    
     return result;
 }
 
@@ -461,10 +461,10 @@ void AbstractValue::checkConsistency() const
         RELEASE_ASSERT(m_structure.isClear());
         RELEASE_ASSERT(!m_arrayModes);
     }
-
+    
     if (isClear())
         RELEASE_ASSERT(!m_value);
-
+    
     if (!!m_value)
         RELEASE_ASSERT(validateTypeAcceptingBoxedInt52(m_value));
 
@@ -533,14 +533,14 @@ void AbstractValue::ensureCanInitializeWithZeros()
 void AbstractValue::fastForwardToSlow(AbstractValueClobberEpoch newEpoch)
 {
     ASSERT(newEpoch != m_effectEpoch);
-
+    
     if (newEpoch.clobberEpoch() != m_effectEpoch.clobberEpoch())
         clobberStructures();
     if (newEpoch.structureClobberState() == StructuresAreWatched)
         m_structure.observeInvalidationPoint();
-
+    
     m_effectEpoch = newEpoch;
-
+    
     checkConsistency();
 }
 

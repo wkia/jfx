@@ -44,10 +44,10 @@ namespace JSC  {
     class CallSiteIndex {
     public:
         CallSiteIndex() = default;
-
+        
         explicit CallSiteIndex(BytecodeIndex bytecodeIndex)
             : m_bits(bytecodeIndex.offset())
-        {
+        { 
             ASSERT(!bytecodeIndex.checkpoint());
         }
         explicit CallSiteIndex(uint32_t bits)
@@ -81,7 +81,7 @@ namespace JSC  {
         }
     };
 
-    // arm64_32 expects caller frame and return pc to use 8 bytes
+    // arm64_32 expects caller frame and return pc to use 8 bytes 
     struct CallerFrameAndPC {
         alignas(CPURegister) CallFrame* callerFrame;
         alignas(CPURegister) void* returnPC;
@@ -175,13 +175,13 @@ namespace JSC  {
         // example if it's native code).
         // https://bugs.webkit.org/show_bug.cgi?id=121754
         BytecodeIndex bytecodeIndex() const;
-
+        
         // This will get you a CodeOrigin. It will always succeed. May return
         // CodeOrigin(BytecodeIndex(0)) if we're in native code.
         JS_EXPORT_PRIVATE CodeOrigin codeOrigin() const;
 
         inline Register* topOfFrame();
-
+    
         const Instruction* currentVPC() const; // This only makes sense in the LLInt and baseline.
         void setCurrentVPC(const Instruction*);
 

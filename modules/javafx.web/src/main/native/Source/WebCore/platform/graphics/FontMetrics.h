@@ -80,7 +80,7 @@ public:
     float xHeight() const { return m_xHeight; }
     void setXHeight(float xHeight) { m_xHeight = xHeight; }
     bool hasXHeight() const { return m_xHeight > 0; }
-
+    
     bool hasCapHeight() const { return m_floatCapHeight > 0; }
     float floatCapHeight() const { return m_floatCapHeight; }
     void setCapHeight(float capHeight)
@@ -88,7 +88,7 @@ public:
         m_floatCapHeight = capHeight;
         m_intCapHeight = lroundf(capHeight);
     }
-
+    
     // Integer variants of certain metrics, used for HTML rendering.
     int ascent(FontBaseline baselineType = AlphabeticBaseline) const
     {
@@ -96,7 +96,7 @@ public:
             return m_intAscent;
         return height() - height() / 2;
     }
-
+    
     int descent(FontBaseline baselineType = AlphabeticBaseline) const
     {
         if (baselineType == AlphabeticBaseline)
@@ -111,9 +111,9 @@ public:
 
     int lineGap() const { return m_intLineGap; }
     int lineSpacing() const { return m_intLineSpacing; }
-
+    
     int capHeight() const { return m_intCapHeight; }
-
+    
     bool hasIdenticalAscentDescentAndLineGap(const FontMetrics& other) const
     {
         return ascent() == other.ascent() && descent() == other.descent() && lineGap() == other.lineGap();

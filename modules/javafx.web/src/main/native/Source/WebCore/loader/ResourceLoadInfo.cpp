@@ -138,7 +138,7 @@ bool ResourceLoadInfo::isThirdParty() const
 {
     return !RegistrableDomain(mainDocumentURL).matches(resourceURL);
 }
-
+    
 ResourceFlags ResourceLoadInfo::getResourceFlags() const
 {
     ResourceFlags flags = 0;

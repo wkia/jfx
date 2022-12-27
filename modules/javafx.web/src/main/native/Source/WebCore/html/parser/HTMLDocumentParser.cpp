@@ -260,7 +260,7 @@ bool HTMLDocumentParser::pumpTokenizerLoop(SynchronousMode mode, bool parsingFra
         if (UNLIKELY(isWaitingForScripts())) {
             if (mode == AllowYield && m_parserScheduler->shouldYieldBeforeExecutingScript(m_treeBuilder->scriptToProcess(), session))
                 return true;
-
+            
             runScriptsForPausedTreeBuilder();
             // If we're paused waiting for a script, we try to execute scripts before continuing.
             if (isWaitingForScripts() || isStopped())
@@ -624,7 +624,7 @@ void HTMLDocumentParser::parseDocumentFragment(const String& source, DocumentFra
     ASSERT(!parser->processingData());
     parser->detach();
 }
-
+    
 void HTMLDocumentParser::suspendScheduledTasks()
 {
     if (m_parserScheduler)

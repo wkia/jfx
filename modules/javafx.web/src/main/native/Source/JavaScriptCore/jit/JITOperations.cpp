@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -274,13 +274,13 @@ JSC_DEFINE_JIT_OPERATION(operationGetByIdDirectOptimize, EncodedJSValue, (JSGlob
 JSC_DEFINE_JIT_OPERATION(operationGetById, EncodedJSValue, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue base, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     JSValue baseValue = JSValue::decode(base);
     PropertySlot slot(baseValue, PropertySlot::InternalMethodType::Get);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
@@ -295,26 +295,26 @@ JSC_DEFINE_JIT_OPERATION(operationGetById, EncodedJSValue, (JSGlobalObject* glob
 JSC_DEFINE_JIT_OPERATION(operationGetByIdGeneric, EncodedJSValue, (JSGlobalObject* globalObject, EncodedJSValue base, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue baseValue = JSValue::decode(base);
     PropertySlot slot(baseValue, PropertySlot::InternalMethodType::Get);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
     JSValue result = baseValue.get(globalObject, ident, slot);
-
+    
     LOG_IC((ICEvent::OperationGetByIdGeneric, baseValue.classInfoOrNull(vm), ident, baseValue == slot.slotBase()));
-
+    
     return JSValue::encode(result);
 }
 
 JSC_DEFINE_JIT_OPERATION(operationGetByIdOptimize, EncodedJSValue, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue base, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -324,9 +324,9 @@ JSC_DEFINE_JIT_OPERATION(operationGetByIdOptimize, EncodedJSValue, (JSGlobalObje
     JSValue baseValue = JSValue::decode(base);
 
     return JSValue::encode(baseValue.getPropertySlot(globalObject, ident, [&] (bool found, PropertySlot& slot) -> JSValue {
-
+        
         LOG_IC((ICEvent::OperationGetByIdOptimize, baseValue.classInfoOrNull(vm), ident, baseValue == slot.slotBase()));
-
+        
         CodeBlock* codeBlock = callFrame->codeBlock();
         if (stubInfo->considerCachingBy(vm, codeBlock, baseValue.structureOrNull(vm), identifier))
             repatchGetBy(globalObject, codeBlock, baseValue, identifier, slot, *stubInfo, GetByKind::ById);
@@ -373,7 +373,7 @@ JSC_DEFINE_JIT_OPERATION(operationGetByIdWithThisGeneric, EncodedJSValue, (JSGlo
 JSC_DEFINE_JIT_OPERATION(operationGetByIdWithThisOptimize, EncodedJSValue, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue base, EncodedJSValue thisEncoded, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -386,7 +386,7 @@ JSC_DEFINE_JIT_OPERATION(operationGetByIdWithThisOptimize, EncodedJSValue, (JSGl
     PropertySlot slot(thisValue, PropertySlot::InternalMethodType::Get);
     return JSValue::encode(baseValue.getPropertySlot(globalObject, ident, slot, [&] (bool found, PropertySlot& slot) -> JSValue {
         LOG_IC((ICEvent::OperationGetByIdWithThisOptimize, baseValue.classInfoOrNull(vm), ident, baseValue == slot.slotBase()));
-
+        
         CodeBlock* codeBlock = callFrame->codeBlock();
         if (stubInfo->considerCachingBy(vm, codeBlock, baseValue.structureOrNull(vm), identifier))
             repatchGetBy(globalObject, codeBlock, baseValue, identifier, slot, *stubInfo, GetByKind::ByIdWithThis);
@@ -617,32 +617,32 @@ JSC_DEFINE_JIT_OPERATION(operationHasPrivateBrandGeneric, EncodedJSValue, (JSGlo
 JSC_DEFINE_JIT_OPERATION(operationPutByIdStrict, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     JSValue baseValue = JSValue::decode(encodedBase);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
     PutPropertySlot slot(baseValue, true, callFrame->codeBlock()->putByIdContext());
     baseValue.putInline(globalObject, ident, JSValue::decode(encodedValue), slot);
-
+    
     LOG_IC((ICEvent::OperationPutByIdStrict, baseValue.classInfoOrNull(vm), ident, slot.base() == baseValue));
 }
 
 JSC_DEFINE_JIT_OPERATION(operationPutByIdNonStrict, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     JSValue baseValue = JSValue::decode(encodedBase);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
@@ -655,13 +655,13 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdNonStrict, void, (JSGlobalObject* globa
 JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectStrict, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     JSValue baseValue = JSValue::decode(encodedBase);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
@@ -674,13 +674,13 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectStrict, void, (JSGlobalObject* gl
 JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectNonStrict, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     JSValue baseValue = JSValue::decode(encodedBase);
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
@@ -693,7 +693,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectNonStrict, void, (JSGlobalObject*
 JSC_DEFINE_JIT_OPERATION(operationPutByIdStrictOptimize, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -717,7 +717,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdStrictOptimize, void, (JSGlobalObject* 
 
     if (accessType != static_cast<AccessType>(stubInfo->accessType))
         return;
-
+    
     if (stubInfo->considerCachingBy(vm, codeBlock, structure, identifier))
         repatchPutBy(globalObject, codeBlock, baseValue, structure, identifier, slot, *stubInfo, PutByKind::ById, PutKind::NotDirect);
 }
@@ -725,7 +725,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdStrictOptimize, void, (JSGlobalObject* 
 JSC_DEFINE_JIT_OPERATION(operationPutByIdNonStrictOptimize, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -749,7 +749,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdNonStrictOptimize, void, (JSGlobalObjec
 
     if (accessType != static_cast<AccessType>(stubInfo->accessType))
         return;
-
+    
     if (stubInfo->considerCachingBy(vm, codeBlock, structure, identifier))
         repatchPutBy(globalObject, codeBlock, baseValue, structure, identifier, slot, *stubInfo, PutByKind::ById, PutKind::NotDirect);
 }
@@ -757,12 +757,12 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdNonStrictOptimize, void, (JSGlobalObjec
 JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectStrictOptimize, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     auto scope = DECLARE_THROW_SCOPE(vm);
-
+    
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
     AccessType accessType = static_cast<AccessType>(stubInfo->accessType);
@@ -777,10 +777,10 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectStrictOptimize, void, (JSGlobalOb
     LOG_IC((ICEvent::OperationPutByIdDirectStrictOptimize, baseObject->classInfo(vm), ident, slot.base() == baseObject));
 
     RETURN_IF_EXCEPTION(scope, void());
-
+    
     if (accessType != static_cast<AccessType>(stubInfo->accessType))
         return;
-
+    
     if (stubInfo->considerCachingBy(vm, codeBlock, structure, identifier))
         repatchPutBy(globalObject, codeBlock, baseObject, structure, identifier, slot, *stubInfo, PutByKind::ById, PutKind::Direct);
 }
@@ -788,12 +788,12 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectStrictOptimize, void, (JSGlobalOb
 JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectNonStrictOptimize, void, (JSGlobalObject* globalObject, StructureStubInfo* stubInfo, EncodedJSValue encodedValue, EncodedJSValue encodedBase, uintptr_t rawCacheableIdentifier))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     auto scope = DECLARE_THROW_SCOPE(vm);
-
+    
     CacheableIdentifier identifier = CacheableIdentifier::createFromRawBits(rawCacheableIdentifier);
     Identifier ident = Identifier::fromUid(vm, identifier.uid());
     AccessType accessType = static_cast<AccessType>(stubInfo->accessType);
@@ -808,10 +808,10 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDirectNonStrictOptimize, void, (JSGloba
     LOG_IC((ICEvent::OperationPutByIdDirectNonStrictOptimize, baseObject->classInfo(vm), ident, slot.base() == baseObject));
 
     RETURN_IF_EXCEPTION(scope, void());
-
+    
     if (accessType != static_cast<AccessType>(stubInfo->accessType))
         return;
-
+    
     if (stubInfo->considerCachingBy(vm, codeBlock, structure, identifier))
         repatchPutBy(globalObject, codeBlock, baseObject, structure, identifier, slot, *stubInfo, PutByKind::ById, PutKind::Direct);
 }
@@ -880,7 +880,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByIdDefinePrivateFieldStrictOptimize, void,
     AccessType accessType = static_cast<AccessType>(stubInfo->accessType);
     JSValue value = JSValue::decode(encodedValue);
     JSValue baseValue = JSValue::decode(encodedBase);
-
+    
     definePrivateField(vm, globalObject, callFrame, baseValue, identifier, value, [=](VM& vm, CodeBlock* codeBlock, Structure* oldStructure, PutPropertySlot& putSlot, const Identifier& ident) {
         JSObject* baseObject = asObject(baseValue);
         LOG_IC((ICEvent::OperationPutByIdDefinePrivateFieldFieldStrictOptimize, baseObject->classInfo(vm), ident, putSlot.base() == baseObject));
@@ -1437,13 +1437,13 @@ JSC_DEFINE_JIT_OPERATION(operationCallEval, EncodedJSValue, (JSGlobalObject* glo
     auto scope = DECLARE_THROW_SCOPE(vm);
 
     calleeFrame->setCodeBlock(nullptr);
-
+    
     if (!isHostFunction(calleeFrame->guaranteedJSValueCallee(), globalFuncEval))
         return JSValue::encode(JSValue());
 
     JSValue result = eval(globalObject, calleeFrame, ecmaMode);
     RETURN_IF_EXCEPTION(scope, encodedJSValue());
-
+    
     return JSValue::encode(result);
 }
 
@@ -1473,7 +1473,7 @@ static SlowPathReturnType handleHostCall(JSGlobalObject* globalObject, CallFrame
                 LLInt::getHostCallReturnValueEntrypoint().code().executableAddress(),
                 reinterpret_cast<void*>(callLinkInfo->callMode() == CallMode::Tail ? ReuseTheFrame : KeepTheFrame));
         }
-
+    
         ASSERT(callData.type == CallData::Type::None);
         throwException(globalObject, scope, createNotAFunctionError(globalObject, callee));
         return encodeResult(
@@ -1515,9 +1515,9 @@ JSC_DEFINE_JIT_OPERATION(operationLinkCall, SlowPathReturnType, (CallFrame* call
 
     CodeSpecializationKind kind = callLinkInfo->specializationKind();
     NativeCallFrameTracer tracer(vm, callFrame);
-
+    
     RELEASE_ASSERT(!callLinkInfo->isDirect());
-
+    
     JSValue calleeAsValue = calleeFrame->guaranteedJSValueCallee();
     JSCell* calleeAsFunctionCell = getJSFunction(calleeAsValue);
     if (!calleeAsFunctionCell) {
@@ -1600,7 +1600,7 @@ inline SlowPathReturnType virtualForWithFunction(JSGlobalObject* globalObject, C
         }
         RELEASE_AND_RETURN(throwScope, handleHostCall(globalObject, calleeFrame, calleeAsValue, callLinkInfo));
     }
-
+    
     JSFunction* function = jsCast<JSFunction*>(calleeAsFunctionCell);
     JSScope* scope = function->scopeUnchecked();
     ExecutableBase* executable = function->executable();
@@ -1637,7 +1637,7 @@ JSC_DEFINE_JIT_OPERATION(operationLinkPolymorphicCall, SlowPathReturnType, (Call
     SlowPathReturnType result = virtualForWithFunction(globalObject, calleeFrame, callLinkInfo, calleeAsFunctionCell);
 
     linkPolymorphicCall(globalObject, calleeFrame, *callLinkInfo, CallVariant(calleeAsFunctionCell));
-
+    
     return result;
 }
 
@@ -1652,7 +1652,7 @@ JSC_DEFINE_JIT_OPERATION(operationCompareLess, size_t, (JSGlobalObject* globalOb
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return jsLess<true>(globalObject, JSValue::decode(encodedOp1), JSValue::decode(encodedOp2));
 }
 
@@ -1816,7 +1816,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewAsyncGeneratorFunction, EncodedJSValue, (VM
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     return newFunctionCommon<JSAsyncGeneratorFunction>(vm, scope, functionExecutable, false);
 }
-
+    
 JSC_DEFINE_JIT_OPERATION(operationNewAsyncGeneratorFunctionWithInvalidatedReallocationWatchpoint, EncodedJSValue, (VM* vmPointer, JSScope* scope, JSCell* functionExecutable))
 {
     VM& vm = *vmPointer;
@@ -1824,7 +1824,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewAsyncGeneratorFunctionWithInvalidatedReallo
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     return newFunctionCommon<JSAsyncGeneratorFunction>(vm, scope, functionExecutable, true);
 }
-
+    
 JSC_DEFINE_JIT_OPERATION(operationSetFunctionName, void, (JSGlobalObject* globalObject, JSCell* funcCell, EncodedJSValue encodedName))
 {
     VM& vm = globalObject->vm();
@@ -1945,13 +1945,13 @@ JSC_DEFINE_JIT_OPERATION(operationOptimize, SlowPathReturnType, (VM* vmPointer, 
     // that case we would have already planted the optimized code block into the JS
     // stack.
     DeferGCForAWhile deferGC(vm.heap);
-
+    
     CodeBlock* codeBlock = callFrame->codeBlock();
     if (UNLIKELY(codeBlock->jitType() != JITType::BaselineJIT)) {
         dataLog("Unexpected code block in Baseline->DFG tier-up: ", *codeBlock, "\n");
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     if (bytecodeIndex) {
         // If we're attempting to OSR from a loop, assume that this should be
         // separately optimized.
@@ -1977,7 +1977,7 @@ JSC_DEFINE_JIT_OPERATION(operationOptimize, SlowPathReturnType, (VM* vmPointer, 
         dataLogLnIf(Options::verboseOSR(), "Choosing not to optimize ", *codeBlock, " yet, because the threshold hasn't been reached.");
         return encodeResult(nullptr, nullptr);
     }
-
+    
     if (UNLIKELY(vm.terminationInProgress())) {
         // If termination of the current stack of execution is in progress,
         // then we need to hold off on optimized compiles so that termination
@@ -2050,7 +2050,7 @@ JSC_DEFINE_JIT_OPERATION(operationOptimize, SlowPathReturnType, (VM* vmPointer, 
         // cti_optimize from a loop. That's because if there's an optimized replacement,
         // then all calls to this function will be relinked to the replacement and so
         // the prologue OSR will never fire.
-
+        
         // This is an interesting threshold check. Consider that a function OSR exits
         // in the middle of a loop, while having a relatively low exit count. The exit
         // will reset the execution counter to some target threshold, meaning that this
@@ -2096,16 +2096,16 @@ JSC_DEFINE_JIT_OPERATION(operationOptimize, SlowPathReturnType, (VM* vmPointer, 
         CompilationResult result = DFG::compile(
             vm, replacementCodeBlock, nullptr, JITCompilationMode::DFG, bytecodeIndex,
             mustHandleValues, JITToDFGDeferredCompilationCallback::create());
-
+        
         if (result != CompilationSuccessful) {
             CODEBLOCK_LOG_EVENT(codeBlock, "delayOptimizeToDFG", ("compilation failed"));
             return encodeResult(nullptr, nullptr);
         }
     }
-
+    
     CodeBlock* optimizedCodeBlock = codeBlock->replacement();
     ASSERT(optimizedCodeBlock && JITCode::isOptimizingJIT(optimizedCodeBlock->jitType()));
-
+    
     if (void* dataBuffer = DFG::prepareOSREntry(vm, callFrame, optimizedCodeBlock, bytecodeIndex)) {
         CODEBLOCK_LOG_EVENT(optimizedCodeBlock, "osrEntry", ("at bc#", bytecodeIndex));
         dataLogLnIf(Options::verboseOSR(), "Performing OSR ", codeBlock, " -> ", optimizedCodeBlock);
@@ -2146,7 +2146,7 @@ JSC_DEFINE_JIT_OPERATION(operationOptimize, SlowPathReturnType, (VM* vmPointer, 
     // OSR failed this time, but it might succeed next time! Let the code run a bit
     // longer and then try again.
     codeBlock->optimizeAfterWarmUp();
-
+    
     CODEBLOCK_LOG_EVENT(codeBlock, "delayOptimizeToDFG", ("OSR failed"));
     return encodeResult(nullptr, nullptr);
 }
@@ -2427,8 +2427,8 @@ JSC_DEFINE_JIT_OPERATION(operationGetByValOptimize, EncodedJSValue, (JSGlobalObj
         if (subscript.isSymbol() || !parseIndex(propertyName)) {
             scope.release();
             return JSValue::encode(baseValue.getPropertySlot(globalObject, propertyName, [&] (bool found, PropertySlot& slot) -> JSValue {
-                LOG_IC((ICEvent::OperationGetByValOptimize, baseValue.classInfoOrNull(vm), propertyName, baseValue == slot.slotBase()));
-
+                LOG_IC((ICEvent::OperationGetByValOptimize, baseValue.classInfoOrNull(vm), propertyName, baseValue == slot.slotBase())); 
+                
                 CacheableIdentifier identifier = CacheableIdentifier::createFromCell(subscript.asCell());
                 if (stubInfo->considerCachingBy(vm, codeBlock, baseValue.structureOrNull(vm), identifier))
                     repatchGetBy(globalObject, codeBlock, baseValue, identifier, slot, *stubInfo, GetByKind::ByVal);
@@ -2784,9 +2784,9 @@ JSC_DEFINE_JIT_OPERATION(operationInstanceOfGeneric, EncodedJSValue, (JSGlobalOb
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     JSValue value = JSValue::decode(encodedValue);
     JSValue proto = JSValue::decode(encodedProto);
-
+    
     stubInfo->tookSlowPath = true;
-
+    
     bool result = JSObject::defaultHasInstance(globalObject, value, proto);
     return JSValue::encode(jsBoolean(result));
 }
@@ -2799,14 +2799,14 @@ JSC_DEFINE_JIT_OPERATION(operationInstanceOfOptimize, EncodedJSValue, (JSGlobalO
     auto scope = DECLARE_THROW_SCOPE(vm);
     JSValue value = JSValue::decode(encodedValue);
     JSValue proto = JSValue::decode(encodedProto);
-
+    
     bool result = JSObject::defaultHasInstance(globalObject, value, proto);
     RETURN_IF_EXCEPTION(scope, JSValue::encode(jsUndefined()));
-
+    
     CodeBlock* codeBlock = callFrame->codeBlock();
     if (stubInfo->considerCachingGeneric(vm, codeBlock, value.structureOrNull(vm)))
         repatchInstanceOf(globalObject, codeBlock, value, proto, *stubInfo, result);
-
+    
     return JSValue::encode(jsBoolean(result));
 }
 
@@ -3064,7 +3064,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutToScope, void, (JSGlobalObject* globalObjec
 
     PutPropertySlot slot(scope, getPutInfo.ecmaMode().isStrict(), PutPropertySlot::UnknownContext, isInitialization(getPutInfo.initializationMode()));
     scope->methodTable(vm)->put(scope, globalObject, ident, value, slot);
-
+    
     RETURN_IF_EXCEPTION(throwScope, void());
 
     CommonSlowPaths::tryCachePutToScopeGlobal(globalObject, codeBlock, bytecode, scope, slot, ident);
@@ -3210,7 +3210,7 @@ JSC_DEFINE_JIT_OPERATION(operationValueAddProfiledOptimize, EncodedJSValue, (JSG
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue op1 = JSValue::decode(encodedOp1);
     JSValue op2 = JSValue::decode(encodedOp2);
 
@@ -3223,7 +3223,7 @@ JSC_DEFINE_JIT_OPERATION(operationValueAddProfiledOptimize, EncodedJSValue, (JSG
 #if ENABLE(MATH_IC_STATS)
     callFrame->codeBlock()->dumpMathICStats();
 #endif
-
+    
     JSValue result = jsAdd(globalObject, op1, op2);
     arithProfile->observeResult(result);
 
@@ -3267,10 +3267,10 @@ JSC_DEFINE_JIT_OPERATION(operationValueAddNoOptimize, EncodedJSValue, (JSGlobalO
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue op1 = JSValue::decode(encodedOp1);
     JSValue op2 = JSValue::decode(encodedOp2);
-
+    
     JSValue result = jsAdd(globalObject, op1, op2);
 
     return JSValue::encode(result);
@@ -3446,7 +3446,7 @@ JSC_DEFINE_JIT_OPERATION(operationArithNegateProfiledOptimize, EncodedJSValue, (
     auto scope = DECLARE_THROW_SCOPE(vm);
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue operand = JSValue::decode(encodedOperand);
 
     UnaryArithProfile* arithProfile = negIC->arithProfile();
@@ -3457,7 +3457,7 @@ JSC_DEFINE_JIT_OPERATION(operationArithNegateProfiledOptimize, EncodedJSValue, (
 #if ENABLE(MATH_IC_STATS)
     callFrame->codeBlock()->dumpMathICStats();
 #endif
-
+    
     JSValue primValue = operand.toPrimitive(globalObject);
     RETURN_IF_EXCEPTION(scope, encodedJSValue());
 
@@ -3521,7 +3521,7 @@ ALWAYS_INLINE static EncodedJSValue unprofiledSub(JSGlobalObject* globalObject, 
 {
     JSValue op1 = JSValue::decode(encodedOp1);
     JSValue op2 = JSValue::decode(encodedOp2);
-
+    
     return JSValue::encode(jsSub(globalObject, op1, op2));
 }
 

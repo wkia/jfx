@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -110,7 +110,7 @@ private:
     ApplicationCacheGroup* findInMemoryCacheGroup(const URL& manifestURL) const;
     bool deleteCacheGroup(const String& manifestURL);
     void vacuumDatabaseFile();
-
+    
     using ResourceStorageIDJournal = StorageIDJournal<ApplicationCacheResource>;
     using GroupStorageIDJournal = StorageIDJournal<ApplicationCacheGroup>;
 
@@ -125,11 +125,11 @@ private:
     bool writeDataToUniqueFileInDirectory(SharedBuffer&, const String& directory, String& outFilename, const String& fileExtension);
 
     void loadManifestHostHashes();
-
+    
     void verifySchemaVersion();
-
+    
     void openDatabase(bool createIfDoesNotExist);
-
+    
     bool executeStatement(SQLiteStatement&);
     bool executeSQLCommand(ASCIILiteral);
 
@@ -151,7 +151,7 @@ private:
     // In order to quickly determine if a given resource exists in an application cache,
     // we keep a hash set of the hosts of the manifest URLs of all non-obsolete cache groups.
     HashCountedSet<unsigned, AlreadyHashed> m_cacheHostSet;
-
+    
     HashMap<String, ApplicationCacheGroup*> m_cachesInMemory; // Excludes obsolete cache groups.
 
     friend class WTF::NeverDestroyed<ApplicationCacheStorage>;

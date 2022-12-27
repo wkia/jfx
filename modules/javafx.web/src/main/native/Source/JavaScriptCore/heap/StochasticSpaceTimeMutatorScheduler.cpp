@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -41,11 +41,11 @@ public:
         m_now = MonotonicTime::now();
         m_bytesAllocatedThisCycle = scheduler.bytesAllocatedThisCycleImpl();
     }
-
+    
     MonotonicTime now() const { return m_now; }
-
+    
     double bytesAllocatedThisCycle() const { return m_bytesAllocatedThisCycle; }
-
+    
 private:
     MonotonicTime m_now;
     double m_bytesAllocatedThisCycle;
@@ -73,12 +73,12 @@ void StochasticSpaceTimeMutatorScheduler::beginCollection()
     m_state = Stopped;
 
     m_bytesAllocatedThisCycleAtTheBeginning = m_heap.m_bytesAllocatedThisCycle;
-    m_bytesAllocatedThisCycleAtTheEnd =
+    m_bytesAllocatedThisCycleAtTheEnd = 
         Options::concurrentGCMaxHeadroom() *
         std::max<double>(m_bytesAllocatedThisCycleAtTheBeginning, m_heap.m_maxEdenSize);
-
+    
     dataLogIf(Options::logGC(), "ca=", m_bytesAllocatedThisCycleAtTheBeginning / 1024, "kb h=", (m_bytesAllocatedThisCycleAtTheEnd - m_bytesAllocatedThisCycleAtTheBeginning) / 1024, "kb ");
-
+    
     m_beforeConstraints = MonotonicTime::now();
 }
 
@@ -102,35 +102,35 @@ void StochasticSpaceTimeMutatorScheduler::didReachTermination()
 void StochasticSpaceTimeMutatorScheduler::didExecuteConstraints()
 {
     Snapshot snapshot(*this);
-
+    
     Seconds constraintExecutionDuration = snapshot.now() - m_beforeConstraints;
-
+    
     m_targetPause = std::max(
         constraintExecutionDuration * m_pauseScale,
         m_minimumPause);
-
+    
     dataLogIf(Options::logGC(), "tp=", m_targetPause.milliseconds(), "ms ");
-
+    
     m_plannedResumeTime = snapshot.now() + m_targetPause;
 }
 
 void StochasticSpaceTimeMutatorScheduler::synchronousDrainingDidStall()
 {
     Snapshot snapshot(*this);
-
+    
     double resumeProbability = mutatorUtilization(snapshot);
     if (resumeProbability < Options::epsilonMutatorUtilization()) {
         m_plannedResumeTime = MonotonicTime::infinity();
         return;
     }
-
+    
     bool shouldResume = m_random.get() < resumeProbability;
-
+    
     if (shouldResume) {
         m_plannedResumeTime = snapshot.now();
         return;
     }
-
+    
     m_plannedResumeTime = snapshot.now() + m_targetPause;
 }
 
@@ -148,7 +148,7 @@ MonotonicTime StochasticSpaceTimeMutatorScheduler::timeToStop()
             return MonotonicTime::now();
         return MonotonicTime::infinity();
     } }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return MonotonicTime();
 }
@@ -162,7 +162,7 @@ MonotonicTime StochasticSpaceTimeMutatorScheduler::timeToResume()
     case Stopped:
         return m_plannedResumeTime;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return MonotonicTime();
 }
@@ -204,7 +204,7 @@ double StochasticSpaceTimeMutatorScheduler::headroomFullness(const Snapshot& sna
     // headroomFullness can be NaN and other interesting things if
     // bytesAllocatedThisCycleAtTheBeginning is zero. We see that in debug tests. This code
     // defends against all floating point dragons.
-
+    
     if (!(result >= 0))
         result = 0;
     if (!(result <= 1))
@@ -216,14 +216,14 @@ double StochasticSpaceTimeMutatorScheduler::headroomFullness(const Snapshot& sna
 double StochasticSpaceTimeMutatorScheduler::mutatorUtilization(const Snapshot& snapshot)
 {
     double mutatorUtilization = 1 - headroomFullness(snapshot);
-
+    
     // Scale the mutator utilization into the permitted window.
     mutatorUtilization =
         Options::minimumMutatorUtilization() +
         mutatorUtilization * (
             Options::maximumMutatorUtilization() -
             Options::minimumMutatorUtilization());
-
+    
     return mutatorUtilization;
 }
 

@@ -152,7 +152,7 @@ Vector<RefPtr<PerformanceEntry>> Performance::getEntriesByType(const String& ent
 
     if (m_navigationTiming && entryType == "navigation")
         entries.append(m_navigationTiming);
-
+    
     if (entryType == "resource")
         entries.appendVector(m_resourceTimingBuffer);
 

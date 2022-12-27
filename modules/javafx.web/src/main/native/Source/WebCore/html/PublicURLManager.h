@@ -51,7 +51,7 @@ private:
     // ActiveDOMObject API.
     void stop() override;
     const char* activeDOMObjectName() const override;
-
+    
     typedef HashSet<String> URLSet;
     typedef HashMap<URLRegistry*, URLSet > RegistryURLMap;
     RegistryURLMap m_registryToURL;

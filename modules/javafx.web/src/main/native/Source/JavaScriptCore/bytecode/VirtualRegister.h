@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -84,7 +84,7 @@ public:
     bool operator>(VirtualRegister other) const { return m_virtualRegister > other.m_virtualRegister; }
     bool operator<=(VirtualRegister other) const { return m_virtualRegister <= other.m_virtualRegister; }
     bool operator>=(VirtualRegister other) const { return m_virtualRegister >= other.m_virtualRegister; }
-
+    
     VirtualRegister operator+(int value) const
     {
         return VirtualRegister(offset() + value);
@@ -109,7 +109,7 @@ public:
     {
         return *this = *this - value;
     }
-
+    
     void dump(PrintStream& out) const;
 
 private:

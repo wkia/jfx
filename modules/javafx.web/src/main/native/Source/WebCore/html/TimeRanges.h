@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,12 +43,12 @@ public:
     void invert();
     WEBCORE_EXPORT void intersectWith(const TimeRanges&);
     void unionWith(const TimeRanges&);
-
+    
     WEBCORE_EXPORT unsigned length() const;
 
     WEBCORE_EXPORT void add(double start, double end);
     bool contain(double time) const;
-
+    
     size_t find(double time) const;
     WEBCORE_EXPORT double nearest(double time) const;
     double totalDuration() const;

@@ -233,7 +233,7 @@ ImageDrawResult BitmapImage::draw(GraphicsContext& context, const FloatRect& des
     if (destRect.isEmpty() || requestedSrcRect.isEmpty())
         return ImageDrawResult::DidNothing;
 
-
+    
     auto srcRect = requestedSrcRect;
     auto preferredSize = size();
     auto srcSize = sourceSize();
@@ -283,15 +283,15 @@ ImageDrawResult BitmapImage::draw(GraphicsContext& context, const FloatRect& des
             fillWithSolidColor(context, destRect, Color::yellow.colorWithAlphaByte(128), options.compositeOperator());
             return result;
         }
-
+        
         // If the decodingMode changes from asynchronous to synchronous and new data is received,
         // the current incomplete decoded frame has to be destroyed.
         if (m_currentFrameDecodingStatus == DecodingStatus::Invalid)
             m_source->destroyIncompleteDecodedData();
-
+        
         bool frameIsCompatible = frameHasDecodedNativeImageCompatibleWithOptionsAtIndex(m_currentFrame, m_currentSubsamplingLevel, DecodingOptions(sizeForDrawing));
         bool frameIsBeingDecoded = frameIsBeingDecodedAndIsCompatibleWithOptionsAtIndex(m_currentFrame, DecodingOptions(DecodingMode::Asynchronous));
-
+        
         if (frameIsCompatible) {
             image = frameImageAtIndex(m_currentFrame);
             LOG(Images, "BitmapImage::%s - %p - url: %s [a decoded frame will reused for synchronous drawing]", __FUNCTION__, this, sourceURL().string().utf8().data());
@@ -306,7 +306,7 @@ ImageDrawResult BitmapImage::draw(GraphicsContext& context, const FloatRect& des
             image = frameImageAtIndexCacheIfNeeded(m_currentFrame, m_currentSubsamplingLevel, &context);
             LOG(Images, "BitmapImage::%s - %p - url: %s [an image frame will be decoded synchronously]", __FUNCTION__, this, sourceURL().string().utf8().data());
         }
-
+        
         if (!image) // If it's too early we won't have an image yet.
             return ImageDrawResult::DidNothing;
 
@@ -345,7 +345,7 @@ void BitmapImage::drawPattern(GraphicsContext& ctxt, const FloatRect& destRect, 
         // If new data is received, the current incomplete decoded frame has to be destroyed.
         if (m_currentFrameDecodingStatus == DecodingStatus::Invalid)
             m_source->destroyIncompleteDecodedData();
-
+        
         Image::drawPattern(ctxt, destRect, tileRect, transform, phase, spacing, { options, ImageOrientation::FromImage });
         m_currentFrameDecodingStatus = frameDecodingStatusAtIndex(m_currentFrame);
         return;
@@ -600,7 +600,7 @@ void BitmapImage::decode(WTF::Function<void()>&& callback)
 
     bool frameIsCompatible = frameHasDecodedNativeImageCompatibleWithOptionsAtIndex(m_currentFrame, m_currentSubsamplingLevel, std::optional<IntSize>());
     bool frameIsBeingDecoded = frameIsBeingDecodedAndIsCompatibleWithOptionsAtIndex(m_currentFrame, std::optional<IntSize>());
-
+    
     if (frameIsCompatible)
         callDecodingCallbacks();
     else if (!frameIsBeingDecoded) {
@@ -665,10 +665,10 @@ unsigned BitmapImage::decodeCountForTesting() const
 void BitmapImage::dump(TextStream& ts) const
 {
     Image::dump(ts);
-
+    
     if (isAnimated())
         ts.dumpProperty("current-frame", m_currentFrame);
-
+    
     m_source->dump(ts);
 }
 

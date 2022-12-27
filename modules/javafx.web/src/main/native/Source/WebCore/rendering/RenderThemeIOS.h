@@ -38,7 +38,7 @@
 OBJC_CLASS CIContext;
 
 namespace WebCore {
-
+    
 class RenderStyle;
 class GraphicsContext;
 

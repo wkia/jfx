@@ -122,7 +122,7 @@ Expected<PrivateClickMeasurement::AttributionTriggerData, String> PrivateClickMe
 
         return AttributionTriggerData { static_cast<uint32_t>(*attributionTriggerDataUInt64), Priority { 0 } };
     }
-
+    
     if (path.length() == prefixLength + privateClickMeasurementAttributionTriggerDataPathSegmentSize + 1 + privateClickMeasurementPriorityPathSegmentSize) {
         auto attributionTriggerDataUInt64 = parseInteger<uint64_t>(path.substring(prefixLength, privateClickMeasurementAttributionTriggerDataPathSegmentSize));
         if (!attributionTriggerDataUInt64 || *attributionTriggerDataUInt64 > AttributionTriggerData::MaxEntropy)
@@ -167,7 +167,7 @@ bool PrivateClickMeasurement::hasHigherPriorityThan(const PrivateClickMeasuremen
 {
     if (!other.m_attributionTriggerData)
         return true;
-
+    
     if (!m_attributionTriggerData)
         return false;
 

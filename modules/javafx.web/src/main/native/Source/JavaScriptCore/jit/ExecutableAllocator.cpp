@@ -382,14 +382,14 @@ static ALWAYS_INLINE JITReservation initializeJITPageReservation()
 
     if (Options::verboseExecutablePoolAllocation())
         dataLog(getpid(), ": Got executable pool reservation at ", RawPointer(reservation.pageReservation.base()), "...", RawPointer(bitwise_cast<char*>(reservation.pageReservation.base()) + reservation.pageReservation.size()), ", while I'm at ", RawPointer(bitwise_cast<void*>(initializeJITPageReservation)), "\n");
-
+    
     if (reservation.pageReservation) {
         ASSERT(reservation.pageReservation.size() == reservation.size);
         reservation.base = reservation.pageReservation.base();
 
         bool fastJITPermissionsIsSupported = false;
 #if OS(DARWIN) && CPU(ARM64)
-#if USE(PTHREAD_JIT_PERMISSIONS_API)
+#if USE(PTHREAD_JIT_PERMISSIONS_API) 
         fastJITPermissionsIsSupported = !!pthread_jit_write_protect_supported_np();
 #elif USE(APPLE_INTERNAL_SDK)
         fastJITPermissionsIsSupported = !!os_thread_self_restrict_rwx_is_supported();
@@ -605,7 +605,7 @@ public:
 #if ENABLE(JUMP_ISLANDS)
         if (m_islandsForJumpSourceLocation.isEmpty())
             return;
-
+        
         Locker locker { getLock() };
         handleWillBeReleased(locker, handle);
 #else // ENABLE(JUMP_ISLANDS) -> so !ENABLE(JUMP_ISLANDS)
@@ -777,7 +777,7 @@ private:
             RELEASE_ASSERT(!m_start);
             RELEASE_ASSERT(!m_end);
             m_start = reinterpret_cast<uintptr_t>(start);
-            m_end = m_start + sizeInBytes;
+            m_end = m_start + sizeInBytes; 
             jit_heap_add_fresh_memory(pas_range_create(m_start, m_end));
         }
 
@@ -864,7 +864,7 @@ private:
                 if (resultBit == islandBits.size())
                     return nullptr;
                 islandBits[resultBit] = true;
-                uintptr_t result = end - ((resultBit + 1) * islandSizeInBytes);
+                uintptr_t result = end - ((resultBit + 1) * islandSizeInBytes); 
                 return bitwise_cast<void*>(result);
             };
 

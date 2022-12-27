@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -74,32 +74,32 @@ public:
         TakesSlowPath,
         Inlineable
     };
-
+    
     ComplexGetStatus()
         : m_kind(ShouldSkip)
         , m_offset(invalidOffset)
     {
     }
-
+    
     static ComplexGetStatus skip()
     {
         return ComplexGetStatus();
     }
-
+    
     static ComplexGetStatus takesSlowPath()
     {
         ComplexGetStatus result;
         result.m_kind = TakesSlowPath;
         return result;
     }
-
+    
     static ComplexGetStatus computeFor(
         Structure* headStructure, const ObjectPropertyConditionSet&, UniquedStringImpl* uid);
-
+    
     Kind kind() const { return m_kind; }
     PropertyOffset offset() const { return m_offset; }
     const ObjectPropertyConditionSet& conditionSet() const { return m_conditionSet; }
-
+    
 private:
     Kind m_kind;
     PropertyOffset m_offset;

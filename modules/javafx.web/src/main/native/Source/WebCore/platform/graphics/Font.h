@@ -234,7 +234,7 @@ private:
     RefPtr<Font> platformCreateScaledFont(const FontDescription&, float scaleFactor) const;
 
     void removeFromSystemFallbackCache();
-
+    
     struct DerivedFonts;
     DerivedFonts& ensureDerivedFontData() const;
 
@@ -346,7 +346,7 @@ private:
     unsigned m_hasVerticalGlyphs : 1;
 
     unsigned m_isUsedInSystemFallbackCache : 1;
-
+    
     unsigned m_allowsAntialiasing : 1;
 
 #if PLATFORM(IOS_FAMILY)

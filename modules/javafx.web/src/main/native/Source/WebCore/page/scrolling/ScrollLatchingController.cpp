@@ -162,7 +162,7 @@ void ScrollLatchingController::removeLatchingStateForTarget(const Element& eleme
         auto* wheelElement = state.wheelEventElement.get();
         return wheelElement && element.isEqualNode(wheelElement);
     });
-
+    
     // If this element is found in the latching stack, just clear the whole stack. We can't just remove one entry,
     // since the stack has to match the frame hierarchy.
     if (findResult != notFound)
@@ -205,7 +205,7 @@ bool ScrollLatchingController::shouldLatchToScrollableArea(const Frame& frame, S
 
         if (scrollDelta.width() < 0)
             return !scrollableArea->scrolledToRight();
-
+        
         return !scrollableArea->scrolledToLeft();
     }
 

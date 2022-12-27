@@ -109,7 +109,7 @@ void CallFrameShuffler::emitLoad(CachedRecovery& location)
             DataFormat dataFormat = DataFormatJS;
             if (location.recovery().dataFormat() == DataFormatDouble)
                 dataFormat = DataFormatDouble;
-            updateRecovery(location,
+            updateRecovery(location, 
                 ValueRecovery::inFPR(resultFPR, dataFormat));
             if (verbose)
                 dataLog(location.recovery(), "\n");
@@ -125,7 +125,7 @@ void CallFrameShuffler::emitLoad(CachedRecovery& location)
             resultGPR = getFreeGPR();
         ASSERT(resultGPR != InvalidGPRReg);
         m_jit.loadPtr(address.withOffset(PayloadOffset), resultGPR);
-        updateRecovery(location,
+        updateRecovery(location, 
             ValueRecovery::inGPR(resultGPR, location.recovery().dataFormat()));
         if (verbose)
             dataLog(location.recovery(), "\n");
@@ -146,7 +146,7 @@ void CallFrameShuffler::emitLoad(CachedRecovery& location)
     ASSERT(payloadGPR != InvalidGPRReg && tagGPR != InvalidGPRReg && tagGPR != payloadGPR);
     m_jit.loadPtr(address.withOffset(PayloadOffset), payloadGPR);
     m_jit.loadPtr(address.withOffset(TagOffset), tagGPR);
-    updateRecovery(location,
+    updateRecovery(location, 
         ValueRecovery::inPair(tagGPR, payloadGPR));
     if (verbose)
         dataLog(location.recovery(), "\n");
@@ -186,7 +186,7 @@ void CallFrameShuffler::emitDisplace(CachedRecovery& location)
 
     GPRReg wantedTagGPR { wantedJSValueRegs.tagGPR() };
     GPRReg wantedPayloadGPR { wantedJSValueRegs.payloadGPR() };
-
+    
     if (wantedTagGPR != InvalidGPRReg) {
         ASSERT(!m_lockedRegisters.get(wantedTagGPR));
         if (CachedRecovery* currentTag { m_registers[wantedTagGPR] }) {
@@ -232,7 +232,7 @@ void CallFrameShuffler::emitDisplace(CachedRecovery& location)
                 if (verbose)
                     dataLog("   * Swapping ", payloadGPR, " and ", wantedPayloadGPR, "\n");
                 m_jit.swap(payloadGPR, wantedPayloadGPR);
-                updateRecovery(location,
+                updateRecovery(location, 
                     ValueRecovery::inPair(payloadGPR, wantedPayloadGPR));
             } else {
                 if (verbose)
@@ -243,7 +243,7 @@ void CallFrameShuffler::emitDisplace(CachedRecovery& location)
                         ValueRecovery::inPair(location.recovery().tagGPR(),
                             wantedPayloadGPR));
                 } else {
-                    updateRecovery(location,
+                    updateRecovery(location, 
                         ValueRecovery::inGPR(wantedPayloadGPR, location.recovery().dataFormat()));
                 }
             }

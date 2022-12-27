@@ -277,7 +277,7 @@ void TextureMapperGL::drawNumber(int number, const Color& color, const FloatPoin
 
     // Since we won't swap R+B when uploading a texture, paint with the swapped R+B color.
     auto [r, g, b, a] = color.toSRGBALossy<float>();
-        cairo_set_source_rgba(cr, b, g, r, a);
+    cairo_set_source_rgba(cr, b, g, r, a);
 
     cairo_rectangle(cr, 0, 0, width, height);
     cairo_fill(cr);

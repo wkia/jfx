@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -93,7 +93,7 @@ struct StorageAccessData {
 struct MultiPutByOffsetData {
     unsigned identifierNumber;
     Vector<PutByVariant, 2> variants;
-
+    
     bool writesStructures() const;
     bool reallocatesStorage() const;
 };
@@ -146,21 +146,21 @@ struct BranchTarget {
         , count(PNaN)
     {
     }
-
+    
     explicit BranchTarget(BasicBlock* block)
         : block(block)
         , count(PNaN)
     {
     }
-
+    
     void setBytecodeIndex(unsigned bytecodeIndex)
     {
         block = bitwise_cast<BasicBlock*>(static_cast<uintptr_t>(bytecodeIndex));
     }
     unsigned bytecodeIndex() const { return bitwise_cast<uintptr_t>(block); }
-
+    
     void dump(PrintStream&) const;
-
+    
     BasicBlock* block;
     float count;
 };
@@ -174,17 +174,17 @@ struct BranchData {
         result.notTaken.block = bitwise_cast<BasicBlock*>(static_cast<uintptr_t>(notTakenBytecodeIndex));
         return result;
     }
-
+    
     unsigned takenBytecodeIndex() const { return taken.bytecodeIndex(); }
     unsigned notTakenBytecodeIndex() const { return notTaken.bytecodeIndex(); }
-
+    
     BasicBlock*& forCondition(bool condition)
     {
         if (condition)
             return taken.block;
         return notTaken.block;
     }
-
+    
     BranchTarget taken;
     BranchTarget notTaken;
 };
@@ -204,13 +204,13 @@ struct SwitchCase {
     SwitchCase()
     {
     }
-
+    
     SwitchCase(LazyJSValue value, BasicBlock* target)
         : value(value)
         , target(target)
     {
     }
-
+    
     static SwitchCase withBytecodeIndex(LazyJSValue value, unsigned bytecodeIndex)
     {
         SwitchCase result;
@@ -218,7 +218,7 @@ struct SwitchCase {
         result.target.setBytecodeIndex(bytecodeIndex);
         return result;
     }
-
+    
     LazyJSValue value;
     BranchTarget target;
 };
@@ -233,7 +233,7 @@ struct SwitchData {
         , didUseJumpTable(false)
     {
     }
-
+    
     Vector<SwitchCase> cases;
     BranchTarget fallThrough;
     size_t switchTableIndex;
@@ -264,17 +264,17 @@ struct StackAccessData {
         : format(DeadFlush)
     {
     }
-
+    
     StackAccessData(Operand operand, FlushFormat format)
         : operand(operand)
         , format(format)
     {
     }
-
+    
     Operand operand;
     VirtualRegister machineLocal;
     FlushFormat format;
-
+    
     FlushedAt flushedAt() { return FlushedAt(format, machineLocal); }
 };
 
@@ -299,11 +299,11 @@ struct Node {
     WTF_MAKE_STRUCT_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER(DFGNode);
 public:
     static const char HashSetTemplateInstantiationString[];
-
+    
     enum VarArgTag { VarArg };
-
+    
     Node() { }
-
+    
     Node(NodeType op, NodeOrigin nodeOrigin, const AdjacencyList& children)
         : origin(nodeOrigin)
         , children(children)
@@ -315,7 +315,7 @@ public:
         m_misc.replacement = nullptr;
         setOpAndDefaultFlags(op);
     }
-
+    
     // Construct a node with up to 3 children, no immediate value.
     Node(NodeType op, NodeOrigin nodeOrigin, Edge child1 = Edge(), Edge child2 = Edge(), Edge child3 = Edge())
         : origin(nodeOrigin)
@@ -391,7 +391,7 @@ public:
         setOpAndDefaultFlags(op);
         ASSERT(!(m_flags & NodeHasVarArgs));
     }
-
+    
     // Construct a node with a variable number of children and two immediate values.
     Node(VarArgTag, NodeType op, NodeOrigin nodeOrigin, OpInfo imm1, OpInfo imm2, unsigned firstChild, unsigned numChildren)
         : origin(nodeOrigin)
@@ -407,22 +407,22 @@ public:
         setOpAndDefaultFlags(op);
         ASSERT(m_flags & NodeHasVarArgs);
     }
-
+    
     NodeType op() const { return static_cast<NodeType>(m_op); }
     NodeFlags flags() const { return m_flags; }
 
     unsigned index() const { return m_index; }
-
+    
     void setOp(NodeType op)
     {
         m_op = op;
     }
-
+    
     void setFlags(NodeFlags flags)
     {
         m_flags = flags;
     }
-
+    
     bool mergeFlags(NodeFlags flags)
     {
         NodeFlags newFlags = m_flags | flags;
@@ -431,7 +431,7 @@ public:
         m_flags = newFlags;
         return true;
     }
-
+    
     bool filterFlags(NodeFlags flags)
     {
         NodeFlags newFlags = m_flags & flags;
@@ -440,24 +440,24 @@ public:
         m_flags = newFlags;
         return true;
     }
-
+    
     bool clearFlags(NodeFlags flags)
     {
         return filterFlags(~flags);
     }
-
+    
     void setResult(NodeFlags result)
     {
         ASSERT(!(result & ~NodeResultMask));
         clearFlags(NodeResultMask);
         mergeFlags(result);
     }
-
+    
     NodeFlags result() const
     {
         return flags() & NodeResultMask;
     }
-
+    
     void setOpAndDefaultFlags(NodeType op)
     {
         m_op = op;
@@ -500,7 +500,7 @@ public:
         ASSERT(op() == CheckArrayOrEmpty);
         setOpAndDefaultFlags(CheckArray);
     }
-
+    
     void replaceWith(Graph&, Node* other);
     void replaceWithWithoutChecks(Node* other);
 
@@ -516,7 +516,7 @@ public:
     {
         return m_flags & NodeHasVarArgs;
     }
-
+    
     bool isConstant()
     {
         switch (op()) {
@@ -528,7 +528,7 @@ public:
             return false;
         }
     }
-
+    
     bool hasConstant()
     {
         switch (op()) {
@@ -537,13 +537,13 @@ public:
         case DoubleConstant:
         case Int52Constant:
             return true;
-
+            
         case PhantomDirectArguments:
         case PhantomClonedArguments:
             // These pretend to be the empty value constant for the benefit of the DFG backend, which
             // otherwise wouldn't take kindly to a node that doesn't compute a value.
             return true;
-
+            
         default:
             return false;
         }
@@ -552,16 +552,16 @@ public:
     FrozenValue* constant()
     {
         ASSERT(hasConstant());
-
+        
         if (op() == PhantomDirectArguments || op() == PhantomClonedArguments) {
             // These pretend to be the empty value constant for the benefit of the DFG backend, which
             // otherwise wouldn't take kindly to a node that doesn't compute a value.
             return FrozenValue::emptySingleton();
         }
-
+        
         return m_opInfo.as<FrozenValue*>();
     }
-
+    
     // Don't call this directly - use Graph::convertToConstant() instead!
     void convertToConstant(FrozenValue* value)
     {
@@ -577,7 +577,7 @@ public:
     }
 
     void convertToLazyJSConstant(Graph&, LazyJSValue);
-
+    
     void convertToConstantStoragePointer(void* pointer)
     {
         ASSERT(op() == GetIndexedPropertyStorage);
@@ -585,7 +585,7 @@ public:
         m_opInfo = pointer;
         children.reset();
     }
-
+    
     void convertToPutStack(StackAccessData* data)
     {
         m_op = PutStack;
@@ -593,7 +593,7 @@ public:
         m_opInfo = data;
         m_opInfo2 = OpInfoWrapper();
     }
-
+    
     void convertToGetStack(StackAccessData* data)
     {
         m_op = GetStack;
@@ -602,7 +602,7 @@ public:
         m_opInfo2 = OpInfoWrapper();
         children.reset();
     }
-
+    
     void convertToGetByOffset(StorageAccessData& data, Edge storage, Edge base)
     {
         ASSERT(m_op == GetById || m_op == GetByIdFlush || m_op == GetByIdDirect || m_op == GetByIdDirectFlush || m_op == GetPrivateNameById || m_op == MultiGetByOffset);
@@ -612,7 +612,7 @@ public:
         m_op = GetByOffset;
         m_flags &= ~NodeMustGenerate;
     }
-
+    
     void convertToMultiGetByOffset(MultiGetByOffsetData* data)
     {
         RELEASE_ASSERT(m_op == GetById || m_op == GetByIdFlush || m_op == GetByIdDirect || m_op == GetByIdDirectFlush || m_op == GetPrivateNameById);
@@ -621,7 +621,7 @@ public:
         m_op = MultiGetByOffset;
         RELEASE_ASSERT(m_flags & NodeMustGenerate);
     }
-
+    
     void convertToPutByOffset(StorageAccessData& data, Edge storage, Edge base)
     {
         ASSERT(m_op == PutById || m_op == PutByIdDirect || m_op == PutByIdFlush || m_op == MultiPutByOffset || m_op == PutPrivateNameById);
@@ -631,14 +631,14 @@ public:
         children.setChild1(storage);
         m_op = PutByOffset;
     }
-
+    
     void convertToMultiPutByOffset(MultiPutByOffsetData* data)
     {
         ASSERT(m_op == PutById || m_op == PutByIdDirect || m_op == PutByIdFlush || m_op == PutPrivateNameById);
         m_opInfo = data;
         m_op = MultiPutByOffset;
     }
-
+    
     void convertToPhantomNewObject()
     {
         ASSERT(m_op == NewObject);
@@ -700,7 +700,7 @@ public:
         m_opInfo2 = OpInfoWrapper();
         children = AdjacencyList();
     }
-
+    
     void convertToPhantomCreateActivation()
     {
         ASSERT(m_op == CreateActivation);
@@ -728,14 +728,14 @@ public:
         m_opInfo = child1()->m_opInfo; // Copy the variableAccessData.
         children.setChild1(Edge());
     }
-
+    
     void convertFlushToPhantomLocal()
     {
         ASSERT(m_op == Flush);
         m_op = PhantomLocal;
         children = AdjacencyList();
     }
-
+    
     void convertToToString()
     {
         ASSERT(m_op == ToPrimitive || m_op == StringValueOf || m_op == ToPropertyKey);
@@ -816,7 +816,7 @@ public:
     }
 
     void convertToNewArrayBuffer(FrozenValue* immutableButterfly);
-
+    
     void convertToDirectCall(FrozenValue*);
 
     void convertToCallDOM(Graph&);
@@ -838,57 +838,57 @@ public:
         m_opInfo = identifier;
         m_opInfo2 = OpInfoWrapper();
     }
-
+    
     JSValue asJSValue()
     {
         return constant()->value();
     }
-
+     
     bool isInt32Constant()
     {
         return isConstant() && constant()->value().isInt32();
     }
-
+     
     int32_t asInt32()
     {
         return asJSValue().asInt32();
     }
-
+     
     uint32_t asUInt32()
     {
         return asInt32();
     }
-
+     
     bool isDoubleConstant()
     {
         return isConstant() && constant()->value().isDouble();
     }
-
+     
     bool isNumberConstant()
     {
         return isConstant() && constant()->value().isNumber();
     }
-
+    
     double asNumber()
     {
         return asJSValue().asNumber();
     }
-
+     
     bool isAnyIntConstant()
     {
         return isConstant() && constant()->value().isAnyInt();
     }
-
+     
     int64_t asAnyInt()
     {
         return asJSValue().asAnyInt();
     }
-
+     
     bool isBooleanConstant()
     {
         return isConstant() && constant()->value().isBoolean();
     }
-
+     
     bool asBoolean()
     {
         return constant()->value().asBoolean();
@@ -903,12 +903,12 @@ public:
     {
         return isConstant() && constant()->value() && constant()->value().isCell();
     }
-
+     
     JSCell* asCell()
     {
         return constant()->value().asCell();
     }
-
+     
     template<typename T>
     T dynamicCastConstant(VM& vm)
     {
@@ -916,7 +916,7 @@ public:
             return nullptr;
         return jsDynamicCast<T>(vm, asCell());
     }
-
+    
     bool hasLazyJSValue()
     {
         return op() == LazyJSConstant;
@@ -992,13 +992,13 @@ public:
             return false;
         }
     }
-
+    
     bool hasVariableAccessData(Graph&);
     bool accessesStack(Graph& graph)
     {
         return hasVariableAccessData(graph);
     }
-
+    
     // This is useful for debugging code, where a node that should have a variable
     // access data doesn't have one because it hasn't been initialized yet.
     VariableAccessData* tryGetVariableAccessData()
@@ -1008,22 +1008,22 @@ public:
             return nullptr;
         return result->find();
     }
-
+    
     VariableAccessData* variableAccessData()
     {
         return m_opInfo.as<VariableAccessData*>()->find();
     }
-
+    
     Operand operand()
     {
         return variableAccessData()->operand();
     }
-
+    
     VirtualRegister machineLocal()
     {
         return variableAccessData()->machineLocal();
     }
-
+    
     bool hasUnlinkedOperand()
     {
         switch (op()) {
@@ -1035,13 +1035,13 @@ public:
             return false;
         }
     }
-
+    
     Operand unlinkedOperand()
     {
         ASSERT(hasUnlinkedOperand());
         return Operand::fromBits(m_opInfo.as<uint64_t>());
     }
-
+    
     bool hasStackAccessData()
     {
         switch (op()) {
@@ -1052,7 +1052,7 @@ public:
             return false;
         }
     }
-
+    
     StackAccessData* stackAccessData()
     {
         ASSERT(hasStackAccessData());
@@ -1064,12 +1064,12 @@ public:
         ASSERT(op() == SetArgumentCountIncludingThis);
         return m_opInfo.as<unsigned>();
     }
-
+    
     bool hasPhi()
     {
         return op() == Upsilon;
     }
-
+    
     Node* phi()
     {
         ASSERT(hasPhi());
@@ -1180,14 +1180,14 @@ public:
             return 0;
         }
     }
-
+    
     bool hasPromotedLocationDescriptor()
     {
         return op() == PutHint;
     }
-
+    
     PromotedLocationDescriptor promotedLocationDescriptor();
-
+    
     // This corrects the arithmetic node flags, so that irrelevant bits are
     // ignored. In particular, anything other than ArithMul or ValueMul does not need
     // to know if it can speculate on negative zero.
@@ -1203,12 +1203,12 @@ public:
     {
         return m_flags & NodeMayHaveNonIntResult;
     }
-
+    
     bool mayHaveDoubleResult()
     {
         return m_flags & NodeMayHaveDoubleResult;
     }
-
+    
     bool mayHaveNonNumericResult()
     {
         return m_flags & NodeMayHaveNonNumericResult;
@@ -1233,7 +1233,7 @@ public:
     {
         return op() == NewArrayBuffer || op() == PhantomNewArrayBuffer;
     }
-
+    
     NewArrayBufferData newArrayBufferData()
     {
         ASSERT(hasNewArrayBufferData());
@@ -1251,7 +1251,7 @@ public:
             return false;
         }
     }
-
+    
     unsigned vectorLengthHint()
     {
         ASSERT(hasVectorLengthHint());
@@ -1259,7 +1259,7 @@ public:
             return m_opInfo2.as<unsigned>();
         return newArrayBufferData().vectorLengthHint;
     }
-
+    
     bool hasIndexingType()
     {
         switch (op()) {
@@ -1302,7 +1302,7 @@ public:
             return static_cast<IndexingType>(newArrayBufferData().indexingMode);
         return static_cast<IndexingType>(m_opInfo.as<uint32_t>());
     }
-
+    
     bool hasTypedArrayType()
     {
         switch (op()) {
@@ -1312,7 +1312,7 @@ public:
             return false;
         }
     }
-
+    
     TypedArrayType typedArrayType()
     {
         ASSERT(hasTypedArrayType());
@@ -1320,7 +1320,7 @@ public:
         ASSERT(isTypedView(result));
         return result;
     }
-
+    
     bool hasInlineCapacity()
     {
         return op() == CreateThis;
@@ -1348,7 +1348,7 @@ public:
         ASSERT(hasIndexingType());
         m_opInfo = indexingType;
     }
-
+    
     bool hasScopeOffset()
     {
         return op() == GetClosureVar || op() == PutClosureVar;
@@ -1370,28 +1370,28 @@ public:
         ASSERT(hasInternalFieldIndex());
         return m_opInfo.as<uint32_t>();
     }
-
+    
     bool hasDirectArgumentsOffset()
     {
         return op() == GetFromArguments || op() == PutToArguments;
     }
-
+    
     DirectArgumentsOffset capturedArgumentsOffset()
     {
         ASSERT(hasDirectArgumentsOffset());
         return DirectArgumentsOffset(m_opInfo.as<uint32_t>());
     }
-
+    
     bool hasRegisterPointer()
     {
         return op() == GetGlobalVar || op() == GetGlobalLexicalVariable || op() == PutGlobalVariable;
     }
-
+    
     WriteBarrier<Unknown>* variablePointer()
     {
         return m_opInfo.as<WriteBarrier<Unknown>*>();
     }
-
+    
     bool hasCallVarargsData()
     {
         switch (op()) {
@@ -1408,18 +1408,18 @@ public:
             return false;
         }
     }
-
+    
     CallVarargsData* callVarargsData()
     {
         ASSERT(hasCallVarargsData());
         return m_opInfo.as<CallVarargsData*>();
     }
-
+    
     bool hasLoadVarargsData()
     {
         return op() == LoadVarargs || op() == ForwardVarargs || op() == VarargsLength;
     }
-
+    
     LoadVarargsData* loadVarargsData()
     {
         ASSERT(hasLoadVarargsData());
@@ -1452,12 +1452,12 @@ public:
     {
         return speculationFromJSType(queriedType());
     }
-
+    
     bool hasResult()
     {
         return !!result();
     }
-
+    
     bool hasInt32Result()
     {
         return result() == NodeResultInt32;
@@ -1467,7 +1467,7 @@ public:
     {
         return result() == NodeResultInt52;
     }
-
+    
     bool hasNumberResult()
     {
         return result() == NodeResultNumber;
@@ -1477,7 +1477,7 @@ public:
     {
         return hasNumberResult() || hasInt32Result() || hasInt52Result();
     }
-
+    
     bool hasNumericResult()
     {
         switch (op()) {
@@ -1500,12 +1500,12 @@ public:
     {
         return result() == NodeResultDouble;
     }
-
+    
     bool hasJSResult()
     {
         return result() == NodeResultJS;
     }
-
+    
     bool hasBooleanResult()
     {
         return result() == NodeResultBoolean;
@@ -1515,12 +1515,12 @@ public:
     {
         return result() == NodeResultStorage;
     }
-
+    
     UseKind defaultUseKind()
     {
         return useKindForResult(result());
     }
-
+    
     Edge defaultEdge()
     {
         return Edge(this, defaultUseKind());
@@ -1535,7 +1535,7 @@ public:
     {
         return op() == Branch;
     }
-
+    
     bool isSwitch() const
     {
         return op() == Switch;
@@ -1602,13 +1602,13 @@ public:
         ASSERT(isJump());
         return *bitwise_cast<BasicBlock**>(&m_opInfo.u.pointer);
     }
-
+    
     BranchData* branchData()
     {
         ASSERT(isBranch());
         return m_opInfo.as<BranchData*>();
     }
-
+    
     SwitchData* switchData()
     {
         ASSERT(isSwitch());
@@ -1638,7 +1638,7 @@ public:
         ASSERT(hasIntrinsic());
         return m_opInfo.as<Intrinsic>();
     }
-
+    
     unsigned numSuccessors()
     {
         switch (op()) {
@@ -1654,7 +1654,7 @@ public:
             return 0;
         }
     }
-
+    
     BasicBlock*& successor(unsigned index)
     {
         if (isSwitch()) {
@@ -1677,19 +1677,19 @@ public:
             return targetBlock();
         }
     }
-
+    
     class SuccessorsIterable {
     public:
         SuccessorsIterable()
             : m_terminal(nullptr)
         {
         }
-
+        
         SuccessorsIterable(Node* terminal)
             : m_terminal(terminal)
         {
         }
-
+        
         class iterator {
         public:
             iterator()
@@ -1697,29 +1697,29 @@ public:
                 , m_index(UINT_MAX)
             {
             }
-
+            
             iterator(Node* terminal, unsigned index)
                 : m_terminal(terminal)
                 , m_index(index)
             {
             }
-
+            
             BasicBlock* operator*()
             {
                 return m_terminal->successor(m_index);
             }
-
+            
             iterator& operator++()
             {
                 m_index++;
                 return *this;
             }
-
+            
             bool operator==(const iterator& other) const
             {
                 return m_index == other.m_index;
             }
-
+            
             bool operator!=(const iterator& other) const
             {
                 return !(*this == other);
@@ -1728,12 +1728,12 @@ public:
             Node* m_terminal;
             unsigned m_index;
         };
-
+        
         iterator begin()
         {
             return iterator(m_terminal, 0);
         }
-
+        
         iterator end()
         {
             return iterator(m_terminal, m_terminal->numSuccessors());
@@ -1742,21 +1742,21 @@ public:
         size_t size() const { return m_terminal->numSuccessors(); }
         BasicBlock* at(size_t index) const { return m_terminal->successor(index); }
         BasicBlock* operator[](size_t index) const { return at(index); }
-
+        
     private:
         Node* m_terminal;
     };
-
+    
     SuccessorsIterable successors()
     {
         return SuccessorsIterable(this);
     }
-
+    
     BasicBlock*& successorForCondition(bool condition)
     {
         return branchData()->forCondition(condition);
     }
-
+    
     bool hasHeapPrediction()
     {
         switch (op()) {
@@ -1842,7 +1842,7 @@ public:
             return false;
         }
     }
-
+    
     SpeculatedType getHeapPrediction()
     {
         ASSERT(hasHeapPrediction());
@@ -1872,7 +1872,7 @@ public:
         ASSERT(op() == ExtractCatchLocal);
         return m_opInfo2.as<SpeculatedType>();
     }
-
+    
     bool hasCellOperand()
     {
         switch (op()) {
@@ -1907,35 +1907,35 @@ public:
         ASSERT(hasCellOperand());
         return m_opInfo.as<FrozenValue*>();
     }
-
+    
     template<typename T>
     T castOperand()
     {
         return cellOperand()->cast<T>();
     }
-
+    
     void setCellOperand(FrozenValue* value)
     {
         ASSERT(hasCellOperand());
         m_opInfo = value;
     }
-
+    
     bool hasWatchpointSet()
     {
         return op() == NotifyWrite;
     }
-
+    
     WatchpointSet* watchpointSet()
     {
         ASSERT(hasWatchpointSet());
         return m_opInfo.as<WatchpointSet*>();
     }
-
+    
     bool hasStoragePointer()
     {
         return op() == ConstantStoragePointer;
     }
-
+    
     void* storagePointer()
     {
         ASSERT(hasStoragePointer());
@@ -2051,13 +2051,13 @@ public:
             return false;
         }
     }
-
+    
     Transition* transition()
     {
         ASSERT(hasTransition());
         return m_opInfo.as<Transition*>();
     }
-
+    
     bool hasStructureSet()
     {
         switch (op()) {
@@ -2070,13 +2070,13 @@ public:
             return false;
         }
     }
-
+    
     const RegisteredStructureSet& structureSet()
     {
         ASSERT(hasStructureSet());
         return *m_opInfo.as<RegisteredStructureSet*>();
     }
-
+    
     bool hasStructure()
     {
         switch (op()) {
@@ -2092,13 +2092,13 @@ public:
             return false;
         }
     }
-
+    
     RegisteredStructure structure()
     {
         ASSERT(hasStructure());
         return m_opInfo.asRegisteredStructure();
     }
-
+    
     bool hasStorageAccessData()
     {
         switch (op()) {
@@ -2110,29 +2110,29 @@ public:
             return false;
         }
     }
-
+    
     StorageAccessData& storageAccessData()
     {
         ASSERT(hasStorageAccessData());
         return *m_opInfo.as<StorageAccessData*>();
     }
-
+    
     bool hasMultiGetByOffsetData()
     {
         return op() == MultiGetByOffset;
     }
-
+    
     MultiGetByOffsetData& multiGetByOffsetData()
     {
         ASSERT(hasMultiGetByOffsetData());
         return *m_opInfo.as<MultiGetByOffsetData*>();
     }
-
+    
     bool hasMultiPutByOffsetData()
     {
         return op() == MultiPutByOffset;
     }
-
+    
     MultiPutByOffsetData& multiPutByOffsetData()
     {
         ASSERT(hasMultiPutByOffsetData());
@@ -2149,18 +2149,18 @@ public:
         ASSERT(hasMultiDeleteByOffsetData());
         return *m_opInfo.as<MultiDeleteByOffsetData*>();
     }
-
+    
     bool hasMatchStructureData()
     {
         return op() == MatchStructure;
     }
-
+    
     MatchStructureData& matchStructureData()
     {
         ASSERT(hasMatchStructureData());
         return *m_opInfo.as<MatchStructureData*>();
     }
-
+    
     bool hasObjectMaterializationData()
     {
         switch (op()) {
@@ -2173,7 +2173,7 @@ public:
             return false;
         }
     }
-
+    
     ObjectMaterializationData& objectMaterializationData()
     {
         ASSERT(hasObjectMaterializationData());
@@ -2190,7 +2190,7 @@ public:
             return false;
         }
     }
-
+    
     bool isPhantomObjectAllocation()
     {
         switch (op()) {
@@ -2200,7 +2200,7 @@ public:
             return false;
         }
     }
-
+    
     bool isActivationAllocation()
     {
         switch (op()) {
@@ -2270,7 +2270,7 @@ public:
             return false;
         }
     }
-
+    
     bool hasArrayMode()
     {
         switch (op()) {
@@ -2311,7 +2311,7 @@ public:
             return false;
         }
     }
-
+    
     ArrayMode arrayMode()
     {
         ASSERT(hasArrayMode());
@@ -2319,7 +2319,7 @@ public:
             return ArrayMode::fromWord(m_opInfo2.as<uint32_t>());
         return ArrayMode::fromWord(m_opInfo.as<uint32_t>());
     }
-
+    
     bool setArrayMode(ArrayMode arrayMode)
     {
         ASSERT(hasArrayMode());
@@ -2375,7 +2375,7 @@ public:
             return ECMAMode::strict();
         }
     }
-
+    
     bool hasPrivateFieldPutKind()
     {
         if (op() == PutPrivateName || op() == PutPrivateNameById)
@@ -2412,7 +2412,7 @@ public:
         ASSERT(hasArithMode());
         return static_cast<Arith::Mode>(m_opInfo.as<uint32_t>());
     }
-
+    
     void setArithMode(Arith::Mode mode)
     {
         m_opInfo = mode;
@@ -2445,7 +2445,7 @@ public:
         ASSERT(hasArithUnaryType());
         return static_cast<Arith::UnaryType>(m_opInfo.as<uint32_t>());
     }
-
+    
     bool hasVirtualRegister()
     {
         return m_virtualRegister.isValid();
@@ -2457,19 +2457,19 @@ public:
         ASSERT(m_virtualRegister.isValid());
         return m_virtualRegister;
     }
-
+    
     void setVirtualRegister(VirtualRegister virtualRegister)
     {
         ASSERT(hasResult());
         ASSERT(!m_virtualRegister.isValid());
         m_virtualRegister = virtualRegister;
     }
-
+    
     bool hasExecutionCounter()
     {
         return op() == CountExecution;
     }
-
+    
     Profiler::ExecutionCounter* executionCounter()
     {
         return m_opInfo.as<Profiler::ExecutionCounter*>();
@@ -2491,7 +2491,7 @@ public:
     {
         return m_refCount;
     }
-
+    
     // Return true if the execution of this Node does not affect our ability to OSR to the FTL.
     // FIXME: Isn't this just like checking if the node has effects?
     bool isSemanticallySkippable()
@@ -2513,18 +2513,18 @@ public:
     {
         return mustGenerate() ? m_refCount - 1 : m_refCount;
     }
-
+    
     void setRefCount(unsigned refCount)
     {
         m_refCount = refCount;
     }
-
+    
     Edge& child1()
     {
         ASSERT(!(m_flags & NodeHasVarArgs));
         return children.child1();
     }
-
+    
     // This is useful if you want to do a fast check on the first child
     // before also doing a check on the opcode. Use this with care and
     // avoid it if possible.
@@ -2544,35 +2544,35 @@ public:
         ASSERT(!(m_flags & NodeHasVarArgs));
         return children.child3();
     }
-
+    
     unsigned firstChild()
     {
         ASSERT(m_flags & NodeHasVarArgs);
         return children.firstChild();
     }
-
+    
     unsigned numChildren()
     {
         ASSERT(m_flags & NodeHasVarArgs);
         return children.numChildren();
     }
-
+    
     UseKind binaryUseKind()
     {
         ASSERT(child1().useKind() == child2().useKind());
         return child1().useKind();
     }
-
+    
     bool isBinaryUseKind(UseKind left, UseKind right)
     {
         return child1().useKind() == left && child2().useKind() == right;
     }
-
+    
     bool isBinaryUseKind(UseKind useKind)
     {
         return isBinaryUseKind(useKind, useKind);
     }
-
+    
     Edge childFor(UseKind useKind)
     {
         if (child1().useKind() == useKind)
@@ -2583,17 +2583,17 @@ public:
             return child3();
         return Edge();
     }
-
+    
     SpeculatedType prediction()
     {
         return m_prediction;
     }
-
+    
     bool predict(SpeculatedType prediction)
     {
         return mergeSpeculation(m_prediction, prediction);
     }
-
+    
     bool shouldSpeculateInt32()
     {
         return isInt32Speculation(prediction());
@@ -2603,38 +2603,38 @@ public:
     {
         return isNotInt32Speculation(prediction());
     }
-
+    
     bool sawBooleans()
     {
         return !!(prediction() & SpecBoolean);
     }
-
+    
     bool shouldSpeculateInt32OrBoolean()
     {
         return isInt32OrBooleanSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateInt32ForArithmetic()
     {
         return isInt32SpeculationForArithmetic(prediction());
     }
-
+    
     bool shouldSpeculateInt32OrBooleanForArithmetic()
     {
         return isInt32OrBooleanSpeculationForArithmetic(prediction());
     }
-
+    
     bool shouldSpeculateInt32OrBooleanExpectingDefined()
     {
         return isInt32OrBooleanSpeculationExpectingDefined(prediction());
     }
-
+    
     bool shouldSpeculateInt52()
     {
         // We have to include SpecInt32Only here for two reasons:
         // 1. We diligently write code that first checks if we should speculate Int32.
         // For example:
-        // if (shouldSpeculateInt32()) ...
+        // if (shouldSpeculateInt32()) ... 
         // else if (shouldSpeculateInt52()) ...
         // This means we it's totally valid to speculate Int52 when we're dealing
         // with a type that's the union of Int32 and Int52.
@@ -2650,32 +2650,32 @@ public:
         //
         return enableInt52() && isInt32OrInt52Speculation(prediction());
     }
-
+    
     bool shouldSpeculateDouble()
     {
         return isDoubleSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateDoubleReal()
     {
         return isDoubleRealSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateNumber()
     {
         return isFullNumberSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateNumberOrBoolean()
     {
         return isFullNumberOrBooleanSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateNumberOrBooleanExpectingDefined()
     {
         return isFullNumberOrBooleanSpeculationExpectingDefined(prediction());
     }
-
+    
     bool shouldSpeculateBoolean()
     {
         return isBooleanSpeculation(prediction());
@@ -2685,27 +2685,27 @@ public:
     {
         return isNotBooleanSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateOther()
     {
         return isOtherSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateMisc()
     {
         return isMiscSpeculation(prediction());
     }
-
+   
     bool shouldSpeculateStringIdent()
     {
         return isStringIdentSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateNotStringVar()
     {
         return isNotStringVarSpeculation(prediction());
     }
-
+ 
     bool shouldSpeculateString()
     {
         return isStringSpeculation(prediction());
@@ -2715,17 +2715,17 @@ public:
     {
         return isNotStringSpeculation(prediction());
     }
-
+ 
     bool shouldSpeculateStringOrOther()
     {
         return isStringOrOtherSpeculation(prediction());
     }
-
+ 
     bool shouldSpeculateStringObject()
     {
         return isStringObjectSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateStringOrStringObject()
     {
         return isStringOrStringObjectSpeculation(prediction());
@@ -2735,7 +2735,7 @@ public:
     {
         return isRegExpObjectSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateSymbol()
     {
         return isSymbolSpeculation(prediction());
@@ -2752,22 +2752,22 @@ public:
     {
         return isHeapBigIntSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateBigInt()
     {
         return isBigIntSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateFinalObject()
     {
         return isFinalObjectSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateFinalObjectOrOther()
     {
         return isFinalObjectOrOtherSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateArray()
     {
         return isArraySpeculation(prediction());
@@ -2787,32 +2787,32 @@ public:
     {
         return isDerivedArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateDirectArguments()
     {
         return isDirectArgumentsSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateScopedArguments()
     {
         return isScopedArgumentsSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateInt8Array()
     {
         return isInt8ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateInt16Array()
     {
         return isInt16ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateInt32Array()
     {
         return isInt32ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateUint8Array()
     {
         return isUint8ArraySpeculation(prediction());
@@ -2822,37 +2822,37 @@ public:
     {
         return isUint8ClampedArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateUint16Array()
     {
         return isUint16ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateUint32Array()
     {
         return isUint32ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateFloat32Array()
     {
         return isFloat32ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateFloat64Array()
     {
         return isFloat64ArraySpeculation(prediction());
     }
-
+    
     bool shouldSpeculateArrayOrOther()
     {
         return isArrayOrOtherSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateObject()
     {
         return isObjectSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateObjectOrOther()
     {
         return isObjectOrOtherSpeculation(prediction());
@@ -2862,12 +2862,12 @@ public:
     {
         return isCellSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateCellOrOther()
     {
         return isCellOrOtherSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateNotCell()
     {
         return isNotCellSpeculation(prediction());
@@ -2887,7 +2887,7 @@ public:
     {
         return isNeitherDoubleNorHeapBigIntNorStringSpeculation(prediction());
     }
-
+    
     bool shouldSpeculateUntypedForArithmetic()
     {
         return isUntypedSpeculationForArithmetic(prediction());
@@ -2897,61 +2897,61 @@ public:
     {
         return op1->shouldSpeculateUntypedForArithmetic() || op2->shouldSpeculateUntypedForArithmetic();
     }
-
+    
     bool shouldSpeculateUntypedForBitOps()
     {
         return isUntypedSpeculationForBitOps(prediction());
     }
-
+    
     static bool shouldSpeculateUntypedForBitOps(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateUntypedForBitOps() || op2->shouldSpeculateUntypedForBitOps();
     }
-
+    
     static bool shouldSpeculateBoolean(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateBoolean() && op2->shouldSpeculateBoolean();
     }
-
+    
     static bool shouldSpeculateInt32(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateInt32() && op2->shouldSpeculateInt32();
     }
-
+    
     static bool shouldSpeculateInt32OrBoolean(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateInt32OrBoolean()
             && op2->shouldSpeculateInt32OrBoolean();
     }
-
+    
     static bool shouldSpeculateInt32OrBooleanForArithmetic(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateInt32OrBooleanForArithmetic()
             && op2->shouldSpeculateInt32OrBooleanForArithmetic();
     }
-
+    
     static bool shouldSpeculateInt32OrBooleanExpectingDefined(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateInt32OrBooleanExpectingDefined()
             && op2->shouldSpeculateInt32OrBooleanExpectingDefined();
     }
-
+    
     static bool shouldSpeculateInt52(Node* op1, Node* op2)
     {
         return enableInt52() && op1->shouldSpeculateInt52() && op2->shouldSpeculateInt52();
     }
-
+    
     static bool shouldSpeculateNumber(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateNumber() && op2->shouldSpeculateNumber();
     }
-
+    
     static bool shouldSpeculateNumberOrBoolean(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateNumberOrBoolean()
             && op2->shouldSpeculateNumberOrBoolean();
     }
-
+    
     static bool shouldSpeculateNumberOrBooleanExpectingDefined(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateNumberOrBooleanExpectingDefined()
@@ -2962,7 +2962,7 @@ public:
     {
         return op1->shouldSpeculateSymbol() && op2->shouldSpeculateSymbol();
     }
-
+    
     static bool shouldSpeculateBigInt(Node* op1, Node* op2)
     {
         return op1->shouldSpeculateBigInt() && op2->shouldSpeculateBigInt();
@@ -2989,12 +2989,12 @@ public:
     {
         return op1->shouldSpeculateArray() && op2->shouldSpeculateArray();
     }
-
+    
     bool canSpeculateInt32(RareCaseProfilingSource source)
     {
         return nodeCanSpeculateInt32(arithNodeFlags(), source);
     }
-
+    
     bool canSpeculateInt52(RareCaseProfilingSource source)
     {
         return nodeCanSpeculateInt52(arithNodeFlags(), source);
@@ -3004,19 +3004,19 @@ public:
     {
         return nodeCanSpeculateBigInt32(arithNodeFlags(), source);
     }
-
+    
     RareCaseProfilingSource sourceFor(PredictionPass pass)
     {
         if (pass == PrimaryPass || child1()->sawBooleans() || (child2() && child2()->sawBooleans()))
             return DFGRareCase;
         return AllRareCases;
     }
-
+    
     bool canSpeculateInt32(PredictionPass pass)
     {
         return canSpeculateInt32(sourceFor(pass));
     }
-
+    
     bool canSpeculateInt52(PredictionPass pass)
     {
         return canSpeculateInt52(sourceFor(pass));
@@ -3100,22 +3100,22 @@ public:
     {
         return m_misc.replacement;
     }
-
+    
     void setReplacement(Node* replacement)
     {
         m_misc.replacement = replacement;
     }
-
+    
     Epoch epoch() const
     {
         return Epoch::fromUnsigned(m_misc.epoch);
     }
-
+    
     void setEpoch(Epoch epoch)
     {
         m_misc.epoch = epoch.toUnsigned();
     }
-
+    
     bool hasNumberOfArgumentsToSkip()
     {
         return op() == CreateRest || op() == PhantomCreateRest || op() == GetRestLength || op() == GetMyArgumentByVal || op() == GetMyArgumentByValOutOfBounds;
@@ -3176,45 +3176,45 @@ public:
         ASSERT(op() == ThrowStaticError);
         return m_opInfo.as<uint32_t>();
     }
-
+    
     bool hasCallLinkStatus()
     {
         return op() == FilterCallLinkStatus;
     }
-
+    
     CallLinkStatus* callLinkStatus()
     {
         ASSERT(hasCallLinkStatus());
         return m_opInfo.as<CallLinkStatus*>();
     }
-
+    
     bool hasGetByStatus()
     {
         return op() == FilterGetByStatus;
     }
-
+    
     GetByStatus* getByStatus()
     {
         ASSERT(hasGetByStatus());
         return m_opInfo.as<GetByStatus*>();
     }
-
+    
     bool hasInByStatus()
     {
         return op() == FilterInByStatus;
     }
-
+    
     InByStatus* inByStatus()
     {
         ASSERT(hasInByStatus());
         return m_opInfo.as<InByStatus*>();
     }
-
+    
     bool hasPutByStatus()
     {
         return op() == FilterPutByStatus;
     }
-
+    
     PutByStatus* putByStatus()
     {
         ASSERT(hasPutByStatus());

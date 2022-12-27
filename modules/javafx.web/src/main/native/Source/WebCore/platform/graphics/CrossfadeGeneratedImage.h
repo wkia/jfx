@@ -54,7 +54,7 @@ private:
 
     bool isCrossfadeGeneratedImage() const override { return true; }
     void dump(WTF::TextStream&) const override;
-
+    
     void drawCrossfade(GraphicsContext&);
 
     Ref<Image> m_fromImage;

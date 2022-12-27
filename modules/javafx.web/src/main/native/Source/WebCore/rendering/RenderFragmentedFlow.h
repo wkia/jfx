@@ -12,7 +12,7 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -49,7 +49,7 @@ typedef HashMap<const LegacyRootInlineBox*, RenderFragmentContainer*> Containing
 
 // RenderFragmentedFlow is used to collect all the render objects that participate in a
 // flow thread. It will also help in doing the layout. However, it will not render
-// directly to screen. Instead, RenderFragmentContainer objects will redirect their paint
+// directly to screen. Instead, RenderFragmentContainer objects will redirect their paint 
 // and nodeAtPoint methods to this object. Each RenderFragmentContainer will actually be a viewPort
 // of the RenderFragmentedFlow.
 
@@ -66,7 +66,7 @@ public:
 #if !ASSERT_WITH_SECURITY_IMPLICATION_DISABLED
     bool checkLinesConsistency(const RenderBlockFlow&) const;
 #endif
-
+    
     void deleteLines() override;
 
     virtual void addFragmentToThread(RenderFragmentContainer*) = 0;
@@ -84,14 +84,14 @@ public:
     void validateFragments();
     void invalidateFragments(MarkingBehavior = MarkContainingBlockChain);
     bool hasValidFragmentInfo() const { return !m_fragmentsInvalidated && !m_fragmentList.isEmpty(); }
-
+    
     // Called when a descendant box's layout is finished and it has been positioned within its container.
     virtual void fragmentedFlowDescendantBoxLaidOut(RenderBox*) { }
 
     void styleDidChange(StyleDifference, const RenderStyle* oldStyle) override;
 
     void repaintRectangleInFragments(const LayoutRect&) const;
-
+    
     LayoutPoint adjustedPositionRelativeToOffsetParent(const RenderBoxModelObject&, const LayoutPoint&) const;
 
     LayoutUnit pageLogicalTopForOffset(LayoutUnit) const;
@@ -116,7 +116,7 @@ public:
     LayoutUnit contentLogicalWidthOfFirstFragment() const;
     LayoutUnit contentLogicalHeightOfFirstFragment() const;
     LayoutUnit contentLogicalLeftOfFirstFragment() const;
-
+    
     RenderFragmentContainer* firstFragment() const;
     RenderFragmentContainer* lastFragment() const;
 
@@ -127,7 +127,7 @@ public:
 
     // Check if the object is in fragment and the fragment is part of this flow thread.
     bool objectInFlowFragment(const RenderObject*, const RenderFragmentContainer*) const;
-
+    
     // Check if the object should be painted in this fragment and if the fragment is part of this flow thread.
     bool objectShouldFragmentInFlowFragment(const RenderObject*, const RenderFragmentContainer*) const;
 
@@ -191,7 +191,7 @@ protected:
     // Overridden by columns/pages to set up an initial logical width of the page width even when
     // no fragments have been generated yet.
     virtual LayoutUnit initialLogicalWidth() const { return 0; };
-
+    
     void clearLinesToFragmentMap();
     void willBeDestroyed() override;
 
@@ -212,7 +212,7 @@ protected:
         {
             setRange(start, end);
         }
-
+        
         void setRange(RenderFragmentContainer* start, RenderFragmentContainer* end)
         {
             m_startFragment = makeWeakPtr(start);
@@ -242,7 +242,7 @@ protected:
     using RenderFragmentContainerRangeMap = HashMap<const RenderBox*, RenderFragmentContainerRange>;
     RenderFragmentContainerRangeMap m_fragmentRangeMap;
 
-    // Map a box with a fragment break to the auto height fragment affected by that break.
+    // Map a box with a fragment break to the auto height fragment affected by that break. 
     using RenderBoxToFragmentMap = HashMap<RenderBox*, RenderFragmentContainer*>;
     RenderBoxToFragmentMap m_breakBeforeToFragmentMap;
     RenderBoxToFragmentMap m_breakAfterToFragmentMap;

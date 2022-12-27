@@ -37,7 +37,7 @@ public:
     {
         m_heap.m_mutatorState = MutatorState::Running;
     }
-
+    
     ~RunningScope()
     {
         m_heap.m_mutatorState = m_oldState;

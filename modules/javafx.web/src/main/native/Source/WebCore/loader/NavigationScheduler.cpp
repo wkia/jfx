@@ -9,13 +9,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -280,7 +280,7 @@ public:
             frame.loader().changeLocation(frame.document()->url(), "_self", 0, ReferrerPolicy::EmptyString, shouldOpenExternalURLs());
             return;
         }
-
+        
         // go(i!=0) from a frame navigates into the history of the frame only,
         // in both IE and NS (but not in Mozilla). We can't easily do that.
         frame.page()->backForward().goBackOrForward(m_historySteps);
@@ -437,10 +437,10 @@ void NavigationScheduler::scheduleRedirect(Document& initiatingDocument, double 
 LockBackForwardList NavigationScheduler::mustLockBackForwardList(Frame& targetFrame)
 {
     // Non-user navigation before the page has finished firing onload should not create a new back/forward item.
-    // See https://webkit.org/b/42861 for the original motivation for this.
+    // See https://webkit.org/b/42861 for the original motivation for this.    
     if (!UserGestureIndicator::processingUserGesture() && targetFrame.loader().documentLoader() && !targetFrame.loader().documentLoader()->wasOnloadDispatched())
         return LockBackForwardList::Yes;
-
+    
     // Navigation of a subframe during loading of an ancestor frame does not create a new back/forward item.
     // The definition of "during load" is any time before all handlers for the load event have been run.
     // See https://bugs.webkit.org/show_bug.cgi?id=14957 for the original motivation for this.
@@ -468,7 +468,7 @@ void NavigationScheduler::scheduleLocationChange(Document& initiatingDocument, S
         ResourceRequest resourceRequest { m_frame.document()->completeURL(url.string()), referrer, ResourceRequestCachePolicy::UseProtocolCachePolicy };
         auto* frame = lexicalFrameFromCommonVM();
         auto initiatedByMainFrame = frame && frame->isMainFrame() ? InitiatedByMainFrame::Yes : InitiatedByMainFrame::Unknown;
-
+        
         FrameLoadRequest frameLoadRequest { initiatingDocument, securityOrigin, WTFMove(resourceRequest), "_self"_s, initiatedByMainFrame };
         frameLoadRequest.setLockHistory(lockHistory);
         frameLoadRequest.setLockBackForwardList(lockBackForwardList);
@@ -504,7 +504,7 @@ void NavigationScheduler::scheduleFormSubmission(Ref<FormSubmission>&& submissio
         && (submission->state().formSubmissionTrigger() == SubmittedByJavaScript && m_frame.tree().parent() && !UserGestureIndicator::processingUserGesture())) {
         lockBackForwardList = LockBackForwardList::Yes;
     }
-
+    
     schedule(makeUnique<ScheduledFormSubmission>(WTFMove(submission), lockBackForwardList, duringLoad));
 }
 
@@ -569,8 +569,8 @@ void NavigationScheduler::schedule(std::unique_ptr<ScheduledNavigation> redirect
     Ref<Frame> protect(m_frame);
 
     // If a redirect was scheduled during a load, then stop the current load.
-    // Otherwise when the current load transitions from a provisional to a
-    // committed state, pending redirects may be cancelled.
+    // Otherwise when the current load transitions from a provisional to a 
+    // committed state, pending redirects may be cancelled. 
     if (redirect->wasDuringLoad()) {
         if (DocumentLoader* provisionalDocumentLoader = m_frame.loader().provisionalDocumentLoader())
             provisionalDocumentLoader->stopLoading();

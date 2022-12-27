@@ -38,29 +38,29 @@ class HitTestLocation;
 class ClipRect {
 public:
     ClipRect() = default;
-
+    
     ClipRect(const LayoutRect& rect)
         : m_rect(rect)
     {
     }
-
+    
     const LayoutRect& rect() const { return m_rect; }
 
     void reset() { m_rect = LayoutRect::infiniteRect(); }
 
     bool affectedByRadius() const { return m_affectedByRadius; }
     void setAffectedByRadius(bool affectedByRadius) { m_affectedByRadius = affectedByRadius; }
-
+    
     bool operator==(const ClipRect& other) const { return rect() == other.rect() && affectedByRadius() == other.affectedByRadius(); }
     bool operator!=(const ClipRect& other) const { return rect() != other.rect() || affectedByRadius() != other.affectedByRadius(); }
     bool operator!=(const LayoutRect& otherRect) const { return rect() != otherRect; }
-
+    
     void intersect(const LayoutRect& other);
     void intersect(const ClipRect& other);
     void move(LayoutUnit x, LayoutUnit y) { m_rect.move(x, y); }
     void move(const LayoutSize& size) { m_rect.move(size); }
     void moveBy(const LayoutPoint& point) { m_rect.moveBy(point); }
-
+    
     bool intersects(const LayoutRect&) const;
     bool intersects(const HitTestLocation&) const;
 
@@ -70,7 +70,7 @@ public:
     void inflateX(LayoutUnit dx) { m_rect.inflateX(dx); }
     void inflateY(LayoutUnit dy) { m_rect.inflateY(dy); }
     void inflate(LayoutUnit d) { inflateX(d); inflateY(d); }
-
+    
 private:
     LayoutRect m_rect;
     bool m_affectedByRadius = false;
@@ -92,7 +92,7 @@ inline void ClipRect::intersect(const ClipRect& other)
     if (other.affectedByRadius())
         m_affectedByRadius = true;
 }
-
+    
 inline bool ClipRect::intersects(const LayoutRect& rect) const
 {
     if (isInfinite() || rect.isInfinite())

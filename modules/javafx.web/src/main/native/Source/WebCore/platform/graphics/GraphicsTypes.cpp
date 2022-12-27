@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -83,7 +83,7 @@ bool parseBlendMode(const String& s, BlendMode& blendMode)
             return true;
         }
     }
-
+    
     return false;
 }
 
@@ -96,13 +96,13 @@ bool parseCompositeAndBlendOperator(const String& s, CompositeOperator& op, Blen
             return true;
         }
     }
-
+    
     if (parseBlendMode(s, blendOp)) {
         // For now, blending will always assume source-over. This will be fixed in the future
         op = CompositeOperator::SourceOver;
         return true;
     }
-
+    
     return false;
 }
 

@@ -30,7 +30,7 @@
 #include <wtf/text/TextStream.h>
 
 namespace WebCore {
-
+    
 FEDropShadow::FEDropShadow(Filter& filter, float stdX, float stdY, float dx, float dy, const Color& shadowColor, float shadowOpacity)
     : FilterEffect(filter, Type::DropShadow)
     , m_stdX(stdX)
@@ -79,7 +79,7 @@ void FEDropShadow::platformApplySoftware()
         return;
 
     Filter& filter = this->filter();
-
+    
     FloatSize blurRadius = 2 * filter.scaledByFilterResolution({ m_stdX, m_stdY });
     blurRadius.scale(filter.filterScale());
     FloatSize offset = filter.scaledByFilterResolution({ m_dx, m_dy });
@@ -107,7 +107,7 @@ void FEDropShadow::platformApplySoftware()
 
     auto& sourcePixelArray = pixelBuffer->data();
     contextShadow.blurLayerImage(sourcePixelArray.data(), pixelBuffer->size(), 4 * pixelBuffer->size().width());
-
+    
     resultImage->putPixelBuffer(*pixelBuffer, shadowArea);
 
     resultContext.setCompositeOperation(CompositeOperator::SourceIn);
@@ -138,5 +138,5 @@ TextStream& FEDropShadow::externalRepresentation(TextStream& ts, RepresentationT
     inputEffect(0)->externalRepresentation(ts, representation);
     return ts;
 }
-
+    
 } // namespace WebCore

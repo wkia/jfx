@@ -90,7 +90,7 @@ void RenderMathMLUnderOver::stretchHorizontalOperatorsAndLayoutChildren()
     // maximum of all unstretched sizes.
     // - The <mo> at the core is stretched to cover the target size, even if the embellished operator
     // might become much wider.
-
+    
     Vector<RenderBox*, 3> embellishedOperators;
     Vector<RenderMathMLOperator*, 3> stretchyOperators;
     bool isAllStretchyOperators = true;

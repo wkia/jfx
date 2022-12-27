@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -99,7 +99,7 @@ public:
     ICEvent()
     {
     }
-
+    
     ICEvent(Kind kind, const ClassInfo* classInfo, const Identifier propertyName)
         : m_kind(kind)
         , m_classInfo(classInfo)
@@ -115,56 +115,56 @@ public:
         , m_propertyLocation(isBaseProperty ? BaseObject : ProtoLookup)
     {
     }
-
+    
     ICEvent(WTF::HashTableDeletedValueType)
         : m_kind(OperationGetById)
     {
     }
-
+    
     bool operator==(const ICEvent& other) const
     {
         return m_kind == other.m_kind
             && m_classInfo == other.m_classInfo
             && m_propertyName == other.m_propertyName;
     }
-
+    
     bool operator!=(const ICEvent& other) const
     {
         return !(*this == other);
     }
-
+    
     bool operator<(const ICEvent& other) const;
     bool operator>(const ICEvent& other) const { return other < *this; }
     bool operator<=(const ICEvent& other) const { return !(*this > other); }
     bool operator>=(const ICEvent& other) const { return !(*this < other); }
-
+    
     explicit operator bool() const
     {
         return *this != ICEvent();
     }
-
+    
     Kind kind() const { return m_kind; }
     const ClassInfo* classInfo() const { return m_classInfo; }
     const Identifier& propertyName() const { return m_propertyName; }
-
+    
     unsigned hash() const
     {
         if (m_propertyName.isNull())
             return m_kind + m_propertyLocation + WTF::PtrHash<const ClassInfo*>::hash(m_classInfo);
         return m_kind + m_propertyLocation + WTF::PtrHash<const ClassInfo*>::hash(m_classInfo) + StringHash::hash(m_propertyName.string());
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return *this == ICEvent(WTF::HashTableDeletedValue);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
     void log() const;
-
+    
 private:
-
+    
     Kind m_kind { InvalidKind };
     const ClassInfo* m_classInfo { nullptr };
     Identifier m_propertyName;
@@ -201,11 +201,11 @@ class ICStats {
 public:
     ICStats();
     ~ICStats();
-
+    
     void add(const ICEvent& event);
-
+    
     static ICStats& instance();
-
+    
 private:
 
     Spectrum<ICEvent, uint64_t> m_spectrum;
@@ -213,7 +213,7 @@ private:
     Lock m_lock;
     Condition m_condition;
     bool m_shouldStop { false };
-
+    
     static Atomic<ICStats*> s_instance;
 };
 

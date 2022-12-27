@@ -29,7 +29,7 @@
 #include <wtf/URL.h>
 
 namespace WebCore {
-
+    
 struct ShareData {
     String title;
     String text;
@@ -41,11 +41,11 @@ struct RawFile {
     String fileName;
     RefPtr<SharedBuffer> fileData;
 };
-
+    
 struct ShareDataWithParsedURL {
     ShareData shareData;
     std::optional<URL> url;
     Vector<RawFile> files;
 };
-
+    
 }

@@ -223,7 +223,7 @@ void ScrollingStateFrameScrollingNode::setCounterScrollingLayer(const LayerRepre
 {
     if (layerRepresentation == m_counterScrollingLayer)
         return;
-
+    
     m_counterScrollingLayer = layerRepresentation;
     setPropertyChanged(Property::CounterScrollingLayer);
 }
@@ -232,7 +232,7 @@ void ScrollingStateFrameScrollingNode::setInsetClipLayer(const LayerRepresentati
 {
     if (layerRepresentation == m_insetClipLayer)
         return;
-
+    
     m_insetClipLayer = layerRepresentation;
     setPropertyChanged(Property::InsetClipLayer);
 }
@@ -241,7 +241,7 @@ void ScrollingStateFrameScrollingNode::setContentShadowLayer(const LayerRepresen
 {
     if (layerRepresentation == m_contentShadowLayer)
         return;
-
+    
     m_contentShadowLayer = layerRepresentation;
     setPropertyChanged(Property::ContentShadowLayer);
 }
@@ -250,7 +250,7 @@ void ScrollingStateFrameScrollingNode::setHeaderLayer(const LayerRepresentation&
 {
     if (layerRepresentation == m_headerLayer)
         return;
-
+    
     m_headerLayer = layerRepresentation;
     setPropertyChanged(Property::HeaderLayer);
 }
@@ -259,7 +259,7 @@ void ScrollingStateFrameScrollingNode::setFooterLayer(const LayerRepresentation&
 {
     if (layerRepresentation == m_footerLayer)
         return;
-
+    
     m_footerLayer = layerRepresentation;
     setPropertyChanged(Property::FooterLayer);
 }
@@ -268,7 +268,7 @@ void ScrollingStateFrameScrollingNode::setVisualViewportIsSmallerThanLayoutViewp
 {
     if (visualViewportIsSmallerThanLayoutViewport == m_visualViewportIsSmallerThanLayoutViewport)
         return;
-
+    
     m_visualViewportIsSmallerThanLayoutViewport = visualViewportIsSmallerThanLayoutViewport;
     setPropertyChanged(Property::VisualViewportIsSmallerThanLayoutViewport);
 }
@@ -277,7 +277,7 @@ void ScrollingStateFrameScrollingNode::setFixedElementsLayoutRelativeToFrame(boo
 {
     if (fixedElementsLayoutRelativeToFrame == m_fixedElementsLayoutRelativeToFrame)
         return;
-
+    
     m_fixedElementsLayoutRelativeToFrame = fixedElementsLayoutRelativeToFrame;
     setPropertyChanged(Property::FixedElementsLayoutRelativeToFrame);
 }
@@ -286,7 +286,7 @@ void ScrollingStateFrameScrollingNode::setAsyncFrameOrOverflowScrollingEnabled(b
 {
     if (enabled == m_asyncFrameOrOverflowScrollingEnabled)
         return;
-
+    
     m_asyncFrameOrOverflowScrollingEnabled = enabled;
     setPropertyChanged(Property::AsyncFrameOrOverflowScrollingEnabled);
 }
@@ -295,7 +295,7 @@ void ScrollingStateFrameScrollingNode::setWheelEventGesturesBecomeNonBlocking(bo
 {
     if (enabled == m_wheelEventGesturesBecomeNonBlocking)
         return;
-
+    
     m_wheelEventGesturesBecomeNonBlocking = enabled;
     setPropertyChanged(Property::WheelEventGesturesBecomeNonBlocking);
 }
@@ -304,7 +304,7 @@ void ScrollingStateFrameScrollingNode::setScrollingPerformanceTestingEnabled(boo
 {
     if (enabled == m_scrollingPerformanceTestingEnabled)
         return;
-
+    
     m_scrollingPerformanceTestingEnabled = enabled;
     setPropertyChanged(Property::ScrollingPerformanceTestingEnabled);
 }
@@ -312,9 +312,9 @@ void ScrollingStateFrameScrollingNode::setScrollingPerformanceTestingEnabled(boo
 void ScrollingStateFrameScrollingNode::dumpProperties(TextStream& ts, ScrollingStateTreeAsTextBehavior behavior) const
 {
     ts << "Frame scrolling node";
-
+    
     ScrollingStateScrollingNode::dumpProperties(ts, behavior);
-
+    
     if (behavior & ScrollingStateTreeAsTextBehaviorIncludeLayerIDs) {
         ts.dumpProperty("root contents layer ID", m_rootContentsLayer.layerID());
         if (m_counterScrollingLayer.layerID())
@@ -337,11 +337,11 @@ void ScrollingStateFrameScrollingNode::dumpProperties(TextStream& ts, ScrollingS
         ts.dumpProperty("header height", m_headerHeight);
     if (m_footerHeight)
         ts.dumpProperty("footer height", m_footerHeight);
-
+    
     ts.dumpProperty("layout viewport", m_layoutViewport);
     ts.dumpProperty("min layout viewport origin", m_minLayoutViewportOrigin);
     ts.dumpProperty("max layout viewport origin", m_maxLayoutViewportOrigin);
-
+    
     if (m_overrideVisualViewportSize)
         ts.dumpProperty("override visual viewport size", m_overrideVisualViewportSize.value());
 

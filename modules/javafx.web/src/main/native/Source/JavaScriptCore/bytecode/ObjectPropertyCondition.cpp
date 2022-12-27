@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -37,7 +37,7 @@ void ObjectPropertyCondition::dumpInContext(PrintStream& out, DumpContext* conte
         out.print("<invalid>");
         return;
     }
-
+    
     out.print("<", inContext(JSValue(m_object), context), ": ", inContext(m_condition, context), ">");
 }
 
@@ -50,7 +50,7 @@ bool ObjectPropertyCondition::structureEnsuresValidityAssumingImpurePropertyWatc
 {
     if (!*this)
         return false;
-
+    
     return m_condition.isStillValidAssumingImpurePropertyWatchpoint(m_object->structure(), nullptr);
 }
 
@@ -63,7 +63,7 @@ bool ObjectPropertyCondition::validityRequiresImpurePropertyWatchpoint() const
 {
     if (!*this)
         return false;
-
+    
     return validityRequiresImpurePropertyWatchpoint(m_object->structure());
 }
 
@@ -90,7 +90,7 @@ bool ObjectPropertyCondition::isStillValid() const
 {
     if (!*this)
         return false;
-
+    
     return isStillValid(m_object->structure());
 }
 
@@ -103,7 +103,7 @@ bool ObjectPropertyCondition::structureEnsuresValidity() const
 {
     if (!*this)
         return false;
-
+    
     return structureEnsuresValidity(m_object->structure());
 }
 
@@ -118,7 +118,7 @@ bool ObjectPropertyCondition::isWatchableAssumingImpurePropertyWatchpoint(
 {
     if (!*this)
         return false;
-
+    
     return isWatchableAssumingImpurePropertyWatchpoint(m_object->structure(), effort);
 }
 
@@ -132,7 +132,7 @@ bool ObjectPropertyCondition::isWatchable(PropertyCondition::WatchabilityEffort 
 {
     if (!*this)
         return false;
-
+    
     return isWatchable(m_object->structure(), effort);
 }
 
@@ -140,7 +140,7 @@ bool ObjectPropertyCondition::isStillLive(VM& vm) const
 {
     if (!*this)
         return false;
-
+    
     bool isStillLive = true;
     forEachDependentCell([&](JSCell* cell) {
         isStillLive &= vm.heap.isMarked(cell);
@@ -152,7 +152,7 @@ void ObjectPropertyCondition::validateReferences(const TrackedReferences& tracke
 {
     if (!*this)
         return;
-
+    
     tracked.check(m_object);
     m_condition.validateReferences(tracked);
 }

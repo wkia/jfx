@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -44,26 +44,26 @@ namespace JSC { namespace DFG {
 
 class WatchpointCollectionPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     WatchpointCollectionPhase(Graph& graph)
         : Phase(graph, "watchpoint collection")
     {
     }
-
+    
     bool run()
     {
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             for (unsigned nodeIndex = block->size(); nodeIndex--;) {
                 m_node = block->at(nodeIndex);
                 handle();
             }
         }
-
+        
         return true;
     }
 
@@ -74,7 +74,7 @@ private:
         case TypeOfIsUndefined:
             handleMasqueradesAsUndefined();
             break;
-
+            
         case CompareEq:
             if (m_node->isBinaryUseKind(ObjectUse)
                 || (m_node->child1().useKind() == ObjectUse && m_node->child2().useKind() == ObjectOrOtherUse)
@@ -82,7 +82,7 @@ private:
                 || (m_node->child1().useKind() == KnownOtherUse || m_node->child2().useKind() == KnownOtherUse))
                 handleMasqueradesAsUndefined();
             break;
-
+            
         case ToBoolean:
         case LogicalNot:
         case Branch:
@@ -95,28 +95,28 @@ private:
                 break;
             }
             break;
-
+            
         default:
             break;
         }
     }
-
+    
     void handleMasqueradesAsUndefined()
     {
         if (m_graph.masqueradesAsUndefinedWatchpointIsStillValid(m_node->origin.semantic))
             addLazily(globalObject()->masqueradesAsUndefinedWatchpoint());
     }
-
+    
     void addLazily(WatchpointSet* set)
     {
         m_graph.watchpoints().addLazily(set);
     }
-
+    
     JSGlobalObject* globalObject()
     {
         return m_graph.globalObjectFor(m_node->origin.semantic);
     }
-
+    
     Node* m_node;
 };
 

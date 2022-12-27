@@ -354,7 +354,7 @@ void ImageLoader::notifyFinished(CachedResource& resource, const NetworkLoadMetr
 
         if (hasPendingDecodePromises())
             rejectDecodePromises("Access control error.");
-
+        
         ASSERT(!m_hasPendingLoadEvent);
 
         // Only consider updating the protection ref-count of the Element immediately before returning
@@ -434,7 +434,7 @@ void ImageLoader::updatedHasPendingEvent()
     } else {
         ASSERT(!m_derefElementTimer.isActive());
         m_derefElementTimer.startOneShot(0_s);
-    }
+    }   
 }
 
 void ImageLoader::decode(Ref<DeferredPromise>&& promise)
@@ -459,7 +459,7 @@ void ImageLoader::decode(Ref<DeferredPromise>&& promise)
 void ImageLoader::decode()
 {
     ASSERT(hasPendingDecodePromises());
-
+    
     if (!element().document().domWindow()) {
         rejectDecodePromises("Inactive document.");
         return;
@@ -513,7 +513,7 @@ void ImageLoader::dispatchPendingBeforeLoadEvent()
         bool didEventListenerDisconnectThisElement = !element().isConnected() || &element().document() != originalDocument.ptr();
         if (didEventListenerDisconnectThisElement)
             return;
-
+        
         updateRenderer();
         return;
     }
@@ -524,7 +524,7 @@ void ImageLoader::dispatchPendingBeforeLoadEvent()
 
     loadEventSender().cancelEvent(*this);
     m_hasPendingLoadEvent = false;
-
+    
     if (is<HTMLObjectElement>(element()))
         downcast<HTMLObjectElement>(element()).renderFallbackContent();
 

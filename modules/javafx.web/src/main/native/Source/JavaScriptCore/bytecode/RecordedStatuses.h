@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,15 +37,15 @@ namespace JSC {
 
 struct RecordedStatuses {
     RecordedStatuses() { }
-
+    
     RecordedStatuses& operator=(const RecordedStatuses& other) = delete;
-
+    
     RecordedStatuses& operator=(RecordedStatuses&& other);
-
+    
     RecordedStatuses(const RecordedStatuses& other) = delete;
-
+    
     RecordedStatuses(RecordedStatuses&& other);
-
+    
     CallLinkStatus* addCallLinkStatus(const CodeOrigin&, const CallLinkStatus&);
     GetByStatus* addGetByStatus(const CodeOrigin&, const GetByStatus&);
     PutByStatus* addPutByStatus(const CodeOrigin&, const PutByStatus&);
@@ -53,15 +53,15 @@ struct RecordedStatuses {
     DeleteByStatus* addDeleteByStatus(const CodeOrigin&, const DeleteByStatus&);
     CheckPrivateBrandStatus* addCheckPrivateBrandStatus(const CodeOrigin&, const CheckPrivateBrandStatus&);
     SetPrivateBrandStatus* addSetPrivateBrandStatus(const CodeOrigin&, const SetPrivateBrandStatus&);
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
-
+    
     void finalizeWithoutDeleting(VM&);
     void finalize(VM&);
-
+    
     void shrinkToFit();
-
+    
     template<typename Func>
     void forEachVector(const Func& func)
     {
@@ -73,7 +73,7 @@ struct RecordedStatuses {
         func(checkPrivateBrands);
         func(setPrivateBrands);
     }
-
+    
     Vector<std::pair<CodeOrigin, std::unique_ptr<CallLinkStatus>>> calls;
     Vector<std::pair<CodeOrigin, std::unique_ptr<GetByStatus>>> gets;
     Vector<std::pair<CodeOrigin, std::unique_ptr<PutByStatus>>> puts;

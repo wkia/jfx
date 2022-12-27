@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -42,16 +42,16 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == ThreadedCPS || m_graph.m_form == SSA);
-
+        
         m_graph.computeRefCounts();
-
+        
         for (BasicBlock* block : m_graph.blocksInPreOrder())
             fixupBlock(block);
-
+        
         for (auto& argumentsVector : m_graph.m_rootToArguments.values())
             cleanVariables(argumentsVector);
 
@@ -86,9 +86,9 @@ public:
             }
             block->resize(targetIndex);
         }
-
+        
         m_graph.m_refCountState = ExactRefCount;
-
+        
         return true;
     }
 
@@ -107,7 +107,7 @@ private:
                     block->phis.removeLast();
                 }
             }
-
+            
             cleanVariables(block->variablesAtHead);
             cleanVariables(block->variablesAtTail);
         }
@@ -117,30 +117,30 @@ private:
             Node* node = block->at(indexInBlock);
             if (node->shouldGenerate())
                 continue;
-
+                
             if (node->flags() & NodeHasVarArgs) {
                 for (unsigned childIdx = node->firstChild(); childIdx < node->firstChild() + node->numChildren(); childIdx++) {
                     Edge edge = m_graph.m_varArgChildren[childIdx];
-
+                    
                     if (!edge || edge.willNotHaveCheck())
                         continue;
-
+                    
                     m_insertionSet.insertNode(indexInBlock, SpecNone, Check, node->origin, edge);
                 }
-
+                
                 node->setOpAndDefaultFlags(Check);
                 node->children.reset();
                 node->setRefCount(1);
                 continue;
             }
-
+            
             node->remove(m_graph);
             node->setRefCount(1);
         }
 
         m_insertionSet.execute(block);
     }
-
+    
     template<typename VariablesVectorType>
     void cleanVariables(VariablesVectorType& variables)
     {
@@ -153,7 +153,7 @@ private:
             variables[i] = nullptr;
         }
     }
-
+    
     InsertionSet m_insertionSet;
 };
 

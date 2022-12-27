@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,7 +40,7 @@ public:
     void scan(const HTMLToken&, PreloadRequestStream&, Document&);
 
     void setPredictedBaseElementURL(const URL& url) { m_predictedBaseElementURL = url; }
-
+    
     bool inPicture() { return !m_pictureSourceState.isEmpty(); }
 
 private:
@@ -75,7 +75,7 @@ private:
 
     URL m_predictedBaseElementURL;
     bool m_inStyle { false };
-
+    
     Vector<bool> m_pictureSourceState;
 
     unsigned m_templateCount { 0 };

@@ -62,7 +62,7 @@ public:
 
     void addObserver(Observer& observer) { m_observers.add(&observer); }
     void removeObserver(Observer& observer) { m_observers.remove(&observer); }
-
+    
     void clearSubimages();
 
 private:

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -140,7 +140,7 @@ void JITGetByIdWithThisGenerator::generateFastPath(MacroAssembler& jit)
 
 JITPutByIdGenerator::JITPutByIdGenerator(
     CodeBlock* codeBlock, JITType jitType, CodeOrigin codeOrigin, CallSiteIndex callSite, const RegisterSet& usedRegisters, CacheableIdentifier,
-    JSValueRegs base, JSValueRegs value, GPRReg stubInfoGPR, GPRReg scratch,
+    JSValueRegs base, JSValueRegs value, GPRReg stubInfoGPR, GPRReg scratch, 
     ECMAMode ecmaMode, PutKind putKind)
         : JITByIdGenerator(codeBlock, jitType, codeOrigin, callSite, AccessType::PutById, usedRegisters, base, value, stubInfoGPR)
         , m_ecmaMode(ecmaMode)

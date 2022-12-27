@@ -42,20 +42,20 @@ class GraphicsContextGLOpenGLManager {
     friend NeverDestroyed<GraphicsContextGLOpenGLManager>;
 public:
     static GraphicsContextGLOpenGLManager& sharedManager();
-
+    
     void addContext(GraphicsContextGLOpenGL*);
     void removeContext(GraphicsContextGLOpenGL*);
-
+    
     void recycleContextIfNecessary();
     bool hasTooManyContexts() const { return m_contexts.size() >= MaxContexts; }
-
+    
 #if PLATFORM(MAC)
     WEBCORE_EXPORT static void displayWasReconfigured(CGDirectDisplayID, CGDisplayChangeSummaryFlags, void*);
 #endif
 #if PLATFORM(COCOA)
     void displayWasReconfigured();
 #endif
-
+    
 private:
     GraphicsContextGLOpenGLManager() = default;
 

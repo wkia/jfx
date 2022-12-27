@@ -20,12 +20,13 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
 #include "PlatformKeyboardEvent.h"
 
+#include "WindowsKeyNames.h"
 #include <windows.h>
 #include <wtf/ASCIICType.h>
 #include <wtf/HexNumber.h>
@@ -218,10 +219,18 @@ static inline String singleCharacterString(UChar c)
     return String(&c, 1);
 }
 
+static WindowsKeyNames& windowsKeyNames()
+{
+    static NeverDestroyed<WindowsKeyNames> keyNames;
+    return keyNames;
+}
+
 PlatformKeyboardEvent::PlatformKeyboardEvent(HWND, WPARAM code, LPARAM keyData, Type type, bool systemKey)
     : PlatformEvent(type, GetKeyState(VK_SHIFT) & HIGH_BIT_MASK_SHORT, GetKeyState(VK_CONTROL) & HIGH_BIT_MASK_SHORT, GetKeyState(VK_MENU) & HIGH_BIT_MASK_SHORT, false, WallTime::fromRawSeconds(::GetTickCount() * 0.001))
     , m_text((type == PlatformEvent::Char) ? singleCharacterString(code) : String())
     , m_unmodifiedText((type == PlatformEvent::Char) ? singleCharacterString(code) : String())
+    , m_key(type == PlatformEvent::Char ? windowsKeyNames().domKeyFromChar(code) : windowsKeyNames().domKeyFromParams(code, keyData))
+    , m_code(windowsKeyNames().domCodeFromLParam(keyData))
     , m_keyIdentifier((type == PlatformEvent::Char) ? String() : keyIdentifierForWindowsKeyCode(code))
     , m_windowsVirtualKeyCode((type == RawKeyDown || type == KeyUp) ? windowsKeycodeWithLocation(code, keyData) : 0)
     , m_autoRepeat(HIWORD(keyData) & KF_REPEAT)

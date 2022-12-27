@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -70,28 +70,6 @@ static int verticalScrollLines()
     if (!scrollLines && !SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &scrollLines, 0))
         scrollLines = 3;
     return scrollLines;
-}
-
-PlatformWheelEvent::PlatformWheelEvent(HWND hWnd, const FloatSize& delta, const FloatPoint& location)
-    : PlatformEvent(PlatformEvent::Wheel, false, false, false, false, WallTime::fromRawSeconds(::GetTickCount() * 0.001))
-    , m_directionInvertedFromDevice(false)
-{
-    m_deltaX = delta.width();
-    m_deltaY = delta.height();
-
-    m_wheelTicksX = m_deltaX;
-    m_wheelTicksY = m_deltaY;
-
-    // Global Position is just x, y location of event
-    float inverseScaleFactor = 1.0f / deviceScaleFactorForWindow(hWnd);
-    m_globalPosition = flooredIntPoint(location);
-    m_globalPosition.scale(inverseScaleFactor, inverseScaleFactor);
-
-    // Position needs to be translated to our client
-    POINT point;
-    ScreenToClient(hWnd, &point);
-    m_position = point;
-    m_position.scale(inverseScaleFactor, inverseScaleFactor);
 }
 
 PlatformWheelEvent::PlatformWheelEvent(HWND hWnd, WPARAM wParam, LPARAM lParam, bool isMouseHWheel)

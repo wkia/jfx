@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -46,15 +46,15 @@ public:
     {
         jit->silentSpillAllRegistersImpl(false, m_plans, extractResult(resultRegs));
     }
-
+    
 private:
     void generateInternal(SpeculativeJIT* jit) final
     {
         linkFrom(jit);
-
+        
         MacroAssembler::Jump isNeg = jit->m_jit.branch32(
             MacroAssembler::LessThan, m_propertyReg, MacroAssembler::TrustedImm32(0));
-
+        
 #if USE(JSVALUE64)
         jit->m_jit.move(
             MacroAssembler::TrustedImm64(JSValue::encode(jsUndefined())), m_resultRegs.gpr());
@@ -65,7 +65,7 @@ private:
             MacroAssembler::TrustedImm32(0), m_resultRegs.payloadGPR());
 #endif
         jumpTo(jit);
-
+        
         isNeg.link(&jit->m_jit);
 
         for (unsigned i = 0; i < m_plans.size(); ++i)
@@ -74,7 +74,7 @@ private:
         for (unsigned i = m_plans.size(); i--;)
             jit->silentFill(m_plans[i]);
         jit->m_jit.exceptionCheck();
-
+        
         jumpTo(jit);
     }
 

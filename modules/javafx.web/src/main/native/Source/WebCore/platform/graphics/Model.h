@@ -42,7 +42,7 @@ public:
     WEBCORE_EXPORT ~Model();
 
     Ref<SharedBuffer> data() const { return m_data; }
-
+    
     template<class Encoder> void encode(Encoder&) const;
     template<class Decoder> static RefPtr<Model> decode(Decoder&);
 

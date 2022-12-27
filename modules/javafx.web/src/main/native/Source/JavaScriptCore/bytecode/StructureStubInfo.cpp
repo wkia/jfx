@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -148,15 +148,15 @@ AccessGenerationResult StructureStubInfo::addAccessCase(
     AccessGenerationResult result = ([&] () -> AccessGenerationResult {
         if (StructureStubInfoInternal::verbose)
             dataLog("Adding access case: ", accessCase, "\n");
-
+        
         if (!accessCase)
             return AccessGenerationResult::GaveUp;
-
+        
         AccessGenerationResult result;
-
+        
         if (m_cacheType == CacheType::Stub) {
             result = u.stub->addCase(locker, vm, codeBlock, *this, accessCase.releaseNonNull());
-
+            
             if (StructureStubInfoInternal::verbose)
                 dataLog("Had stub, result: ", result, "\n");
 
@@ -169,17 +169,17 @@ AccessGenerationResult StructureStubInfo::addAccessCase(
             }
         } else {
             std::unique_ptr<PolymorphicAccess> access = makeUnique<PolymorphicAccess>();
-
+            
             Vector<RefPtr<AccessCase>, 2> accessCases;
-
+            
             auto previousCase = AccessCase::fromStructureStubInfo(vm, codeBlock, ident, *this);
             if (previousCase)
                 accessCases.append(WTFMove(previousCase));
-
+            
             accessCases.append(WTFMove(accessCase));
-
+            
             result = access->addCases(locker, vm, codeBlock, *this, WTFMove(accessCases));
-
+            
             if (StructureStubInfoInternal::verbose)
                 dataLog("Created stub, result: ", result, "\n");
 
@@ -190,14 +190,14 @@ AccessGenerationResult StructureStubInfo::addAccessCase(
                 clearBufferedStructures();
                 return result;
             }
-
+            
             setCacheType(locker, CacheType::Stub);
             u.stub = access.release();
         }
-
+        
         ASSERT(m_cacheType == CacheType::Stub);
         RELEASE_ASSERT(!result.generatedSomeCode());
-
+        
         // If we didn't buffer any cases then bail. If this made no changes then we'll just try again
         // subject to cool-down.
         if (!result.buffered()) {
@@ -206,25 +206,25 @@ AccessGenerationResult StructureStubInfo::addAccessCase(
             clearBufferedStructures();
             return result;
         }
-
+        
         // The buffering countdown tells us if we should be repatching now.
         if (bufferingCountdown) {
             if (StructureStubInfoInternal::verbose)
                 dataLog("Countdown is too high: ", bufferingCountdown, ".\n");
             return result;
         }
-
+        
         // Forget the buffered structures so that all future attempts to cache get fully handled by the
         // PolymorphicAccess.
         clearBufferedStructures();
-
+        
         result = u.stub->regenerate(locker, vm, globalObject, codeBlock, ecmaMode, *this);
-
+        
         if (StructureStubInfoInternal::verbose)
             dataLog("Regeneration result: ", result, "\n");
-
+        
         RELEASE_ASSERT(!result.buffered());
-
+        
         if (!result.generatedSomeCode())
             return result;
 
@@ -237,7 +237,7 @@ AccessGenerationResult StructureStubInfo::addAccessCase(
         // is collected.
         m_identifier = nullptr;
         m_inlineAccessBaseStructure.clear();
-
+        
         // If we generated some code then we don't want to attempt to repatch in the future until we
         // gather enough cases.
         bufferingCountdown = Options::repatchBufferingCountdown();
@@ -315,7 +315,7 @@ void StructureStubInfo::reset(const ConcurrentJSLockerBase& locker, CodeBlock* c
         resetSetPrivateBrand(codeBlock, *this);
         break;
     }
-
+    
     deref();
     setCacheType(locker, CacheType::Unset);
 }
@@ -341,7 +341,7 @@ void StructureStubInfo::visitAggregateImpl(Visitor& visitor)
         u.stub->visitAggregate(visitor);
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return;
 }
@@ -400,13 +400,13 @@ StubInfoSummary StructureStubInfo::summary(VM& vm) const
             }
         }
     }
-
+    
     if (tookSlowPath || sawNonCell)
         return takesSlowPath;
-
+    
     if (!everConsidered)
         return StubInfoSummary::NoInformation;
-
+    
     return simple;
 }
 
@@ -414,7 +414,7 @@ StubInfoSummary StructureStubInfo::summary(VM& vm, const StructureStubInfo* stub
 {
     if (!stubInfo)
         return StubInfoSummary::NoInformation;
-
+    
     return stubInfo->summary(vm);
 }
 

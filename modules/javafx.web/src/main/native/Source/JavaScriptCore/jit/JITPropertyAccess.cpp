@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -975,7 +975,7 @@ void JIT::emit_op_try_get_by_id(const Instruction* currentInstruction)
     gen.generateFastPath(*this);
     addSlowCase(gen.slowPathJump());
     m_getByIds.append(gen);
-
+    
     emitValueProfilingSite(bytecode.metadata(m_codeBlock), resultRegs);
     emitPutVirtualRegister(resultVReg);
 }
@@ -1105,9 +1105,9 @@ void JIT::emit_op_get_by_id(const Instruction* currentInstruction)
     const Identifier* ident = &(m_codeBlock->identifier(bytecode.m_property));
 
     emitGetVirtualRegister(baseVReg, regT0);
-
+    
     emitJumpSlowCaseIfNotJSCell(regT0, baseVReg);
-
+    
     if (*ident == m_vm->propertyNames->length && shouldEmitProfiling()) {
         Jump notArrayLengthMode = branch8(NotEqual, AbsoluteAddress(&metadata.m_modeMetadata.mode), TrustedImm32(static_cast<uint8_t>(GetByIdMode::ArrayLength)));
         emitArrayProfilingSiteWithCell(regT0, &metadata.m_modeMetadata.arrayLengthMode.arrayProfile, regT1);
@@ -1163,7 +1163,7 @@ void JIT::emitSlow_op_get_by_id(const Instruction* currentInstruction, Vector<Sl
     const Identifier* ident = &(m_codeBlock->identifier(bytecode.m_property));
 
     JITGetByIdGenerator& gen = m_getByIds[m_getByIdIndex++];
-
+    
     Label coldPathBegin = label();
 
 #if !ENABLE(EXTRA_CTI_THUNKS)
@@ -1246,7 +1246,7 @@ void JIT::emitSlow_op_get_by_id_with_this(const Instruction* currentInstruction,
     const Identifier* ident = &(m_codeBlock->identifier(bytecode.m_property));
 
     JITGetByIdWithThisGenerator& gen = m_getByIdsWithThis[m_getByIdWithThisIndex++];
-
+    
     Label coldPathBegin = label();
 
 #if !ENABLE(EXTRA_CTI_THUNKS)
@@ -1347,7 +1347,7 @@ void JIT::emit_op_put_by_id(const Instruction* currentInstruction)
     gen.generateFastPath(*this);
     addSlowCase(gen.slowPathJump());
     m_putByIds.append(gen);
-
+    
     // IC can write new Structure without write-barrier if a base is cell.
     // FIXME: Use UnconditionalWriteBarrier in Baseline effectively to reduce code size.
     // https://bugs.webkit.org/show_bug.cgi?id=209395
@@ -1362,7 +1362,7 @@ void JIT::emitSlow_op_put_by_id(const Instruction* currentInstruction, Vector<Sl
     const Identifier* ident = &(m_codeBlock->identifier(bytecode.m_property));
 
     Label coldPathBegin(this);
-
+    
     JITPutByIdGenerator& gen = m_putByIds[m_putByIdIndex++];
 
 #if !ENABLE(EXTRA_CTI_THUNKS)
@@ -2265,7 +2265,7 @@ MacroAssemblerCodeRef<JITThunkPtrTag> JIT::generateOpGetFromScopeThunk(ResolveTy
         loadPtr(Address(regT3, OBJECT_OFFSETOF(JSGlobalObject, m_varInjectionWatchpoint)), regT3);
         slowCase.append(branch8(Equal, Address(regT3, WatchpointSet::offsetOfState()), TrustedImm32(IsInvalidated)));
     };
-
+    
     auto emitGetVarFromPointer = [&] (int32_t operand, GPRReg reg) {
         loadPtr(Address(metadataGPR, operand), reg);
         loadPtr(reg, reg);
@@ -2698,7 +2698,7 @@ void JIT::emit_op_get_from_arguments(const Instruction* currentInstruction)
     VirtualRegister dst = bytecode.m_dst;
     VirtualRegister arguments = bytecode.m_arguments;
     int index = bytecode.m_index;
-
+    
     emitGetVirtualRegister(arguments, regT0);
     load64(Address(regT0, DirectArguments::storageOffset() + index * sizeof(WriteBarrier<Unknown>)), regT0);
     emitValueProfilingSite(bytecode.metadata(m_codeBlock), regT0);
@@ -2711,7 +2711,7 @@ void JIT::emit_op_put_to_arguments(const Instruction* currentInstruction)
     VirtualRegister arguments = bytecode.m_arguments;
     int index = bytecode.m_index;
     VirtualRegister value = bytecode.m_value;
-
+    
     emitGetVirtualRegister(arguments, regT0);
     emitGetVirtualRegister(value, regT1);
     store64(regT1, Address(regT0, DirectArguments::storageOffset() + index * sizeof(WriteBarrier<Unknown>)));
@@ -2727,7 +2727,7 @@ void JIT::emitWriteBarrier(VirtualRegister owner, VirtualRegister value, WriteBa
         emitGetVirtualRegister(value, regT0);
         valueNotCell = branchIfNotCell(regT0);
     }
-
+    
     emitGetVirtualRegister(owner, regT0);
     Jump ownerNotCell;
     if (mode == ShouldFilterBaseAndValue || mode == ShouldFilterBase)
@@ -2739,7 +2739,7 @@ void JIT::emitWriteBarrier(VirtualRegister owner, VirtualRegister value, WriteBa
 
     if (mode == ShouldFilterBaseAndValue || mode == ShouldFilterBase)
         ownerNotCell.link(this);
-    if (mode == ShouldFilterValue || mode == ShouldFilterBaseAndValue)
+    if (mode == ShouldFilterValue || mode == ShouldFilterBaseAndValue) 
         valueNotCell.link(this);
 }
 
@@ -2752,7 +2752,7 @@ void JIT::emitWriteBarrier(JSCell* owner, VirtualRegister value, WriteBarrierMod
 
     emitWriteBarrier(owner);
 
-    if (mode == ShouldFilterValue)
+    if (mode == ShouldFilterValue) 
         valueNotCell.link(this);
 }
 
@@ -2983,7 +2983,7 @@ void JIT::emitWriteBarrier(VirtualRegister owner, VirtualRegister value, WriteBa
         emitLoadTag(value, regT0);
         valueNotCell = branchIfNotCell(regT0);
     }
-
+    
     emitLoad(owner, regT0, regT1);
     Jump ownerNotCell;
     if (mode == ShouldFilterBase || mode == ShouldFilterBaseAndValue)
@@ -2995,7 +2995,7 @@ void JIT::emitWriteBarrier(VirtualRegister owner, VirtualRegister value, WriteBa
 
     if (mode == ShouldFilterBase || mode == ShouldFilterBaseAndValue)
         ownerNotCell.link(this);
-    if (mode == ShouldFilterValue || mode == ShouldFilterBaseAndValue)
+    if (mode == ShouldFilterValue || mode == ShouldFilterBaseAndValue) 
         valueNotCell.link(this);
 }
 
@@ -3009,7 +3009,7 @@ void JIT::emitWriteBarrier(JSCell* owner, VirtualRegister value, WriteBarrierMod
 
     emitWriteBarrier(owner);
 
-    if (mode == ShouldFilterValue)
+    if (mode == ShouldFilterValue) 
         valueNotCell.link(this);
 }
 

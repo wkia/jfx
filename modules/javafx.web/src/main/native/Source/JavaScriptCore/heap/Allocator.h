@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,22 +40,22 @@ class LocalAllocator;
 class Allocator {
 public:
     Allocator() { }
-
+    
     explicit Allocator(LocalAllocator* localAllocator)
         : m_localAllocator(localAllocator)
     {
     }
-
+    
     void* allocate(Heap&, GCDeferralContext*, AllocationFailureMode) const;
-
+    
     unsigned cellSize() const;
-
+    
     LocalAllocator* localAllocator() const { return m_localAllocator; }
-
+    
     bool operator==(const Allocator& other) const { return m_localAllocator == other.localAllocator(); }
     bool operator!=(const Allocator& other) const { return !(*this == other); }
     explicit operator bool() const { return *this != Allocator(); }
-
+    
 private:
     LocalAllocator* m_localAllocator { nullptr };
 };

@@ -50,7 +50,7 @@ class TextRun;
 namespace DisplayList {
 class InMemoryDisplayList;
 }
-
+    
 struct GlyphData;
 
 struct GlyphOverflow {
@@ -148,7 +148,7 @@ public:
     void setWordSpacing(float s) { m_wordSpacing = s; }
     void setLetterSpacing(float s) { m_letterSpacing = s; }
     bool isFixedPitch() const;
-
+    
     FontRenderingMode renderingMode() const { return m_fontDescription.renderingMode(); }
 
     bool enableKerning() const { return m_enableKerning; }

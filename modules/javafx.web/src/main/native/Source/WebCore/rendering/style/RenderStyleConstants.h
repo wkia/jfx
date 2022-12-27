@@ -813,7 +813,7 @@ enum class BreakBetween : uint8_t {
     VersoPage
 };
 bool alwaysPageBreak(BreakBetween);
-
+    
 enum class BreakInside : uint8_t {
     Auto,
     Avoid,
@@ -935,7 +935,7 @@ enum class InsideLink : uint8_t {
     InsideUnvisited,
     InsideVisited
 };
-
+    
 enum class PointerEvents : uint8_t {
     None,
     Auto,

@@ -388,7 +388,7 @@ Page::~Page()
         --gNonUtilityPageCount;
         MemoryPressureHandler::setPageCount(gNonUtilityPageCount);
     }
-
+    
     m_settings->pageDestroyed();
 
     m_inspectorController->inspectedPageDestroyed();
@@ -549,7 +549,7 @@ Ref<DOMRectList> Page::passiveTouchEventListenerRectsForTesting()
         document->updateLayout();
 #if ENABLE(IOS_TOUCH_EVENTS)
         document->updateTouchEventRegions();
-#endif
+#endif  
     }
 
     Vector<IntRect> rects;
@@ -1011,7 +1011,7 @@ Vector<Ref<Element>> Page::editableElementsInRect(const FloatRect& searchRectInR
             ASSERT(searchRectInRootViewCoordinates.inclusivelyIntersects(editableElement->boundingBoxInRootViewCoordinates()));
             rootEditableElements.add(*editableElement);
         }
-            }
+    }
 
     // Fix up for a now empty focused inline element, e.g. <span contenteditable='true'>Hello</span> became
     // <span contenteditable='true'></span>. Hit testing will likely not find this element because the engine
@@ -1182,7 +1182,7 @@ void Page::setDeviceScaleFactor(float scaleFactor)
     ASSERT(scaleFactor > 0);
     if (scaleFactor <= 0)
         return;
-
+    
     if (m_deviceScaleFactor == scaleFactor)
         return;
 
@@ -1342,9 +1342,9 @@ void Page::setTopContentInset(float contentInset)
 {
     if (m_topContentInset == contentInset)
         return;
-
+    
     m_topContentInset = contentInset;
-
+    
     if (FrameView* view = mainFrame().view())
         view->topContentInsetDidChange(m_topContentInset);
 }
@@ -1365,7 +1365,7 @@ void Page::lockAllOverlayScrollbarsToHidden(bool lockOverlayScrollbars)
         return;
 
     view->lockOverlayScrollbarStateToHidden(lockOverlayScrollbars);
-
+    
     for (Frame* frame = &mainFrame(); frame; frame = frame->tree().traverseNext()) {
         FrameView* frameView = frame->view();
         if (!frameView)
@@ -1379,25 +1379,25 @@ void Page::lockAllOverlayScrollbarsToHidden(bool lockOverlayScrollbars)
             scrollableArea->lockOverlayScrollbarStateToHidden(lockOverlayScrollbars);
     }
 }
-
+    
 void Page::setVerticalScrollElasticity(ScrollElasticity elasticity)
 {
     if (m_verticalScrollElasticity == elasticity)
         return;
-
+    
     m_verticalScrollElasticity = elasticity;
-
+    
     if (FrameView* view = mainFrame().view())
         view->setVerticalScrollElasticity(elasticity);
 }
-
+    
 void Page::setHorizontalScrollElasticity(ScrollElasticity elasticity)
 {
     if (m_horizontalScrollElasticity == elasticity)
         return;
-
+    
     m_horizontalScrollElasticity = elasticity;
-
+    
     if (FrameView* view = mainFrame().view())
         view->setHorizontalScrollElasticity(elasticity);
 }
@@ -1416,9 +1416,9 @@ void Page::setPaginationLineGridEnabled(bool enabled)
 {
     if (m_paginationLineGridEnabled == enabled)
         return;
-
+    
     m_paginationLineGridEnabled = enabled;
-
+    
     setNeedsRecalcStyleInAllFrames();
 }
 
@@ -1563,7 +1563,7 @@ void Page::updateRendering()
     });
 
     runProcessingStep(RenderingUpdateStep::MediaQueryEvaluation, [] (Document& document) {
-        document.evaluateMediaQueriesAndReportChanges();
+        document.evaluateMediaQueriesAndReportChanges();        
     });
 
     runProcessingStep(RenderingUpdateStep::Animations, [] (Document& document) {
@@ -1661,7 +1661,7 @@ void Page::doAfterUpdateRendering()
         auto appHighlightStorage = document.appHighlightStorageIfExists();
         if (!appHighlightStorage)
             return;
-
+        
         if (appHighlightStorage->hasUnrestoredHighlights() && MonotonicTime::now() - appHighlightStorage->lastRangeSearchTime() > 1_s) {
             appHighlightStorage->resetLastRangeSearchTime();
             document.eventLoop().queueTask(TaskSource::InternalAsyncTask, [weakDocument = makeWeakPtr(document)] {
@@ -1775,24 +1775,24 @@ void Page::prioritizeVisibleResources()
     forEachDocument([&] (Document& document) {
         toPrioritize.appendVector(document.cachedResourceLoader().visibleResourcesToPrioritize());
     });
-
+    
     auto computeSchedulingMode = [&] {
         auto& document = *mainFrame().document();
         // Parsing generates resource loads.
         if (document.parsing())
             return LoadSchedulingMode::Prioritized;
-
+        
         // Async script execution may generate more resource loads that benefit from prioritization.
         if (document.scriptRunner().hasPendingScripts())
             return LoadSchedulingMode::Prioritized;
-
+        
         // We still haven't finished loading the visible resources.
         if (!toPrioritize.isEmpty())
             return LoadSchedulingMode::Prioritized;
-
+        
         return LoadSchedulingMode::Direct;
     };
-
+    
     setLoadSchedulingMode(computeSchedulingMode());
 
     if (toPrioritize.isEmpty())
@@ -1871,7 +1871,7 @@ void Page::userStyleSheetLocationChanged()
     // FIXME: Eventually we will move to a model of just being handed the sheet
     // text instead of loading the URL ourselves.
     URL url = m_settings->userStyleSheetLocation();
-
+    
     // Allow any local file URL scheme to be loaded.
     if (LegacySchemeRegistry::shouldTreatURLSchemeAsLocal(url.protocol().toStringWithoutCopying()))
         m_userStyleSheetPath = url.fileSystemPath();
@@ -1883,7 +1883,7 @@ void Page::userStyleSheetLocationChanged()
     m_userStyleSheetModificationTime = std::nullopt;
 
     // Data URLs with base64-encoded UTF-8 style sheets are common. We can process them
-    // synchronously and avoid using a loader.
+    // synchronously and avoid using a loader. 
     if (url.protocolIsData() && url.string().startsWith("data:text/css;charset=utf-8;base64,")) {
         m_didLoadUserStyleSheet = true;
 
@@ -3071,7 +3071,7 @@ RefPtr<WheelEventTestMonitor> Page::wheelEventTestMonitor() const
 
 void Page::clearWheelEventTestMonitor()
 {
-            if (m_scrollingCoordinator)
+    if (m_scrollingCoordinator)
         m_scrollingCoordinator->stopMonitoringWheelEvents();
 
     m_wheelEventTestMonitor = nullptr;
@@ -3094,7 +3094,7 @@ void Page::startMonitoringWheelEvents(bool clearLatchingState)
     if (auto* frameView = mainFrame().view()) {
         if (m_scrollingCoordinator) {
             m_scrollingCoordinator->startMonitoringWheelEvents(clearLatchingState);
-                m_scrollingCoordinator->updateIsMonitoringWheelEventsForFrameView(*frameView);
+            m_scrollingCoordinator->updateIsMonitoringWheelEventsForFrameView(*frameView);
         }
     }
 }
@@ -3126,7 +3126,7 @@ IDBClient::IDBConnectionToServer& Page::idbConnection()
 {
     if (!m_idbConnectionToServer)
         m_idbConnectionToServer = &databaseProvider().idbConnectionToServerForSession(m_sessionID);
-
+    
     return *m_idbConnectionToServer;
 }
 
@@ -3405,7 +3405,7 @@ ScrollLatchingController& Page::scrollLatchingController()
 {
     if (!m_scrollLatchingController)
         m_scrollLatchingController = makeUnique<ScrollLatchingController>();
-
+        
     return *m_scrollLatchingController;
 }
 

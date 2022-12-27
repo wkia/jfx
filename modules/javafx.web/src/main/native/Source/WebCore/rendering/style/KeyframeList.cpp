@@ -68,7 +68,7 @@ void KeyframeList::insert(KeyframeValue&& keyframe)
             break;
         }
     }
-
+    
     if (!inserted)
         m_keyframes.append(WTFMove(keyframe));
 

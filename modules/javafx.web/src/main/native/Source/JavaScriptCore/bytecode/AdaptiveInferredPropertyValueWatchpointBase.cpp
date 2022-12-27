@@ -95,8 +95,8 @@ void AdaptiveInferredPropertyValueWatchpointBase::PropertyWatchpoint::fireIntern
     ptrdiff_t myOffset = OBJECT_OFFSETOF(AdaptiveInferredPropertyValueWatchpointBase, m_propertyWatchpoint);
 
     AdaptiveInferredPropertyValueWatchpointBase* parent = bitwise_cast<AdaptiveInferredPropertyValueWatchpointBase*>(bitwise_cast<char*>(this) - myOffset);
-
+    
     parent->fire(vm, detail);
 }
-
+    
 } // namespace JSC

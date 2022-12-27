@@ -379,7 +379,7 @@ macro makeHostFunctionCall(entry, protoCallFrame, temp1, temp2)
         move sp, a1
         # We need to allocate stack space for 16 bytes (8-byte aligned)
         # for 4 arguments, since callee can use this space.
-        subp 16, sp
+        subp 16, sp 
         loadp ProtoCallFrame::globalObject[protoCallFrame], a0
         call temp1
         addp 16, sp
@@ -1450,7 +1450,7 @@ end)
 macro performGetByIDHelper(opcodeStruct, modeMetadataName, valueProfileName, slowLabel, size, metadata, return)
     metadata(t2, t1)
     loadb %opcodeStruct%::Metadata::%modeMetadataName%.mode[t2], t1
-
+        
 .opGetByIdDefault:
     bbneq t1, constexpr GetByIdMode::Default, .opGetByIdProtoLoad
     loadi JSCell::m_structureID[t3], t1 # assumes base object in t3
@@ -1483,7 +1483,7 @@ macro performGetByIDHelper(opcodeStruct, modeMetadataName, valueProfileName, slo
     bilt t0, 0, slowLabel
     valueProfile(opcodeStruct, valueProfileName, t2, Int32Tag, t0)
     return(Int32Tag, t0)
-
+    
 .opGetByIdUnset:
     loadi JSCell::m_structureID[t3], t1
     loadi %opcodeStruct%::Metadata::%modeMetadataName%.unsetMode.structureID[t2], t0
@@ -2159,7 +2159,7 @@ macro callHelper(opcodeName, slowPath, opcodeStruct, valueProfileName, dstVirtua
     negi t3
     addp cfr, t3  # t3 contains the new value of cfr
     storei t2, Callee + PayloadOffset[t3]
-    getArgumentCountIncludingThis(t2)
+    getArgumentCountIncludingThis(t2)    
     storei PC, ArgumentCountIncludingThis + TagOffset[cfr]
     storei t2, ArgumentCountIncludingThis + PayloadOffset[t3]
     storei CellTag, Callee + TagOffset[t3]
@@ -2170,7 +2170,7 @@ macro callHelper(opcodeName, slowPath, opcodeStruct, valueProfileName, dstVirtua
 .opCallSlow:
     slowPathForCall(opcodeName, size, opcodeStruct, valueProfileName, dstVirtualRegister, dispatch, slowPath, prepareCall)
 end
-
+        
 macro commonCallOp(opcodeName, slowPath, opcodeStruct, prepareCall, prologue)
     llintOpWithMetadata(opcodeName, opcodeStruct, macro (size, get, dispatch, metadata, return)
         metadata(t5, t0)
@@ -2190,7 +2190,7 @@ macro commonCallOp(opcodeName, slowPath, opcodeStruct, prepareCall, prologue)
         macro getArgumentCount(dst)
             getu(size, opcodeStruct, m_argc, dst)
         end
-
+        
         callHelper(opcodeName, slowPath, opcodeStruct, m_profile, m_dst, prepareCall, size, dispatch, metadata, getCallee, getArgumentStart, getArgumentCount)
     end)
 end
@@ -2871,7 +2871,7 @@ llintOpWithMetadata(op_iterator_open, OpIteratorOpen, macro (size, get, dispatch
     end
 
     # We need to load m_iterator into t3 because that's where
-    # performGetByIDHelper expects the base object
+    # performGetByIDHelper expects the base object    
     loadVariable(get, m_iterator, t3, t0, t3)
     bineq t0, CellTag, .iteratorOpenGenericGetNextSlow
     performGetByIDHelper(OpIteratorOpen, m_modeMetadata, m_nextProfile, .iteratorOpenGenericGetNextSlow, size, metadata, storeNextAndDispatch)
@@ -2882,7 +2882,7 @@ llintOpWithMetadata(op_iterator_open, OpIteratorOpen, macro (size, get, dispatch
 end)
 
 llintOpWithMetadata(op_iterator_next, OpIteratorNext, macro (size, get, dispatch, metadata, return)
-
+        
     loadVariable(get, m_next, t0, t1, t0)
     bineq t1, EmptyValueTag, .iteratorNextGeneric
 
@@ -3078,6 +3078,7 @@ llintOpWithMetadata(op_set_private_brand, OpSetPrivateBrand, macro (size, get, d
     callSlowPath(_llint_slow_path_set_private_brand)
     dispatch()
 end)
+
 slowPathOp(enumerator_next)
 slowPathOp(enumerator_get_by_val)
 slowPathOp(enumerator_in_by_val)

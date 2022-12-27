@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -77,7 +77,7 @@ void JITCompiler::linkOSRExits()
                 RELEASE_ASSERT(label.isSet());
                 labels.append(label);
             };
-
+            
             if (!info.m_failureJumps.empty()) {
                 for (unsigned j = 0; j < info.m_failureJumps.jumps().size(); ++j)
                     appendLabel(info.m_failureJumps.jumps()[j].label());
@@ -86,7 +86,7 @@ void JITCompiler::linkOSRExits()
             m_exitSiteLabels.append(labels);
         }
     }
-
+    
     for (unsigned i = 0; i < m_osrExit.size(); ++i) {
         OSRExitCompilationInfo& info = m_exitCompilationInfo[i];
         JumpList& failureJumps = info.m_failureJumps;
@@ -116,7 +116,7 @@ void JITCompiler::compileEntry()
 void JITCompiler::compileSetupRegistersForEntry()
 {
     emitSaveCalleeSaves();
-    emitMaterializeTagCheckRegisters();
+    emitMaterializeTagCheckRegisters();    
 }
 
 void JITCompiler::compileEntryExecutionFlag()
@@ -182,7 +182,7 @@ void JITCompiler::link(LinkBuffer& linkBuffer)
 #if USE(JSVALUE32_64)
     m_jitCode->common.doubleConstants = WTFMove(m_graph.m_doubleConstants);
 #endif
-
+    
     m_graph.registerFrozenValues();
 
     if (!m_graph.m_stringSwitchJumpTables.isEmpty() || !m_graph.m_switchJumpTables.isEmpty()) {
@@ -266,7 +266,7 @@ void JITCompiler::link(LinkBuffer& linkBuffer)
             linkBuffer.locationOf<JSInternalPtrTag>(record.slowPathStart),
             linkBuffer.locationOf<JSInternalPtrTag>(record.doneLocation));
     }
-
+    
     for (auto& record : m_jsDirectCalls) {
         CallLinkInfo& info = *record.info;
         info.setCodeLocations(
@@ -296,7 +296,7 @@ void JITCompiler::link(LinkBuffer& linkBuffer)
                 linkBuffer.locationOf<OSRExitPtrTag>(info.m_replacementDestination)));
         }
     }
-
+    
     if (UNLIKELY(m_graph.compilation())) {
         ASSERT(m_exitSiteLabels.size() == m_osrExit.size());
         for (unsigned i = 0; i < m_exitSiteLabels.size(); ++i) {
@@ -312,7 +312,7 @@ void JITCompiler::link(LinkBuffer& linkBuffer)
     m_jitCode->common.compilation = m_graph.compilation();
     m_jitCode->m_osrExit = WTFMove(m_osrExit);
     m_jitCode->m_speculationRecovery = WTFMove(m_speculationRecovery);
-
+    
     // Link new DFG exception handlers and remove baseline JIT handlers.
     m_codeBlock->clearExceptionHandlers();
     for (unsigned  i = 0; i < m_exceptionHandlerOSRExitCallSites.size(); i++) {
@@ -382,10 +382,10 @@ void JITCompiler::compile()
     // Generate slow path code.
     m_speculative->runSlowPathGenerators(m_pcToCodeOriginMapBuilder);
     m_pcToCodeOriginMapBuilder.appendItem(labelIgnoringWatchpoints(), PCToCodeOriginMapBuilder::defaultCodeOrigin());
-
+    
     compileExceptionHandlers();
     linkOSRExits();
-
+    
     // Create OSR entry trampolines if necessary.
     m_speculative->createOSREntries();
     setEndOfCode();
@@ -395,7 +395,7 @@ void JITCompiler::compile()
         m_graph.m_plan.setFinalizer(makeUnique<FailedFinalizer>(m_graph.m_plan));
         return;
     }
-
+    
     link(*linkBuffer);
     m_speculative->linkOSREntries(*linkBuffer);
 
@@ -452,7 +452,7 @@ void JITCompiler::compileFunction()
         addPtr(TrustedImm32(-static_cast<int32_t>(maxFrameExtentForSlowPathCall)), stackPointerRegister);
 
     m_speculative->callOperationWithCallFrameRollbackOnException(operationThrowStackOverflowError, m_codeBlock);
-
+    
     // The fast entry point into a function does not check the correct number of arguments
     // have been passed to the call (we only use the fast entry point where we can statically
     // determine the correct number of arguments have been passed, or have already checked).
@@ -484,10 +484,10 @@ void JITCompiler::compileFunction()
     // Generate slow path code.
     m_speculative->runSlowPathGenerators(m_pcToCodeOriginMapBuilder);
     m_pcToCodeOriginMapBuilder.appendItem(labelIgnoringWatchpoints(), PCToCodeOriginMapBuilder::defaultCodeOrigin());
-
+    
     compileExceptionHandlers();
     linkOSRExits();
-
+    
     // Create OSR entry trampolines if necessary.
     m_speculative->createOSREntries();
     setEndOfCode();
@@ -500,7 +500,7 @@ void JITCompiler::compileFunction()
     }
     link(*linkBuffer);
     m_speculative->linkOSREntries(*linkBuffer);
-
+    
     if (requiresArityFixup)
         linkBuffer->link(callArityFixup, FunctionPtr<JITThunkPtrTag>(vm().getCTIStub(arityFixupGenerator).code()));
 
@@ -583,7 +583,7 @@ void JITCompiler::noticeOSREntry(BasicBlock& basicBlock, JITCompiler::Label bloc
         else {
             VariableAccessData* variable = node->variableAccessData();
             entry.m_machineStackUsed.set(variable->machineLocal().toLocal());
-
+                
             switch (variable->flushFormat()) {
             case FlushedDouble:
                 entry.m_localsForcedDouble.set(local);
@@ -603,7 +603,7 @@ void JITCompiler::noticeOSREntry(BasicBlock& basicBlock, JITCompiler::Label bloc
             }
         }
     }
-
+        
     entry.m_expectedValues = WTFMove(expectedValues);
     entry.m_reshufflings = WTFMove(reshufflings);
     m_osrEntry.append(WTFMove(entry));
@@ -625,8 +625,8 @@ void JITCompiler::exceptionCheck()
     // addition outside a loop, and that we exit at the point of that concatenation
     // from an out of memory exception.
     // If the original loop had a try/catch around string concatenation, if we "catch"
-    // that exception inside the loop, then the loops induction variable will be undefined
-    // in the OSR exit value recovery. It's more defensible for the string concatenation,
+    // that exception inside the loop, then the loops induction variable will be undefined 
+    // in the OSR exit value recovery. It's more defensible for the string concatenation, 
     // then, to not be caught by the for loops' try/catch.
     // Here is the program I'm speaking about:
     //
@@ -634,16 +634,16 @@ void JITCompiler::exceptionCheck()
     // for (var i = 0; i < length; i++) {
     //     try {
     //         c = a + b
-    //     } catch(e) {
+    //     } catch(e) { 
     //         If we threw an out of memory error, and we cought the exception
     //         right here, then "i" would almost certainly be undefined, which
     //         would make no sense.
-    //         ...
+    //         ... 
     //     }
     // }
     CodeOrigin opCatchOrigin;
     HandlerInfo* exceptionHandler;
-    bool willCatchException = m_graph.willCatchExceptionInMachineFrame(m_speculative->m_currentNode->origin.forExit, opCatchOrigin, exceptionHandler);
+    bool willCatchException = m_graph.willCatchExceptionInMachineFrame(m_speculative->m_currentNode->origin.forExit, opCatchOrigin, exceptionHandler); 
     if (willCatchException) {
         unsigned streamIndex = m_speculative->m_outOfLineStreamIndex ? *m_speculative->m_outOfLineStreamIndex : m_speculative->m_stream->size();
         MacroAssembler::Jump hadException = emitNonPatchableExceptionCheck(vm());

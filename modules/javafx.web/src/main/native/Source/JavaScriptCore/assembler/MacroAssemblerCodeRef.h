@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -252,7 +252,7 @@ public:
     {
         return m_value;
     }
-
+    
     const void* untaggedValue() const
     {
         return untagCodePtr<ReturnAddressPtrTag>(m_value);
@@ -364,7 +364,7 @@ public:
         return !m_value;
     }
     explicit operator bool() const { return !(!*this); }
-
+    
     bool operator==(const MacroAssemblerCodePtr& other) const
     {
         return m_value == other.m_value;
@@ -384,15 +384,15 @@ public:
 
     enum EmptyValueTag { EmptyValue };
     enum DeletedValueTag { DeletedValue };
-
+    
     MacroAssemblerCodePtr(EmptyValueTag)
         : m_value(emptyValue())
     { }
-
+    
     MacroAssemblerCodePtr(DeletedValueTag)
         : m_value(deletedValue())
     { }
-
+    
     bool isEmptyValue() const { return m_value == emptyValue(); }
     bool isDeletedValue() const { return m_value == deletedValue(); }
 
@@ -458,7 +458,7 @@ public:
         m_executableMemory = otherCodeRef.m_executableMemory;
         return *this;
     }
-
+    
     // Use this only when you know that the codePtr refers to code that is
     // already being kept alive through some other means. Typically this means
     // that codePtr is immortal.
@@ -466,12 +466,12 @@ public:
     {
         return MacroAssemblerCodeRef(codePtr);
     }
-
+    
     ExecutableMemoryHandle* executableMemory() const
     {
         return m_executableMemory.get();
     }
-
+    
     MacroAssemblerCodePtr<tag> code() const
     {
         return m_codePtr;
@@ -500,19 +500,19 @@ public:
     {
         return tryToDisassemble(retaggedCode<DisassemblyPtrTag>(), size(), prefix, out);
     }
-
+    
     bool tryToDisassemble(const char* prefix = "") const
     {
         return tryToDisassemble(retaggedCode<DisassemblyPtrTag>(), size(), prefix);
     }
-
+    
     CString disassembly() const
     {
         return MacroAssemblerCodeRefBase::disassembly(retaggedCode<DisassemblyPtrTag>(), size());
     }
-
+    
     explicit operator bool() const { return !!m_codePtr; }
-
+    
     void dump(PrintStream& out) const
     {
         m_codePtr.dumpWithName("CodeRef", out);

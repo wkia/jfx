@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -52,7 +52,7 @@ public:
         , m_direction(mappingDirection)
     {
     }
-
+    
     TransformState(TransformDirection mappingDirection, const FloatPoint& p)
         : m_lastPlanarPoint(p)
         , m_accumulatingTransform(false)
@@ -61,7 +61,7 @@ public:
         , m_direction(mappingDirection)
     {
     }
-
+    
     TransformState(TransformDirection mappingDirection, const FloatQuad& quad)
         : m_lastPlanarQuad(quad)
         , m_accumulatingTransform(false)
@@ -70,7 +70,7 @@ public:
         , m_direction(mappingDirection)
     {
     }
-
+    
     TransformState(const TransformState& other) { *this = other; }
 
     TransformState& operator=(const TransformState&);
@@ -119,12 +119,12 @@ private:
     void translateMappedCoordinates(const LayoutSize&);
     void flattenWithTransform(const TransformationMatrix&, bool* wasClamped);
     void applyAccumulatedOffset();
-
+    
     TransformDirection direction() const { return m_direction; }
     TransformDirection inverseDirection() const;
 
     void mapQuad(FloatQuad&, TransformDirection, bool* clamped = nullptr) const;
-
+    
     FloatPoint m_lastPlanarPoint;
     FloatQuad m_lastPlanarQuad;
     std::optional<FloatQuad> m_lastPlanarSecondaryQuad;

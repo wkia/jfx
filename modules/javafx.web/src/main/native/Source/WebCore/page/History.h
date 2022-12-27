@@ -42,7 +42,7 @@ public:
     static Ref<History> create(DOMWindow& window) { return adoptRef(*new History(window)); }
 
     unsigned length() const;
-
+    
     enum class ScrollRestoration {
         Auto,
         Manual

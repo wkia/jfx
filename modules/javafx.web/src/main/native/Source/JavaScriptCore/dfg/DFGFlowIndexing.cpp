@@ -46,10 +46,10 @@ FlowIndexing::~FlowIndexing()
 void FlowIndexing::recompute()
 {
     unsigned numNodeIndices = m_graph.maxNodeCount();
-
+    
     m_nodeIndexToShadowIndex.resize(numNodeIndices);
     m_nodeIndexToShadowIndex.fill(UINT_MAX);
-
+    
     m_shadowIndexToNodeIndex.shrink(0);
 
     m_numIndices = numNodeIndices;
@@ -58,7 +58,7 @@ void FlowIndexing::recompute()
         for (Node* node : *block) {
             if (node->op() != Phi)
                 continue;
-
+            
             unsigned nodeIndex = node->index();
             unsigned shadowIndex = m_numIndices++;
             m_nodeIndexToShadowIndex[nodeIndex] = shadowIndex;

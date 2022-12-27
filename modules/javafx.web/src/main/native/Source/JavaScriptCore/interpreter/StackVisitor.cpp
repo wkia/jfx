@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -302,7 +302,7 @@ String StackVisitor::Frame::functionName() const
             traceLine = getCalculatedDisplayName(callFrame()->deprecatedVM(), jsCast<JSObject*>(callee)).impl();
         break;
     }
-    case CodeType::Function:
+    case CodeType::Function: 
         traceLine = getCalculatedDisplayName(callFrame()->deprecatedVM(), jsCast<JSObject*>(this->callee().asCell())).impl();
         break;
     case CodeType::Global:
@@ -375,7 +375,7 @@ ClonedArguments* StackVisitor::Frame::createArguments(VM& vm)
     if (isInlinedFrame()) {
         ASSERT(m_inlineCallFrame);
         arguments = ClonedArguments::createWithInlineFrame(globalObject, physicalFrame, m_inlineCallFrame, mode);
-    } else
+    } else 
 #endif
         arguments = ClonedArguments::createWithMachineFrame(globalObject, physicalFrame, mode);
     return arguments;

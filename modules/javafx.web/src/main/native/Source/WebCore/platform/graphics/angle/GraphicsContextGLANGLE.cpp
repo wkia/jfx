@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -243,7 +243,7 @@ void GraphicsContextGLOpenGL::resolveMultisamplingIfNecessary(const IntRect& rec
         gl::GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &boundFrameBuffer);
         gl::GetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &boundReadFrameBuffer);
     } else
-    gl::GetIntegerv(GL_FRAMEBUFFER_BINDING, &boundFrameBuffer);
+        gl::GetIntegerv(GL_FRAMEBUFFER_BINDING, &boundFrameBuffer);
     gl::BindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, m_multisampleFBO);
     gl::BindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, m_fbo);
 
@@ -260,7 +260,7 @@ void GraphicsContextGLOpenGL::resolveMultisamplingIfNecessary(const IntRect& rec
         gl::BindFramebuffer(GL_DRAW_FRAMEBUFFER, boundFrameBuffer);
         gl::BindFramebuffer(GL_READ_FRAMEBUFFER, boundReadFrameBuffer);
     } else
-    gl::BindFramebuffer(GL_FRAMEBUFFER, boundFrameBuffer);
+        gl::BindFramebuffer(GL_FRAMEBUFFER, boundFrameBuffer);
 }
 
 void GraphicsContextGLOpenGL::renderbufferStorage(GCGLenum target, GCGLenum internalformat, GCGLsizei width, GCGLsizei height)
@@ -650,7 +650,7 @@ void GraphicsContextGLOpenGL::bindFramebuffer(GCGLenum target, PlatformGLObject 
     else
         fbo = (contextAttributes().antialias ? m_multisampleFBO : m_fbo);
 
-        gl::BindFramebuffer(target, fbo);
+    gl::BindFramebuffer(target, fbo);
     if (target == GL_FRAMEBUFFER) {
         m_state.boundReadFBO = m_state.boundDrawFBO = fbo;
     } else if (target == GL_READ_FRAMEBUFFER) {
@@ -1782,7 +1782,7 @@ void GraphicsContextGLOpenGL::getFloatv(GCGLenum pname, GCGLSpan<GCGLfloat> valu
 
     gl::GetFloatvRobustANGLE(pname, value.bufSize, nullptr, value.data);
 }
-
+    
 GCGLint64 GraphicsContextGLOpenGL::getInteger64(GCGLenum pname)
 {
     GCGLint64 value = 0;
@@ -1851,7 +1851,7 @@ String GraphicsContextGLOpenGL::getProgramInfoLog(PlatformGLObject program)
     GLint length = 0;
     gl::GetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
     if (!length)
-        return String();
+        return String(); 
 
     GLsizei size = 0;
     Vector<GLchar> info(length);
@@ -1893,7 +1893,7 @@ String GraphicsContextGLOpenGL::getShaderInfoLog(PlatformGLObject shader)
     GLint length = 0;
     gl::GetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
     if (!length)
-        return String();
+        return String(); 
 
     GLsizei size = 0;
     Vector<GLchar> info(length);

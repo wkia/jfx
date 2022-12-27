@@ -113,7 +113,7 @@ IntRect Chrome::rootViewToScreen(const IntRect& rect) const
 {
     return m_client.rootViewToScreen(rect);
 }
-
+    
 IntPoint Chrome::accessibilityScreenToRootView(const IntPoint& point) const
 {
     return m_client.accessibilityScreenToRootView(point);

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -313,21 +313,21 @@ public:
         , m_hugeBlock(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_fixpointState == FixpointNotConverged);
         ASSERT(m_graph.m_form == ThreadedCPS || m_graph.m_form == LoadStore);
-
+        
         bool changed = false;
-
+        
         m_graph.clearReplacements();
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             if (block->size() <= SmallMaps::capacity)
                 changed |= m_smallBlock.run(block);
             else if (block->size() <= Options::maxDFGNodesInBasicBlockForPreciseAnalysis())
@@ -335,10 +335,10 @@ public:
             else
                 changed |= m_hugeBlock.run(block);
         }
-
+        
         return changed;
     }
-
+    
 private:
     class SmallMaps {
     public:
@@ -350,19 +350,19 @@ private:
         // enough things from them, deletes (or resizes) their backing store eagerly. Hence
         // HashMaps induce a lot of malloc traffic.
         static constexpr unsigned capacity = 100;
-
+    
         SmallMaps()
             : m_pureLength(0)
             , m_impureLength(0)
         {
         }
-
+    
         void clear()
         {
             m_pureLength = 0;
             m_impureLength = 0;
         }
-
+    
         void write(AbstractHeap heap)
         {
             if (heap.kind() == SideState)
@@ -373,19 +373,19 @@ private:
                     m_impureMap[i--] = m_impureMap[--m_impureLength];
             }
         }
-
+    
         Node* addPure(PureValue value, Node* node)
         {
             for (unsigned i = m_pureLength; i--;) {
                 if (m_pureMap[i].key == value)
                     return m_pureMap[i].value;
             }
-
+        
             RELEASE_ASSERT(m_pureLength < capacity);
             m_pureMap[m_pureLength++] = WTF::KeyValuePair<PureValue, Node*>(value, node);
             return nullptr;
         }
-
+        
         LazyNode findReplacement(HeapLocation location)
         {
             for (unsigned i = m_impureLength; i--;) {
@@ -394,7 +394,7 @@ private:
             }
             return nullptr;
         }
-
+    
         LazyNode addImpure(HeapLocation location, LazyNode node)
         {
             // FIXME: If we are using small maps, we must not def() derived values.
@@ -407,7 +407,7 @@ private:
             m_impureMap[m_impureLength++] = WTF::KeyValuePair<HeapLocation, LazyNode>(location, node);
             return nullptr;
         }
-
+    
     private:
         WTF::KeyValuePair<PureValue, Node*> m_pureMap[capacity];
         WTF::KeyValuePair<HeapLocation, LazyNode> m_impureMap[capacity];
@@ -420,19 +420,19 @@ private:
         LargeMaps()
         {
         }
-
+    
         void clear()
         {
             m_pureMap.clear();
             m_impureMap.clear();
         }
-
+    
         void write(AbstractHeap heap)
         {
             bool clobberConservatively = false;
             m_impureMap.clobber(heap, clobberConservatively);
         }
-
+    
         Node* addPure(PureValue value, Node* node)
         {
             auto result = m_pureMap.add(value, node);
@@ -440,12 +440,12 @@ private:
                 return nullptr;
             return result.iterator->value;
         }
-
+        
         LazyNode findReplacement(HeapLocation location)
         {
             return m_impureMap.get(location);
         }
-
+    
         LazyNode addImpure(const HeapLocation& location, const LazyNode& node)
         {
             if (const ImpureDataSlot* slot = m_impureMap.add(location, node))
@@ -512,17 +512,17 @@ private:
             , m_insertionSet(graph)
         {
         }
-
+    
         bool run(BasicBlock* block)
         {
             m_maps.clear();
             m_changed = false;
             m_block = block;
-
+        
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                 m_node = block->at(nodeIndex);
                 m_graph.performSubstitution(m_node);
-
+            
                 if (m_node->op() == Identity || m_node->op() == IdentityWithProfile) {
                     m_node->replaceWith(m_graph, m_node->child1().node());
                     m_changed = true;
@@ -534,11 +534,11 @@ private:
                     // CheckInBounds.
                     if (m_node->op() == PutByVal || m_node->op() == PutByValDirect) {
                         HeapLocation heap;
-
+                        
                         Node* base = m_graph.varArgChild(m_node, 0).node();
                         Node* index = m_graph.varArgChild(m_node, 1).node();
                         LocationKind indexedPropertyLoc = indexedPropertyLocForResultType(m_node->result());
-
+                        
                         ArrayMode mode = m_node->arrayMode();
                         switch (mode.type()) {
                         case Array::Int32:
@@ -546,7 +546,7 @@ private:
                                 break;
                             heap = HeapLocation(indexedPropertyLoc, IndexedInt32Properties, base, index);
                             break;
-
+                            
                         case Array::Double: {
                             if (!mode.isInBounds())
                                 break;
@@ -554,13 +554,13 @@ private:
                             heap = HeapLocation(kind, IndexedDoubleProperties, base, index);
                             break;
                         }
-
+                            
                         case Array::Contiguous:
                             if (!mode.isInBounds())
                                 break;
                             heap = HeapLocation(indexedPropertyLoc, IndexedContiguousProperties, base, index);
                             break;
-
+                            
                         case Array::Int8Array:
                         case Array::Int16Array:
                         case Array::Int32Array:
@@ -575,7 +575,7 @@ private:
                             heap = HeapLocation(
                                 indexedPropertyLoc, TypedArrayProperties, base, index);
                             break;
-
+                            
                         default:
                             break;
                         }
@@ -589,17 +589,17 @@ private:
             }
 
             m_insertionSet.execute(block);
-
+        
             return m_changed;
         }
-
+    
         void read(AbstractHeap) { }
-
+    
         void write(AbstractHeap heap)
         {
             m_maps.write(heap);
         }
-
+        
         void def(PureValue value)
         {
             Node* match = m_maps.addPure(value, m_node);
@@ -609,17 +609,17 @@ private:
             m_node->replaceWith(m_graph, match);
             m_changed = true;
         }
-
+    
         void def(const HeapLocation& location, const LazyNode& value)
         {
             LazyNode match = m_maps.addImpure(location, value);
             if (!match)
                 return;
-
+        
             if (m_node->op() == GetLocal) {
                 // Usually the CPS rethreading phase does this. But it's OK for us to mess with
                 // locals so long as:
-                //
+                // 
                 // - We dethread the graph. Any changes we make may invalidate the assumptions of
                 //   our CPS form, particularly if this GetLocal is linked to the variablesAtTail.
                 //
@@ -630,11 +630,11 @@ private:
                 //
                 // We accomplish the latter by just clearing the child; then the Phantom that we
                 // introduce won't have children and so it will eventually just be deleted.
-
+            
                 m_node->child1() = Edge();
                 m_graph.dethread();
             }
-
+        
             if (value.isNode() && value.asNode() == m_node) {
                 match.ensureIsNode(m_insertionSet, m_block, 0)->owner = m_block;
                 ASSERT(match.isNode());
@@ -642,14 +642,14 @@ private:
                 m_changed = true;
             }
         }
-
+    
     private:
         Graph& m_graph;
-
+        
         bool m_changed;
         Node* m_node;
         BasicBlock* m_block;
-
+    
         Maps m_maps;
 
         InsertionSet m_insertionSet;
@@ -668,17 +668,17 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_fixpointState == FixpointNotConverged);
         ASSERT(m_graph.m_form == SSA);
-
+        
         m_graph.initializeNodeOwners();
         m_graph.ensureSSADominators();
-
+        
         m_preOrder = m_graph.blocksInPreOrder();
-
+        
         // First figure out what gets clobbered by blocks. Node that this uses the preOrder list
         // for convenience only.
         for (unsigned i = m_preOrder.size(); i--;) {
@@ -687,34 +687,34 @@ public:
             for (unsigned nodeIndex = m_block->size(); nodeIndex--;)
                 addWrites(m_graph, m_block->at(nodeIndex), m_impureData->writes);
         }
-
+        
         // Based on my experience doing this before, what follows might have to be made iterative.
         // Right now it doesn't have to be iterative because everything is dominator-bsed. But when
         // validation is enabled, we check if iterating would find new CSE opportunities.
 
         bool changed = iterate();
-
+        
         // FIXME: It should be possible to assert that CSE will not find any new opportunities if you
         // run it a second time. Unfortunately, we cannot assert this right now. Note that if we did
         // this, we'd have to first reset all of our state.
         // https://bugs.webkit.org/show_bug.cgi?id=145853
-
+        
         return changed;
     }
-
+    
     bool iterate()
     {
         if (DFGCSEPhaseInternal::verbose)
             dataLog("Performing iteration.\n");
-
+        
         m_changed = false;
         m_graph.clearReplacements();
-
+        
         for (unsigned i = 0; i < m_preOrder.size(); ++i) {
             m_block = m_preOrder[i];
             m_impureData = &m_impureDataMap[m_block];
             m_writesSoFar.clear();
-
+            
             if (DFGCSEPhaseInternal::verbose)
                 dataLog("Processing block ", *m_block, ":\n");
 
@@ -723,9 +723,9 @@ public:
                 m_node = m_block->at(nodeIndex);
                 if (DFGCSEPhaseInternal::verbose)
                     dataLog("  Looking at node ", m_node, ":\n");
-
+                
                 m_graph.performSubstitution(m_node);
-
+                
                 if (m_node->op() == Identity || m_node->op() == IdentityWithProfile) {
                     m_node->replaceWith(m_graph, m_node->child1().node());
                     m_changed = true;
@@ -734,22 +734,22 @@ public:
             }
 
             m_insertionSet.execute(m_block);
-
+            
             m_impureData->didVisit = true;
         }
-
+        
         return m_changed;
     }
 
     void read(AbstractHeap) { }
-
+    
     void write(AbstractHeap heap)
     {
         bool clobberConservatively = false;
         m_impureData->availableAtTail.clobber(heap, clobberConservatively);
         m_writesSoFar.add(heap);
     }
-
+    
     void def(PureValue value)
     {
         // With pure values we do not have to worry about the possibility of some control flow path
@@ -759,13 +759,13 @@ public:
         // flow graph that compute a value but only one of them that dominates us. We may build up
         // a large list of nodes that compute some value in the case of gnarly control flow. This
         // is probably OK.
-
+        
         auto result = m_pureValues.add(value, Vector<Node*>());
         if (result.isNewEntry) {
             result.iterator->value.append(m_node);
             return;
         }
-
+        
         for (unsigned i = result.iterator->value.size(); i--;) {
             Node* candidate = result.iterator->value[i];
             if (m_graph.m_ssaDominators->dominates(candidate->owner, m_block)) {
@@ -774,10 +774,10 @@ public:
                 return;
             }
         }
-
+        
         result.iterator->value.append(m_node);
     }
-
+    
     LazyNode findReplacement(HeapLocation location)
     {
         // At this instant, our "availableAtTail" reflects the set of things that are available in
@@ -789,7 +789,7 @@ public:
                 dataLog("      Found local match: ", match, "\n");
             return match;
         }
-
+        
         // If it's not available at this point in the block, and at some prior point in the block
         // we have clobbered this heap location, then there is no point in doing a global search.
         if (m_writesSoFar.overlaps(location.heap())) {
@@ -797,7 +797,7 @@ public:
                 dataLog("      Not looking globally because of local clobber: ", m_writesSoFar, "\n");
             return nullptr;
         }
-
+        
         // This perfoms a backward search over the control flow graph to find some possible
         // non-local def() that matches our heap location. Such a match is only valid if there does
         // not exist any path from that def() to our block that contains a write() that overlaps
@@ -833,11 +833,11 @@ public:
         // Hence this graph search algorithm ends up being deceptively simple: any overlapping
         // write() causes us to immediately return nullptr, and a matching def() means that we just
         // record it and neglect to visit its precessors.
-
+        
         Vector<BasicBlock*, 8> worklist;
         Vector<BasicBlock*, 8> seenList;
         BitVector seen;
-
+        
         for (unsigned i = m_block->predecessors.size(); i--;) {
             BasicBlock* predecessor = m_block->predecessors[i];
             if (!seen.get(predecessor->index)) {
@@ -845,15 +845,15 @@ public:
                 seen.set(predecessor->index);
             }
         }
-
+        
         while (!worklist.isEmpty()) {
             BasicBlock* block = worklist.takeLast();
             seenList.append(block);
-
+            
             if (DFGCSEPhaseInternal::verbose)
                 dataLog("      Searching in block ", *block, "\n");
             ImpureBlockData& data = m_impureDataMap[block];
-
+            
             // We require strict domination because this would only see things in our own block if
             // they came *after* our position in the block. Clearly, while our block dominates
             // itself, the things in the block after us don't dominate us.
@@ -872,7 +872,7 @@ public:
                     continue;
                 }
             }
-
+            
             if (DFGCSEPhaseInternal::verbose)
                 dataLog("        Dealing with write set ", data.writes, "\n");
             if (data.writes.overlaps(location.heap())) {
@@ -880,7 +880,7 @@ public:
                     dataLog("        Clobbered.\n");
                 return nullptr;
             }
-
+            
             for (unsigned i = block->predecessors.size(); i--;) {
                 BasicBlock* predecessor = block->predecessors[i];
                 if (!seen.get(predecessor->index)) {
@@ -889,10 +889,10 @@ public:
                 }
             }
         }
-
+        
         if (!match)
             return nullptr;
-
+        
         // Cache the results for next time. We cache them both for this block and for all of our
         // predecessors, since even though we've already visited our predecessors, our predecessors
         // probably have successors other than us.
@@ -902,20 +902,20 @@ public:
         for (BasicBlock* block : seenList)
             m_impureDataMap[block].availableAtTail.add(location, match);
         m_impureData->availableAtTail.add(location, match);
-
+        
         return match;
     }
-
+    
     void def(HeapLocation location, LazyNode value)
     {
         if (DFGCSEPhaseInternal::verbose)
             dataLog("    Got heap location def: ", location, " -> ", value, "\n");
-
+        
         LazyNode match = findReplacement(location);
-
+        
         if (DFGCSEPhaseInternal::verbose)
             dataLog("      Got match: ", match, "\n");
-
+        
         if (!match) {
             if (DFGCSEPhaseInternal::verbose)
                 dataLog("      Adding at-tail mapping: ", location, " -> ", value, "\n");
@@ -951,30 +951,30 @@ public:
             m_changed = true;
         }
     }
-
+    
     struct ImpureBlockData {
         ImpureBlockData()
             : didVisit(false)
         {
         }
-
+        
         ClobberSet writes;
         ImpureMap availableAtTail;
         bool didVisit;
     };
-
+    
     Vector<BasicBlock*> m_preOrder;
 
     PureMultiMap m_pureValues;
     BlockMap<ImpureBlockData> m_impureDataMap;
-
+    
     BasicBlock* m_block;
     Node* m_node;
     unsigned m_nodeIndex;
     ImpureBlockData* m_impureData;
     ClobberSet m_writesSoFar;
     InsertionSet m_insertionSet;
-
+    
     bool m_changed;
 };
 

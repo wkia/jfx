@@ -100,11 +100,11 @@ void RenderReplaced::layout()
 {
     StackStats::LayoutCheckPoint layoutCheckPoint;
     ASSERT(needsLayout());
-
+    
     LayoutRepainter repainter(*this, checkForRepaintDuringLayout());
 
     LayoutRect oldContentRect = replacedContentRect();
-
+    
     setHeight(minimumReplacedHeight());
 
     updateLogicalWidth();
@@ -216,7 +216,7 @@ void RenderReplaced::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 
     if (hasVisibleBoxDecorations() && paintInfo.phase == PaintPhase::Foreground)
         paintBoxDecorations(paintInfo, adjustedPaintOffset);
-
+    
     if (paintInfo.phase == PaintPhase::Mask) {
         paintMask(paintInfo, adjustedPaintOffset);
         return;
@@ -231,14 +231,14 @@ void RenderReplaced::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 
     if (paintInfo.phase != PaintPhase::Foreground && paintInfo.phase != PaintPhase::Selection)
         return;
-
+    
     if (!paintInfo.shouldPaintWithinRoot(*this))
         return;
-
+    
     Color highlightColor;
     if (!document().printing() && !paintInfo.paintBehavior.contains(PaintBehavior::ExcludeSelection))
         highlightColor = calculateHighlightColor();
-
+    
     bool drawSelectionTint = shouldDrawSelectionTint();
     if (paintInfo.phase == PaintPhase::Selection) {
         if (selectionState() == HighlightState::None)
@@ -264,7 +264,7 @@ void RenderReplaced::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
         if (style().hasBorderRadius())
             paintInfo.context().restore();
     }
-
+        
     // The selection tint never gets clipped by border-radius rounding, since we want it to run right up to the edges of
     // surrounding content.
     if (drawSelectionTint) {
@@ -272,7 +272,7 @@ void RenderReplaced::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
         selectionPaintingRect.moveBy(adjustedPaintOffset);
         paintInfo.context().fillRect(snappedIntRect(selectionPaintingRect), selectionBackgroundColor());
     }
-
+    
     if (highlightColor.isVisible()) {
         auto selectionPaintingRect = localSelectionRect(false);
         selectionPaintingRect.moveBy(adjustedPaintOffset);
@@ -295,11 +295,11 @@ bool RenderReplaced::shouldPaint(PaintInfo& paintInfo, const LayoutPoint& paintO
 
     if (!paintInfo.shouldPaintWithinRoot(*this))
         return false;
-
+        
     // if we're invisible or haven't received a layout yet, then just bail.
     if (style().visibility() != Visibility::Visible)
         return false;
-
+    
     LayoutPoint adjustedPaintOffset = paintOffset + location();
 
     // Early exit if the element touches the edges.
@@ -312,7 +312,7 @@ bool RenderReplaced::shouldPaint(PaintInfo& paintInfo, const LayoutPoint& paintO
         top = std::min(selTop, top);
         bottom = std::max(selBottom, bottom);
     }
-
+    
     LayoutRect localRepaintRect = paintInfo.rect;
     if (adjustedPaintOffset.x() + visualOverflowRect().x() >= localRepaintRect.maxX() || adjustedPaintOffset.x() + visualOverflowRect().maxX() <= localRepaintRect.x())
         return false;
@@ -371,10 +371,10 @@ bool RenderReplaced::hasReplacedLogicalHeight() const
 bool RenderReplaced::setNeedsLayoutIfNeededAfterIntrinsicSizeChange()
 {
     setPreferredLogicalWidthsDirty(true);
-
+    
     // If the actual area occupied by the image has changed and it is not constrained by style then a layout is required.
     bool imageSizeIsConstrained = style().logicalWidth().isSpecified() && style().logicalHeight().isSpecified();
-
+    
     // FIXME: We only need to recompute the containing block's preferred size
     // if the containing block's size depends on the image's size (i.e., the container uses shrink-to-fit sizing).
     // There's no easy way to detect that shrink-to-fit is needed, always force a layout.
@@ -382,7 +382,7 @@ bool RenderReplaced::setNeedsLayoutIfNeededAfterIntrinsicSizeChange()
         style().logicalWidth().isPercentOrCalculated()
         || style().logicalMaxWidth().isPercentOrCalculated()
         || style().logicalMinWidth().isPercentOrCalculated();
-
+    
     // Flex layout algorithm uses the intrinsic image width/height even if width/height are specified.
     if (!imageSizeIsConstrained || containingBlockNeedsToRecomputePreferredSize || isFlexItem()) {
         setNeedsLayout();
@@ -391,7 +391,7 @@ bool RenderReplaced::setNeedsLayoutIfNeededAfterIntrinsicSizeChange()
 
     return false;
 }
-
+    
 void RenderReplaced::computeAspectRatioInformationForRenderBox(RenderBox* contentRenderer, FloatSize& constrainedSize, double& intrinsicRatio) const
 {
     FloatSize intrinsicSize;
@@ -514,10 +514,10 @@ LayoutUnit RenderReplaced::computeConstrainedLogicalWidth(ShouldComputePreferred
     // 'padding-right' + 'border-right-width' + 'margin-right' = width of
     // containing block
     LayoutUnit logicalWidth = containingBlock()->availableLogicalWidth();
-
+    
     // This solves above equation for 'width' (== logicalWidth).
     LayoutUnit marginStart = minimumValueForLength(style().marginStart(), logicalWidth);
-    LayoutUnit marginEnd = minimumValueForLength(style().marginEnd(), logicalWidth);
+    LayoutUnit marginEnd = minimumValueForLength(style().marginEnd(), logicalWidth); 
 
     // FIXME: This expression does not align with the comment above, which is quoting https://www.w3.org/TR/CSS22/visudet.html#blockwidth.
     logicalWidth = std::max(0_lu, (logicalWidth - (marginStart + marginEnd + borderLeft() + borderRight())));
@@ -673,7 +673,7 @@ void RenderReplaced::computePreferredLogicalWidths()
         m_maxPreferredLogicalWidth = std::max(m_maxPreferredLogicalWidth, adjustContentBoxLogicalWidthForBoxSizing(styleToUse.logicalMinWidth()));
         m_minPreferredLogicalWidth = std::max(m_minPreferredLogicalWidth, adjustContentBoxLogicalWidthForBoxSizing(styleToUse.logicalMinWidth()));
     }
-
+    
     if (styleToUse.logicalMaxWidth().isFixed()) {
         m_maxPreferredLogicalWidth = std::min(m_maxPreferredLogicalWidth, adjustContentBoxLogicalWidthForBoxSizing(styleToUse.logicalMaxWidth()));
         m_minPreferredLogicalWidth = std::min(m_minPreferredLogicalWidth, adjustContentBoxLogicalWidthForBoxSizing(styleToUse.logicalMaxWidth()));
@@ -698,13 +698,13 @@ VisiblePosition RenderReplaced::positionForPoint(const LayoutPoint& point, const
 
     LayoutUnit blockDirectionPosition = isHorizontalWritingMode() ? point.y() + y() : point.x() + x();
     LayoutUnit lineDirectionPosition = isHorizontalWritingMode() ? point.x() + x() : point.y() + y();
-
+    
     if (blockDirectionPosition < top)
         return createVisiblePosition(caretMinOffset(), Affinity::Downstream); // coordinates are above
-
+    
     if (blockDirectionPosition >= bottom)
         return createVisiblePosition(caretMaxOffset(), Affinity::Downstream); // coordinates are below
-
+    
     if (element()) {
         if (lineDirectionPosition <= logicalLeft() + (logicalWidth() / 2))
             return createVisiblePosition(0, Affinity::Downstream);
@@ -720,7 +720,7 @@ LayoutRect RenderReplaced::selectionRectForRepaint(const RenderLayerModelObject*
 
     if (!isSelected())
         return LayoutRect();
-
+    
     LayoutRect rect = localSelectionRect();
     if (clipToVisibleContent)
         return computeRectForRepaint(rect, repaintContainer);
@@ -735,7 +735,7 @@ LayoutRect RenderReplaced::localSelectionRect(bool checkWhetherSelected) const
     if (!m_inlineBoxWrapper)
         // We're a block-level replaced element.  Just return our own dimensions.
         return LayoutRect(LayoutPoint(), size());
-
+    
     const LegacyRootInlineBox& rootBox = m_inlineBoxWrapper->root();
     LayoutUnit newLogicalTop { rootBox.blockFlow().style().isFlippedBlocksWritingMode() ? m_inlineBoxWrapper->logicalBottom() - rootBox.selectionBottom() : rootBox.selectionTop() - m_inlineBoxWrapper->logicalTop() };
     if (rootBox.blockFlow().style().isHorizontalWritingMode())

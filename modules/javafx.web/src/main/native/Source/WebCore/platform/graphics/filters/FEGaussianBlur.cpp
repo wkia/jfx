@@ -25,9 +25,8 @@
 
 #include "config.h"
 #include "FEGaussianBlur.h"
-#if !PLATFORM(JAVA) || HAVE(ARM_NEON_INTRINSICS)
+
 #include "FEGaussianBlurNEON.h"
-#endif
 #include "Filter.h"
 #include "GraphicsContext.h"
 #include "PixelBuffer.h"
@@ -333,7 +332,7 @@ inline void standardBoxBlur(Uint8ClampedArray& ioBuffer, Uint8ClampedArray& temp
     int dxRight = 0;
     int dyLeft = 0;
     int dyRight = 0;
-
+    
     Uint8ClampedArray* fromBuffer = &ioBuffer;
     Uint8ClampedArray* toBuffer = &tempBuffer;
 
@@ -469,7 +468,7 @@ static int clampedToKernelSize(float value)
     unsigned size = std::max<unsigned>(2, static_cast<unsigned>(floorf(value * gaussianKernelFactor() + 0.5f)));
     return clampTo<int>(std::min(size, static_cast<unsigned>(gMaxKernelSize)));
 }
-
+    
 IntSize FEGaussianBlur::calculateUnscaledKernelSize(FloatSize stdDeviation)
 {
     ASSERT(stdDeviation.width() >= 0 && stdDeviation.height() >= 0);

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,7 +40,7 @@ enum VariableEventKind : uint8_t {
     // Marks the beginning of a checkpoint. If you interpret the variable
     // events starting at a Reset point then you'll get everything you need.
     Reset,
-
+    
     // Node births. Points in the code where a node becomes relevant for OSR.
     // It may be the point where it is actually born (i.e. assigned) or it may
     // be a later point, if it's only later in the sequence of instructions
@@ -48,29 +48,29 @@ enum VariableEventKind : uint8_t {
     BirthToFill,
     BirthToSpill,
     Birth,
-
+    
     // Events related to how a node is represented.
     Fill,
     Spill,
-
+    
     // Death of a node - after this we no longer care about this node.
     Death,
-
+    
     // A MovHintEvent means that a node is being associated with a bytecode operand,
     // but that it has not been stored into that operand.
     MovHintEvent,
-
+    
     // A SetLocalEvent means that a node's value has been stored into the stack.
     SetLocalEvent,
-
+    
     // Used to indicate an uninitialized VariableEvent. Don't use for other
     // purposes.
     InvalidEventKind
 };
 
 union VariableRepresentation {
-    VariableRepresentation()
-        : operand()
+    VariableRepresentation() 
+        : operand() 
     { }
 
     MacroAssembler::RegisterID gpr;
@@ -90,14 +90,14 @@ public:
         : m_kind(InvalidEventKind)
     {
     }
-
+    
     static VariableEvent reset()
     {
         VariableEvent event;
         event.m_kind = Reset;
         return event;
     }
-
+    
     static VariableEvent fillGPR(VariableEventKind kind, MinifiedID id, MacroAssembler::RegisterID gpr, DataFormat dataFormat)
     {
         ASSERT(kind == BirthToFill || kind == Fill);
@@ -116,7 +116,7 @@ public:
         event.m_representation = WTFMove(representation);
         return event;
     }
-
+    
 #if USE(JSVALUE32_64)
     static VariableEvent fillPair(VariableEventKind kind, MinifiedID id, MacroAssembler::RegisterID tagGPR, MacroAssembler::RegisterID payloadGPR)
     {
@@ -134,7 +134,7 @@ public:
         return event;
     }
 #endif // USE(JSVALUE32_64)
-
+    
     static VariableEvent fillFPR(VariableEventKind kind, MinifiedID id, MacroAssembler::FPRegisterID fpr)
     {
         ASSERT(kind == BirthToFill || kind == Fill);
@@ -149,7 +149,7 @@ public:
         event.m_representation = WTFMove(representation);
         return event;
     }
-
+    
     static VariableEvent birth(MinifiedID id)
     {
         VariableEvent event;
@@ -159,7 +159,7 @@ public:
         event.m_which = WTFMove(which);
         return event;
     }
-
+    
     static VariableEvent spill(VariableEventKind kind, MinifiedID id, VirtualRegister virtualRegister, DataFormat format)
     {
         ASSERT(kind == BirthToSpill || kind == Spill);
@@ -174,7 +174,7 @@ public:
         event.m_representation = WTFMove(representation);
         return event;
     }
-
+    
     static VariableEvent death(MinifiedID id)
     {
         VariableEvent event;
@@ -184,7 +184,7 @@ public:
         event.m_which = WTFMove(which);
         return event;
     }
-
+    
     static VariableEvent setLocal(
         Operand bytecodeOperand, VirtualRegister machineReg, DataFormat format)
     {
@@ -199,7 +199,7 @@ public:
         event.m_representation = WTFMove(representation);
         return event;
     }
-
+    
     static VariableEvent movHint(MinifiedID id, Operand bytecodeReg)
     {
         VariableEvent event;
@@ -212,12 +212,12 @@ public:
         event.m_representation = WTFMove(representation);
         return event;
     }
-
+    
     VariableEventKind kind() const
     {
         return static_cast<VariableEventKind>(m_kind);
     }
-
+    
     MinifiedID id() const
     {
         ASSERT(
@@ -225,7 +225,7 @@ public:
             || m_kind == Death || m_kind == MovHintEvent || m_kind == Birth);
         return MinifiedID::fromBits(m_which.get().id);
     }
-
+    
     DataFormat dataFormat() const
     {
         ASSERT(
@@ -233,7 +233,7 @@ public:
             || m_kind == SetLocalEvent);
         return m_dataFormat;
     }
-
+    
     MacroAssembler::RegisterID gpr() const
     {
         ASSERT(m_kind == BirthToFill || m_kind == Fill);
@@ -244,7 +244,7 @@ public:
 #endif
         return m_representation.get().gpr;
     }
-
+    
 #if USE(JSVALUE32_64)
     MacroAssembler::RegisterID tagGPR() const
     {
@@ -259,14 +259,14 @@ public:
         return m_representation.get().pair.payloadGPR;
     }
 #endif // USE(JSVALUE32_64)
-
+    
     MacroAssembler::FPRegisterID fpr() const
     {
         ASSERT(m_kind == BirthToFill || m_kind == Fill);
         ASSERT(m_dataFormat == DataFormatDouble);
         return m_representation.get().fpr;
     }
-
+    
     VirtualRegister spillRegister() const
     {
         ASSERT(m_kind == BirthToSpill || m_kind == Spill);
@@ -278,27 +278,27 @@ public:
         ASSERT(m_kind == SetLocalEvent || m_kind == MovHintEvent);
         return m_representation.get().operand;
     }
-
+    
     VirtualRegister machineRegister() const
     {
         ASSERT(m_kind == SetLocalEvent);
         return VirtualRegister(m_which.get().virtualReg);
     }
-
+    
     VariableRepresentation variableRepresentation() const { return m_representation.get(); }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     void dumpFillInfo(const char* name, PrintStream&) const;
     void dumpSpillInfo(const char* name, PrintStream&) const;
-
+    
     union WhichType {
         int virtualReg;
         unsigned id;
     };
     Packed<WhichType> m_which;
-
+    
     // For BirthToFill, Fill:
     //   - The GPR or FPR, or a GPR pair.
     // For BirthToSpill, Spill:
@@ -308,7 +308,7 @@ private:
     // For Death:
     //   - Unused.
     Packed<VariableRepresentation> m_representation;
-
+    
     VariableEventKind m_kind;
     DataFormat m_dataFormat { DataFormatNone };
 };

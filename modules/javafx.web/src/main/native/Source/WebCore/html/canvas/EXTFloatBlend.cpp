@@ -52,7 +52,7 @@ bool EXTFloatBlend::supported(const WebGLRenderingContextBase& context)
 {
     return context.graphicsContextGL()->getExtensions().supports("GL_EXT_float_blend"_s);
 }
-
+    
 } // namespace WebCore
 
 #endif // ENABLE(WEBGL)

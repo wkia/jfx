@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -423,7 +423,7 @@ bool FocusController::setInitialFocus(FocusDirection direction, KeyboardEvent* p
 {
     bool didAdvanceFocus = advanceFocus(direction, providedEvent, true);
 
-    // If focus is being set initially, accessibility needs to be informed that system focus has moved
+    // If focus is being set initially, accessibility needs to be informed that system focus has moved 
     // into the web area again, even if focus did not change within WebCore. PostNotification is called instead
     // of handleFocusedUIElementChanged, because this will send the notification even if the element is the same.
     if (auto* cache = focusedOrMainFrame().document()->existingAXObjectCache())
@@ -513,7 +513,7 @@ bool FocusController::advanceFocusInDocumentOrder(FocusDirection direction, Keyb
         setFocusedFrame(owner.contentFrame());
         return true;
     }
-
+    
     // FIXME: It would be nice to just be able to call setFocusedElement(node) here, but we can't do
     // that because some elements (e.g. HTMLInputElement and HTMLTextAreaElement) do extra work in
     // their focus() methods.
@@ -769,7 +769,7 @@ static void clearSelectionIfNeeded(Frame* oldFocusedFrame, Frame* newFocusedFram
 {
     if (!oldFocusedFrame || !newFocusedFrame)
         return;
-
+        
     if (oldFocusedFrame->document() != newFocusedFrame->document())
         return;
 
@@ -832,7 +832,7 @@ bool FocusController::setFocusedElement(Element* element, Frame& newFocusedFrame
     Ref<Frame> protectedNewFocusedFrame = newFocusedFrame;
     RefPtr<Frame> oldFocusedFrame = focusedFrame();
     RefPtr<Document> oldDocument = oldFocusedFrame ? oldFocusedFrame->document() : nullptr;
-
+    
     Element* oldFocusedElement = oldDocument ? oldDocument->focusedElement() : nullptr;
     if (oldFocusedElement == element) {
         if (element)
@@ -862,7 +862,7 @@ bool FocusController::setFocusedElement(Element* element, Frame& newFocusedFrame
         m_page.editorClient().setInputMethodState(element);
         return true;
     }
-
+    
     if (oldDocument && oldDocument != newDocument.ptr())
         oldDocument->setFocusedElement(nullptr);
 
@@ -916,7 +916,7 @@ void FocusController::setActiveInternal(bool active)
     }
 
     focusedOrMainFrame().selection().pageActivationChanged();
-
+    
     if (m_focusedFrame && isFocused())
         dispatchEventsOnWindowAndFocusedElement(m_focusedFrame->document(), active);
 }

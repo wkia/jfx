@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,7 +44,7 @@ public:
     {
         RemoveFontMemResourceEx(m_fontResourceHandle);
     }
-
+    
 private:
     explicit FontMemoryResource(HANDLE handle)
         : m_fontResourceHandle(handle)
@@ -54,7 +54,7 @@ private:
 
     HANDLE m_fontResourceHandle;
 };
-
+    
 } // namespace WebCore
 
 #endif // OS(WINDOWS)

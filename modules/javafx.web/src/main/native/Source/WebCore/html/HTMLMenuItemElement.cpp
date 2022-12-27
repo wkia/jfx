@@ -39,7 +39,7 @@ namespace WebCore {
 WTF_MAKE_ISO_ALLOCATED_IMPL(HTMLMenuItemElement);
 
 using namespace HTMLNames;
-
+    
 inline HTMLMenuItemElement::HTMLMenuItemElement(const QualifiedName& tagName, Document& document)
     : HTMLElement(tagName, document)
 {

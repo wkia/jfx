@@ -101,7 +101,7 @@ bool RenderEmbeddedObject::requiresLayer() const
 {
     if (RenderWidget::requiresLayer())
         return true;
-
+    
     return allowsAcceleratedCompositing();
 }
 

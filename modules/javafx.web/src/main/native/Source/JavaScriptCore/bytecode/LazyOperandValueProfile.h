@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,36 +43,36 @@ public:
         : m_operand(VirtualRegister()) // not a valid operand index in our current scheme
     {
     }
-
+    
     LazyOperandValueProfileKey(WTF::HashTableDeletedValueType)
         : m_bytecodeIndex(WTF::HashTableDeletedValue)
         , m_operand(VirtualRegister()) // not a valid operand index in our current scheme
     {
     }
-
+    
     LazyOperandValueProfileKey(BytecodeIndex bytecodeIndex, Operand operand)
         : m_bytecodeIndex(bytecodeIndex)
         , m_operand(operand)
     {
         ASSERT(m_operand.isValid());
     }
-
+    
     bool operator!() const
     {
         return !m_operand.isValid();
     }
-
+    
     bool operator==(const LazyOperandValueProfileKey& other) const
     {
         return m_bytecodeIndex == other.m_bytecodeIndex
             && m_operand == other.m_operand;
     }
-
+    
     unsigned hash() const
     {
         return m_bytecodeIndex.hash() + m_operand.value() + static_cast<unsigned>(m_operand.kind());
     }
-
+    
     BytecodeIndex bytecodeIndex() const
     {
         ASSERT(!!*this);
@@ -84,12 +84,12 @@ public:
         ASSERT(!!*this);
         return m_operand;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return !m_operand.isValid() && m_bytecodeIndex.isHashTableDeletedValue();
     }
-private:
+private: 
     BytecodeIndex m_bytecodeIndex;
     Operand m_operand;
 };
@@ -125,21 +125,21 @@ struct LazyOperandValueProfile : public MinimalValueProfile {
         , m_operand(VirtualRegister())
     {
     }
-
+    
     explicit LazyOperandValueProfile(const LazyOperandValueProfileKey& key)
         : MinimalValueProfile()
         , m_key(key)
     {
     }
-
+    
     LazyOperandValueProfileKey key() const
     {
         return m_key;
     }
-
+    
     VirtualRegister m_operand;
     LazyOperandValueProfileKey m_key;
-
+    
     typedef SegmentedVector<LazyOperandValueProfile, 8> List;
 };
 
@@ -150,12 +150,12 @@ class CompressedLazyOperandValueProfileHolder {
 public:
     CompressedLazyOperandValueProfileHolder();
     ~CompressedLazyOperandValueProfileHolder();
-
+    
     void computeUpdatedPredictions(const ConcurrentJSLocker&);
-
+    
     LazyOperandValueProfile* add(
         const ConcurrentJSLocker&, const LazyOperandValueProfileKey& key);
-
+    
 private:
     friend class LazyOperandValueProfileParser;
     std::unique_ptr<LazyOperandValueProfile::List> m_data;
@@ -166,13 +166,13 @@ class LazyOperandValueProfileParser {
 public:
     explicit LazyOperandValueProfileParser();
     ~LazyOperandValueProfileParser();
-
+    
     void initialize(
         const ConcurrentJSLocker&, CompressedLazyOperandValueProfileHolder& holder);
-
+    
     LazyOperandValueProfile* getIfPresent(
         const LazyOperandValueProfileKey& key) const;
-
+    
     SpeculatedType prediction(
         const ConcurrentJSLocker&, const LazyOperandValueProfileKey& key) const;
 private:

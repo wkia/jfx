@@ -123,7 +123,7 @@ void CLoopStack::sanitizeStack()
         char* end = reinterpret_cast<char*>(stackTop);
         memset(begin, 0, end - begin);
     }
-
+    
     m_lastStackPointer = stackTop;
 #endif
 }

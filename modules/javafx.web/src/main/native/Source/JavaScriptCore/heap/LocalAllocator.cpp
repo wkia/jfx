@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -57,7 +57,7 @@ LocalAllocator::~LocalAllocator()
         Locker locker { m_directory->m_localAllocatorsLock };
         remove();
     }
-
+    
     bool ok = true;
     if (!m_freeList.allocationWillFail()) {
         dataLog("FATAL: ", RawPointer(this), "->~LocalAllocator has non-empty free-list.\n");
@@ -81,7 +81,7 @@ void LocalAllocator::stopAllocating()
         ASSERT(m_freeList.allocationWillFail());
         return;
     }
-
+    
     m_currentBlock->stopAllocating(m_freeList);
     m_lastActiveBlock = m_currentBlock;
     m_currentBlock = nullptr;
@@ -117,20 +117,20 @@ void* LocalAllocator::allocateSlowCase(Heap& heap, GCDeferralContext* deferralCo
 
     ASSERT(!m_directory->markedSpace().isIterating());
     heap.didAllocate(m_freeList.originalSize());
-
+    
     didConsumeFreeList();
-
+    
     AllocatingScope helpingHeap(heap);
 
     heap.collectIfNecessaryOrDefer(deferralContext);
-
+    
     // Goofy corner case: the GC called a callback and now this directory has a currentBlock. This only
     // happens when running WebKit tests, which inject a callback into the GC's finalization.
     if (UNLIKELY(m_currentBlock))
         return allocate(heap, deferralContext, failureMode);
-
+    
     void* result = tryAllocateWithoutCollecting();
-
+    
     if (LIKELY(result != nullptr))
         return result;
 
@@ -139,7 +139,7 @@ void* LocalAllocator::allocateSlowCase(Heap& heap, GCDeferralContext* deferralCo
         if (void* result = static_cast<IsoSubspace*>(subspace)->tryAllocateFromLowerTier())
             return result;
     }
-
+    
     MarkedBlock::Handle* block = m_directory->tryAllocateBlock(heap);
     if (!block) {
         if (failureMode == AllocationFailureMode::Assert)
@@ -157,7 +157,7 @@ void LocalAllocator::didConsumeFreeList()
 {
     if (m_currentBlock)
         m_currentBlock->didConsumeFreeList();
-
+    
     m_freeList.clear();
     m_currentBlock = nullptr;
 }
@@ -172,17 +172,17 @@ void* LocalAllocator::tryAllocateWithoutCollecting()
     //
     // - The harder case of some LocalAllocator triggering a steal from a different BlockDirectory
     //   via a search in the AlignedMemoryAllocator's list. Who knows what locks that needs.
-    //
+    // 
     // One way to make this work is to have a single per-Heap lock that protects all mutator lock
     // allocation slow paths. That would probably be scalable enough for years. It would certainly be
     // for using TLC allocation from JIT threads.
     // https://bugs.webkit.org/show_bug.cgi?id=181635
-
+    
     SuperSamplerScope superSamplerScope(false);
-
+    
     ASSERT(!m_currentBlock);
     ASSERT(m_freeList.allocationWillFail());
-
+    
     for (;;) {
         MarkedBlock::Handle* block = m_directory->findBlockForAllocation(*this);
         if (!block)
@@ -191,13 +191,13 @@ void* LocalAllocator::tryAllocateWithoutCollecting()
         if (void* result = tryAllocateIn(block))
             return result;
     }
-
+    
     if (Options::stealEmptyBlocksFromOtherAllocators()) {
         if (MarkedBlock::Handle* block = m_directory->m_subspace->findEmptyBlockToSteal()) {
             RELEASE_ASSERT(block->alignedMemoryAllocator() == m_directory->m_subspace->alignedMemoryAllocator());
-
+            
             block->sweep(nullptr);
-
+            
             // It's good that this clears canAllocateButNotEmpty as well as all other bits,
             // because there is a remote chance that a block may have both canAllocateButNotEmpty
             // and empty set at the same time.
@@ -206,7 +206,7 @@ void* LocalAllocator::tryAllocateWithoutCollecting()
             return allocateIn(block);
         }
     }
-
+    
     return nullptr;
 }
 
@@ -221,9 +221,9 @@ void* LocalAllocator::tryAllocateIn(MarkedBlock::Handle* block)
 {
     ASSERT(block);
     ASSERT(!block->isFreeListed());
-
+    
     block->sweep(&m_freeList);
-
+    
     // It's possible to stumble on a completely full block. Marking tries to retire these, but
     // that algorithm is racy and may forget to do it sometimes.
     if (m_freeList.allocationWillFail()) {
@@ -234,9 +234,9 @@ void* LocalAllocator::tryAllocateIn(MarkedBlock::Handle* block)
         ASSERT(!m_directory->isCanAllocateButNotEmpty(NoLockingNecessary, block));
         return nullptr;
     }
-
+    
     m_currentBlock = block;
-
+    
     void* result = m_freeList.allocate(
         [] () -> HeapCell* {
             RELEASE_ASSERT_NOT_REACHED();

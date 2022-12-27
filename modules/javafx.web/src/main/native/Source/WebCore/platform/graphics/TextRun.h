@@ -124,7 +124,7 @@ private:
     // start of the containing block. In the case of right alignment or center alignment, left start of
     // the text line is not the same as left start of the containing block. This variable is only used
     // to calculate the width of \t
-    float m_xpos;
+    float m_xpos;  
     float m_horizontalGlyphStretch;
 
     float m_expansion;

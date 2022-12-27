@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -272,14 +272,14 @@ public:
 
 #if ENABLE(DRAG_SUPPORT)
     WEBCORE_EXPORT bool eventMayStartDrag(const PlatformMouseEvent&) const;
-
+    
     WEBCORE_EXPORT void didStartDrag();
     WEBCORE_EXPORT void dragCancelled();
     WEBCORE_EXPORT void dragSourceEndedAt(const PlatformMouseEvent&, OptionSet<DragOperation>, MayExtendDragSession = MayExtendDragSession::No);
 #endif
 
     void focusDocumentView();
-
+    
     WEBCORE_EXPORT void scheduleScrollEvent();
 
 #if PLATFORM(MAC)
@@ -337,7 +337,7 @@ public:
 #if PLATFORM(IOS_FAMILY) && ENABLE(DRAG_SUPPORT)
     WEBCORE_EXPORT bool tryToBeginDragAtPoint(const IntPoint& clientPosition, const IntPoint& globalPosition);
 #endif
-
+    
 #if PLATFORM(IOS_FAMILY)
     WEBCORE_EXPORT void startSelectionAutoscroll(RenderObject* renderer, const FloatPoint& positionInWindow);
     WEBCORE_EXPORT void cancelSelectionAutoscroll();
@@ -400,7 +400,7 @@ private:
 #endif
 
     bool logicalScrollOverflow(ScrollLogicalDirection, ScrollGranularity, Node* startingNode = nullptr);
-
+    
     bool shouldSwapScrollDirection(const HitTestResult&, const PlatformWheelEvent&) const;
 
     static bool isKeyboardOptionTab(KeyboardEvent&);
@@ -418,7 +418,7 @@ private:
 #endif
 
     Node* nodeUnderMouse() const;
-
+    
     enum class FireMouseOverOut { No, Yes };
     void updateMouseEventTargetNode(const AtomString& eventType, Node*, const PlatformMouseEvent&, FireMouseOverOut);
 
@@ -450,7 +450,7 @@ private:
     bool dragHysteresisExceeded(const FloatPoint&) const;
     bool dragHysteresisExceeded(const IntPoint&) const;
 #endif
-
+    
     bool mouseMovementExceedsThreshold(const FloatPoint&, int pointsThreshold) const;
 
     bool passMousePressEventToSubframe(MouseEventWithHitTestResults&, Frame&);
@@ -491,7 +491,7 @@ private:
     bool supportsSelectionUpdatesOnMouseDrag() const;
 #endif
 
-    // The following are called at the beginning of handleMouseUp and handleDrag.
+    // The following are called at the beginning of handleMouseUp and handleDrag.  
     // If they return true it indicates that they have consumed the event.
     bool eventLoopHandleMouseUp(const MouseEventWithHitTestResults&);
 
@@ -502,7 +502,7 @@ private:
 
     enum class SetOrClearLastScrollbar { Clear, Set };
     void updateLastScrollbarUnderMouse(Scrollbar*, SetOrClearLastScrollbar);
-
+    
     void setFrameWasScrolledByUser();
 
     bool capturesDragging() const { return m_capturesDragging; }
@@ -532,7 +532,7 @@ private:
 
     bool canMouseDownStartSelect(const MouseEventWithHitTestResults&);
     bool mouseDownMayStartSelect() const;
-
+    
     Frame& m_frame;
     RefPtr<Node> m_mousePressNode;
     Timer m_hoverTimer;
@@ -573,7 +573,7 @@ private:
     RefPtr<HTMLFrameSetElement> m_frameSetBeingResized;
 
     LayoutSize m_offsetFromResizeCorner; // In the coords of m_resizeLayer.
-
+    
     int m_clickCount { 0 };
 
     std::optional<IntPoint> m_lastKnownMousePosition; // Same coordinates as PlatformMouseEvent::position().

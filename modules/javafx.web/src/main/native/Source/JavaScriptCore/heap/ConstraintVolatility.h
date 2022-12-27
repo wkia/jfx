@@ -33,22 +33,22 @@ enum class ConstraintVolatility : uint8_t {
     // The constraint needs to be validated, but it is unlikely to ever produce information.
     // It's best to run it at the bitter end.
     SeldomGreyed,
-
+    
     // FIXME: We could introduce a new kind of volatility called GreyedByResumption, which
     // would mean running all of the times that GreyedByExecution runs except as a root in a
     // full GC.
     // https://bugs.webkit.org/show_bug.cgi?id=166830
-
+    
     // The constraint needs to be reevaluated anytime the mutator runs: so at GC start and
     // whenever the GC resuspends after a resumption. This is almost always something that
     // you'd call a "root" in a traditional GC.
     GreyedByExecution,
-
+    
     // The constraint needs to be reevaluated any time any object is marked and anytime the
     // mutator resumes.
     GreyedByMarking
 };
-
+    
 } // namespace JSC
 
 namespace WTF {

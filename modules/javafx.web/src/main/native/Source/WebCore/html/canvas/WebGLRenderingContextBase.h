@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -395,7 +395,7 @@ public:
 
     void removeSharedObject(WebGLSharedObject&);
     void removeContextObject(WebGLContextObject&);
-
+    
     unsigned getMaxVertexAttribs() const { return m_maxVertexAttribs; }
 
     bool isContextUnrecoverablyLost() const;
@@ -556,14 +556,14 @@ protected:
     RefPtr<WebGLVertexArrayObjectBase> m_boundVertexArrayObject;
 
     void setBoundVertexArrayObject(const WTF::AbstractLocker&, WebGLVertexArrayObjectBase*);
-
+    
     class VertexAttribValue {
     public:
         VertexAttribValue()
         {
             initValue();
         }
-
+        
         void initValue()
         {
             type = GraphicsContextGL::FLOAT;
@@ -572,7 +572,7 @@ protected:
             fValue[2] = 0.0f;
             fValue[3] = 1.0f;
         }
-
+        
         GCGLenum type;
         union {
             GCGLfloat fValue[4];

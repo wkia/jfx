@@ -70,7 +70,7 @@ Ref<TextControlInnerContainer> TextControlInnerContainer::create(Document& docum
 {
     return adoptRef(*new TextControlInnerContainer(document));
 }
-
+    
 RenderPtr<RenderElement> TextControlInnerContainer::createElementRenderer(RenderStyle&& style, const RenderTreePosition&)
 {
     return createRenderer<RenderTextControlInnerContainer>(*this, WTFMove(style));

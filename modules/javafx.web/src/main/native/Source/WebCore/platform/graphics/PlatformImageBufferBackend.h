@@ -31,8 +31,6 @@
 #include "ImageBufferDirect2DBackend.h"
 #elif USE(CAIRO)
 #include "ImageBufferCairoBackend.h"
-#elif PLATFORM(JAVA)
-#include "ImageBufferJavaBackend.h"
 #endif
 
 namespace WebCore {
@@ -43,8 +41,6 @@ using PlatformImageBufferBackend = ImageBufferCGBackend;
 using PlatformImageBufferBackend = ImageBufferDirect2DBackend;
 #elif USE(CAIRO)
 using PlatformImageBufferBackend = ImageBufferCairoBackend;
-#elif PLATFORM(JAVA)
-using PlatformImageBufferBackend = ImageBufferJavaBackend;
 #endif
 
 } // namespace WebCore

@@ -921,24 +921,24 @@ ExceptionOr<void> DOMWindow::postMessage(JSC::JSGlobalObject& lexicalGlobalObjec
 
     document()->eventLoop().queueTask(TaskSource::PostedMessageQueue, [this, protectedThis = makeRef(*this), message = WTFMove(message), incumbentWindowProxy = WTFMove(incumbentWindowProxy), sourceOrigin = WTFMove(sourceOrigin), userGestureToForward = WTFMove(userGestureToForward), postMessageIdentifier, stackTrace = WTFMove(stackTrace), targetOrigin = WTFMove(target)]() mutable {
         if (!isCurrentlyDisplayedInFrame())
-        return;
+            return;
 
         Ref frame = *this->frame();
         if (targetOrigin) {
-        // Check target origin now since the target document may have changed since the timer was scheduled.
+            // Check target origin now since the target document may have changed since the timer was scheduled.
             if (!targetOrigin->isSameSchemeHostPort(document()->securityOrigin())) {
-            if (auto* pageConsole = console()) {
+                if (auto* pageConsole = console()) {
                     auto message = makeString("Unable to post message to ", targetOrigin->toString(), ". Recipient has origin ", document()->securityOrigin().toString(), ".\n");
                     if (stackTrace)
                         pageConsole->addMessage(MessageSource::Security, MessageLevel::Error, message, *stackTrace);
-                else
-                    pageConsole->addMessage(MessageSource::Security, MessageLevel::Error, message);
-            }
+                    else
+                        pageConsole->addMessage(MessageSource::Security, MessageLevel::Error, message);
+                }
 
                 InspectorInstrumentation::didFailPostMessage(frame, postMessageIdentifier);
-            return;
+                return;
+            }
         }
-    }
 
         UserGestureIndicator userGestureIndicator(userGestureToForward);
         InspectorInstrumentation::willDispatchPostMessage(frame, postMessageIdentifier);
@@ -1210,7 +1210,7 @@ bool DOMWindow::find(const String& string, bool caseSensitive, bool backwards, b
     if (!isCurrentlyDisplayedInFrame() || string.length() > maximumStringLength)
         return false;
 
-    // FIXME (13016): Support wholeWord, searchInFrames and showDialog.
+    // FIXME (13016): Support wholeWord, searchInFrames and showDialog.    
     FindOptions options { DoNotTraverseFlatTree };
     if (backwards)
         options.add(Backwards);
@@ -1278,7 +1278,7 @@ int DOMWindow::innerHeight() const
 {
     if (!frame())
         return 0;
-
+    
     // Force enough layout in the parent document to ensure that the FrameView has been resized.
     if (RefPtr ownerElement = frameElement())
         ownerElement->document().updateLayoutIfDimensionsOutOfDate(*ownerElement, HeightDimensionsCheck);
@@ -1286,7 +1286,7 @@ int DOMWindow::innerHeight() const
     RefPtr frame = this->frame();
     if (!frame)
         return 0;
-
+    
     RefPtr view = frame->view();
     if (!view)
         return 0;
@@ -1432,7 +1432,7 @@ void DOMWindow::setName(const String& string)
     frame->tree().setName(string);
 }
 
-void DOMWindow::setStatus(const String& string)
+void DOMWindow::setStatus(const String& string) 
 {
     m_status = string;
 
@@ -1448,7 +1448,7 @@ void DOMWindow::setStatus(const String& string)
     page->chrome().setStatusbarText(*frame, m_status);
 }
 
-void DOMWindow::setDefaultStatus(const String& string)
+void DOMWindow::setDefaultStatus(const String& string) 
 {
     m_defaultStatus = string;
 
@@ -1933,7 +1933,7 @@ static void didAddStorageEventListener(DOMWindow& window)
     // Creating these WebCore::Storage objects informs the system that we'd like to receive
     // notifications about storage events that might be triggered in other processes. Rather
     // than subscribe to these notifications explicitly, we subscribe to them implicitly to
-    // simplify the work done by the system.
+    // simplify the work done by the system. 
     window.localStorage();
     window.sessionStorage();
 }

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,16 +45,16 @@ public:
     DesiredIdentifiers();
     DesiredIdentifiers(CodeBlock*);
     ~DesiredIdentifiers();
-
+    
     unsigned numberOfIdentifiers();
     unsigned ensure(UniquedStringImpl*);
-
+    
     UniquedStringImpl* at(unsigned index) const;
-
+    
     UniquedStringImpl* operator[](unsigned index) const { return at(index); }
-
+    
     void reallyAdd(VM&, CommonData*);
-
+    
 private:
     void processCodeBlockIdentifiersIfNeeded();
 

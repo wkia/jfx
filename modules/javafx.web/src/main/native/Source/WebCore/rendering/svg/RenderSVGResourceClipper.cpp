@@ -103,7 +103,7 @@ bool RenderSVGResourceClipper::pathOnlyClipping(GraphicsContext& context, const 
             continue;
         auto& style = renderer->style();
         if (style.display() == DisplayType::None || style.visibility() != Visibility::Visible)
-             continue;
+            continue;
         // Current shape in clip-path gets clipped too. Fall back to masking.
         if (style.clipPath())
             return false;
@@ -139,7 +139,7 @@ bool RenderSVGResourceClipper::pathOnlyClipping(GraphicsContext& context, const 
 bool RenderSVGResourceClipper::applyClippingToContext(GraphicsContext& context, RenderElement& renderer, const FloatRect& objectBoundingBox, float effectiveZoom)
 {
     ClipperData& clipperData = addRendererToClipper(renderer);
-
+    
     LOG_WITH_STREAM(SVG, stream << "RenderSVGResourceClipper " << this << " applyClippingToContext: renderer " << &renderer << " objectBoundingBox " << objectBoundingBox << " (existing image buffer " << clipperData.imageBuffer.get() << ")");
 
     AffineTransform animatedLocalTransform = clipPathElement().animatedLocalTransform();
@@ -310,7 +310,7 @@ FloatRect RenderSVGResourceClipper::resourceBoundingBox(const RenderObject& obje
         addRendererToClipper(object); // For selfNeedsClientInvalidation().
         return object.objectBoundingBox();
     }
-
+    
     if (m_clipBoundaries.isEmpty())
         calculateClipContentRepaintRect();
 

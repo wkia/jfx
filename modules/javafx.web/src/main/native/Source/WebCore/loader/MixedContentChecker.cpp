@@ -123,7 +123,7 @@ std::optional<String> MixedContentChecker::checkForMixedContentInFrameTree(const
 
     while (document) {
         RELEASE_ASSERT_WITH_MESSAGE(document->frame(), "An unparented document tried to connect to a websocket with url: %s", url.string().utf8().data());
-
+        
         auto* frame = document->frame();
         if (isMixedContent(document->securityOrigin(), url))
             return makeString("The page at ", document->url().stringCenterEllipsizedToLength(), " was blocked from connecting insecurely to ", url.stringCenterEllipsizedToLength(), " either because the protocol is insecure or the page is embedded from an insecure page.");
@@ -135,7 +135,7 @@ std::optional<String> MixedContentChecker::checkForMixedContentInFrameTree(const
         RELEASE_ASSERT_WITH_MESSAGE(frame, "Should never have a parentless non main frame");
         document = frame->document();
     }
-
+    
     return std::nullopt;
 }
 

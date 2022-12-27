@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -61,7 +61,7 @@ public:
     static FloatRect clampedRect(const FloatRect&);
 
     static IntSize compatibleBufferSize(const FloatSize&, const GraphicsContext&);
-
+    
     WEBCORE_EXPORT virtual ~ImageBuffer() = default;
 
     virtual void setBackend(std::unique_ptr<ImageBufferBackend>&&) = 0;
@@ -117,7 +117,7 @@ public:
 
     WEBCORE_EXPORT static RefPtr<Image> sinkIntoImage(RefPtr<ImageBuffer>, PreserveResolution = PreserveResolution::No);
     static void drawConsuming(RefPtr<ImageBuffer>, GraphicsContext&, const FloatRect& destRect, const FloatRect& srcRect = FloatRect(0, 0, -1, -1), const ImagePaintingOptions& = { });
-
+    
     virtual void clipToMask(GraphicsContext&, const FloatRect& destRect) = 0;
 
     virtual void convertToLuminanceMask() = 0;

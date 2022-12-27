@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,7 +50,7 @@ InPlaceAbstractState::~InPlaceAbstractState() { }
 void InPlaceAbstractState::beginBasicBlock(BasicBlock* basicBlock)
 {
     ASSERT(!m_block);
-
+    
     ASSERT(basicBlock->variablesAtHead.numberOfLocals() == basicBlock->valuesAtHead.numberOfLocals());
     ASSERT(basicBlock->variablesAtTail.numberOfLocals() == basicBlock->valuesAtTail.numberOfLocals());
     ASSERT(basicBlock->variablesAtHead.numberOfLocals() == basicBlock->variablesAtTail.numberOfLocals());
@@ -69,7 +69,7 @@ void InPlaceAbstractState::beginBasicBlock(BasicBlock* basicBlock)
     m_activeVariables.clearRange(0, std::min(m_variables.size(), m_activeVariables.size()));
     if (m_variables.size() > m_activeVariables.size())
         m_activeVariables.resize(m_variables.size());
-
+    
     if (m_graph.m_form == SSA) {
         for (NodeAbstractValuePair& entry : basicBlock->ssa->valuesAtHead) {
             if (entry.node.isStillValid()) {
@@ -197,13 +197,13 @@ void InPlaceAbstractState::initialize()
 bool InPlaceAbstractState::endBasicBlock()
 {
     ASSERT(m_block);
-
+    
     BasicBlock* block = m_block; // Save the block for successor merging.
-
+    
     block->cfaThinksShouldTryConstantFolding = m_shouldTryConstantFolding;
     block->cfaDidFinish = m_isValid;
     block->cfaBranchDirection = m_branchDirection;
-
+    
     if (!m_isValid) {
         reset();
         return false;
@@ -213,7 +213,7 @@ bool InPlaceAbstractState::endBasicBlock()
     AbstractValueClobberEpoch currentEpoch = m_effectEpoch;
 
     block->cfaStructureClobberStateAtTail = m_structureClobberState;
-
+    
     switch (m_graph.m_form) {
     case ThreadedCPS: {
         ASSERT(block->variablesAtTail.size() == block->valuesAtTail.size());
@@ -223,13 +223,13 @@ bool InPlaceAbstractState::endBasicBlock()
             if (!node)
                 continue;
             AbstractValue& destination = block->valuesAtTail[index];
-
+            
             if (!m_activeVariables[index]) {
                 destination = block->valuesAtHead[index];
                 destination.fastForwardFromTo(epochAtHead, currentEpoch);
                 continue;
             }
-
+            
             switch (node->op()) {
             case Phi:
             case SetArgumentDefinitely:
@@ -240,7 +240,7 @@ bool InPlaceAbstractState::endBasicBlock()
                 destination = atIndex(index);
                 break;
             }
-
+                
             case GetLocal: {
                 // The block refines the value with additional speculations.
                 destination = forNode(node);
@@ -283,7 +283,7 @@ bool InPlaceAbstractState::endBasicBlock()
                 destination = value;
                 break;
             }
-
+                
             default:
                 RELEASE_ASSERT_NOT_REACHED();
                 break;
@@ -301,7 +301,7 @@ bool InPlaceAbstractState::endBasicBlock()
                 destination.fastForwardFromTo(epochAtHead, currentEpoch);
                 continue;
             }
-
+            
             block->valuesAtTail[i] = atIndex(i);
         }
 
@@ -315,7 +315,7 @@ bool InPlaceAbstractState::endBasicBlock()
     }
 
     reset();
-
+    
     return mergeToSuccessors(block);
 }
 
@@ -342,13 +342,13 @@ bool InPlaceAbstractState::merge(BasicBlock* from, BasicBlock* to)
     ASSERT(from->variablesAtTail.numberOfArguments() == to->variablesAtHead.numberOfArguments());
     ASSERT(from->variablesAtTail.numberOfLocals() == to->variablesAtHead.numberOfLocals());
     ASSERT(from->variablesAtTail.numberOfTmps() == to->variablesAtHead.numberOfTmps());
-
+    
     bool changed = false;
-
+    
     changed |= checkAndSet(
         to->cfaStructureClobberStateAtHead,
         DFG::merge(from->cfaStructureClobberStateAtTail, to->cfaStructureClobberStateAtHead));
-
+    
     switch (m_graph.m_form) {
     case ThreadedCPS: {
         for (size_t index = 0; index < from->variablesAtTail.size(); ++index) {
@@ -357,7 +357,7 @@ bool InPlaceAbstractState::merge(BasicBlock* from, BasicBlock* to)
         }
         break;
     }
-
+        
     case SSA: {
         for (size_t i = from->valuesAtTail.size(); i--;)
             changed |= to->valuesAtHead[i].merge(from->valuesAtTail[i]);
@@ -384,7 +384,7 @@ bool InPlaceAbstractState::merge(BasicBlock* from, BasicBlock* to)
         }
         break;
     }
-
+        
     default:
         RELEASE_ASSERT_NOT_REACHED();
         break;
@@ -392,26 +392,26 @@ bool InPlaceAbstractState::merge(BasicBlock* from, BasicBlock* to)
 
     if (!to->cfaHasVisited)
         changed = true;
-
+    
     if (DFGInPlaceAbstractStateInternal::verbose)
         dataLog("      Will revisit: ", changed, "\n");
     to->cfaShouldRevisit |= changed;
-
+    
     return changed;
 }
 
 inline bool InPlaceAbstractState::mergeToSuccessors(BasicBlock* basicBlock)
 {
     Node* terminal = basicBlock->terminal();
-
+    
     ASSERT(terminal->isTerminal());
-
+    
     switch (terminal->op()) {
     case Jump: {
         ASSERT(basicBlock->cfaBranchDirection == InvalidBranchDirection);
         return merge(basicBlock, terminal->targetBlock());
     }
-
+        
     case Branch: {
         ASSERT(basicBlock->cfaBranchDirection != InvalidBranchDirection);
         bool changed = false;
@@ -421,7 +421,7 @@ inline bool InPlaceAbstractState::mergeToSuccessors(BasicBlock* basicBlock)
             changed |= merge(basicBlock, terminal->branchData()->notTaken.block);
         return changed;
     }
-
+        
     case Switch: {
         // FIXME: It would be cool to be sparse conditional for Switch's. Currently
         // we're not. However I somehow doubt that this will ever be a big deal.
@@ -432,7 +432,7 @@ inline bool InPlaceAbstractState::mergeToSuccessors(BasicBlock* basicBlock)
             changed |= merge(basicBlock, data->cases[i].target.block);
         return changed;
     }
-
+    
     case EntrySwitch: {
         EntrySwitchData* data = terminal->entrySwitchData();
         bool changed = false;
@@ -462,11 +462,11 @@ inline bool InPlaceAbstractState::mergeVariableBetweenBlocks(AbstractValue& dest
 {
     if (!destinationNode)
         return false;
-
+    
     ASSERT_UNUSED(sourceNode, sourceNode);
-
+    
     // FIXME: We could do some sparse conditional propagation here!
-
+    
     return destination.merge(source);
 }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -38,28 +38,28 @@ class Heap;
 
 class LocalAllocator : public BasicRawSentinelNode<LocalAllocator> {
     WTF_MAKE_NONCOPYABLE(LocalAllocator);
-
+    
 public:
     LocalAllocator(BlockDirectory*);
     ~LocalAllocator();
-
+    
     void* allocate(Heap&, GCDeferralContext*, AllocationFailureMode);
-
+    
     unsigned cellSize() const { return m_freeList.cellSize(); }
 
     void stopAllocating();
     void prepareForAllocation();
     void resumeAllocating();
     void stopAllocatingForGood();
-
+    
     static ptrdiff_t offsetOfFreeList();
     static ptrdiff_t offsetOfCellSize();
-
+    
     bool isFreeListedCell(const void*) const;
-
+    
 private:
     friend class BlockDirectory;
-
+    
     void reset();
     JS_EXPORT_PRIVATE void* allocateSlowCase(Heap&, GCDeferralContext*, AllocationFailureMode);
     void didConsumeFreeList();
@@ -73,7 +73,7 @@ private:
 
     MarkedBlock::Handle* m_currentBlock { nullptr };
     MarkedBlock::Handle* m_lastActiveBlock { nullptr };
-
+    
     // After you do something to a block based on one of these cursors, you clear the bit in the
     // corresponding bitvector and leave the cursor where it was.
     unsigned m_allocationCursor { 0 }; // Points to the next block that is a candidate for allocation.

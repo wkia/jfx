@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -53,7 +53,7 @@ void GetByStatus::shrinkToFit()
 GetByStatus GetByStatus::computeFromLLInt(CodeBlock* profiledBlock, BytecodeIndex bytecodeIndex)
 {
     VM& vm = profiledBlock->vm();
-
+    
     auto instruction = profiledBlock->instructions().at(bytecodeIndex.offset());
 
     StructureID structureID;
@@ -153,7 +153,7 @@ GetByStatus GetByStatus::computeFor(CodeBlock* profiledBlock, ICStatusMap& map, 
 #if ENABLE(DFG_JIT)
     result = computeForStubInfoWithoutExitSiteFeedback(
         locker, profiledBlock, map.get(CodeOrigin(bytecodeIndex)).stubInfo, callExitSiteData);
-
+    
     if (didExit)
         return result.slowVersion();
 #else
@@ -164,7 +164,7 @@ GetByStatus GetByStatus::computeFor(CodeBlock* profiledBlock, ICStatusMap& map, 
 
     if (!result)
         return computeFromLLInt(profiledBlock, bytecodeIndex);
-
+    
     return result;
 }
 
@@ -203,7 +203,7 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
     StubInfoSummary summary = StructureStubInfo::summary(profiledBlock->vm(), stubInfo);
     if (!isInlineable(summary))
         return GetByStatus(summary, *stubInfo);
-
+    
     // Finally figure out if we can derive an access strategy.
     GetByStatus result;
     result.m_state = Simple;
@@ -211,7 +211,7 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
     switch (stubInfo->cacheType()) {
     case CacheType::Unset:
         return GetByStatus(NoInformation);
-
+        
     case CacheType::GetByIdSelf: {
         Structure* structure = stubInfo->m_inlineAccessBaseStructure.get();
         if (structure->takesSlowPathInDFGForImpureProperty())
@@ -226,13 +226,13 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
             return GetByStatus(JSC::slowVersion(summary), *stubInfo);
         if (attributes & PropertyAttribute::CustomAccessorOrValue)
             return GetByStatus(JSC::slowVersion(summary), *stubInfo);
-
+        
         variant.m_structureSet.add(structure);
         bool didAppend = result.appendVariant(variant);
         ASSERT_UNUSED(didAppend, didAppend);
         return result;
     }
-
+        
     case CacheType::Stub: {
         PolymorphicAccess* list = stubInfo->u.stub;
         if (list->size() == 1) {
@@ -259,7 +259,7 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
                 // https://bugs.webkit.org/show_bug.cgi?id=204215
                 return GetByStatus(JSC::slowVersion(summary), *stubInfo);
             }
-
+            
             Structure* structure = access.structure();
             if (!structure) {
                 // The null structure cases arise due to array.length and string.length. We have no way
@@ -270,17 +270,17 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
                 // crash on null structure.
                 return GetByStatus(JSC::slowVersion(summary), *stubInfo);
             }
-
+            
             ComplexGetStatus complexGetStatus = ComplexGetStatus::computeFor(
                 structure, access.conditionSet(), access.uid());
-
+             
             switch (complexGetStatus.kind()) {
             case ComplexGetStatus::ShouldSkip:
                 continue;
-
+                 
             case ComplexGetStatus::TakesSlowPath:
                 return GetByStatus(JSC::slowVersion(summary), *stubInfo);
-
+                 
             case ComplexGetStatus::Inlineable: {
                 std::unique_ptr<CallLinkStatus> callLinkStatus;
                 JSFunction* intrinsicFunction = nullptr;
@@ -343,15 +343,15 @@ GetByStatus GetByStatus::computeForStubInfoWithoutExitSiteFeedback(
                 break;
             } }
         }
-
+        
         result.shrinkToFit();
         return result;
     }
-
+        
     default:
         return GetByStatus(JSC::slowVersion(summary), *stubInfo);
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return GetByStatus();
 }
@@ -366,7 +366,7 @@ GetByStatus GetByStatus::computeFor(
 
     for (ICStatusContext* context : icContextStack) {
         ICStatus status = context->get(codeOrigin);
-
+        
         auto bless = [&] (const GetByStatus& result) -> GetByStatus {
             if (!context->isInlined(codeOrigin)) {
                 // Merge with baseline result, which also happens to contain exit data for both
@@ -381,7 +381,7 @@ GetByStatus GetByStatus::computeFor(
                 return result.slowVersion();
             return result;
         };
-
+        
         if (status.stubInfo) {
             GetByStatus result;
             {
@@ -392,11 +392,11 @@ GetByStatus GetByStatus::computeFor(
             if (result.isSet())
                 return bless(result);
         }
-
+        
         if (status.getStatus)
             return bless(*status.getStatus);
     }
-
+    
     return computeFor(profiledBlock, baselineMap, bytecodeIndex, didExit, callExitSiteData);
 }
 
@@ -408,13 +408,13 @@ GetByStatus GetByStatus::computeFor(const StructureSet& set, UniquedStringImpl* 
     // Note that this code is also used for GetByIdDirect since this function only looks
     // into direct properties. When supporting prototype chains, we should split this for
     // GetById and GetByIdDirect.
-
+    
     if (set.isEmpty())
         return GetByStatus();
 
     if (parseIndex(*uid))
         return GetByStatus(LikelyTakesSlowPath);
-
+    
     GetByStatus result;
     result.m_state = Simple;
     result.m_wasSeenInJIT = false;
@@ -422,10 +422,10 @@ GetByStatus GetByStatus::computeFor(const StructureSet& set, UniquedStringImpl* 
         Structure* structure = set[i];
         if (structure->typeInfo().overridesGetOwnPropertySlot() && structure->typeInfo().type() != GlobalObjectType)
             return GetByStatus(LikelyTakesSlowPath);
-
+        
         if (!structure->propertyAccessesAreCacheable())
             return GetByStatus(LikelyTakesSlowPath);
-
+        
         unsigned attributes;
         PropertyOffset offset = structure->getConcurrently(uid, attributes);
         if (!isValidOffset(offset))
@@ -434,11 +434,11 @@ GetByStatus GetByStatus::computeFor(const StructureSet& set, UniquedStringImpl* 
             return GetByStatus(MakesCalls); // We could be smarter here, like strength-reducing this to a Call.
         if (attributes & PropertyAttribute::CustomAccessorOrValue)
             return GetByStatus(LikelyTakesSlowPath);
-
+        
         if (!result.appendVariant(GetByVariant(nullptr, structure, offset)))
             return GetByStatus(LikelyTakesSlowPath);
     }
-
+    
     result.shrinkToFit();
     return result;
 }
@@ -479,53 +479,53 @@ void GetByStatus::merge(const GetByStatus& other)
 {
     if (other.m_state == NoInformation)
         return;
-
+    
     auto mergeSlow = [&] () {
         if (observedStructureStubInfoSlowPath() || other.observedStructureStubInfoSlowPath())
             *this = GetByStatus((makesCalls() || other.makesCalls()) ? ObservedSlowPathAndMakesCalls : ObservedTakesSlowPath);
         else
             *this = GetByStatus((makesCalls() || other.makesCalls()) ? MakesCalls : LikelyTakesSlowPath);
     };
-
+    
     switch (m_state) {
     case NoInformation:
         *this = other;
         return;
-
+        
     case Simple:
     case Custom:
         if (m_state != other.m_state)
             return mergeSlow();
-
+        
         for (const GetByVariant& otherVariant : other.m_variants) {
             if (!appendVariant(otherVariant))
                 return mergeSlow();
         }
         shrinkToFit();
         return;
-
+        
     case ModuleNamespace:
         if (other.m_state != ModuleNamespace)
             return mergeSlow();
-
+        
         if (m_moduleNamespaceData->m_moduleNamespaceObject != other.m_moduleNamespaceData->m_moduleNamespaceObject)
             return mergeSlow();
-
+        
         if (m_moduleNamespaceData->m_moduleEnvironment != other.m_moduleNamespaceData->m_moduleEnvironment)
             return mergeSlow();
-
+        
         if (m_moduleNamespaceData->m_scopeOffset != other.m_moduleNamespaceData->m_scopeOffset)
             return mergeSlow();
-
+        
         return;
-
+        
     case LikelyTakesSlowPath:
     case ObservedTakesSlowPath:
     case MakesCalls:
     case ObservedSlowPathAndMakesCalls:
         return mergeSlow();
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

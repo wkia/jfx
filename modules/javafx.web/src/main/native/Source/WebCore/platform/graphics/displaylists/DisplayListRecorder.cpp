@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -543,7 +543,7 @@ FloatRect Recorder::extentFromLocalBounds(const FloatRect& rect) const
         shadowExtent.inflate(shadowPaintingExtent(shadowRadius));
         bounds.unite(shadowExtent);
     }
-
+    
     FloatRect clippedExtent = intersection(state.clipBounds, bounds);
     return state.ctm.mapRect(clippedExtent);
 }
@@ -575,7 +575,7 @@ void Recorder::ContextState::rotate(float angleInRadians)
 {
     double angleInDegrees = rad2deg(static_cast<double>(angleInRadians));
     ctm.rotate(angleInDegrees);
-
+    
     AffineTransform rotation;
     rotation.rotate(angleInDegrees);
 

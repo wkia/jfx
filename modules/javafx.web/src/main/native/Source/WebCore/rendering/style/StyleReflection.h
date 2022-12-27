@@ -58,7 +58,7 @@ private:
         , m_mask(NinePieceImage::Type::Mask)
     {
     }
-
+    
     ReflectionDirection m_direction { ReflectionDirection::Below };
     Length m_offset;
     NinePieceImage m_mask;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -219,7 +219,7 @@ void CaptionUserPreferencesMediaAF::setCaptionDisplayMode(CaptionUserPreferences
         captionPreferencesDelegate()->setDisplayMode(mode);
         return;
     }
-
+    
     platformSetCaptionDisplayMode(mode);
 }
 
@@ -251,7 +251,7 @@ bool CaptionUserPreferencesMediaAF::userPrefersCaptions() const
     bool captionSetting = CaptionUserPreferences::userPrefersCaptions();
     if (captionSetting || testingMode() || !MediaAccessibilityLibrary())
         return captionSetting;
-
+    
     RetainPtr<CFArrayRef> captioningMediaCharacteristics = adoptCF(MACaptionAppearanceCopyPreferredCaptioningMediaCharacteristics(kMACaptionAppearanceDomainUser));
     return captioningMediaCharacteristics && CFArrayGetCount(captioningMediaCharacteristics.get());
 }
@@ -261,7 +261,7 @@ bool CaptionUserPreferencesMediaAF::userPrefersSubtitles() const
     bool subtitlesSetting = CaptionUserPreferences::userPrefersSubtitles();
     if (subtitlesSetting || testingMode() || !MediaAccessibilityLibrary())
         return subtitlesSetting;
-
+    
     RetainPtr<CFArrayRef> captioningMediaCharacteristics = adoptCF(MACaptionAppearanceCopyPreferredCaptioningMediaCharacteristics(kMACaptionAppearanceDomainUser));
     return !(captioningMediaCharacteristics && CFArrayGetCount(captioningMediaCharacteristics.get()));
 }
@@ -382,7 +382,7 @@ static void appendCSS(StringBuilder& builder, CSSPropertyID id, const String& va
 {
     builder.append(getPropertyNameString(id), ':', value, important ? " !important;" : ";");
 }
-
+    
 String CaptionUserPreferencesMediaAF::windowRoundedCornerRadiusCSS() const
 {
     MACaptionAppearanceBehavior behavior;
@@ -407,11 +407,11 @@ bool CaptionUserPreferencesMediaAF::captionStrokeWidthForFont(float fontSize, co
 {
     if (!canLoad_MediaAccessibility_MACaptionAppearanceCopyFontDescriptorWithStrokeForStyle())
         return false;
-
+    
     MACaptionAppearanceBehavior behavior;
     auto trackLanguage = language.createCFString();
     CGFloat strokeWidthPt;
-
+    
     auto fontDescriptor = adoptCF(MACaptionAppearanceCopyFontDescriptorWithStrokeForStyle(kMACaptionAppearanceDomainUser, &behavior, kMACaptionAppearanceFontStyleDefault, trackLanguage.get(), fontSize, &strokeWidthPt));
 
     if (!fontDescriptor)
@@ -431,7 +431,7 @@ String CaptionUserPreferencesMediaAF::captionsTextEdgeCSS() const
 
     MACaptionAppearanceBehavior behavior;
     MACaptionAppearanceTextEdgeStyle textEdgeStyle = MACaptionAppearanceGetTextEdgeStyle(kMACaptionAppearanceDomainUser, &behavior);
-
+    
     if (textEdgeStyle == kMACaptionAppearanceTextEdgeStyleUndefined || textEdgeStyle == kMACaptionAppearanceTextEdgeStyleNone)
         return emptyString();
 
@@ -450,14 +450,14 @@ String CaptionUserPreferencesMediaAF::captionsTextEdgeCSS() const
         appendCSS(builder, CSSPropertyStrokeLinejoin, getValueName(CSSValueRound), important);
         appendCSS(builder, CSSPropertyStrokeLinecap, getValueName(CSSValueRound), important);
     }
-
+    
     return builder.toString();
 }
 
 String CaptionUserPreferencesMediaAF::captionsDefaultFontCSS() const
 {
     MACaptionAppearanceBehavior behavior;
-
+    
     auto font = adoptCF(MACaptionAppearanceCopyFontDescriptorForStyle(kMACaptionAppearanceDomainUser, &behavior, kMACaptionAppearanceFontStyleDefault));
     if (!font)
         return emptyString();
@@ -596,7 +596,7 @@ String CaptionUserPreferencesMediaAF::captionsStyleSheetOverride() const
 {
     if (testingMode())
         return CaptionUserPreferences::captionsStyleSheetOverride();
-
+    
     StringBuilder captionsOverrideStyleSheet;
 
 #if HAVE(MEDIA_ACCESSIBILITY_FRAMEWORK)
@@ -824,9 +824,9 @@ static bool textTrackCompare(const RefPtr<TextTrack>& a, const RefPtr<TextTrack>
 Vector<RefPtr<AudioTrack>> CaptionUserPreferencesMediaAF::sortedTrackListForMenu(AudioTrackList* trackList)
 {
     ASSERT(trackList);
-
+    
     Vector<RefPtr<AudioTrack>> tracksForMenu;
-
+    
     for (unsigned i = 0, length = trackList->length(); i < length; ++i) {
         AudioTrack* track = trackList->item(i);
         String language = displayNameForLanguageLocale(track->validBCP47Language());
@@ -841,7 +841,7 @@ Vector<RefPtr<AudioTrack>> CaptionUserPreferencesMediaAF::sortedTrackListForMenu
 
         return a->uniqueId() < b->uniqueId();
     });
-
+    
     return tracksForMenu;
 }
 
@@ -960,7 +960,7 @@ Vector<RefPtr<TextTrack>> CaptionUserPreferencesMediaAF::sortedTrackListForMenu(
 
     return tracksForMenu;
 }
-
+    
 }
 
 #endif

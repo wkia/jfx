@@ -72,12 +72,12 @@ RenderView::RenderView(Document& document, RenderStyle&& style)
 
     // init RenderObject attributes
     setInline(false);
-
+    
     m_minPreferredLogicalWidth = 0;
     m_maxPreferredLogicalWidth = 0;
 
     setPreferredLogicalWidthsDirty(true, MarkOnlyThis);
-
+    
     setPositionState(PositionType::Absolute); // to 0,0 :)
 }
 
@@ -194,7 +194,7 @@ LayoutUnit RenderView::pageOrViewLogicalHeight() const
 {
     if (shouldUsePrintingLayout())
         return m_pageLogicalSize->height();
-
+    
     if (multiColumnFlow() && !style().hasInlineColumnAxis()) {
         if (int pageLength = frameView().pagination().pageLength)
             return pageLength;
@@ -409,7 +409,7 @@ void RenderView::paintBoxDecorations(PaintInfo& paintInfo, const LayoutPoint&)
 
     // This code typically only executes if the root element's visibility has been set to hidden,
     // if there is a transform on the <html>, or if there is a page scale factor less than 1.
-    // Only fill with a background color (typically white) if we're the root document,
+    // Only fill with a background color (typically white) if we're the root document, 
     // since iframes/frames with no background in the child document should show the parent's background.
     // We use the base background color unless the backgroundShouldExtendBeyondPage setting is set,
     // in which case we use the document's background color.
@@ -521,7 +521,7 @@ std::optional<LayoutRect> RenderView::computeVisibleRectInContainer(const Layout
 
     if (printing())
         return rect;
-
+    
     LayoutRect adjustedRect = rect;
     if (style().isFlippedBlocksWritingMode()) {
         // We have to flip by hand since the view's logical height has not been determined.  We
@@ -534,7 +534,7 @@ std::optional<LayoutRect> RenderView::computeVisibleRectInContainer(const Layout
 
     if (context.hasPositionFixedDescendant)
         adjustedRect.moveBy(frameView().scrollPositionRespectingCustomFixedPosition());
-
+    
     // Apply our transform if we have one (because of full page zooming).
     if (!container && layer() && layer()->transform())
         adjustedRect = LayoutRect(layer()->transform()->mapRect(snapRectToDevicePixels(adjustedRect, document().deviceScaleFactor())));
@@ -593,13 +593,13 @@ bool RenderView::rootBackgroundIsEntirelyFixed() const
         return rootBackgroundRenderer->style().hasEntirelyFixedBackground();
     return false;
 }
-
+    
 LayoutRect RenderView::unextendedBackgroundRect() const
 {
     // FIXME: What is this? Need to patch for new columns?
     return unscaledDocumentRect();
 }
-
+    
 LayoutRect RenderView::backgroundRect() const
 {
     // FIXME: New columns care about this?
@@ -841,16 +841,16 @@ unsigned RenderView::pageNumberForBlockProgressionOffset(int offset) const
     const Pagination& pagination = page().pagination();
     if (pagination.mode == Pagination::Unpaginated)
         return columnNumber;
-
+    
     bool progressionIsInline = false;
     bool progressionIsReversed = false;
-
+    
     if (multiColumnFlow()) {
         progressionIsInline = multiColumnFlow()->progressionIsInline();
         progressionIsReversed = multiColumnFlow()->progressionIsReversed();
     } else
         return columnNumber;
-
+    
     if (!progressionIsInline) {
         if (!progressionIsReversed)
             columnNumber = (pagination.pageLength + pagination.gap - offset) / (pagination.pageLength + pagination.gap);
@@ -866,7 +866,7 @@ unsigned RenderView::pageCount() const
     const Pagination& pagination = page().pagination();
     if (pagination.mode == Pagination::Unpaginated)
         return 0;
-
+    
     if (multiColumnFlow() && multiColumnFlow()->firstMultiColumnSet())
         return multiColumnFlow()->firstMultiColumnSet()->columnCount();
 

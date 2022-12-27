@@ -61,7 +61,7 @@ private:
     bool knownToBeOpaque(const RenderElement&) const final;
 
     explicit StyleGeneratedImage(Ref<CSSImageGeneratorValue>&&);
-
+    
     Ref<CSSImageGeneratorValue> m_imageGeneratorValue;
     FloatSize m_containerSize;
     bool m_fixedSize;

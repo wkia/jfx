@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,12 +48,12 @@ void emitSetVarargsFrame(CCallHelpers& jit, GPRReg lengthGPR, bool lengthInclude
 
     jit.addPtr(lengthGPR, resultGPR);
     jit.addPtr(CCallHelpers::TrustedImm32(CallFrame::headerSizeInRegisters + (lengthIncludesThis ? 0 : 1)), resultGPR);
-
+    
     // resultGPR now has the required frame size in Register units
     // Round resultGPR to next multiple of stackAlignmentRegisters()
     jit.addPtr(CCallHelpers::TrustedImm32(stackAlignmentRegisters() - 1), resultGPR);
     jit.andPtr(CCallHelpers::TrustedImm32(~(stackAlignmentRegisters() - 1)), resultGPR);
-
+    
     // Now resultGPR has the right stack frame offset in Register units.
     jit.negPtr(resultGPR);
     jit.getEffectiveAddress(CCallHelpers::BaseIndex(GPRInfo::callFrameRegister, resultGPR, CCallHelpers::TimesEight), resultGPR);
@@ -62,7 +62,7 @@ void emitSetVarargsFrame(CCallHelpers& jit, GPRReg lengthGPR, bool lengthInclude
 static void emitSetupVarargsFrameFastCase(VM& vm, CCallHelpers& jit, GPRReg numUsedSlotsGPR, GPRReg scratchGPR1, GPRReg scratchGPR2, GPRReg scratchGPR3, ValueRecovery argCountRecovery, VirtualRegister firstArgumentReg, unsigned firstVarArgOffset, CCallHelpers::JumpList& slowCase)
 {
     CCallHelpers::JumpList end;
-
+    
     if (argCountRecovery.isConstant()) {
         // FIXME: We could constant-fold a lot of the computation below in this case.
         // https://bugs.webkit.org/show_bug.cgi?id=141486
@@ -78,7 +78,7 @@ static void emitSetupVarargsFrameFastCase(VM& vm, CCallHelpers& jit, GPRReg numU
         endVarArgs.link(&jit);
     }
     slowCase.append(jit.branch32(CCallHelpers::Above, scratchGPR1, CCallHelpers::TrustedImm32(JSC::maxArguments + 1)));
-
+    
     emitSetVarargsFrame(jit, scratchGPR1, true, numUsedSlotsGPR, scratchGPR2);
 
     slowCase.append(jit.branchPtr(CCallHelpers::Above, scratchGPR2, GPRInfo::callFrameRegister));
@@ -107,7 +107,7 @@ static void emitSetupVarargsFrameFastCase(VM& vm, CCallHelpers& jit, GPRReg numU
     jit.store32(scratchGPR3, CCallHelpers::BaseIndex(scratchGPR2, scratchGPR1, CCallHelpers::TimesEight, CallFrame::thisArgumentOffset() * static_cast<int>(sizeof(Register)) + PayloadOffset));
 #endif // USE(JSVALUE64), end of 32-bit case
     jit.branchSubPtr(CCallHelpers::NonZero, CCallHelpers::TrustedImm32(1), scratchGPR1).linkTo(copyLoop, &jit);
-
+    
     done.link(&jit);
 }
 

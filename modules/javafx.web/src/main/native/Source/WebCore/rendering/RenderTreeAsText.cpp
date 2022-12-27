@@ -231,7 +231,7 @@ void RenderTreeAsText::writeRenderObject(TextStream& ts, const RenderObject& o, 
                 ts << " *empty or unstyled AppleStyleSpan*";
         }
     }
-
+    
     RenderBlock* cb = o.containingBlock();
     bool adjustForTableCells = cb ? cb->isTableCell() : false;
 
@@ -255,7 +255,7 @@ void RenderTreeAsText::writeRenderObject(TextStream& ts, const RenderObject& o, 
         auto width = inlineFlow.linesBoundingBox().width();
         auto inlineHeight = [&] {
             // Let's match legacy line layout's RenderInline behavior and report 0 height when the inline box is "empty".
-            // FIXME: Remove and rebaseline when LFC inline boxes are enabled (see webkit.org/b/220722)
+            // FIXME: Remove and rebaseline when LFC inline boxes are enabled (see webkit.org/b/220722) 
             auto height = inlineFlow.linesBoundingBox().height();
             if (width)
                 return height;
@@ -303,7 +303,7 @@ void RenderTreeAsText::writeRenderObject(TextStream& ts, const RenderObject& o, 
             if (!equalIgnoringSemanticColor(o.parent()->style().visitedDependentColor(CSSPropertyBackgroundColor), backgroundColor)
                 && backgroundColor != Color::transparentBlack)
                 ts << " [bgcolor=" << serializationForRenderTreeAsText(backgroundColor) << "]";
-
+            
             Color textFillColor = o.style().visitedDependentColor(CSSPropertyWebkitTextFillColor);
             if (!equalIgnoringSemanticColor(o.parent()->style().visitedDependentColor(CSSPropertyWebkitTextFillColor), textFillColor)
                 && textFillColor != color && textFillColor != Color::transparentBlack)
@@ -336,7 +336,7 @@ void RenderTreeAsText::writeRenderObject(TextStream& ts, const RenderObject& o, 
                 borderLeft -= block.intrinsicBorderForFieldset();
             else if (o.style().writingMode() == WritingMode::RightToLeft)
                 borderRight -= block.intrinsicBorderForFieldset();
-
+            
         }
         if (borderTop || borderRight || borderBottom || borderLeft) {
             ts << " [border:";
@@ -462,7 +462,7 @@ void RenderTreeAsText::writeRenderObject(TextStream& ts, const RenderObject& o, 
             ts << ": " << text;
         }
     }
-
+    
     writeDebugInfo(ts, o, behavior);
 }
 
@@ -489,7 +489,7 @@ void writeDebugInfo(TextStream& ts, const RenderObject& object, OptionSet<Render
         bool needsLayout = object.selfNeedsLayout() || object.needsPositionedMovementLayout() || object.posChildNeedsLayout() || object.normalChildNeedsLayout();
         if (needsLayout)
             ts << " (needs layout:";
-
+        
         bool havePrevious = false;
         if (object.selfNeedsLayout()) {
             ts << " self";
@@ -525,7 +525,7 @@ void writeDebugInfo(TextStream& ts, const RenderObject& object, OptionSet<Render
         if (box.hasRenderOverflow()) {
             LayoutRect layoutOverflow = box.layoutOverflowRect();
             ts << " (layout overflow " << layoutOverflow.x().toInt() << "," << layoutOverflow.y().toInt() << " " << layoutOverflow.width().toInt() << "x" << layoutOverflow.height().toInt() << ")";
-
+            
             if (box.hasVisualOverflow()) {
                 LayoutRect visualOverflow = box.visualOverflowRect();
                 ts << " (visual overflow " << visualOverflow.x().toInt() << "," << visualOverflow.y().toInt() << " " << visualOverflow.width().toInt() << "x" << visualOverflow.height().toInt() << ")";
@@ -642,7 +642,7 @@ static void writeLayer(TextStream& ts, const RenderLayer& layer, const LayoutRec
     IntRect adjustedClipRect = snappedIntRect(clipRect);
 
     ts << indent << "layer ";
-
+    
     if (behavior.contains(RenderAsTextFlag::ShowAddresses)) {
         ts << &layer << " ";
         if (auto* scrollableArea = layer.scrollableArea())
@@ -700,7 +700,7 @@ static void writeLayer(TextStream& ts, const RenderLayer& layer, const LayoutRec
     if (layer.hasBlendMode())
         ts << " blendMode: " << compositeOperatorName(CompositeOperator::SourceOver, layer.blendMode());
 #endif
-
+    
     ts << "\n";
 }
 
@@ -727,7 +727,7 @@ static void writeLayers(TextStream& ts, const RenderLayer& rootLayer, RenderLaye
         paintDirtyRect.setHeight(std::max<LayoutUnit>(paintDirtyRect.height(), rootLayer.renderBox()->layoutOverflowRect().maxY()));
         layer.setSize(layer.size().expandedTo(snappedIntSize(maxLayoutOverflow(layer.renderBox()), LayoutPoint(0, 0))));
     }
-
+    
     // Calculate the clip rects we should use.
     LayoutRect layerBounds;
     ClipRect damageRect;
@@ -746,13 +746,13 @@ static void writeLayers(TextStream& ts, const RenderLayer& rootLayer, RenderLaye
         writeLayer(ts, layer, layerBounds, damageRect.rect(), clipRectToApply.rect(), LayerPaintPhaseBackground, behavior);
         writeLayerRenderers(ts, layer, LayerPaintPhaseBackground, behavior);
     }
-
+        
     if (negativeZOrderLayers.size()) {
         if (behavior.contains(RenderAsTextFlag::ShowLayerNesting)) {
             ts << indent << " negative z-order list (" << negativeZOrderLayers.size() << ")\n";
             ts.increaseIndent();
         }
-
+        
         for (auto* currLayer : negativeZOrderLayers)
             writeLayers(ts, rootLayer, *currLayer, paintDirtyRect, behavior);
 
@@ -762,11 +762,11 @@ static void writeLayers(TextStream& ts, const RenderLayer& rootLayer, RenderLaye
 
     if (shouldPaint) {
         writeLayer(ts, layer, layerBounds, damageRect.rect(), clipRectToApply.rect(), paintsBackgroundSeparately ? LayerPaintPhaseForeground : LayerPaintPhaseAll, behavior);
-
+        
         if (behavior.contains(RenderAsTextFlag::ShowLayerFragments)) {
             LayerFragments layerFragments;
             layer.collectFragments(layerFragments, &rootLayer, paintDirtyRect, RenderLayer::PaginationInclusionMode::ExcludeCompositedPaginatedLayers, TemporaryClipRects, IgnoreOverlayScrollbarSize, RespectOverflowClip, offsetFromRoot);
-
+            
             if (layerFragments.size() > 1) {
                 TextStream::IndentScope indentScope(ts, 2);
                 for (unsigned i = 0; i < layerFragments.size(); ++i) {
@@ -775,17 +775,17 @@ static void writeLayers(TextStream& ts, const RenderLayer& rootLayer, RenderLaye
                 }
             }
         }
-
+        
         writeLayerRenderers(ts, layer, paintsBackgroundSeparately ? LayerPaintPhaseForeground : LayerPaintPhaseAll, behavior);
     }
-
+    
     auto normalFlowLayers = layer.normalFlowLayers();
     if (normalFlowLayers.size()) {
         if (behavior.contains(RenderAsTextFlag::ShowLayerNesting)) {
             ts << indent << " normal flow list (" << normalFlowLayers.size() << ")\n";
             ts.increaseIndent();
         }
-
+        
         for (auto* currLayer : normalFlowLayers)
             writeLayers(ts, rootLayer, *currLayer, paintDirtyRect, behavior);
 

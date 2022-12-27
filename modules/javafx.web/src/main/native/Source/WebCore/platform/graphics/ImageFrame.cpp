@@ -100,7 +100,7 @@ IntSize ImageFrame::size() const
 {
     return m_size;
 }
-
+    
 bool ImageFrame::hasNativeImage(const std::optional<SubsamplingLevel>& subsamplingLevel) const
 {
     return m_nativeImage && (!subsamplingLevel || *subsamplingLevel >= m_subsamplingLevel);

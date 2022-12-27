@@ -87,7 +87,7 @@ public:
     bool isScrollingRegion() { return m_scroll; }
 
     HTMLDivElement& getDisplayTree();
-
+    
     void appendTextTrackCueBox(Ref<TextTrackCueBox>&&);
     void displayLastTextTrackCueBox();
     void willRemoveTextTrackCueBox(VTTCueBox*);

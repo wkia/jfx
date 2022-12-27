@@ -90,7 +90,7 @@ void ThreadedScrollingTree::wheelEventWasProcessedByMainThread(const PlatformWhe
     LOG_WITH_STREAM(Scrolling, stream << "ThreadedScrollingTree::wheelEventWasProcessedByMainThread - gestureState " << gestureState);
 
     ASSERT(isMainThread());
-
+    
     Locker locker { m_treeLock };
     if (m_receivedBeganEventFromMainThread || !wheelEvent.isGestureStart())
         return;
@@ -143,7 +143,7 @@ void ThreadedScrollingTree::invalidate()
     ASSERT(ScrollingThread::isCurrentThread());
 
     Locker locker { m_treeLock };
-
+    
     removeAllNodes();
     m_delayedRenderingUpdateDetectionTimer = nullptr;
 
@@ -267,7 +267,7 @@ void ThreadedScrollingTree::setActiveScrollSnapIndices(ScrollingNodeID nodeID, s
 {
     if (!m_scrollingCoordinator)
         return;
-
+    
     RunLoop::main().dispatch([scrollingCoordinator = m_scrollingCoordinator, nodeID, horizontalIndex, verticalIndex] {
         scrollingCoordinator->setActiveScrollSnapIndices(nodeID, horizontalIndex, verticalIndex);
     });

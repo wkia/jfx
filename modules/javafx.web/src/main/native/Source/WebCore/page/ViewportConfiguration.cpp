@@ -183,7 +183,7 @@ bool ViewportConfiguration::setCanIgnoreScalingConstraints(bool canIgnoreScaling
 {
     if (canIgnoreScalingConstraints == m_canIgnoreScalingConstraints)
         return false;
-
+    
     m_canIgnoreScalingConstraints = canIgnoreScalingConstraints;
     updateDefaultConfiguration();
     updateMinimumLayoutSize();
@@ -310,7 +310,7 @@ double ViewportConfiguration::minimumScale() const
 
     // If not, we still need to sanity check our value.
     double minimumScale = m_configuration.minimumScale;
-
+    
     if (m_forceAlwaysUserScalable)
         minimumScale = std::min(minimumScale, forceAlwaysUserScalableMinimumScale());
 
@@ -348,7 +348,7 @@ bool ViewportConfiguration::allowsUserScaling() const
 {
     return m_forceAlwaysUserScalable || allowsUserScalingIgnoringAlwaysScalable();
 }
-
+    
 bool ViewportConfiguration::allowsUserScalingIgnoringAlwaysScalable() const
 {
     return shouldIgnoreScalingConstraints() || m_configuration.allowsUserScaling;
@@ -723,7 +723,7 @@ String ViewportConfiguration::description() const
     ts.dumpProperty("avoids unsafe area", avoidsUnsafeArea() ? "true" : "false");
     ts.dumpProperty("minimum effective device width", m_minimumEffectiveDeviceWidth);
     ts.dumpProperty("known to lay out wider than viewport", m_isKnownToLayOutWiderThanViewport ? "true" : "false");
-
+    
     ts.endGroup();
 
     return ts.release();

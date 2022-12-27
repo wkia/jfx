@@ -530,7 +530,7 @@ TextStream& operator<<(TextStream& ts, FillSizeType sizeType)
     case FillSizeType::Size: ts << "size-length"; break;
     case FillSizeType::None: ts << "size-none"; break;
     }
-
+    
     return ts;
 }
 
@@ -1264,7 +1264,7 @@ TextStream& operator<<(TextStream& ts, Visibility visibility)
     case Visibility::Hidden: ts << "hidden"; break;
     case Visibility::Collapse: ts << "collapse"; break;
     }
-
+    
     return ts;
 }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -53,13 +53,13 @@ void CallVariant::filter(VM& vm, JSValue value)
 {
     if (!*this)
         return;
-
+    
     if (!isClosureCall()) {
         if (nonExecutableCallee() != value)
             *this = CallVariant();
         return;
     }
-
+    
     if (JSFunction* function = jsDynamicCast<JSFunction*>(vm, value)) {
         if (function->executable() == executable())
             *this = CallVariant(function);
@@ -67,7 +67,7 @@ void CallVariant::filter(VM& vm, JSValue value)
             *this = CallVariant();
         return;
     }
-
+    
     *this = CallVariant();
 }
 
@@ -77,17 +77,17 @@ void CallVariant::dump(PrintStream& out) const
         out.print("null");
         return;
     }
-
+    
     if (InternalFunction* internalFunction = this->internalFunction()) {
         out.print("InternalFunction: ", JSValue(internalFunction));
         return;
     }
-
+    
     if (JSFunction* function = this->function()) {
         out.print("(Function: ", JSValue(function), "; Executable: ", *executable(), ")");
         return;
     }
-
+    
     if (ExecutableBase* executable = this->executable()) {
         out.print("(Executable: ", *executable, ")");
         return;
@@ -114,19 +114,19 @@ CallVariantList variantListWithVariant(const CallVariantList& list, CallVariant 
     }
     if (!!variantToAdd)
         result.append(variantToAdd);
-
+    
     if (ASSERT_ENABLED) {
         for (unsigned i = 0; i < result.size(); ++i) {
             for (unsigned j = i + 1; j < result.size(); ++j) {
                 if (result[i] != result[j])
                     continue;
-
+                
                 dataLog("variantListWithVariant(", listDump(list), ", ", variantToAdd, ") failed: got duplicates in result: ", listDump(result), "\n");
                 RELEASE_ASSERT_NOT_REACHED();
             }
         }
     }
-
+    
     return result;
 }
 

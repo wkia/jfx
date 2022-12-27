@@ -73,7 +73,7 @@ private:
         : GlobalCodeBlock(vm, structure, CopyParsedBlock, other)
     {
     }
-
+        
     EvalCodeBlock(VM& vm, Structure* structure, EvalExecutable* ownerExecutable, UnlinkedEvalCodeBlock* unlinkedCodeBlock, JSScope* scope)
         : GlobalCodeBlock(vm, structure, ownerExecutable, unlinkedCodeBlock, scope)
     {

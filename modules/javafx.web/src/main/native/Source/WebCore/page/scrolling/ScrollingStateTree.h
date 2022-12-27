@@ -30,7 +30,7 @@
 #include "ScrollingCoordinator.h"
 #include "ScrollingStateNode.h"
 #include <wtf/RefPtr.h>
-
+ 
 namespace WebCore {
 
 class AsyncScrollingCoordinator;
@@ -39,7 +39,7 @@ class ScrollingStateFrameScrollingNode;
 // The ScrollingStateTree is a tree that manages ScrollingStateNodes. The nodes keep track of the current
 // state of scrolling related properties. Whenever any properties change, the scrolling coordinator
 // will be informed and will schedule a timer that will clone the new state tree and send it over to
-// the scrolling thread, avoiding locking.
+// the scrolling thread, avoiding locking. 
 
 class ScrollingStateTree {
     WTF_MAKE_FAST_ALLOCATED;

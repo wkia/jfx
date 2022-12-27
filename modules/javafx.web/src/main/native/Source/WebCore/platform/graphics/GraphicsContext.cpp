@@ -82,9 +82,6 @@ GraphicsContextState::GraphicsContextState()
     , shouldSmoothFonts(true)
     , shouldSubpixelQuantizeFonts(true)
     , shadowsIgnoreTransforms(false)
-#if PLATFORM(JAVA)
-    , clipBounds(FloatRect::infiniteRect())
-#endif
     , drawLuminanceMask(false)
 {
 }
@@ -390,7 +387,7 @@ void GraphicsContext::drawRaisedEllipse(const FloatRect& rect, const Color& elli
     setStrokeColor(ellipseColor);
     setFillColor(ellipseColor);
 
-    drawEllipse(rect);
+    drawEllipse(rect);  
 
     restore();
 }
@@ -660,7 +657,6 @@ void GraphicsContext::fillRect(const FloatRect& rect, const Color& color, Compos
     setCompositeOperation(previousOperator);
 }
 
-#if !PLATFORM(JAVA) // FIXME-java: recheck
 void GraphicsContext::fillRoundedRect(const FloatRoundedRect& rect, const Color& color, BlendMode blendMode)
 {
     if (rect.isRounded()) {
@@ -670,7 +666,6 @@ void GraphicsContext::fillRoundedRect(const FloatRoundedRect& rect, const Color&
     } else
         fillRect(rect.rect(), color, compositeOperation(), blendMode);
 }
-#endif
 
 void GraphicsContext::fillRectWithRoundedHole(const FloatRect& rect, const FloatRoundedRect& roundedHoleRect, const Color& color)
 {
@@ -684,12 +679,12 @@ void GraphicsContext::fillRectWithRoundedHole(const FloatRect& rect, const Float
 
     WindRule oldFillRule = fillRule();
     Color oldFillColor = fillColor();
-
+    
     setFillRule(WindRule::EvenOdd);
     setFillColor(color);
 
     fillPath(path);
-
+    
     setFillRule(oldFillRule);
     setFillColor(oldFillColor);
 }
@@ -735,7 +730,7 @@ FloatSize GraphicsContext::scaleFactor() const
     AffineTransform transform = getCTM(GraphicsContext::DefinitelyIncludeDeviceScale);
     return FloatSize(transform.xScale(), transform.yScale());
 }
-
+    
 FloatSize GraphicsContext::scaleFactorForDrawing(const FloatRect& destRect, const FloatRect& srcRect) const
 {
     AffineTransform transform = getCTM(GraphicsContext::DefinitelyIncludeDeviceScale);

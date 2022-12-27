@@ -78,7 +78,7 @@ public:
     virtual void stopScrollAnimations() { };
 
     void wasScrolledByDelegatedScrolling(const FloatPoint& position, std::optional<FloatRect> overrideLayoutViewport = { }, ScrollingLayerPositionAction = ScrollingLayerPositionAction::Sync);
-
+    
 #if ENABLE(SCROLLING_THREAD)
     OptionSet<SynchronousScrollingReason> synchronousScrollingReasons() const { return m_synchronousScrollingReasons; }
     void addSynchronousScrollingReason(SynchronousScrollingReason reason) { m_synchronousScrollingReasons.add(reason); }
@@ -103,7 +103,7 @@ public:
     bool useDarkAppearanceForScrollbars() const { return m_scrollableAreaParameters.useDarkAppearanceForScrollbars; }
 
     bool eventCanScrollContents(const PlatformWheelEvent&) const;
-
+    
     bool scrolledSinceLastCommit() const { return m_scrolledSinceLastCommit; }
 
     const LayerRepresentation& scrollContainerLayer() const { return m_scrollContainerLayer; }
@@ -116,9 +116,9 @@ protected:
     virtual FloatPoint maximumScrollPosition() const;
 
     FloatPoint clampScrollPosition(const FloatPoint&) const;
-
+    
     virtual void willDoProgrammaticScroll(const FloatPoint&) { }
-
+    
     virtual FloatPoint adjustedScrollPosition(const FloatPoint&, ScrollClamping = ScrollClamping::Clamped) const;
 
     virtual void currentScrollPositionChanged(ScrollType, ScrollingLayerPositionAction = ScrollingLayerPositionAction::Sync);
@@ -131,7 +131,7 @@ protected:
     void applyLayerPositions() override;
 
     const FloatSize& reachableContentsSize() const { return m_reachableContentsSize; }
-
+    
     bool isLatchedNode() const;
 
     // If the totalContentsSize changes in the middle of a rubber-band, we still want to use the old totalContentsSize for the sake of

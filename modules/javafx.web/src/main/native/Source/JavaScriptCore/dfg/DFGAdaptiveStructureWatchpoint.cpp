@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -59,7 +59,7 @@ void AdaptiveStructureWatchpoint::initialize(const ObjectPropertyCondition& key,
 void AdaptiveStructureWatchpoint::install(VM& vm)
 {
     RELEASE_ASSERT(m_key.isWatchable());
-
+    
     m_key.object()->structure(vm)->addTransitionWatchpoint(this);
 }
 
@@ -72,7 +72,7 @@ void AdaptiveStructureWatchpoint::fireInternal(VM& vm, const FireDetail& detail)
         install(vm);
         return;
     }
-
+    
     if (DFG::shouldDumpDisassembly()) {
         dataLog(
             "Firing watchpoint ", RawPointer(this), " (", m_key, ") on ", *m_codeBlock, "\n");

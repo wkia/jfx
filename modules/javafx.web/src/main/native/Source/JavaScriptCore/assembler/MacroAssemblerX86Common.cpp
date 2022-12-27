@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -748,7 +748,7 @@ asm (
 //
 // Specifically, the saved stack pointer register will point to the stack
 // position before we push the Probe::State frame. The saved rip will point to
-// the address of the instruction immediately following the probe.
+// the address of the instruction immediately following the probe. 
 
 void MacroAssembler::probe(Probe::Function function, void* arg)
 {

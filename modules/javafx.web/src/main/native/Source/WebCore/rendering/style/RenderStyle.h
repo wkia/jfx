@@ -197,7 +197,7 @@ public:
     bool hasViewportUnits() const { return m_nonInheritedFlags.hasViewportUnits; }
 
     void setColumnStylesFromPaginationMode(const Pagination::Mode&);
-
+    
     bool isFloating() const { return static_cast<Float>(m_nonInheritedFlags.floating) != Float::None; }
     bool hasMargin() const { return !m_surroundData->margin.isZero(); }
     bool hasBorder() const { return m_surroundData->border.hasBorder(); }
@@ -217,7 +217,7 @@ public:
     bool hasAppearance() const { return appearance() != NoControlPart; }
 
     bool hasBackground() const;
-
+    
     LayoutBoxExtent imageOutsets(const NinePieceImage&) const;
     bool hasBorderImageOutsets() const { return borderImage().hasImage() && !borderImage().outset().isZero(); }
     LayoutBoxExtent borderImageOutsets() const { return imageOutsets(borderImage()); }
@@ -268,7 +268,7 @@ public:
     const Length& maxWidth() const { return m_boxData->maxWidth(); }
     const Length& minHeight() const { return m_boxData->minHeight(); }
     const Length& maxHeight() const { return m_boxData->maxHeight(); }
-
+    
     const Length& logicalWidth() const { return isHorizontalWritingMode() ? width() : height(); }
     const Length& logicalHeight() const { return isHorizontalWritingMode() ? height() : width(); }
     const Length& logicalMinWidth() const { return isHorizontalWritingMode() ? minWidth() : minHeight(); }
@@ -327,7 +327,7 @@ public:
     BorderStyle outlineStyle() const { return m_backgroundData->outline.style(); }
     OutlineIsAuto outlineStyleIsAuto() const { return static_cast<OutlineIsAuto>(m_backgroundData->outline.isAuto()); }
     bool hasOutlineInVisualOverflow() const { return hasOutline() && outlineSize() > 0; }
-
+    
     Overflow overflowX() const { return static_cast<Overflow>(m_nonInheritedFlags.overflowX); }
     Overflow overflowY() const { return static_cast<Overflow>(m_nonInheritedFlags.overflowY); }
     Overflow overflowInlineDirection() const { return isHorizontalWritingMode() ? overflowX() : overflowY(); }
@@ -336,7 +336,7 @@ public:
 
     OverscrollBehavior overscrollBehaviorX() const { return static_cast<OverscrollBehavior>(m_rareNonInheritedData->overscrollBehaviorX); }
     OverscrollBehavior overscrollBehaviorY() const { return static_cast<OverscrollBehavior>(m_rareNonInheritedData->overscrollBehaviorY); }
-
+    
     Visibility visibility() const { return static_cast<Visibility>(m_inheritedFlags.visibility); }
     VerticalAlign verticalAlign() const { return static_cast<VerticalAlign>(m_nonInheritedFlags.verticalAlign); }
     const Length& verticalAlignLength() const { return m_boxData->verticalAlign(); }
@@ -390,7 +390,7 @@ public:
 
     float zoom() const { return m_visualData->zoom; }
     float effectiveZoom() const { return m_rareInheritedData->effectiveZoom; }
-
+    
     TextZoom textZoom() const { return static_cast<TextZoom>(m_rareInheritedData->textZoom); }
 
     TextDirection direction() const { return static_cast<TextDirection>(m_inheritedFlags.direction); }
@@ -707,7 +707,7 @@ public:
 
     AnimationList* animations() { return m_rareNonInheritedData->animations.get(); }
     AnimationList* transitions() { return m_rareNonInheritedData->transitions.get(); }
-
+    
     bool hasAnimationsOrTransitions() const { return hasAnimations() || hasTransitions(); }
 
     AnimationList& ensureAnimations();
@@ -797,7 +797,7 @@ public:
     ImageResolutionSnap imageResolutionSnap() const { return static_cast<ImageResolutionSnap>(m_rareInheritedData->imageResolutionSnap); }
     float imageResolution() const { return m_rareInheritedData->imageResolution; }
 #endif
-
+    
     OptionSet<SpeakAs> speakAs() const { return OptionSet<SpeakAs>::fromRaw(m_rareInheritedData->speakAs); }
 
     FilterOperations& mutableFilter() { return m_rareNonInheritedData.access().filter.access().operations; }
@@ -1268,7 +1268,7 @@ public:
     void setBreakBefore(BreakBetween breakBehavior) { SET_VAR(m_rareNonInheritedData, breakBefore, static_cast<unsigned>(breakBehavior)); }
     void setBreakAfter(BreakBetween breakBehavior) { SET_VAR(m_rareNonInheritedData, breakAfter, static_cast<unsigned>(breakBehavior)); }
     void setBreakInside(BreakInside breakBehavior) { SET_VAR(m_rareNonInheritedData, breakInside, static_cast<unsigned>(breakBehavior)); }
-
+    
     void setHangingPunctuation(OptionSet<HangingPunctuation> punctuation) { SET_VAR(m_rareInheritedData, hangingPunctuation, punctuation.toRaw()); }
 
     // End CSS3 Setters
@@ -1296,9 +1296,9 @@ public:
 
     void setLineBoxContain(OptionSet<LineBoxContain> c) { SET_VAR(m_rareInheritedData, lineBoxContain, c.toRaw()); }
     void setLineClamp(LineClampValue c) { SET_VAR(m_rareNonInheritedData, lineClamp, c); }
-
+    
     void setInitialLetter(const IntSize& size) { SET_VAR(m_rareNonInheritedData, initialLetter, size); }
-
+    
     void setTouchActions(OptionSet<TouchAction> touchActions) { SET_VAR(m_rareNonInheritedData, touchActions, touchActions); }
     void setEffectiveTouchActions(OptionSet<TouchAction> touchActions) { SET_VAR(m_rareInheritedData, effectiveTouchActions, touchActions); }
     void setEventListenerRegionTypes(OptionSet<EventListenerRegionType> eventListenerTypes) { SET_VAR(m_rareInheritedData, eventListenerRegionTypes, eventListenerTypes); }
@@ -1356,15 +1356,15 @@ public:
     PaintOrder paintOrder() const { return static_cast<PaintOrder>(m_rareInheritedData->paintOrder); }
     static PaintOrder initialPaintOrder() { return PaintOrder::Normal; }
     static Vector<PaintType, 3> paintTypesForPaintOrder(PaintOrder);
-
+    
     void setCapStyle(LineCap val) { SET_VAR(m_rareInheritedData, capStyle, val); }
     LineCap capStyle() const { return static_cast<LineCap>(m_rareInheritedData->capStyle); }
     static LineCap initialCapStyle() { return ButtCap; }
-
+    
     void setJoinStyle(LineJoin val) { SET_VAR(m_rareInheritedData, joinStyle, val); }
     LineJoin joinStyle() const { return static_cast<LineJoin>(m_rareInheritedData->joinStyle); }
     static LineJoin initialJoinStyle() { return MiterJoin; }
-
+    
     const Length& strokeWidth() const { return m_rareInheritedData->strokeWidth; }
     void setStrokeWidth(Length&& w) { SET_VAR(m_rareInheritedData, strokeWidth, WTFMove(w)); }
     bool hasVisibleStroke() const { return svgStyle().hasStroke() && !strokeWidth().isZero(); }
@@ -1374,7 +1374,7 @@ public:
     void setHasExplicitlySetStrokeWidth(bool v) { SET_VAR(m_rareInheritedData, hasSetStrokeWidth, static_cast<unsigned>(v)); }
     bool hasExplicitlySetStrokeWidth() const { return m_rareInheritedData->hasSetStrokeWidth; };
     bool hasPositiveStrokeWidth() const;
-
+    
     Color strokeColor() const { return m_rareInheritedData->strokeColor; }
     void setStrokeColor(const Color& v)  { SET_VAR(m_rareInheritedData, strokeColor, v); }
     void setVisitedLinkStrokeColor(const Color& v) { SET_VAR(m_rareInheritedData, visitedLinkStrokeColor, v); }
@@ -1530,7 +1530,7 @@ public:
 
     void setHasExplicitlyInheritedProperties() { m_nonInheritedFlags.hasExplicitlyInheritedProperties = true; }
     bool hasExplicitlyInheritedProperties() const { return m_nonInheritedFlags.hasExplicitlyInheritedProperties; }
-
+    
     void setMathStyle(const MathStyle& v) { SET_VAR(m_rareInheritedData, mathStyle, static_cast<unsigned>(v)); }
 
     // Initial values for all the properties
@@ -2110,7 +2110,7 @@ inline int adjustForAbsoluteZoom(int value, const RenderStyle& style)
     if (zoomFactor > 1) {
         if (value < 0)
             value--;
-        else
+        else 
             value++;
     }
 

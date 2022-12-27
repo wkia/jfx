@@ -243,7 +243,7 @@ public:
     virtual void themeColorChanged() const { }
     virtual void pageExtendedBackgroundColorDidChange() const { }
     virtual void sampledPageTopColorChanged() const { }
-
+    
 #if ENABLE(APP_HIGHLIGHTS)
     virtual WebCore::HighlightVisibility appHighlightsVisiblility() const { return HighlightVisibility::Hidden; };
 #endif
@@ -252,7 +252,7 @@ public:
 
     // Callback invoked when the application cache fails to save a cache object
     // because storing it would grow the database file past its defined maximum
-    // size or past the amount of free space on the device.
+    // size or past the amount of free space on the device. 
     // The chrome client would need to take some action such as evicting some
     // old caches.
     virtual void reachedMaxAppCacheSize(int64_t spaceNeeded) = 0;
@@ -331,10 +331,10 @@ public:
     virtual void runOpenPanel(Frame&, FileChooser&) = 0;
     virtual void showShareSheet(ShareDataWithParsedURL&, WTF::CompletionHandler<void(bool)>&& callback) { callback(false); }
     virtual void showContactPicker(const ContactsRequestData&, WTF::CompletionHandler<void(std::optional<Vector<ContactInfo>>&&)>&& callback) { callback(std::nullopt); }
-
+    
     // Asynchronous request to load an icon for specified filenames.
     virtual void loadIconForFiles(const Vector<String>&, FileIconLoader&) = 0;
-
+        
     virtual void elementDidFocus(Element&) { }
     virtual void elementDidBlur(Element&) { }
     virtual void elementDidRefocus(Element&) { }
@@ -346,7 +346,7 @@ public:
 
     // Allows ports to customize the type of graphics layers created by this page.
     virtual GraphicsLayerFactory* graphicsLayerFactory() const { return nullptr; }
-
+    
     virtual DisplayRefreshMonitorFactory* displayRefreshMonitorFactory() const { return nullptr; }
 
     virtual RefPtr<ImageBuffer> createImageBuffer(const FloatSize&, RenderingMode, RenderingPurpose, float, const DestinationColorSpace&, PixelFormat) const { return nullptr; }
@@ -387,7 +387,7 @@ public:
 
     // Returns a bitfield indicating conditions that can trigger the compositor.
     virtual CompositingTriggerFlags allowedCompositingTriggers() const { return static_cast<CompositingTriggerFlags>(AllTriggers); }
-
+    
     // Returns true if layer tree updates are disabled.
     virtual bool layerTreeStateIsFrozen() const { return false; }
 
@@ -419,7 +419,7 @@ public:
 
     virtual void exitVideoFullscreenForVideoElement(HTMLVideoElement&, WTF::CompletionHandler<void(bool)>&& completionHandler = [](bool) { }) { completionHandler(true); }
     virtual void exitVideoFullscreenToModeWithoutAnimation(HTMLVideoElement&, HTMLMediaElementEnums::VideoFullscreenMode) { }
-    virtual bool requiresFullscreenForVideoPlayback() { return false; }
+    virtual bool requiresFullscreenForVideoPlayback() { return false; } 
 
 #if ENABLE(FULLSCREEN_API)
     virtual bool supportsFullScreenForElement(const Element&, bool) { return false; }
@@ -476,7 +476,7 @@ public:
     virtual std::optional<ScrollbarOverlayStyle> preferredScrollbarOverlayStyle() { return std::nullopt; }
 
     virtual void wheelEventHandlersChanged(bool hasHandlers) = 0;
-
+        
     virtual bool isSVGImageChromeClient() const { return false; }
 
 #if ENABLE(POINTER_LOCK)

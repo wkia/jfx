@@ -51,7 +51,7 @@ public:
     virtual ~UserContentProviderInvalidationClient()
     {
     }
-
+    
     virtual void didInvalidate(UserContentProvider&) = 0;
 };
 

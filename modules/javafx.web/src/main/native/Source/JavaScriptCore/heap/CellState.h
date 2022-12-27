@@ -35,7 +35,7 @@ enum class CellState : uint8_t {
     // is a full collection and it's actually a white object (you'd know because its mark bit
     // would be clear).
     PossiblyBlack = 0,
-
+    
     // The object is in eden. During GC, this means that the object has not been marked yet.
     DefinitelyWhite = 1,
 

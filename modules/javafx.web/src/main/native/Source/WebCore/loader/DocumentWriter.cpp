@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -33,6 +33,7 @@
 #include "ContentSecurityPolicy.h"
 #include "DOMImplementation.h"
 #include "DOMWindow.h"
+#include "DocumentLoader.h"
 #include "Frame.h"
 #include "FrameLoader.h"
 #include "FrameLoaderClient.h"
@@ -53,13 +54,13 @@
 
 namespace WebCore {
 
-static inline bool canReferToParentFrameEncoding(const Frame* frame, const Frame* parentFrame)
+static inline bool canReferToParentFrameEncoding(const Frame* frame, const Frame* parentFrame) 
 {
     if (is<XMLDocument>(frame->document()))
         return false;
     return parentFrame && parentFrame->document()->securityOrigin().isSameOriginDomain(frame->document()->securityOrigin());
 }
-
+    
 // This is only called by ScriptController::executeIfJavaScriptURL
 // and always contains the result of evaluating a javascript: url.
 // This is the <iframe src="javascript:'html'"> case.
@@ -130,7 +131,7 @@ bool DocumentWriter::begin(const URL& urlReference, bool dispatch, Document* own
     // Create a new document before clearing the frame, because it may need to
     // inherit an aliased security context.
     Ref<Document> document = createDocument(url);
-
+    
     // If the new document is for a Plugin but we're supposed to be sandboxed from Plugins,
     // then replace the document with one whose parser will ignore the incoming data (bug 39323)
     if (document->isPluginDocument() && document->isSandboxed(SandboxPlugins))
@@ -141,6 +142,12 @@ bool DocumentWriter::begin(const URL& urlReference, bool dispatch, Document* own
     bool shouldReuseDefaultView = m_frame->loader().stateMachine().isDisplayingInitialEmptyDocument()
         && m_frame->document()->isSecureTransitionTo(url)
         && (m_frame->window() && !m_frame->window()->wasWrappedWithoutInitializedSecurityOrigin() && m_frame->window()->mayReuseForNavigation());
+
+    if (shouldReuseDefaultView) {
+        ASSERT(m_frame->loader().documentLoader());
+        if (auto* contentSecurityPolicy = m_frame->loader().documentLoader()->contentSecurityPolicy())
+            shouldReuseDefaultView = !(contentSecurityPolicy->sandboxFlags() & SandboxOrigin);
+    }
 
     // Temporarily extend the lifetime of the existing document so that FrameLoader::clear() doesn't destroy it as
     // we need to retain its ongoing set of upgraded requests in new navigation contexts per <http://www.w3.org/TR/upgrade-insecure-requests/>
@@ -283,7 +290,7 @@ void DocumentWriter::end()
     m_state = State::Finished;
 
     // http://bugs.webkit.org/show_bug.cgi?id=10854
-    // The frame's last ref may be removed and it can be deleted by checkCompleted(),
+    // The frame's last ref may be removed and it can be deleted by checkCompleted(), 
     // so we'll add a protective refcount
     Ref<Frame> protect(*m_frame);
 

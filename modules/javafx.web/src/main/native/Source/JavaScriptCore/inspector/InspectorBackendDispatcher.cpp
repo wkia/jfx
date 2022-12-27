@@ -237,7 +237,7 @@ void BackendDispatcher::sendPendingErrors()
     CommonErrorCode errorCode = InternalError;
     String errorMessage;
     Ref<JSON::Array> payload = JSON::Array::create();
-
+    
     for (auto& data : m_protocolErrors) {
         errorCode = std::get<0>(data);
         errorMessage = std::get<1>(data);
@@ -270,7 +270,7 @@ void BackendDispatcher::sendPendingErrors()
     m_protocolErrors.clear();
     m_currentRequestId = std::nullopt;
 }
-
+    
 void BackendDispatcher::reportProtocolError(CommonErrorCode errorCode, const String& errorMessage)
 {
     reportProtocolError(m_currentRequestId, errorCode, errorMessage);

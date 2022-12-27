@@ -71,12 +71,12 @@ void RenderSVGViewportContainer::calcViewport()
     setNeedsTransformUpdate();
 }
 
-bool RenderSVGViewportContainer::calculateLocalTransform()
+bool RenderSVGViewportContainer::calculateLocalTransform() 
 {
     m_didTransformToRootUpdate = m_needsTransformUpdate || SVGRenderSupport::transformToRootChanged(parent());
     if (!m_needsTransformUpdate)
         return false;
-
+    
     m_localToParentTransform = AffineTransform::translation(m_viewport.x(), m_viewport.y()) * viewportTransform();
     m_needsTransformUpdate = false;
     return true;
@@ -92,7 +92,7 @@ bool RenderSVGViewportContainer::pointIsInsideViewportClip(const FloatPoint& poi
     // Respect the viewport clip (which is in parent coords)
     if (!SVGRenderSupport::isOverflowHidden(*this))
         return true;
-
+    
     return m_viewport.contains(pointInParent);
 }
 

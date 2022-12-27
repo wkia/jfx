@@ -52,7 +52,7 @@ private:
     WEBCORE_EXPORT void moveWidgets();
     WEBCORE_EXPORT static unsigned s_widgetHierarchyUpdateSuspendCount;
 };
-
+    
 class RenderWidget : public RenderReplaced, private OverlapTestRequestClient {
     WTF_MAKE_ISO_ALLOCATED(RenderWidget);
 public:

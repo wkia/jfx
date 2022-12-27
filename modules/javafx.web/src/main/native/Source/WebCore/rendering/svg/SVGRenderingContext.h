@@ -35,7 +35,7 @@ class RenderElement;
 class RenderObject;
 class RenderSVGResourceFilter;
 
-// SVGRenderingContext
+// SVGRenderingContext 
 class SVGRenderingContext {
 public:
     enum NeedsGraphicsContextSave {

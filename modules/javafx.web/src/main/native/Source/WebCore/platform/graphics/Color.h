@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -74,10 +74,10 @@ public:
 
     Color(SRGBA<uint8_t>, OptionSet<Flags> = { });
     Color(std::optional<SRGBA<uint8_t>>, OptionSet<Flags> = { });
-
+    
     template<typename ColorType, typename std::enable_if_t<IsColorTypeWithComponentType<ColorType, float>>* = nullptr>
     Color(const ColorType&, OptionSet<Flags> = { });
-
+    
     template<typename ColorType, typename std::enable_if_t<IsColorTypeWithComponentType<ColorType, float>>* = nullptr>
     Color(const std::optional<ColorType>&, OptionSet<Flags> = { });
 
@@ -559,7 +559,7 @@ template<class Encoder> void Color::encode(Encoder& encoder) const
 
     encoder << flags().contains(FlagsIncludingPrivate::Semantic);
     encoder << flags().contains(FlagsIncludingPrivate::UseColorFunctionSerialization);
-
+    
     if (isOutOfLine()) {
         encoder << true;
         encoder << colorSpace();

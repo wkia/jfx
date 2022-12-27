@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,20 +50,20 @@ public:
         , m_verbose(Options::verboseCFA())
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == ThreadedCPS || m_graph.m_form == SSA);
         ASSERT(m_graph.m_unificationState == GloballyUnified);
         ASSERT(m_graph.m_refCountState == EverythingIsLive);
-
+        
         m_count = 0;
 
         if (m_verbose && !shouldDumpGraphAtEachPhase(m_graph.m_plan.mode())) {
             dataLog("Graph before CFA:\n");
             m_graph.dump();
         }
-
+        
         // This implements a pseudo-worklist-based forward CFA, except that the visit order
         // of blocks is the bytecode program order (which is nearly topological), and
         // instead of a worklist we just walk all basic blocks checking if cfaShouldRevisit
@@ -74,24 +74,24 @@ public:
         // fixpoint-based approach, it has a high probability of only visiting a block
         // after all predecessors have been visited. Only loops will cause this analysis to
         // revisit blocks, and the amount of revisiting is proportional to loop depth.
-
+        
         m_state.initialize();
-
+        
         if (m_graph.m_form != SSA) {
             if (m_verbose)
                 dataLog("   Widening state at OSR entry block.\n");
-
+            
             // Widen the abstract values at the block that serves as the must-handle OSR entry.
             for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
                 BasicBlock* block = m_graph.block(blockIndex);
                 if (!block)
                     continue;
-
+                
                 if (!block->isOSRTarget)
                     continue;
                 if (block->bytecodeBegin != m_graph.m_plan.osrEntryBytecodeIndex())
                     continue;
-
+                
                 // We record that the block needs some OSR stuff, but we don't do that yet. We want to
                 // handle OSR entry data at the right time in order to get the best compile times. If we
                 // simply injected OSR data right now, then we'd potentially cause a loop body to be
@@ -118,29 +118,29 @@ public:
             m_changed = false;
             performForwardCFA();
         } while (m_changed);
-
+        
         if (m_graph.m_form != SSA) {
             for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
                 BasicBlock* block = m_graph.block(blockIndex);
                 if (!block)
                     continue;
-
+                
                 if (m_blocksWithOSR.remove(block))
                     m_changed |= injectOSR(block);
             }
-
+            
             while (m_changed) {
                 m_changed = false;
                 performForwardCFA();
             }
-
+        
             // Make sure we record the intersection of all proofs that we ever allowed the
             // compiler to rely upon.
             for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
                 BasicBlock* block = m_graph.block(blockIndex);
                 if (!block)
                     continue;
-
+                
                 block->intersectionOfCFAHasVisited &= block->cfaHasVisited;
                 for (unsigned i = block->intersectionOfPastValuesAtHead.size(); i--;) {
                     AbstractValue value = block->valuesAtHead[i];
@@ -153,16 +153,16 @@ public:
                 }
             }
         }
-
+        
         return true;
     }
-
+    
 private:
     bool injectOSR(BasicBlock* block)
     {
         if (m_verbose)
             dataLog("   Found must-handle block: ", *block, "\n");
-
+        
         // This merges snapshot of stack values while CFA phase want to have proven types and values. This is somewhat tricky.
         // But this is OK as long as DFG OSR entry validates the inputs with *proven* AbstractValue values. And it turns out that this
         // type widening is critical to navier-stokes. Without it, navier-stokes has more strict constraint on OSR entry and
@@ -183,22 +183,22 @@ private:
                     dataLog("   Not live: ", operand, "\n");
                 continue;
             }
-
+            
             if (m_verbose)
                 dataLog("   Widening ", operand, " with ", value.value(), "\n");
-
+            
             AbstractValue& target = block->valuesAtHead.operand(operand);
             changed |= target.mergeOSREntryValue(m_graph, value.value(), node->variableAccessData(), node);
         }
-
+        
         if (changed || !block->cfaHasVisited) {
             block->cfaShouldRevisit = true;
             return true;
         }
-
+        
         return false;
     }
-
+    
     void performBlockCFA(BasicBlock* block)
     {
         if (!block)
@@ -207,10 +207,10 @@ private:
             return;
         if (m_verbose)
             dataLog("   Block ", *block, ":\n");
-
+        
         if (m_blocksWithOSR.remove(block))
             injectOSR(block);
-
+        
         m_state.beginBasicBlock(block);
         if (m_verbose) {
             dataLog("      head vars: ", block->valuesAtHead, "\n");
@@ -221,12 +221,12 @@ private:
             Node* node = block->at(i);
             if (m_verbose) {
                 dataLogF("      %s @%u: ", Graph::opName(node->op()), node->index());
-
+                
                 if (!safeToExecute(m_state, m_graph, node))
                     dataLog("(UNSAFE) ");
-
+                
                 dataLog(m_state.variablesForDebugging(), " ", m_interpreter);
-
+                
                 dataLogF("\n");
             }
             if (!m_interpreter.execute(i)) {
@@ -234,7 +234,7 @@ private:
                     dataLogF("         Expect OSR exit.\n");
                 break;
             }
-
+            
             if (ASSERT_ENABLED
                 && m_state.didClobberOrFolded() != writesOverlap(m_graph, node, JSCell_structureID))
                 DFG_CRASH(m_graph, node, toCString("AI-clobberize disagreement; AI says ", m_state.clobberState(), " while clobberize says ", writeSet(m_graph, node)).data());
@@ -245,20 +245,20 @@ private:
             dataLogF("\n");
         }
         m_changed |= m_state.endBasicBlock();
-
+        
         if (m_verbose) {
             dataLog("      tail vars: ", block->valuesAtTail, "\n");
             if (m_graph.m_form == SSA)
                 dataLog("      head regs: ", nodeValuePairListDump(block->ssa->valuesAtTail), "\n");
         }
     }
-
+    
     void performForwardCFA()
     {
         ++m_count;
         if (m_verbose)
             dataLogF("CFA [%u]\n", m_count);
-
+        
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex)
             performBlockCFA(m_graph.block(blockIndex));
     }
@@ -267,9 +267,9 @@ private:
     InPlaceAbstractState m_state;
     AbstractInterpreter<InPlaceAbstractState> m_interpreter;
     BlockSet m_blocksWithOSR;
-
+    
     const bool m_verbose;
-
+    
     bool m_changed;
     unsigned m_count;
 };

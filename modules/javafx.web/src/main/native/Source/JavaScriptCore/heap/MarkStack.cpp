@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,24 +38,24 @@ MarkStackArray::MarkStackArray()
 void MarkStackArray::transferTo(MarkStackArray& other)
 {
     RELEASE_ASSERT(this != &other);
-
+    
     // Remove our head and the head of the other list.
     GCArraySegment<const JSCell*>* myHead = m_segments.removeHead();
     GCArraySegment<const JSCell*>* otherHead = other.m_segments.removeHead();
     m_numberOfSegments--;
     other.m_numberOfSegments--;
-
+    
     other.m_segments.append(m_segments);
-
+    
     other.m_numberOfSegments += m_numberOfSegments;
     m_numberOfSegments = 0;
-
+    
     // Put the original heads back in their places.
     m_segments.push(myHead);
     other.m_segments.push(otherHead);
     m_numberOfSegments++;
     other.m_numberOfSegments++;
-
+    
     while (!isEmpty()) {
         refill();
         while (canRemoveLast())
@@ -127,7 +127,7 @@ void MarkStackArray::stealSomeCellsFrom(MarkStackArray& other, size_t idleThread
 
     validatePrevious();
     other.validatePrevious();
-
+        
     // If other has an entire segment, steal it and return.
     if (other.m_numberOfSegments > 1) {
         // Move the heads of the lists aside. We'll push them back on after.
@@ -140,10 +140,10 @@ void MarkStackArray::stealSomeCellsFrom(MarkStackArray& other, size_t idleThread
 
         m_numberOfSegments++;
         other.m_numberOfSegments--;
-
+        
         m_segments.push(myHead);
         other.m_segments.push(otherHead);
-
+    
         validatePrevious();
         other.validatePrevious();
         return;

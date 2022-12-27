@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -30,7 +30,7 @@
 #include <wtf/PrintStream.h>
 
 namespace WebCore {
-
+    
 PlatformTimeRanges::PlatformTimeRanges(const MediaTime& start, const MediaTime& end)
 {
     add(start, end);
@@ -94,12 +94,12 @@ MediaTime PlatformTimeRanges::start(unsigned index) const
 }
 
 MediaTime PlatformTimeRanges::start(unsigned index, bool& valid) const
-{
+{ 
     if (index >= length()) {
         valid = false;
         return MediaTime::zeroTime();
     }
-
+    
     valid = true;
     return m_ranges[index].m_start;
 }
@@ -111,7 +111,7 @@ MediaTime PlatformTimeRanges::end(unsigned index) const
 }
 
 MediaTime PlatformTimeRanges::end(unsigned index, bool& valid) const
-{
+{ 
     if (index >= length()) {
         valid = false;
         return MediaTime::zeroTime();

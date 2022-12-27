@@ -63,7 +63,7 @@ void SVGTextLayoutEngine::updateCharacerPositionIfNeeded(float& x, float& y)
 
     // Replace characters x/y position, with the current text position plus any
     // relative adjustments, if it doesn't specify an absolute position itself.
-    if (x == SVGTextLayoutAttributes::emptyValue())
+    if (x == SVGTextLayoutAttributes::emptyValue()) 
         x = m_x + m_dx;
 
     if (y == SVGTextLayoutAttributes::emptyValue())
@@ -173,7 +173,7 @@ void SVGTextLayoutEngine::beginTextPathLayout(RenderSVGTextPath& textPath, SVGTe
 
     const auto& startOffset = textPath.startOffset();
     m_textPathLength = m_textPath.length();
-
+    
     if (textPath.startOffset().lengthType() == SVGLengthType::Percentage)
         m_textPathStartOffset = startOffset.valueAsPercentage() * m_textPathLength;
     else {
@@ -417,7 +417,7 @@ void SVGTextLayoutEngine::layoutTextOnLineOrPath(SVGInlineTextBox& textBox, Rend
     RenderElement* textParent = text.parent();
     ASSERT(textParent);
     SVGElement* lengthContext = downcast<SVGElement>(textParent->element());
-
+    
     bool definesTextLength = parentDefinesTextLength(textParent);
 
     const SVGRenderStyle& svgStyle = style.svgStyle();

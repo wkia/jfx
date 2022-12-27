@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -44,11 +44,11 @@ bool argumentsInvolveStackSlot(InlineCallFrame* inlineCallFrame, Operand operand
     if (inlineCallFrame->isClosureCall
         && reg == VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::callee))
         return true;
-
+    
     if (inlineCallFrame->isVarargs()
         && reg == VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::argumentCountIncludingThis))
         return true;
-
+    
     // We do not include fixups here since it is not related to |arguments|, rest parameters, and varargs.
     unsigned numArguments = static_cast<unsigned>(inlineCallFrame->argumentCountIncludingThis - 1);
     VirtualRegister argumentStart =
@@ -112,13 +112,13 @@ Node* emitCodeToGetArgumentsArrayLength(
         return insertionSet.insertConstant(
             nodeIndex, origin, jsNumber(arguments->castOperand<JSImmutableButterfly*>()->length() + addThis));
     }
-
+    
     InlineCallFrame* inlineCallFrame = arguments->origin.semantic.inlineCallFrame();
 
     unsigned numberOfArgumentsToSkip = 0;
     if (arguments->op() == CreateRest || arguments->op() == PhantomCreateRest)
         numberOfArgumentsToSkip = arguments->numberOfArgumentsToSkip();
-
+    
     if (inlineCallFrame && !inlineCallFrame->isVarargs()) {
         unsigned argumentsSize = inlineCallFrame->argumentCountIncludingThis - !addThis;
         if (argumentsSize >= numberOfArgumentsToSkip)
@@ -128,7 +128,7 @@ Node* emitCodeToGetArgumentsArrayLength(
         return insertionSet.insertConstant(
             nodeIndex, origin, jsNumber(argumentsSize));
     }
-
+    
     Node* argumentCount = insertionSet.insertNode(nodeIndex,
         SpecInt32Only, GetArgumentCountIncludingThis, origin, OpInfo(inlineCallFrame));
 
@@ -141,8 +141,8 @@ Node* emitCodeToGetArgumentsArrayLength(
     if (numberOfArgumentsToSkip) {
         // The above subtraction may produce a negative number if this number is non-zero. We correct that here.
         result = insertionSet.insertNode(
-            nodeIndex, SpecInt32Only, ArithMax, origin,
-            Edge(result, Int32Use),
+            nodeIndex, SpecInt32Only, ArithMax, origin, 
+            Edge(result, Int32Use), 
             insertionSet.insertConstantForUse(nodeIndex, origin, jsNumber(static_cast<unsigned>(addThis)), Int32Use));
         result->setResult(NodeResultInt32);
     }

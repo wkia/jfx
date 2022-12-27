@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -108,7 +108,7 @@ bool GetByVariant::attemptToMerge(const GetByVariant& other)
 
     if (m_offset != other.m_offset)
         return false;
-
+    
     if (m_callLinkStatus || other.m_callLinkStatus) {
         if (!(m_callLinkStatus && other.m_callLinkStatus))
             return false;
@@ -129,7 +129,7 @@ bool GetByVariant::attemptToMerge(const GetByVariant& other)
 
     if (m_conditionSet.isEmpty() != other.m_conditionSet.isEmpty())
         return false;
-
+    
     ObjectPropertyConditionSet mergedConditionSet;
     if (!m_conditionSet.isEmpty()) {
         mergedConditionSet = m_conditionSet.mergedWith(other.m_conditionSet);
@@ -140,9 +140,9 @@ bool GetByVariant::attemptToMerge(const GetByVariant& other)
             return false;
     }
     m_conditionSet = mergedConditionSet;
-
+    
     m_structureSet.merge(other.m_structureSet);
-
+    
     if (m_callLinkStatus)
         m_callLinkStatus->merge(*other.m_callLinkStatus);
 

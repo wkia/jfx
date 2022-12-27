@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,7 +48,7 @@ InstanceOfStatus InstanceOfStatus::computeFor(
     CodeBlock* codeBlock, ICStatusMap& infoMap, BytecodeIndex bytecodeIndex)
 {
     ConcurrentJSLocker locker(codeBlock->m_lock);
-
+    
     InstanceOfStatus result;
 #if ENABLE(DFG_JIT)
     result = computeForStubInfo(locker, codeBlock->vm(), infoMap.get(CodeOrigin(bytecodeIndex)).stubInfo);
@@ -66,7 +66,7 @@ InstanceOfStatus InstanceOfStatus::computeFor(
     UNUSED_PARAM(infoMap);
     UNUSED_PARAM(bytecodeIndex);
 #endif
-
+    
     return result;
 }
 
@@ -79,28 +79,28 @@ InstanceOfStatus InstanceOfStatus::computeForStubInfo(const ConcurrentJSLocker&,
     StubInfoSummary summary = StructureStubInfo::summary(vm, stubInfo);
     if (!isInlineable(summary))
         return InstanceOfStatus(summary);
-
+    
     if (stubInfo->cacheType() != CacheType::Stub)
         return TakesSlowPath; // This is conservative. It could be that we have no information.
-
+    
     PolymorphicAccess* list = stubInfo->u.stub;
     InstanceOfStatus result;
     for (unsigned listIndex = 0; listIndex < list->size(); ++listIndex) {
         const AccessCase& access = list->at(listIndex);
-
+        
         if (access.type() == AccessCase::InstanceOfGeneric)
             return TakesSlowPath;
-
+        
         if (!access.conditionSet().structuresEnsureValidity())
             return TakesSlowPath;
-
+        
         result.appendVariant(InstanceOfVariant(
             access.structure(),
             access.conditionSet(),
             access.as<InstanceOfAccessCase>().prototype(),
             access.type() == AccessCase::InstanceOfHit));
     }
-
+    
     result.shrinkToFit();
     return result;
 }

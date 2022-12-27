@@ -69,7 +69,7 @@ public:
     float borderLeftWidth() const
     {
         if (m_left.style() == BorderStyle::None || m_left.style() == BorderStyle::Hidden)
-            return 0;
+            return 0; 
         return m_left.width();
     }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,21 +40,21 @@ public:
         : Phase(graph, "clean up")
     {
     }
-
+    
     bool run()
     {
         bool changed = false;
-
+        
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
             unsigned sourceIndex = 0;
             unsigned targetIndex = 0;
             while (sourceIndex < block->size()) {
                 Node* node = block->at(sourceIndex++);
                 bool kill = false;
-
+                
                 if (node->op() == Check)
                     node->children = node->children.justChecks();
-
+                
                 switch (node->op()) {
                 case Phantom:
                 case Check:
@@ -70,7 +70,7 @@ public:
                 default:
                     break;
                 }
-
+                
                 if (kill)
                     m_graph.deleteNode(node);
                 else
@@ -78,11 +78,11 @@ public:
             }
             block->resize(targetIndex);
         }
-
+        
         return changed;
     }
 };
-
+    
 bool performCleanUp(Graph& graph)
 {
     return runPhase<CleanUpPhase>(graph);

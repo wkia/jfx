@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -50,7 +50,7 @@ bool appendICStatusVariant(VariantVectorType& variants, const VariantType& varia
             return true;
         }
     }
-
+    
     // Make sure there is no overlap. We should have pruned out opportunities for
     // overlap but it's possible that an inline cache got into a weird state. We are
     // defensive and bail if we detect crazy.
@@ -58,7 +58,7 @@ bool appendICStatusVariant(VariantVectorType& variants, const VariantType& varia
         if (variants[i].overlaps(variant))
             return false;
     }
-
+    
     variants.append(variant);
     return true;
 }

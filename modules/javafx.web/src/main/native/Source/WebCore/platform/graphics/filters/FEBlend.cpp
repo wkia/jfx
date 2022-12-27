@@ -25,9 +25,7 @@
 #include "config.h"
 #include "FEBlend.h"
 
-#if !PLATFORM(JAVA) || HAVE(ARM_NEON_INTRINSICS)
 #include "FEBlendNEON.h"
-#endif
 #include "Filter.h"
 #include "FloatPoint.h"
 #include "GraphicsContext.h"

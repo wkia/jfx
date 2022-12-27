@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,7 +47,7 @@ private:
     bool sweepNextBlock(VM&);
     void doSweep(VM&, MonotonicTime startTime);
     void scheduleTimer();
-
+    
     BlockDirectory* m_currentDirectory;
     bool m_shouldFreeFastMallocMemoryAfterSweeping { false };
 };

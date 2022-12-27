@@ -169,7 +169,7 @@ public:
     ExpressionType push(NoConsistencyCheckTag)
     {
         m_maxStackSize = std::max(m_maxStackSize, ++m_stackSize);
-        return virtualRegisterForLocal((m_stackSize - 1));
+        return virtualRegisterForLocal(m_stackSize - 1);
     }
 
     ExpressionType push()
@@ -316,7 +316,7 @@ private:
     {
         startOffset = target.stackSize() + 1;
         keep = target.branchTargetArity();
-        drop = (m_stackSize - target.stackSize() - target.branchTargetArity());
+        drop = m_stackSize - target.stackSize() - target.branchTargetArity();
     }
 
     void dropKeep(Stack& values, const ControlType& target, bool dropValues)

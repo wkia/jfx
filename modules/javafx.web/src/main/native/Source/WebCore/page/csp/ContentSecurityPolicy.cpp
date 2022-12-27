@@ -92,7 +92,7 @@ ContentSecurityPolicy::ContentSecurityPolicy(URL&& protectedURL, ScriptExecution
 
 ContentSecurityPolicy::~ContentSecurityPolicy() = default;
 
-void ContentSecurityPolicy::copyStateFrom(const ContentSecurityPolicy* other)
+void ContentSecurityPolicy::copyStateFrom(const ContentSecurityPolicy* other) 
 {
     if (m_hasAPIPolicy)
         return;
@@ -173,6 +173,17 @@ void ContentSecurityPolicy::didReceiveHeaders(const ContentSecurityPolicyRespons
     m_httpStatusCode = headers.m_httpStatusCode;
 }
 
+void ContentSecurityPolicy::didReceiveHeaders(const ContentSecurityPolicy& other, ReportParsingErrors reportParsingErrors)
+{
+    SetForScope<bool> isReportingEnabled(m_isReportingEnabled, reportParsingErrors == ReportParsingErrors::Yes);
+    for (auto& policy : other.m_policies)
+        didReceiveHeader(policy->header(), policy->headerType(), ContentSecurityPolicy::PolicyFrom::HTTPHeader, String { });
+    m_referrer = other.m_referrer;
+    m_httpStatusCode = other.m_httpStatusCode;
+    m_upgradeInsecureRequests = other.m_upgradeInsecureRequests;
+    m_insecureNavigationRequestsToUpgrade.add(other.m_insecureNavigationRequestsToUpgrade.begin(), other.m_insecureNavigationRequestsToUpgrade.end());
+}
+
 void ContentSecurityPolicy::didReceiveHeader(const String& header, ContentSecurityPolicyHeaderType type, ContentSecurityPolicy::PolicyFrom policyFrom, String&& referrer, int httpStatusCode)
 {
     if (m_hasAPIPolicy)
@@ -193,7 +204,7 @@ void ContentSecurityPolicy::didReceiveHeader(const String& header, ContentSecuri
     // separated chunk as a separate header.
     readCharactersForParsing(header, [&](auto buffer) {
         auto begin = buffer.position();
-
+    
         while (buffer.hasCharactersRemaining()) {
             skipUntil(buffer, ',');
 
@@ -207,7 +218,7 @@ void ContentSecurityPolicy::didReceiveHeader(const String& header, ContentSecuri
             begin = buffer.position();
         }
     });
-
+    
 
     if (m_scriptExecutionContext)
         applyPolicyToScriptExecutionContext();
@@ -911,7 +922,7 @@ void ContentSecurityPolicy::setUpgradeInsecureRequests(bool upgradeInsecureReque
         upgradeURL.setProtocol("http");
     else if (upgradeURL.protocolIs("wss"))
         upgradeURL.setProtocol("ws");
-
+    
     m_insecureNavigationRequestsToUpgrade.add(SecurityOriginData::fromURL(upgradeURL));
 }
 

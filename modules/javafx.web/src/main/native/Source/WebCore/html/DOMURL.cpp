@@ -107,7 +107,7 @@ URLSearchParams& DOMURL::searchParams()
         m_searchParams = URLSearchParams::create(search(), this);
     return *m_searchParams;
 }
-
+    
 void DOMURL::revokeObjectURL(ScriptExecutionContext& scriptExecutionContext, const String& urlString)
 {
     URL url(URL(), urlString);

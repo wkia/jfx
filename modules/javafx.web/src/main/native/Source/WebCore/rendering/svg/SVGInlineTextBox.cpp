@@ -104,7 +104,7 @@ int SVGInlineTextBox::offsetForPositionInFragment(const SVGTextFragment& fragmen
 
 float SVGInlineTextBox::positionForOffset(unsigned) const
 {
-    // SVG doesn't use the offset <-> position selection system.
+    // SVG doesn't use the offset <-> position selection system. 
     ASSERT_NOT_REACHED();
     return 0;
 }
@@ -358,7 +358,7 @@ bool SVGInlineTextBox::acquirePaintingResource(GraphicsContext*& context, float 
             m_paintingResource = nullptr;
             return false;
         }
-
+        
         RenderSVGResourceSolidColor* fallbackResource = RenderSVGResource::sharedSolidPaintingResource();
         fallbackResource->setColor(fallbackColor);
 
@@ -660,7 +660,7 @@ bool SVGInlineTextBox::nodeAtPoint(const HitTestRequest& request, HitTestResult&
 
                 float scalingFactor = renderer().scalingFactor();
                 ASSERT(scalingFactor);
-
+                
                 float baseline = renderer().scaledFont().fontMetrics().floatAscent() / scalingFactor;
 
                 AffineTransform fragmentTransform;
@@ -669,7 +669,7 @@ bool SVGInlineTextBox::nodeAtPoint(const HitTestRequest& request, HitTestResult&
                     fragment.buildFragmentTransform(fragmentTransform);
                     if (!fragmentTransform.isIdentity())
                         fragmentQuad = fragmentTransform.mapQuad(fragmentQuad);
-
+                    
                     if (fragmentQuad.containsPoint(locationInContainer.point())) {
                         renderer().updateHitTestResult(result, locationInContainer.point() - toLayoutSize(accumulatedOffset));
                         if (result.addNodeToListBasedTestResult(renderer().nodeForHitTest(), request, locationInContainer, rect) == HitTestProgress::Stop)

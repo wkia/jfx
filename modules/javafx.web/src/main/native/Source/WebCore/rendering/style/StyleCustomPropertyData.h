@@ -34,7 +34,7 @@ class StyleCustomPropertyData : public RefCounted<StyleCustomPropertyData> {
 public:
     static Ref<StyleCustomPropertyData> create() { return adoptRef(*new StyleCustomPropertyData); }
     Ref<StyleCustomPropertyData> copy() const { return adoptRef(*new StyleCustomPropertyData(*this)); }
-
+    
     bool operator==(const StyleCustomPropertyData& other) const
     {
         if (values.size() != other.values.size())
@@ -50,7 +50,7 @@ public:
     }
 
     bool operator!=(const StyleCustomPropertyData& other) const { return !(*this == other); }
-
+    
     void setCustomPropertyValue(const AtomString& name, Ref<CSSCustomPropertyValue>&& value)
     {
         values.set(name, WTFMove(value));

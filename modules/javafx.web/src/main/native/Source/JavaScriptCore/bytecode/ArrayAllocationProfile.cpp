@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -51,7 +51,7 @@ void ArrayAllocationProfile::updateProfile()
     // length hint. However vector length can be accessible only from the main
     // thread because large butterfly can be realloced in the main thread.
     // So for now, we update the allocation profile only from the main thread.
-
+    
     ASSERT(!isCompilationThread());
     JSArray* lastArray = m_lastArray;
     if (!lastArray)

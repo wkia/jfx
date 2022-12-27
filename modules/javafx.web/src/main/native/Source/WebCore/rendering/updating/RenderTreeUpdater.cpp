@@ -117,7 +117,7 @@ void RenderTreeUpdater::commit(std::unique_ptr<const Style::Update> styleUpdate)
 
     if (!m_document.shouldCreateRenderers() || !m_document.renderView())
         return;
-
+    
     TraceScope scope(RenderTreeBuildStart, RenderTreeBuildEnd);
 
     m_styleUpdate = WTFMove(styleUpdate);
@@ -373,7 +373,7 @@ void RenderTreeUpdater::createRenderer(Element& element, RenderStyle&& style)
         renderTreePosition().computeNextSibling(element);
         return renderTreePosition();
     };
-
+    
     if (!shouldCreateRenderer(element, renderTreePosition().parent()))
         return;
 
@@ -443,7 +443,7 @@ bool RenderTreeUpdater::textRendererIsNeeded(const Text& textNode)
     } else {
         if (parentRenderer.isRenderBlock() && !parentRenderer.childrenInline() && (!previousRenderer || !previousRenderer->isInline()))
             return false;
-
+        
         RenderObject* first = parentRenderer.firstChild();
         while (first && first->isFloatingOrOutOfFlowPositioned())
             first = first->nextSibling();

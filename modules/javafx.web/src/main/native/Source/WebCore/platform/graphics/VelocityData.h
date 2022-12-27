@@ -39,7 +39,7 @@ struct VelocityData  {
     float verticalVelocity { 0 };
     float scaleChangeRate { 0 };
     MonotonicTime lastUpdateTime;
-
+    
     VelocityData(float horizontal = 0, float vertical = 0, float scaleChange = 0, MonotonicTime updateTime = MonotonicTime())
         : horizontalVelocity(horizontal)
         , verticalVelocity(vertical)
@@ -47,12 +47,12 @@ struct VelocityData  {
         , lastUpdateTime(updateTime)
     {
     }
-
+    
     bool velocityOrScaleIsChanging() const
     {
         return horizontalVelocity || verticalVelocity || scaleChangeRate;
     }
-
+    
     bool equalIgnoringTimestamp(const VelocityData& other) const
     {
         return horizontalVelocity == other.horizontalVelocity

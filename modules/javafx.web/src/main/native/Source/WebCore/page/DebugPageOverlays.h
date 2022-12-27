@@ -66,7 +66,7 @@ private:
     {
         return m_pageRegionOverlays.contains(&page);
     }
-
+    
     void updateOverlayRegionVisibility(Page&, OptionSet<DebugOverlayRegions>);
 
     RegionOverlay* regionOverlayForPage(Page&, RegionType) const;

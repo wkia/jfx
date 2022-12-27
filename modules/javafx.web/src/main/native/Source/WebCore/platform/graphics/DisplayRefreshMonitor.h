@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,7 +44,7 @@ class DisplayRefreshMonitor : public ThreadSafeRefCounted<DisplayRefreshMonitor>
 public:
     static RefPtr<DisplayRefreshMonitor> create(DisplayRefreshMonitorFactory*, PlatformDisplayID);
     WEBCORE_EXPORT virtual ~DisplayRefreshMonitor();
-
+    
     WEBCORE_EXPORT virtual void stop();
 
     // Return true if callback request was scheduled, false if it couldn't be
@@ -52,7 +52,7 @@ public:
     WEBCORE_EXPORT virtual bool requestRefreshCallback();
 
     void windowScreenDidChange(PlatformDisplayID);
-
+    
     bool hasClients() const { return m_clients.size(); }
     void addClient(DisplayRefreshMonitorClient&);
     bool removeClient(DisplayRefreshMonitorClient&);
@@ -104,7 +104,7 @@ private:
     Lock m_lock;
     bool m_scheduled { false };
     bool m_previousFrameDone { true };
-
+    
     unsigned m_unscheduledFireCount { 0 };
     unsigned m_maxUnscheduledFireCount { 0 };
 };

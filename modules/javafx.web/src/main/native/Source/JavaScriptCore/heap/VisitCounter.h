@@ -32,20 +32,20 @@ namespace JSC {
 class VisitCounter {
 public:
     VisitCounter() { }
-
+    
     VisitCounter(AbstractSlotVisitor& visitor)
         : m_visitor(&visitor)
         , m_initialVisitCount(visitor.visitCount())
     {
     }
-
+    
     AbstractSlotVisitor& visitor() const { return *m_visitor; }
-
+    
     size_t visitCount() const
     {
         return m_visitor->visitCount() - m_initialVisitCount;
     }
-
+    
 private:
     AbstractSlotVisitor* m_visitor { nullptr };
     size_t m_initialVisitCount { 0 };

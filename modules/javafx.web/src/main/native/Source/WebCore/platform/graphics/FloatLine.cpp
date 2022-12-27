@@ -55,7 +55,7 @@ const FloatLine FloatLine::extendedToBounds(const FloatRect& bounds) const
         FloatPoint bottom = { (((bounds.y() + bounds.height() - m_start.y()) * (m_end.x() - m_start.x())) / (m_end.y() - m_start.y())) + m_start.x(), bounds.y() + bounds.height() };
         return { top, bottom };
     }
-
+    
     // The line is roughly horizontal, so construct points at the left and right of the bounds.
     FloatPoint left = { bounds.x(), (((bounds.x() - m_start.x()) * (m_end.y() - m_start.y())) / (m_end.x() - m_start.x())) + m_start.y() };
     FloatPoint right = { bounds.x() + bounds.width(), (((bounds.x() + bounds.width() - m_start.x()) * (m_end.y() - m_start.y())) / (m_end.x() - m_start.x())) + m_start.y() };
@@ -65,14 +65,14 @@ const FloatLine FloatLine::extendedToBounds(const FloatRect& bounds) const
 const std::optional<FloatPoint> FloatLine::intersectionWith(const FloatLine& otherLine) const
 {
     float denominator = ((m_start.x() - m_end.x()) * (otherLine.start().y() - otherLine.end().y())) - ((m_start.y() - m_end.y()) * (otherLine.start().x() - otherLine.end().x()));
-
+    
     // A denominator of zero indicates the lines are parallel or coincident, which means there is no true intersection.
     if (!denominator)
         return std::nullopt;
-
+    
     float thisLineCommonNumeratorFactor = (m_start.x() * m_end.y()) - (m_start.y() * m_end.x());
     float otherLineCommonNumeratorFactor = (otherLine.start().x() * otherLine.end().y()) - (otherLine.start().y() * otherLine.end().x());
-
+    
     return {{
         ((thisLineCommonNumeratorFactor * (otherLine.start().x() - otherLine.end().x())) - (otherLineCommonNumeratorFactor * (m_start.x() - m_end.x()))) / denominator,
         ((thisLineCommonNumeratorFactor * (otherLine.start().y() - otherLine.end().y())) - (otherLineCommonNumeratorFactor * (m_start.y() - m_end.y()))) / denominator,

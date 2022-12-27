@@ -140,7 +140,7 @@ CString CodeBlock::sourceCodeForTools() const
 {
     if (codeType() != FunctionCode)
         return ownerExecutable()->source().toUTF8();
-
+    
     SourceProvider* provider = source().provider();
     FunctionExecutable* executable = jsCast<FunctionExecutable*>(ownerExecutable());
     UnlinkedFunctionExecutable* unlinked = executable->unlinkedExecutable();
@@ -216,7 +216,7 @@ void CodeBlock::dumpSource(PrintStream& out)
         StringView source = functionExecutable->source().provider()->getRange(
             functionExecutable->parametersStartOffset(),
             functionExecutable->typeProfilingEndOffset(vm()) + 1); // Type profiling end offset is the character before the '}'.
-
+        
         out.print("function ", inferredName(), source);
         return;
     }
@@ -256,12 +256,12 @@ public:
         , m_ident(ident)
     {
     }
-
+    
     void dump(PrintStream& out) const final
     {
         out.print("Linking put_to_scope in ", FunctionExecutableDump(jsCast<FunctionExecutable*>(m_codeBlock->ownerExecutable())), " for ", m_ident);
     }
-
+    
 private:
     CodeBlock* m_codeBlock;
     const Identifier& m_ident;
@@ -308,7 +308,7 @@ CodeBlock::CodeBlock(VM& vm, Structure* structure, CopyParsedBlockTag, CodeBlock
 
     ASSERT(source().provider());
     setNumParameters(other.numParameters());
-
+    
     vm.heap.codeBlockSet().add(this);
 }
 
@@ -337,7 +337,7 @@ CodeBlock::CodeBlock(VM& vm, Structure* structure, ScriptExecutable* ownerExecut
     , m_didFailFTLCompilation(false)
     , m_hasBeenCompiledWithFTL(false)
     , m_hasLinkedOSRExit(false)
-    , m_isEligibleForLLIntDowngrade(false)
+    , m_isEligibleForLLIntDowngrade(false) 
     , m_numCalleeLocals(unlinkedCodeBlock->numCalleeLocals())
     , m_numVars(unlinkedCodeBlock->numVars())
     , m_hasDebuggerStatement(false)
@@ -359,7 +359,7 @@ CodeBlock::CodeBlock(VM& vm, Structure* structure, ScriptExecutable* ownerExecut
 
     ASSERT(source().provider());
     setNumParameters(unlinkedCodeBlock->numParameters());
-
+    
     vm.heap.codeBlockSet().add(this);
 }
 
@@ -694,7 +694,7 @@ bool CodeBlock::finishCreation(VM& vm, ScriptExecutable* ownerExecutable, Unlink
 
                 break;
             }
-            case ProfileTypeBytecodeDoesNotHaveGlobalID:
+            case ProfileTypeBytecodeDoesNotHaveGlobalID: 
             case ProfileTypeBytecodeFunctionArgument: {
                 globalVariableID = TypeProfilerNoGlobalIDExists;
                 break;
@@ -750,7 +750,7 @@ bool CodeBlock::finishCreation(VM& vm, ScriptExecutable* ownerExecutable, Unlink
                 vm.addLoopHintExecutionCounter(instruction.ptr());
             break;
         }
-
+        
         default:
             break;
         }
@@ -836,7 +836,7 @@ CodeBlock::~CodeBlock()
         jitCode()->dfgCommon()->clearWatchpoints();
 #endif
     vm.heap.codeBlockSet().remove(this);
-
+    
     if (UNLIKELY(vm.m_perBytecodeProfiler))
         vm.m_perBytecodeProfiler->notifyDestruction(this);
 
@@ -854,7 +854,7 @@ CodeBlock::~CodeBlock()
     // CodeBlock(s) that have calls into us, then the CallLinkInfo vector's
     // destructor will try to remove nodes from our (no longer valid) linked list.
     unlinkIncomingCalls();
-
+    
     // Note that our outgoing calls will be removed from other CodeBlocks'
     // m_incomingCalls linked lists through the execution of the ~CallLinkInfo
     // destructors.
@@ -989,7 +989,7 @@ void CodeBlock::visitChildren(Visitor& visitor)
 
     stronglyVisitStrongReferences(locker, visitor);
     stronglyVisitWeakReferences(locker, visitor);
-
+    
     VM::SpaceAndSet::setFor(*subspace()).add(this);
 }
 
@@ -1070,10 +1070,10 @@ ALWAYS_INLINE bool CodeBlock::shouldJettisonDueToOldAge(const ConcurrentJSLocker
 
     if (UNLIKELY(Options::forceCodeBlockToJettisonDueToOldAge()))
         return true;
-
+    
     if (timeSinceCreation() < timeToLive(jitType()))
         return false;
-
+    
     return true;
 }
 
@@ -1083,10 +1083,10 @@ static inline bool shouldMarkTransition(Visitor& visitor, DFG::WeakReferenceTran
 {
     if (transition.m_codeOrigin && !visitor.isMarked(transition.m_codeOrigin.get()))
         return false;
-
+    
     if (!visitor.isMarked(transition.m_from.get()))
         return false;
-
+    
     return true;
 }
 
@@ -1167,13 +1167,13 @@ void CodeBlock::propagateTransitions(const ConcurrentJSLocker&, Visitor& visitor
         }
     }
 #endif // ENABLE(JIT)
-
+    
 #if ENABLE(DFG_JIT)
     if (JITCode::isOptimizingJIT(jitType())) {
         DFG::CommonData* dfgCommon = m_jitCode->dfgCommon();
-
+        
         dfgCommon->recordedStatuses.markIfCheap(visitor);
-
+        
         for (StructureID structureID : dfgCommon->m_weakStructureReferences)
             vm.getStructure(structureID)->markIfCheap(visitor);
 
@@ -1212,18 +1212,18 @@ template<typename Visitor>
 void CodeBlock::determineLiveness(const ConcurrentJSLocker&, Visitor& visitor)
 {
     UNUSED_PARAM(visitor);
-
+    
 #if ENABLE(DFG_JIT)
     VM& vm = *m_vm;
     if (visitor.isMarked(this))
         return;
-
+    
     // In rare and weird cases, this could be called on a baseline CodeBlock. One that I found was
     // that we might decide that the CodeBlock should be jettisoned due to old age, so the
     // isMarked check doesn't protect us.
     if (!JITCode::isOptimizingJIT(jitType()))
         return;
-
+    
     DFG::CommonData* dfgCommon = m_jitCode->dfgCommon();
     // Now check all of our weak references. If all of them are live, then we
     // have proved liveness and so we scan our strong references. If at end of
@@ -1246,12 +1246,12 @@ void CodeBlock::determineLiveness(const ConcurrentJSLocker&, Visitor& visitor)
             }
         }
     }
-
+    
     // If some weak references are dead, then this fixpoint iteration was
     // unsuccessful.
     if (!allAreLiveSoFar)
         return;
-
+    
     // All weak references are live. Record this information so we don't
     // come back here again, and scan the strong references.
     visitor.appendUnbarriered(this);
@@ -1552,7 +1552,7 @@ void CodeBlock::finalizeUnconditionally(VM& vm)
     }
 
 #endif
-
+    
     if (JITCode::couldBeInterpreted(jitType()))
         finalizeLLIntInlineCaches();
 
@@ -1738,7 +1738,7 @@ void CodeBlock::resetJITData()
 {
     RELEASE_ASSERT(!JITCode::isJIT(jitType()));
     ConcurrentJSLocker locker(m_lock);
-
+    
     if (auto* jitData = m_jitData.get()) {
         // We can clear these because no other thread will have references to any stub infos, call
         // link infos, or by val infos if we don't have JIT code. Attempts to query these data
@@ -1790,7 +1790,7 @@ template<typename Visitor>
 void CodeBlock::stronglyVisitStrongReferences(const ConcurrentJSLocker& locker, Visitor& visitor)
 {
     UNUSED_PARAM(locker);
-
+    
     visitor.append(m_globalObject);
     visitor.append(m_ownerExecutable); // This is extra important since it causes the ExecutableToCodeBlockEdge to be marked.
     visitor.append(m_unlinkedCode);
@@ -1829,7 +1829,7 @@ void CodeBlock::stronglyVisitWeakReferences(const ConcurrentJSLocker&, Visitor& 
 #if ENABLE(DFG_JIT)
     if (!JITCode::isOptimizingJIT(jitType()))
         return;
-
+    
     DFG::CommonData* dfgCommon = m_jitCode->dfgCommon();
 
     for (auto& transition : dfgCommon->m_transitions) {
@@ -1844,7 +1844,7 @@ void CodeBlock::stronglyVisitWeakReferences(const ConcurrentJSLocker&, Visitor& 
 
     for (StructureID structureID : dfgCommon->m_weakStructureReferences)
         visitor.appendUnbarriered(visitor.vm().getStructure(structureID));
-#endif
+#endif    
 }
 
 CodeBlock* CodeBlock::baselineAlternative()
@@ -2061,7 +2061,7 @@ void CodeBlock::shrinkToFit(const ConcurrentJSLocker&, ShrinkMode shrinkMode)
         m_constantRegisters.shrinkToFit();
 #else
     UNUSED_PARAM(shrinkMode);
-        m_constantRegisters.shrinkToFit();
+    m_constantRegisters.shrinkToFit();
 #endif
 }
 
@@ -2172,7 +2172,7 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
     CODEBLOCK_LOG_EVENT(codeBlock, "jettison", ("due to ", reason, ", counting = ", mode == CountReoptimization, ", detail = ", pointerDump(detail)));
 
     RELEASE_ASSERT(reason != Profiler::NotJettisoned);
-
+    
 #if ENABLE(DFG_JIT)
     if (DFG::shouldDumpDisassembly()) {
         dataLog("Jettisoning ", *this);
@@ -2183,7 +2183,7 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
             dataLog(", ", *detail);
         dataLog(".\n");
     }
-
+    
     if (reason == Profiler::JettisonDueToWeakReference) {
         if (DFG::shouldDumpDisassembly()) {
             dataLog(*this, " will be jettisoned because of the following dead references:\n");
@@ -2207,7 +2207,7 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
 #endif // ENABLE(DFG_JIT)
 
     DeferGCForAWhile deferGC(*heap());
-
+    
     // We want to accomplish two things here:
     // 1) Make sure that if this CodeBlock is on the stack right now, then if we return to it
     //    we should OSR exit at the top of the next bytecode instruction after the return.
@@ -2216,12 +2216,12 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
 #if ENABLE(DFG_JIT)
     if (JITCode::isOptimizingJIT(jitType()))
         jitCode()->dfgCommon()->clearWatchpoints();
-
+    
     if (reason != Profiler::JettisonDueToOldAge) {
         Profiler::Compilation* compilation = jitCode()->dfgCommon()->compilation.get();
         if (UNLIKELY(compilation))
             compilation->setJettisonReason(reason, detail);
-
+        
         // This accomplishes (1), and does its own book-keeping about whether it has already happened.
         if (!jitCode()->dfgCommon()->invalidate()) {
             // We've already been invalidated.
@@ -2229,10 +2229,10 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
             return;
         }
     }
-
+    
     if (DFG::shouldDumpDisassembly())
         dataLog("    Did invalidate ", *this, "\n");
-
+    
     // Count the reoptimization if that's what the user wanted.
     if (mode == CountReoptimization) {
         // FIXME: Maybe this should call alternative().
@@ -2241,7 +2241,7 @@ void CodeBlock::jettison(Profiler::JettisonReason reason, ReoptimizationMode mod
         if (DFG::shouldDumpDisassembly())
             dataLog("    Did count reoptimization for ", *this, "\n");
     }
-
+    
     if (this != replacement()) {
         // This means that we were never the entrypoint. This can happen for OSR entry code
         // blocks.
@@ -2330,13 +2330,13 @@ private:
 void CodeBlock::noticeIncomingCall(CallFrame* callerFrame)
 {
     CodeBlock* callerCodeBlock = callerFrame->codeBlock();
-
+    
     dataLogLnIf(Options::verboseCallLink(), "Noticing call link from ", pointerDump(callerCodeBlock), " to ", *this);
-
+    
 #if ENABLE(DFG_JIT)
     if (!m_shouldAlwaysBeInlined)
         return;
-
+    
     if (!callerCodeBlock) {
         m_shouldAlwaysBeInlined = false;
         dataLogLnIf(Options::verboseCallLink(), "    Clearing SABI because caller is native.");
@@ -2351,7 +2351,7 @@ void CodeBlock::noticeIncomingCall(CallFrame* callerFrame)
 
     if (!canInline(capabilityLevelState()))
         return;
-
+    
     if (!DFG::isSmallEnoughToInlineCodeInto(callerCodeBlock)) {
         m_shouldAlwaysBeInlined = false;
         dataLogLnIf(Options::verboseCallLink(), "    Clearing SABI because caller is too large.");
@@ -2367,13 +2367,13 @@ void CodeBlock::noticeIncomingCall(CallFrame* callerFrame)
         dataLogLnIf(Options::verboseCallLink(), "    Clearing SABI because caller is in LLInt.");
         return;
     }
-
+    
     if (JITCode::isOptimizingJIT(callerCodeBlock->jitType())) {
         m_shouldAlwaysBeInlined = false;
         dataLogLnIf(Options::verboseCallLink(), "    Clearing SABI bcause caller was already optimized.");
         return;
     }
-
+    
     if (callerCodeBlock->codeType() != FunctionCode) {
         // If the caller is either eval or global code, assume that that won't be
         // optimized anytime soon. For eval code this is particularly true since we
@@ -2392,17 +2392,17 @@ void CodeBlock::noticeIncomingCall(CallFrame* callerFrame)
         m_shouldAlwaysBeInlined = false;
         return;
     }
-
+    
     if (callerCodeBlock->capabilityLevelState() == DFG::CapabilityLevelNotSet) {
         dataLog("In call from ", FullCodeOrigin(callerCodeBlock, callerFrame->codeOrigin()), " to ", *this, ": caller's DFG capability level is not set.\n");
         CRASH();
     }
-
+    
     if (canCompile(callerCodeBlock->capabilityLevelState()))
         return;
-
+    
     dataLogLnIf(Options::verboseCallLink(), "    Clearing SABI because the caller is not a DFG candidate.");
-
+    
     m_shouldAlwaysBeInlined = false;
 #endif
 }
@@ -2429,7 +2429,7 @@ const RegisterAtOffsetList* CodeBlock::calleeSaveRegisters() const
     return &RegisterAtOffsetList::llintBaselineCalleeSaveRegisters();
 }
 
-
+    
 static size_t roundCalleeSaveSpaceAsVirtualRegisters(size_t calleeSaveRegisters)
 {
 
@@ -2473,7 +2473,7 @@ int32_t CodeBlock::codeTypeThresholdMultiplier() const
 {
     if (codeType() == EvalCode)
         return Options::evalThresholdMultiplier();
-
+    
     return 1;
 }
 
@@ -2499,7 +2499,7 @@ double CodeBlock::optimizationThresholdScalingFactor()
     //
     // samples = {{10, 0.9}, {200, 1}, {320, 1.2}, {1268, 5}, {4000, 5.5}, {10000, 6}}
     //
-    // solution =
+    // solution = 
     //     Minimize[Plus @@ ((MyFunctionTemplate[#[[1]], a, b, c, d] - #[[2]])^2 & /@ samples),
     //         {a, b, c, d}][[2]]
     //
@@ -2533,22 +2533,22 @@ double CodeBlock::optimizationThresholdScalingFactor()
     // the function turning over and going negative for large x) and I threw in a Sqrt
     // term because Sqrt represents my intution that the function should be more sensitive
     // to small changes in small values of x, but less sensitive when x gets large.
-
+    
     // Note that the current fit essentially eliminates the linear portion of the
     // expression (c == 0.0).
     const double a = 0.061504;
     const double b = 1.02406;
     const double c = 0.0;
     const double d = 0.825914;
-
+    
     double bytecodeCost = this->bytecodeCost();
-
+    
     ASSERT(bytecodeCost); // Make sure this is called only after we have an instruction stream; otherwise it'll just return the value of d, which makes no sense.
-
+    
     double result = d + a * sqrt(bytecodeCost + b) + c * bytecodeCost;
-
+    
     result *= codeTypeThresholdMultiplier();
-
+    
     dataLogLnIf(Options::verboseOSR(),
         *this, ": bytecode cost is ", bytecodeCost,
         ", scaling execution counter by ", result, " * ", codeTypeThresholdMultiplier());
@@ -2559,10 +2559,10 @@ static int32_t clipThreshold(double threshold)
 {
     if (threshold < 1.0)
         return 1;
-
+    
     if (threshold > static_cast<double>(std::numeric_limits<int32_t>::max()))
         return std::numeric_limits<int32_t>::max();
-
+    
     return static_cast<int32_t>(threshold);
 }
 
@@ -2584,7 +2584,7 @@ bool CodeBlock::checkIfOptimizationThresholdReached()
         }
     }
 #endif
-
+    
     return m_jitExecuteCounter.checkIfThresholdCrossedAndSet(this);
 }
 
@@ -2690,7 +2690,7 @@ void CodeBlock::setOptimizationThresholdBasedOnCompilationResult(CompilationResu
         dataLogLn(*this, ": expected to have baseline code but have ", type);
         CRASH_WITH_INFO(bitwise_cast<uintptr_t>(jitCode().get()), static_cast<uint8_t>(type));
     }
-
+    
     CodeBlock* replacement = this->replacement();
     bool hasReplacement = (replacement && replacement != this);
     if ((result == CompilationSuccessful) != hasReplacement) {
@@ -2701,7 +2701,7 @@ void CodeBlock::setOptimizationThresholdBasedOnCompilationResult(CompilationResu
             dataLog("our replacement is ", pointerDump(replacement), "\n");
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     switch (result) {
     case CompilationSuccessful:
         RELEASE_ASSERT(replacement && JITCode::isOptimizingJIT(replacement->jitType()));
@@ -2724,13 +2724,13 @@ void CodeBlock::setOptimizationThresholdBasedOnCompilationResult(CompilationResu
         optimizeAfterWarmUp();
         return;
     }
-
+    
     dataLog("Unrecognized result: ", static_cast<int>(result), "\n");
     RELEASE_ASSERT_NOT_REACHED();
 }
 
 #endif
-
+    
 uint32_t CodeBlock::adjustedExitCountThreshold(uint32_t desiredThreshold)
 {
     ASSERT(JITCode::isOptimizingJIT(jitType()));
@@ -2815,7 +2815,7 @@ size_t CodeBlock::numberOfDFGIdentifiers() const
 {
     if (!JITCode::isOptimizingJIT(jitType()))
         return 0;
-
+    
     return m_jitCode->dfgCommon()->m_dfgIdentifiers.size();
 }
 
@@ -2932,11 +2932,11 @@ void CodeBlock::updateAllValueProfilePredictions()
 void CodeBlock::updateAllArrayPredictions()
 {
     ConcurrentJSLocker locker(m_lock);
-
+    
     forEachArrayProfile([&](ArrayProfile& profile) {
         profile.computeUpdatedPrediction(locker, this);
     });
-
+    
     forEachArrayAllocationProfile([&](ArrayAllocationProfile& profile) {
         profile.updateProfile();
     });
@@ -2954,9 +2954,9 @@ bool CodeBlock::shouldOptimizeNow()
 
     if (m_optimizationDelayCounter >= Options::maximumOptimizationDelay())
         return true;
-
+    
     updateAllArrayPredictions();
-
+    
     unsigned numberOfLiveNonArgumentValueProfiles;
     unsigned numberOfSamplesInProfiles;
     updateAllValueProfilePredictionsAndCountLiveness(numberOfLiveNonArgumentValueProfiles, numberOfSamplesInProfiles);
@@ -2974,7 +2974,7 @@ bool CodeBlock::shouldOptimizeNow()
         && (!totalNumberOfValueProfiles() || (double)numberOfSamplesInProfiles / ValueProfile::numberOfBuckets / totalNumberOfValueProfiles() >= Options::desiredProfileFullnessRate())
         && static_cast<unsigned>(m_optimizationDelayCounter) + 1 >= Options::minimumOptimizationDelay())
         return true;
-
+    
     ASSERT(m_optimizationDelayCounter < std::numeric_limits<uint8_t>::max());
     m_optimizationDelayCounter++;
     optimizeAfterWarmUp();
@@ -2986,9 +2986,9 @@ void CodeBlock::tallyFrequentExitSites()
 {
     ASSERT(JITCode::isOptimizingJIT(jitType()));
     ASSERT(JITCode::isBaselineCode(alternative()->jitType()));
-
+    
     CodeBlock* profiledBlock = alternative();
-
+    
     switch (jitType()) {
     case JITType::DFGJIT: {
         DFG::JITCode* jitCode = m_jitCode->dfg();
@@ -3008,7 +3008,7 @@ void CodeBlock::tallyFrequentExitSites()
         break;
     }
 #endif
-
+        
     default:
         RELEASE_ASSERT_NOT_REACHED();
         break;
@@ -3087,7 +3087,7 @@ unsigned CodeBlock::frameRegisterCount()
     case JITType::FTLJIT:
         return jitCode()->dfgCommon()->frameRegisterCount;
 #endif // ENABLE(DFG_JIT)
-
+        
     default:
         RELEASE_ASSERT_NOT_REACHED();
         return 0;
@@ -3107,28 +3107,28 @@ size_t CodeBlock::predictedMachineCodeSize()
     // matter is the recomputation of this value when the slow path is triggered.
     if (!vm)
         return 0;
-
+    
     if (!*vm->machineCodeBytesPerBytecodeWordForBaselineJIT)
         return 0; // It's as good of a prediction as we'll get.
-
+    
     // Be conservative: return a size that will be an overestimation 84% of the time.
     double multiplier = vm->machineCodeBytesPerBytecodeWordForBaselineJIT->mean() +
         vm->machineCodeBytesPerBytecodeWordForBaselineJIT->standardDeviation();
-
+    
     // Be paranoid: silently reject bogus multipiers. Silently doing the "wrong" thing
     // here is OK, since this whole method is just a heuristic.
     if (multiplier < 0 || multiplier > 1000)
         return 0;
-
+    
     double doubleResult = multiplier * bytecodeCost();
-
+    
     // Be even more paranoid: silently reject values that won't fit into a size_t. If
     // the function is so huge that we can't even fit it into virtual memory then we
     // should probably have some other guards in place to prevent us from even getting
     // to this point.
     if (doubleResult >= maxPlusOne<size_t>)
         return 0;
-
+    
     return static_cast<size_t>(doubleResult);
 }
 
@@ -3198,9 +3198,9 @@ ValueProfile& CodeBlock::valueProfileForBytecodeIndex(BytecodeIndex bytecodeInde
 void CodeBlock::validate()
 {
     BytecodeLivenessAnalysis liveness(this); // Compute directly from scratch so it doesn't effect CodeBlock footprint.
-
+    
     FastBitVector liveAtHead = liveness.getLivenessInfoAtInstruction(this, BytecodeIndex(0));
-
+    
     if (liveAtHead.numBits() != static_cast<size_t>(m_numCalleeLocals)) {
         beginValidationDidFail();
         dataLog("    Wrong number of bits in result!\n");
@@ -3208,10 +3208,10 @@ void CodeBlock::validate()
         dataLog("    Bit count: ", liveAtHead.numBits(), "\n");
         endValidationDidFail();
     }
-
+    
     for (unsigned i = m_numCalleeLocals; i--;) {
         VirtualRegister reg = virtualRegisterForLocal(i);
-
+        
         if (liveAtHead[i]) {
             beginValidationDidFail();
             dataLog("    Variable ", reg, " is expected to be dead.\n");
@@ -3219,7 +3219,7 @@ void CodeBlock::validate()
             endValidationDidFail();
         }
     }
-
+     
     const InstructionStream& instructionStream = instructions();
     for (const auto& instruction : instructionStream) {
         OpcodeID opcode = instruction->opcodeID();
@@ -3350,7 +3350,7 @@ void CodeBlock::insertBasicBlockBoundariesForControlFlowProfiler()
         return;
     const FixedVector<InstructionStream::Offset>& bytecodeOffsets = unlinkedCodeBlock()->opProfileControlFlowBytecodeOffsets();
     for (size_t i = 0, offsetsLength = bytecodeOffsets.size(); i < offsetsLength; i++) {
-        // Because op_profile_control_flow is emitted at the beginning of every basic block, finding
+        // Because op_profile_control_flow is emitted at the beginning of every basic block, finding 
         // the next op_profile_control_flow will give us the text range of a single basic block.
         size_t startIdx = bytecodeOffsets[i];
         auto instruction = instructions().at(startIdx);
@@ -3370,16 +3370,16 @@ void CodeBlock::insertBasicBlockBoundariesForControlFlowProfiler()
         }
 
         // The following check allows for the same textual JavaScript basic block to have its bytecode emitted more
-        // than once and still play nice with the control flow profiler. When basicBlockStartOffset is larger than
-        // basicBlockEndOffset, it indicates that the bytecode generator has emitted code for the same AST node
-        // more than once (for example: ForInNode, Finally blocks in TryNode, etc). Though these are different
-        // basic blocks at the bytecode level, they are generated from the same textual basic block in the JavaScript
-        // program. The condition:
-        // (basicBlockEndOffset < basicBlockStartOffset)
-        // is encountered when op_profile_control_flow lies across the boundary of these duplicated bytecode basic
-        // blocks and the textual offset goes from the end of the duplicated block back to the beginning. These
-        // ranges are dummy ranges and are ignored. The duplicated bytecode basic blocks point to the same
-        // internal data structure, so if any of them execute, it will record the same textual basic block in the
+        // than once and still play nice with the control flow profiler. When basicBlockStartOffset is larger than 
+        // basicBlockEndOffset, it indicates that the bytecode generator has emitted code for the same AST node 
+        // more than once (for example: ForInNode, Finally blocks in TryNode, etc). Though these are different 
+        // basic blocks at the bytecode level, they are generated from the same textual basic block in the JavaScript 
+        // program. The condition: 
+        // (basicBlockEndOffset < basicBlockStartOffset) 
+        // is encountered when op_profile_control_flow lies across the boundary of these duplicated bytecode basic 
+        // blocks and the textual offset goes from the end of the duplicated block back to the beginning. These 
+        // ranges are dummy ranges and are ignored. The duplicated bytecode basic blocks point to the same 
+        // internal data structure, so if any of them execute, it will record the same textual basic block in the 
         // JavaScript program as executing.
         // At the bytecode level, this situation looks like:
         // j: op_profile_control_flow (from j->k, we have basicBlockEndOffset < basicBlockStartOffset)
@@ -3397,8 +3397,8 @@ void CodeBlock::insertBasicBlockBoundariesForControlFlowProfiler()
 
         // Find all functions that are enclosed within the range: [basicBlockStartOffset, basicBlockEndOffset]
         // and insert these functions' start/end offsets as gaps in the current BasicBlockLocation.
-        // This is necessary because in the original source text of a JavaScript program,
-        // function literals form new basic blocks boundaries, but they aren't represented
+        // This is necessary because in the original source text of a JavaScript program, 
+        // function literals form new basic blocks boundaries, but they aren't represented 
         // inside the CodeBlock's instruction stream.
         auto insertFunctionGaps = [basicBlockLocation, basicBlockStartOffset, basicBlockEndOffset] (const WriteBarrier<FunctionExecutable>& functionExecutable) {
             const UnlinkedFunctionExecutable* executable = functionExecutable->unlinkedExecutable();
@@ -3418,8 +3418,8 @@ void CodeBlock::insertBasicBlockBoundariesForControlFlowProfiler()
 }
 
 #if ENABLE(JIT)
-void CodeBlock::setPCToCodeOriginMap(std::unique_ptr<PCToCodeOriginMap>&& map)
-{
+void CodeBlock::setPCToCodeOriginMap(std::unique_ptr<PCToCodeOriginMap>&& map) 
+{ 
     ConcurrentJSLocker locker(m_lock);
     ensureJITData(locker).m_pcToCodeOriginMap = WTFMove(map);
 }
@@ -3587,7 +3587,7 @@ void setPrinter(Printer::PrintRecord& record, CodeBlock* codeBlock)
 } // namespace JSC
 
 namespace WTF {
-
+    
 void printInternal(PrintStream& out, JSC::CodeBlock* codeBlock)
 {
     if (UNLIKELY(!codeBlock)) {
@@ -3596,5 +3596,5 @@ void printInternal(PrintStream& out, JSC::CodeBlock* codeBlock)
     }
     out.print(*codeBlock);
 }
-
+    
 } // namespace WTF

@@ -75,7 +75,7 @@ void CachedXSLStyleSheet::checkNotify(const NetworkLoadMetrics&)
 {
     if (isLoading())
         return;
-
+    
     CachedResourceClientWalker<CachedStyleSheetClient> w(m_clients);
     while (CachedStyleSheetClient* c = w.next())
         c->setXSLStyleSheet(m_resourceRequest.url().string(), m_response.url(), m_sheet);

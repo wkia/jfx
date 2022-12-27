@@ -85,7 +85,7 @@ inline void BytecodeLivenessPropagation::stepOverBytecodeIndexUse(CodeBlockType*
 template<typename CodeBlockType, typename UseFunctor>
 inline void BytecodeLivenessPropagation::stepOverBytecodeIndexUseInExceptionHandler(CodeBlockType* codeBlock, const InstructionStream&, BytecodeGraph& graph, BytecodeIndex bytecodeIndex, const UseFunctor& use)
 {
-    // If we have an exception handler, we want the live-in variables of the
+    // If we have an exception handler, we want the live-in variables of the 
     // exception handler block to be included in the live-in of this particular BytecodeIndex.
     if (auto* handler = codeBlock->handlerForBytecodeIndex(bytecodeIndex)) {
         BytecodeBasicBlock* handlerBlock = graph.findBasicBlockWithLeaderOffset(handler->target);

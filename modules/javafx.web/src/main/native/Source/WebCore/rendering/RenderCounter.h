@@ -45,11 +45,11 @@ public:
 private:
     void willBeDestroyed() override;
     static void rendererStyleChangedSlowCase(RenderElement&, const RenderStyle* oldStyle, const RenderStyle& newStyle);
-
+    
     const char* renderName() const override;
     bool isCounter() const override;
     String originalText() const override;
-
+    
     void computePreferredLogicalWidths(float leadWidth) override;
 
     CounterContent m_counter;

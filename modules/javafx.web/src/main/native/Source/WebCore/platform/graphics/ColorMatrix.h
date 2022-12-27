@@ -123,7 +123,7 @@ template<size_t ColumnCount, size_t RowCount>
 constexpr ColorComponents<float, 4> ColorMatrix<ColumnCount, RowCount>::transformedColorComponents(const ColorComponents<float, 4>& inputVector) const
 {
     static_assert(ColorComponents<float, 4>::Size >= RowCount);
-
+    
     ColorComponents<float, 4> result;
     for (size_t row = 0; row < RowCount; ++row) {
         if constexpr (ColumnCount <= ColorComponents<float, 4>::Size) {

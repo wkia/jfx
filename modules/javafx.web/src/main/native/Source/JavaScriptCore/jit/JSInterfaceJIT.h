@@ -75,7 +75,7 @@ namespace JSC {
         ASSERT(virtualRegister < VirtualRegister(FirstConstantRegisterIndex));
         return branch32(NotEqual, tagFor(virtualRegister), TrustedImm32(JSValue::CellTag));
     }
-
+    
     inline JSInterfaceJIT::Jump JSInterfaceJIT::emitLoadInt32(VirtualRegister virtualRegister, RegisterID dst)
     {
         ASSERT(virtualRegister < VirtualRegister(FirstConstantRegisterIndex));
@@ -106,7 +106,7 @@ namespace JSC {
         load64(addressFor(virtualRegister), dst);
         return branchIfNotCell(dst);
     }
-
+    
     inline JSInterfaceJIT::Jump JSInterfaceJIT::emitLoadInt32(VirtualRegister virtualRegister, RegisterID dst)
     {
         load64(addressFor(virtualRegister), dst);

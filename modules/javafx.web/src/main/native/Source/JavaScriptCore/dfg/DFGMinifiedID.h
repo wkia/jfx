@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,37 +42,37 @@ public:
     MinifiedID() = default;
     MinifiedID(WTF::HashTableDeletedValueType) : m_index(otherInvalidIndex()) { }
     explicit MinifiedID(Node* node);
-
+    
     bool operator!() const { return m_index.get() == invalidIndex(); }
-
+    
     bool operator==(const MinifiedID& other) const { return m_index.get() == other.m_index.get(); }
     bool operator!=(const MinifiedID& other) const { return m_index.get() != other.m_index.get(); }
     bool operator<(const MinifiedID& other) const { return m_index.get() < other.m_index.get(); }
     bool operator>(const MinifiedID& other) const { return m_index.get() > other.m_index.get(); }
     bool operator<=(const MinifiedID& other) const { return m_index.get() <= other.m_index.get(); }
     bool operator>=(const MinifiedID& other) const { return m_index.get() >= other.m_index.get(); }
-
+    
     unsigned hash() const { return WTF::IntHash<unsigned>::hash(m_index.get()); }
-
+    
     void dump(PrintStream& out) const { out.print(m_index.get()); }
-
+    
     bool isHashTableDeletedValue() const { return m_index.get() == otherInvalidIndex(); }
-
+    
     static MinifiedID fromBits(unsigned value)
     {
         MinifiedID result;
         result.m_index = value;
         return result;
     }
-
+    
     unsigned bits() const { return m_index.get(); }
 
 private:
     friend class MinifiedNode;
-
+    
     static constexpr unsigned invalidIndex() { return static_cast<unsigned>(-1); }
     static constexpr unsigned otherInvalidIndex() { return static_cast<unsigned>(-2); }
-
+    
     Packed<unsigned> m_index { invalidIndex() };
 };
 

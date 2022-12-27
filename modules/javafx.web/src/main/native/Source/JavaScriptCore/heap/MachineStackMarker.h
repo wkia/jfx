@@ -38,7 +38,7 @@ struct CurrentThreadState {
     void* stackTop { nullptr };
     RegisterState* registerState { nullptr };
 };
-
+    
 class MachineThreads {
     WTF_MAKE_FAST_ALLOCATED;
     WTF_MAKE_NONCOPYABLE(MachineThreads);

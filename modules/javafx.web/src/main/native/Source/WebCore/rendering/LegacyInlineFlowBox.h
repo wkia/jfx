@@ -89,7 +89,7 @@ public:
     LegacyInlineBox* lastChild() const { checkConsistency(); return m_lastChild; }
 
     bool isLeaf() const final { return false; }
-
+    
     LegacyInlineBox* firstLeafDescendant() const;
     LegacyInlineBox* lastLeafDescendant() const;
 
@@ -200,7 +200,7 @@ public:
     LayoutUnit computeUnderAnnotationAdjustment(LayoutUnit allowedPosition) const;
 
     void computeOverflow(LayoutUnit lineTop, LayoutUnit lineBottom, GlyphOverflowAndFallbackFontsMap&);
-
+    
     void removeChild(LegacyInlineBox* child);
 
     RenderObject::HighlightState selectionState() override;
@@ -213,7 +213,7 @@ public:
     bool hasHardLinebreak() const { return m_hasHardLinebreak; }
     void setHasTextChildren() { m_hasTextChildren = true; setHasTextDescendants(); }
     void setHasTextDescendants() { m_hasTextDescendants = true; }
-
+    
     void checkConsistency() const;
     void setHasBadChildList();
 
@@ -245,7 +245,7 @@ public:
     }
 
     LayoutRect visualOverflowRect(LayoutUnit lineTop, LayoutUnit lineBottom) const
-    {
+    { 
         return m_overflow ? m_overflow->visualOverflowRect() : enclosingLayoutRect(frameRectIncludingLineHeight(lineTop, lineBottom));
     }
     LayoutUnit logicalLeftVisualOverflow() const { return m_overflow ? (isHorizontal() ? m_overflow->visualOverflowRect().x() : m_overflow->visualOverflowRect().y()) : LayoutUnit(logicalLeft()); }
@@ -280,15 +280,15 @@ public:
             return FloatRect(x(), lineTop, width(), lineBottom - lineTop);
         return FloatRect(lineTop, y(), lineBottom - lineTop, height());
     }
-
+    
     FloatRect logicalFrameRectIncludingLineHeight(LayoutUnit lineTop, LayoutUnit lineBottom) const
     {
         return FloatRect(logicalLeft(), lineTop, logicalWidth(), lineBottom - lineTop);
     }
-
+    
     bool descendantsHaveSameLineHeightAndBaseline() const { return m_descendantsHaveSameLineHeightAndBaseline; }
     void clearDescendantsHaveSameLineHeightAndBaseline()
-    {
+    { 
         m_descendantsHaveSameLineHeightAndBaseline = false;
         if (parent() && parent()->descendantsHaveSameLineHeightAndBaseline())
             parent()->clearDescendantsHaveSameLineHeightAndBaseline();
@@ -344,7 +344,7 @@ protected:
 
     LegacyInlineBox* m_firstChild;
     LegacyInlineBox* m_lastChild;
-
+    
     LegacyInlineFlowBox* m_prevLineBox; // The previous box that also uses our RenderObject
     LegacyInlineFlowBox* m_nextLineBox; // The next box that also uses our RenderObject
 };

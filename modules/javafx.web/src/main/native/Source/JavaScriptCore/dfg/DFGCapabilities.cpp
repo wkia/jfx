@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -104,7 +104,7 @@ CapabilityLevel capabilityLevel(OpcodeID opcodeID, CodeBlock* codeBlock, const I
 {
     UNUSED_PARAM(codeBlock); // This function does some bytecode parsing. Ordinarily bytecode parsing requires the owning CodeBlock. It's sort of strange that we don't use it here right now.
     UNUSED_PARAM(pc);
-
+    
     switch (opcodeID) {
     case op_wide16:
     case op_wide32:
@@ -374,7 +374,7 @@ CapabilityLevel capabilityLevel(OpcodeID opcodeID, CodeBlock* codeBlock, const I
 CapabilityLevel capabilityLevel(CodeBlock* codeBlock)
 {
     CapabilityLevel result = CanCompileAndInline;
-
+    
     for (const auto& instruction : codeBlock->instructions()) {
         switch (instruction->opcodeID()) {
 #define DEFINE_OP(opcode, length) \
@@ -393,7 +393,7 @@ CapabilityLevel capabilityLevel(CodeBlock* codeBlock)
             break;
         }
     }
-
+    
     return result;
 }
 

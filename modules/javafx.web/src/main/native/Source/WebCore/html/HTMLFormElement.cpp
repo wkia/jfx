@@ -403,7 +403,7 @@ void HTMLFormElement::submit(Event* event, bool activateSubmitButton, bool proce
         m_plannedFormSubmission->cancel();
 
     m_plannedFormSubmission = makeWeakPtr(formSubmission.get());
-
+    
     if (RuntimeEnabledFeatures::sharedFeatures().dialogElementEnabled() && formSubmission->method() == FormSubmission::Method::Dialog)
         submitDialog(WTFMove(formSubmission));
     else
@@ -462,7 +462,7 @@ void HTMLFormElement::resetAssociatedFormControlElements()
         if (is<HTMLFormControlElement>(element))
             associatedFormControlElements.uncheckedAppend(downcast<HTMLFormControlElement>(*element));
     }
-
+    
     for (auto& associatedFormControlElement : associatedFormControlElements)
         associatedFormControlElement->reset();
 }
@@ -487,7 +487,7 @@ void HTMLFormElement::parseAttribute(const QualifiedName& name, const AtomString
 {
     if (name == actionAttr) {
         m_attributes.parseAction(value);
-
+        
         if (!m_attributes.action().isEmpty()) {
             if (RefPtr<Frame> f = document().frame()) {
                 Frame& topFrame = f->tree().top();
@@ -536,7 +536,7 @@ unsigned HTMLFormElement::formElementIndexWithFormAttribute(Element* element, un
         else
             left = middle + 1;
     }
-
+    
     ASSERT(left < m_associatedElementsBeforeIndex || left >= m_associatedElementsAfterIndex);
     position = element->compareDocumentPosition(*m_associatedElements[left]);
     if (position & DOCUMENT_POSITION_FOLLOWING)
@@ -966,12 +966,12 @@ RefPtr<DOMFormData> HTMLFormElement::constructEntryList(Ref<DOMFormData>&& domFo
 {
     // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#constructing-form-data-set
     ASSERT(isMainThread());
-
+    
     if (m_isConstructingEntryList)
         return nullptr;
-
+    
     SetForScope<bool> isConstructingEntryListScope(m_isConstructingEntryList, true);
-
+    
     for (auto& control : this->copyAssociatedElementsVector()) {
         auto& element = control->asHTMLElement();
         if (!element.isDisabledFormControl())
@@ -984,9 +984,9 @@ RefPtr<DOMFormData> HTMLFormElement::constructEntryList(Ref<DOMFormData>&& domFo
             }
         }
     }
-
+    
     dispatchEvent(FormDataEvent::create(eventNames().formdataEvent, Event::CanBubble::Yes, Event::IsCancelable::No, Event::IsComposed::No, domFormData.copyRef()));
-
+    
     return domFormData->clone();
 }
 

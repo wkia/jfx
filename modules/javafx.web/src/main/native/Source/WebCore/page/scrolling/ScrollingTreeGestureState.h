@@ -46,7 +46,7 @@ public:
     bool handleGestureCancel(const PlatformWheelEvent&);
 
     void nodeDidHandleEvent(ScrollingNodeID, const PlatformWheelEvent&);
-
+    
 private:
     void clearAllNodes();
 

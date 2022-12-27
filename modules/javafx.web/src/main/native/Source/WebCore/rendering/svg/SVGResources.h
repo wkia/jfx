@@ -98,7 +98,7 @@ private:
     bool setFill(RenderSVGResourceContainer*);
     bool setStroke(RenderSVGResourceContainer*);
     bool setLinkedResource(RenderSVGResourceContainer*);
-
+    
     bool isEmpty() const { return !m_clipperFilterMaskerData && !m_markerData && !m_fillStrokeData && !m_linkedResource; }
 
     // From SVG 1.1 2nd Edition

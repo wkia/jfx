@@ -59,7 +59,7 @@ public:
     {
         return hasDecodingMode() && WTF::get<DecodingMode>(m_decodingModeOrSize) == DecodingMode::Auto;
     }
-
+    
     bool isSynchronous() const
     {
         return hasDecodingMode() && WTF::get<DecodingMode>(m_decodingModeOrSize) == DecodingMode::Synchronous;
@@ -79,7 +79,7 @@ public:
         ASSERT(!isAsynchronous());
         if (isAsynchronous() || decodingOptions.isSynchronous())
             return false;
-
+        
         // If the image was synchronously decoded, then it should fit any size.
         // If we want an image regardless of its size, then the current decoded
         // image should be fine.

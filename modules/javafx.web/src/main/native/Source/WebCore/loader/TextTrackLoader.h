@@ -44,7 +44,7 @@ class VTTCue;
 class TextTrackLoaderClient {
 public:
     virtual ~TextTrackLoaderClient() = default;
-
+    
     virtual void newCuesAvailable(TextTrackLoader&) = 0;
     virtual void cueLoadingCompleted(TextTrackLoader&, bool loadingFailed) = 0;
     virtual void newRegionsAvailable(TextTrackLoader&) = 0;
@@ -52,7 +52,7 @@ public:
 };
 
 class TextTrackLoader final : public CachedResourceClient, private WebVTTParserClient {
-    WTF_MAKE_NONCOPYABLE(TextTrackLoader);
+    WTF_MAKE_NONCOPYABLE(TextTrackLoader); 
     WTF_MAKE_FAST_ALLOCATED;
 public:
     TextTrackLoader(TextTrackLoaderClient&, Document&);

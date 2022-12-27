@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,27 +47,27 @@ class ClobberSet {
 public:
     ClobberSet();
     ~ClobberSet();
-
+    
     bool isEmpty() const { return m_clobbers.isEmpty(); }
-
+    
     void add(AbstractHeap);
     void addAll(const ClobberSet&);
     bool overlaps(AbstractHeap) const;
     void clear();
-
+    
     // Calls useful for debugging the ClobberSet.
     // Do not call for non debugging purpose. Otherwise, you must handle DOMState hierarchy carefully.
-
+    
     HashSet<AbstractHeap> direct() const;
     HashSet<AbstractHeap> super() const;
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     bool contains(AbstractHeap) const;
 
     HashSet<AbstractHeap> setOf(bool direct) const;
-
+    
     // Maps heap to:
     // true --> it's a direct clobber
     // false --> it's just a supertype of a direct clobber
@@ -80,7 +80,7 @@ public:
         : m_set(set)
     {
     }
-
+    
     void operator()(AbstractHeap heap) const
     {
         m_set.add(heap);
@@ -96,14 +96,14 @@ public:
         , m_result(false)
     {
     }
-
+    
     void operator()(AbstractHeap heap) const
     {
         m_result |= m_set.overlaps(heap);
     }
-
+    
     bool result() const { return m_result; }
-
+    
 private:
     const ClobberSet& m_set;
     mutable bool m_result;

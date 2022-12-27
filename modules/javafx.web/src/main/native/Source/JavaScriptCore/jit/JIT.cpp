@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -90,7 +90,7 @@ void JIT::emitEnterOptimizationCheck()
         return;
 
     JumpList skipOptimize;
-
+    
     skipOptimize.append(branchAdd32(Signed, TrustedImm32(Options::executionCounterIncrementForEntry()), AbsoluteAddress(m_codeBlock->addressOfJITExecuteCounter())));
     ASSERT(!m_bytecodeIndex.offset());
 
@@ -109,7 +109,7 @@ void JIT::emitNotifyWrite(WatchpointSet* set)
         addSlowCase(Jump());
         return;
     }
-
+    
     addSlowCase(branch8(NotEqual, AbsoluteAddress(set->addressOfState()), TrustedImm32(IsInvalidated)));
 }
 
@@ -128,7 +128,7 @@ void JIT::assertStackPointerOffset()
 {
     if (!ASSERT_ENABLED)
         return;
-
+    
     addPtr(TrustedImm32(stackPointerOffsetFor(m_codeBlock) * sizeof(Register)), callFrameRegister, regT0);
     Jump ok = branchPtr(Equal, regT0, stackPointerRegister);
     breakpoint();
@@ -185,10 +185,10 @@ void JIT::privateCompileMainPass()
 {
     if (JITInternal::verbose)
         dataLog("Compiling ", *m_codeBlock, "\n");
-
+    
     jitAssertTagsInPlace();
     jitAssertArgumentCountSane();
-
+    
     auto& instructions = m_codeBlock->instructions();
     unsigned instructionCount = m_codeBlock->instructions().size();
 
@@ -272,7 +272,7 @@ void JIT::privateCompileMainPass()
                 AbsoluteAddress(m_compilation->executionCounterFor(Profiler::OriginStack(Profiler::Origin(
                     m_compilation->bytecodes(), m_bytecodeIndex)))->address()));
         }
-
+        
         if (Options::eagerlyUpdateTopCallFrame())
             updateTopCallFrame();
 
@@ -528,7 +528,7 @@ void JIT::privateCompileSlowCases()
         BytecodeIndex firstTo = m_bytecodeIndex;
 
         const Instruction* currentInstruction = m_codeBlock->instructions().at(m_bytecodeIndex).ptr();
-
+        
         if (JITInternal::verbose)
             dataLogLn("Baseline JIT emitting slow code for ", m_bytecodeIndex, " at offset ", (long)debugOffset());
 
@@ -650,7 +650,7 @@ void JIT::privateCompileSlowCases()
 
         RELEASE_ASSERT_WITH_MESSAGE(iter == m_slowCases.end() || firstTo.offset() != iter->to.offset(), "Not enough jumps linked in slow case codegen.");
         RELEASE_ASSERT_WITH_MESSAGE(firstTo.offset() == (iter - 1)->to.offset(), "Too many jumps linked in slow case codegen.");
-
+        
         emitJumpSlowToHot(jump(), 0);
         ++bytecodeCountHavingSlowCase;
 
@@ -693,7 +693,7 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
         RELEASE_ASSERT_NOT_REACHED();
         break;
     }
-
+    
     switch (m_codeBlock->codeType()) {
     case GlobalCode:
     case ModuleCode:
@@ -724,7 +724,7 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
                 Profiler::Baseline));
         m_compilation->addProfiledBytecodes(*m_vm->m_perBytecodeProfiler, m_codeBlock);
     }
-
+    
     m_pcToCodeOriginMapBuilder.appendItem(label(), CodeOrigin(BytecodeIndex(0)));
 
     std::optional<JITSizeStatistics::Marker> sizeMarker;
@@ -781,7 +781,7 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
             }
         }
     }
-
+    
     RELEASE_ASSERT(!JITCode::isJIT(m_codeBlock->jitType()));
 
     if (UNLIKELY(sizeMarker))
@@ -790,7 +790,7 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
     privateCompileMainPass();
     privateCompileLinkPass();
     privateCompileSlowCases();
-
+    
     if (m_disassembler)
         m_disassembler->setEndOfSlowPath(label());
     m_pcToCodeOriginMapBuilder.appendItem(label(), PCToCodeOriginMapBuilder::defaultCodeOrigin());
@@ -832,9 +832,9 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
         m_arityCheck = entryLabel; // Never require arity fixup.
 
     ASSERT(m_jmpTable.isEmpty());
-
+    
     privateCompileExceptionHandlers();
-
+    
     if (m_disassembler)
         m_disassembler->setEndOfCode(label());
     m_pcToCodeOriginMapBuilder.appendItem(label(), PCToCodeOriginMapBuilder::defaultCodeOrigin());
@@ -846,7 +846,7 @@ void JIT::compileAndLinkWithoutFinalizing(JITCompilationEffort effort)
 void JIT::link()
 {
     LinkBuffer& patchBuffer = *m_linkBuffer;
-
+    
     if (patchBuffer.didFailToAllocate())
         return;
 
@@ -947,11 +947,11 @@ void JIT::link()
 
     if (m_pcToCodeOriginMapBuilder.didBuildMapping())
         m_pcToCodeOriginMap = makeUnique<PCToCodeOriginMap>(WTFMove(m_pcToCodeOriginMapBuilder), patchBuffer);
-
+    
     CodeRef<JSEntryPtrTag> result = FINALIZE_CODE(
         patchBuffer, JSEntryPtrTag,
         "Baseline JIT code for %s", toCString(CodeBlockWithJITType(m_codeBlock, JITType::BaselineJIT)).data());
-
+    
     MacroAssemblerCodePtr<JSEntryPtrTag> withArityCheck = patchBuffer.locationOf<JSEntryPtrTag>(m_arityCheck);
     m_jitCode = adoptRef(*new DirectJITCode(result, withArityCheck, JITType::BaselineJIT));
 

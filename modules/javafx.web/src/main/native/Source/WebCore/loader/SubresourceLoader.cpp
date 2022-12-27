@@ -137,7 +137,7 @@ void SubresourceLoader::create(Frame& frame, CachedResource& resource, ResourceR
         completionHandler(WTFMove(subloader));
     });
 }
-
+    
 #if PLATFORM(IOS_FAMILY)
 void SubresourceLoader::startLoading()
 {
@@ -621,7 +621,7 @@ static void logResourceLoaded(Frame* frame, CachedResource::Type type)
         resourceType = DiagnosticLoggingKeys::otherKey();
         break;
     }
-
+    
     frame->page()->diagnosticLoggingClient().logDiagnosticMessage(DiagnosticLoggingKeys::resourceLoadedKey(), resourceType, ShouldSample::Yes);
 }
 

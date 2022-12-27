@@ -490,10 +490,10 @@ public:
             m_assembler.lui(addrTempRegister, (adr + 0x8000) >> 16);
             m_assembler.lbu(immTempRegister, addrTempRegister, adr & 0xffff);
             or32(imm, immTempRegister);
-            m_assembler.sb(immTempRegister, addrTempRegister, adr & 0xffff);
+            m_assembler.sb(immTempRegister, addrTempRegister, adr & 0xffff);            
         }
     }
-
+    
     void or16(TrustedImm32 imm, AbsoluteAddress dest)
     {
         if (!imm.m_value && !m_fixedWidth)
@@ -1208,7 +1208,7 @@ public:
         m_fixedWidth = false;
         return dataLabel;
     }
-
+    
     DataLabelCompact load32WithCompactAddressOffsetPatch(Address address, RegisterID dest)
     {
         DataLabelCompact dataLabel(this);
@@ -3509,7 +3509,7 @@ public:
     {
         MIPSAssembler::replaceWithJump(instructionStart.dataLocation(), destination.dataLocation());
     }
-
+    
     static ptrdiff_t maxJumpReplacementSize()
     {
         MIPSAssembler::maxJumpReplacementSize();

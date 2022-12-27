@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -60,12 +60,12 @@ public:
         // It known to take paths that make calls. We also observed that the slow path was taken on StructureStubInfo.
         ObservedSlowPathAndMakesCalls,
     };
-
+    
     PutByStatus()
         : m_state(NoInformation)
     {
     }
-
+    
     explicit PutByStatus(State state)
         : m_state(state)
     {
@@ -83,26 +83,26 @@ public:
         }
 #endif
     }
-
+    
     explicit PutByStatus(StubInfoSummary, StructureStubInfo&);
-
+    
     PutByStatus(const PutByVariant& variant)
         : m_state(Simple)
     {
         m_variants.append(variant);
     }
-
+    
     static PutByStatus computeFor(CodeBlock*, ICStatusMap&, BytecodeIndex, ExitFlag, CallLinkStatus::ExitSiteData);
     static PutByStatus computeFor(JSGlobalObject*, const StructureSet&, CacheableIdentifier, bool isDirect, PrivateFieldPutKind);
-
+    
     static PutByStatus computeFor(CodeBlock* baselineBlock, ICStatusMap& baselineMap, ICStatusContextStack&, CodeOrigin);
 
 #if ENABLE(JIT)
     static PutByStatus computeForStubInfo(const ConcurrentJSLocker&, CodeBlock* baselineBlock, StructureStubInfo*, CodeOrigin);
 #endif
-
+    
     State state() const { return m_state; }
-
+    
     bool isSet() const { return m_state != NoInformation; }
     bool operator!() const { return m_state == NoInformation; }
     bool isSimple() const { return m_state == Simple; }
@@ -119,32 +119,32 @@ public:
     bool makesCalls() const;
     PutByStatus slowVersion() const;
     bool observedStructureStubInfoSlowPath() const { return m_state == ObservedTakesSlowPath || m_state == ObservedSlowPathAndMakesCalls; }
-
+    
     size_t numVariants() const { return m_variants.size(); }
     const Vector<PutByVariant, 1>& variants() const { return m_variants; }
     const PutByVariant& at(size_t index) const { return m_variants[index]; }
     const PutByVariant& operator[](size_t index) const { return at(index); }
     CacheableIdentifier singleIdentifier() const;
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
     bool finalize(VM&);
-
+    
     void merge(const PutByStatus&);
-
+    
     void filter(const StructureSet&);
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
 #if ENABLE(JIT)
     static PutByStatus computeForStubInfo(const ConcurrentJSLocker&, CodeBlock*, StructureStubInfo*, CallLinkStatus::ExitSiteData);
 #endif
     static PutByStatus computeFromLLInt(CodeBlock*, BytecodeIndex);
-
+    
     bool appendVariant(const PutByVariant&);
     void shrinkToFit();
-
+    
     State m_state;
     Vector<PutByVariant, 1> m_variants;
 };

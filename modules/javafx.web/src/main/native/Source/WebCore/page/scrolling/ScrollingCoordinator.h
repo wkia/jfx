@@ -65,7 +65,7 @@ public:
     virtual ~ScrollingCoordinator();
 
     WEBCORE_EXPORT virtual void pageDestroyed();
-
+    
     virtual bool isAsyncScrollingCoordinator() const { return false; }
     virtual bool isRemoteScrollingCoordinator() const { return false; }
 
@@ -110,7 +110,7 @@ public:
     // Force all scroll layer position updates to happen on the main thread.
     WEBCORE_EXPORT void setForceSynchronousScrollLayerPositionUpdates(bool);
 
-    // These virtual functions are currently unique to the threaded scrolling architecture.
+    // These virtual functions are currently unique to the threaded scrolling architecture. 
     virtual void commitTreeStateIfNeeded() { }
     virtual bool requestScrollPositionUpdate(ScrollableArea&, const IntPoint&, ScrollType = ScrollType::Programmatic, ScrollClamping = ScrollClamping::Clamped) { return false; }
     virtual bool handleWheelEventForScrolling(const PlatformWheelEvent&, ScrollingNodeID, std::optional<WheelScrollGestureState>) { return false; }

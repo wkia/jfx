@@ -59,7 +59,7 @@ WebGLCompressedTextureASTC::WebGLCompressedTextureASTC(WebGLRenderingContextBase
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_RGBA_ASTC_10x10_KHR);
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_RGBA_ASTC_12x10_KHR);
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_RGBA_ASTC_12x12_KHR);
-
+    
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR);
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR);
     context.addCompressedTextureFormat(ExtensionsGL::COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR);
@@ -82,16 +82,16 @@ WebGLExtension::ExtensionName WebGLCompressedTextureASTC::getName() const
 {
     return WebGLCompressedTextureASTCName;
 }
-
+    
 Vector<String> WebGLCompressedTextureASTC::getSupportedProfiles()
 {
     Vector<String> result;
-
+    
     if (m_isHDRSupported)
         result.append("hdr"_s);
     if (m_isLDRSupported)
         result.append("ldr"_s);
-
+    
     return result;
 }
 

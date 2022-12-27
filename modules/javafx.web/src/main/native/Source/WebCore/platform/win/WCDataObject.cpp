@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -178,7 +178,7 @@ STDMETHODIMP WCDataObject::QueryInterface(_In_ REFIID riid, _COM_Outptr_ void** 
     if (!ppvObject)
         return E_POINTER;
     *ppvObject = nullptr;
-    if (IsEqualIID(riid, IID_IUnknown) ||
+    if (IsEqualIID(riid, IID_IUnknown) || 
         IsEqualIID(riid, IID_IDataObject)) {
         *ppvObject=this;
     }
@@ -203,7 +203,7 @@ STDMETHODIMP_(ULONG) WCDataObject::Release( void)
 }
 
 STDMETHODIMP WCDataObject::GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
-{
+{ 
     if (!pformatetcIn || !pmedium)
         return E_POINTER;
     pmedium->hGlobal = nullptr;
@@ -221,12 +221,12 @@ STDMETHODIMP WCDataObject::GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
 }
 
 STDMETHODIMP WCDataObject::GetDataHere(FORMATETC*, STGMEDIUM*)
-{
+{ 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP WCDataObject::QueryGetData(FORMATETC* pformatetc)
-{
+{ 
     if (!pformatetc)
         return E_POINTER;
 
@@ -247,12 +247,12 @@ STDMETHODIMP WCDataObject::QueryGetData(FORMATETC* pformatetc)
 }
 
 STDMETHODIMP WCDataObject::GetCanonicalFormatEtc(FORMATETC*, FORMATETC*)
-{
+{ 
     return DATA_S_SAMEFORMATETC;
 }
 
 STDMETHODIMP WCDataObject::SetData(FORMATETC* pformatetc, STGMEDIUM* pmedium, BOOL fRelease)
-{
+{ 
     if (!pformatetc || !pmedium)
         return E_POINTER;
 
@@ -312,7 +312,7 @@ void WCDataObject::CopyMedium(STGMEDIUM* pMedDest, STGMEDIUM* pMedSrc, FORMATETC
     }
 }
 STDMETHODIMP WCDataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatEtc)
-{
+{ 
     if (!ppenumFormatEtc)
         return E_POINTER;
 
@@ -335,7 +335,7 @@ STDMETHODIMP WCDataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppe
 }
 
 STDMETHODIMP WCDataObject::DAdvise(FORMATETC*, DWORD, IAdviseSink*,DWORD*)
-{
+{ 
     return OLE_E_ADVISENOTSUPPORTED;
 }
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,17 +43,17 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             // An edge A->B is critical if A has multiple successor and B has multiple
             // predecessors. Thus we fail early if we don't have multiple successors.
-
+            
             if (block->numSuccessors() <= 1)
                 continue;
 
@@ -82,7 +82,7 @@ public:
                 *successor = pad;
             }
         }
-
+        
         return m_insertionSet.execute();
     }
 

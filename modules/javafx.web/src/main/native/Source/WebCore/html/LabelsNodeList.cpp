@@ -49,8 +49,8 @@ Ref<LabelsNodeList> LabelsNodeList::create(LabelableElement& element, const Atom
 LabelsNodeList::~LabelsNodeList()
 {
     ownerNode().nodeLists()->removeCacheWithAtomName(*this, starAtom());
-}
-
+} 
+    
 bool LabelsNodeList::elementMatches(Element& testNode) const
 {
     return is<HTMLLabelElement>(testNode) && downcast<HTMLLabelElement>(testNode).control() == &ownerNode();

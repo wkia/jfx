@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,7 +38,7 @@ bool doesGC(Graph& graph, Node* node)
 {
     if (clobbersHeap(graph, node))
         return true;
-
+    
     // Now consider nodes that don't clobber the world but that still may GC. This includes all
     // nodes. By default, we should assume every node can GC and return true. This includes the
     // world-clobbering nodes. We should only return false if we have proven that the node cannot
@@ -541,7 +541,7 @@ bool doesGC(Graph& graph, Node* node)
             // We might resolve a rope.
             return true;
         }
-
+        
     case MultiPutByOffset:
         return node->multiPutByOffsetData().reallocatesStorage();
 
@@ -588,7 +588,7 @@ bool doesGC(Graph& graph, Node* node)
     case LastNodeType:
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

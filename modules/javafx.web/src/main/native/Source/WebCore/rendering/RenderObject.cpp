@@ -182,7 +182,7 @@ bool RenderObject::isLegend() const
     return node() && node()->hasTagName(legendTag);
 }
 
-
+    
 bool RenderObject::isFieldset() const
 {
     return node() && node()->hasTagName(fieldsetTag);
@@ -627,7 +627,7 @@ void RenderObject::invalidateContainerPreferredLogicalWidths()
     // in the chain that we mark dirty (even though they're kind of irrelevant).
     auto o = isTableCell() ? containingBlock() : container();
     while (o && !o->preferredLogicalWidthsDirty()) {
-        // Don't invalidate the outermost object of an unrooted subtree. That object will be
+        // Don't invalidate the outermost object of an unrooted subtree. That object will be 
         // invalidated when the subtree is added to the document.
         auto container = o->isTableCell() ? o->containingBlock() : o->container();
         if (!container && !o->isRenderView())
@@ -723,8 +723,8 @@ void RenderObject::collectSelectionGeometries(Vector<SelectionGeometry>& geometr
     Vector<FloatQuad> quads;
 
     if (!firstChildSlow()) {
-        // FIXME: WebKit's position for an empty span after a BR is incorrect, so we can't trust
-        // quads for them. We don't need selection geometries for those anyway though, since they
+        // FIXME: WebKit's position for an empty span after a BR is incorrect, so we can't trust 
+        // quads for them. We don't need selection geometries for those anyway though, since they 
         // are just empty containers. See <https://bugs.webkit.org/show_bug.cgi?id=49358>.
         RenderObject* previous = previousSibling();
         Node* node = this->node();
@@ -971,7 +971,7 @@ IntRect RenderObject::pixelSnappedAbsoluteClippedOverflowRect() const
 {
     return snappedIntRect(absoluteClippedOverflowRectForRepaint());
 }
-
+    
 LayoutRect RenderObject::rectWithOutlineForRepaint(const RenderLayerModelObject* repaintContainer, LayoutUnit outlineWidth) const
 {
     LayoutRect r(clippedOverflowRectForRepaint(repaintContainer));
@@ -1219,7 +1219,7 @@ void RenderObject::outputRenderObject(TextStream& stream, bool mark, int depth) 
 
             value.replaceWithLiteral('\\', "\\\\");
             value.replaceWithLiteral('\n', "\\n");
-
+            
             const int maxPrintedLength = 80;
             if (value.length() > maxPrintedLength) {
                 String substring = value.substring(0, maxPrintedLength);
@@ -1239,7 +1239,7 @@ void RenderObject::outputRenderObject(TextStream& stream, bool mark, int depth) 
         if (box.hasRenderOverflow()) {
             auto layoutOverflow = box.layoutOverflowRect();
             stream << " (layout overflow " << layoutOverflow.x() << "," << layoutOverflow.y() << " " << layoutOverflow.width() << "x" << layoutOverflow.height() << ")";
-
+            
             if (box.hasVisualOverflow()) {
                 auto visualOverflow = box.visualOverflowRect();
                 stream << " (visual overflow " << visualOverflow.x() << "," << visualOverflow.y() << " " << visualOverflow.width() << "x" << visualOverflow.height() << ")";
@@ -1291,7 +1291,7 @@ FloatPoint RenderObject::localToAbsolute(const FloatPoint& localPoint, OptionSet
     TransformState transformState(TransformState::ApplyTransformDirection, localPoint);
     mapLocalToContainer(nullptr, transformState, mode | ApplyContainerFlip, wasFixed);
     transformState.flatten();
-
+    
     return transformState.lastPlanarPoint();
 }
 
@@ -1300,7 +1300,7 @@ FloatPoint RenderObject::absoluteToLocal(const FloatPoint& containerPoint, Optio
     TransformState transformState(TransformState::UnapplyInverseTransformDirection, containerPoint);
     mapAbsoluteToLocalPoint(mode, transformState);
     transformState.flatten();
-
+    
     return transformState.lastPlanarPoint();
 }
 
@@ -1349,7 +1349,7 @@ const RenderObject* RenderObject::pushMappingToContainer(const RenderLayerModelO
         offset = -toLayoutSize(downcast<RenderBox>(*container).scrollPosition());
 
     geometryMap.push(this, offset, false);
-
+    
     return container;
 }
 
@@ -1379,7 +1379,7 @@ void RenderObject::getTransformFromContainer(const RenderObject* containerObject
     RenderLayer* layer;
     if (hasLayer() && (layer = downcast<RenderLayerModelObject>(*this).layer()) && layer->transform())
         transform.multiply(layer->currentTransform());
-
+    
 #if ENABLE(3D_TRANSFORMS)
     if (containerObject && containerObject->hasLayer() && containerObject->style().hasPerspective()) {
         // Perpsective on the container affects us, so we have to factor it in here.
@@ -1388,7 +1388,7 @@ void RenderObject::getTransformFromContainer(const RenderObject* containerObject
 
         TransformationMatrix perspectiveMatrix;
         perspectiveMatrix.applyPerspective(containerObject->style().perspective());
-
+        
         transform.translateRight3d(-perspectiveOrigin.x(), -perspectiveOrigin.y(), 0);
         transform = perspectiveMatrix * transform;
         transform.translateRight3d(perspectiveOrigin.x(), perspectiveOrigin.y(), 0);
@@ -1405,7 +1405,7 @@ FloatQuad RenderObject::localToContainerQuad(const FloatQuad& localQuad, const R
     TransformState transformState(TransformState::ApplyTransformDirection, localQuad.boundingBox().center(), localQuad);
     mapLocalToContainer(container, transformState, mode | ApplyContainerFlip, wasFixed);
     transformState.flatten();
-
+    
     return transformState.lastPlanarQuad();
 }
 
@@ -1564,7 +1564,7 @@ void RenderObject::destroy()
 
 Position RenderObject::positionForPoint(const LayoutPoint& point)
 {
-    // FIXME: This should just create a Position object instead (webkit.org/b/168566).
+    // FIXME: This should just create a Position object instead (webkit.org/b/168566). 
     return positionForPoint(point, nullptr).deepEquivalent();
 }
 
@@ -1692,7 +1692,7 @@ RenderBoxModelObject* RenderObject::offsetParent() const
     // If A is an area HTML element which has a map HTML element somewhere in the ancestor
     // chain return the nearest ancestor map HTML element and stop this algorithm.
     // FIXME: Implement!
-
+    
     // Return the nearest ancestor element of A for which at least one of the following is
     // true and stop this algorithm if such an ancestor is found:
     //     * The computed value of the position property is not static.
@@ -1708,7 +1708,7 @@ RenderBoxModelObject* RenderObject::offsetParent() const
         Element* element = current->element();
         if (!skipTables && element && (is<HTMLTableElement>(*element) || is<HTMLTableCellElement>(*element)))
             break;
-
+ 
         float newZoom = current->style().effectiveZoom();
         if (currZoom != newZoom)
             break;
@@ -1724,7 +1724,7 @@ VisiblePosition RenderObject::createVisiblePosition(int offset, Affinity affinit
     // If this is a non-anonymous renderer in an editable area, then it's simple.
     if (Node* node = nonPseudoNode()) {
         if (!node->hasEditableStyle()) {
-            // If it can be found, we prefer a visually equivalent position that is editable.
+            // If it can be found, we prefer a visually equivalent position that is editable. 
             Position position = makeDeprecatedLegacyPosition(node, offset);
             Position candidate = position.downstream(CanCrossEditingBoundary);
             if (candidate.deprecatedNode()->hasEditableStyle())
@@ -2436,7 +2436,7 @@ String RenderObject::description() const
     builder.append(renderName(), ' ');
     if (node())
         builder.append(' ', node()->description());
-
+    
     return builder.toString();
 }
 
@@ -2447,7 +2447,7 @@ String RenderObject::debugDescription() const
     builder.append(renderName(), " 0x"_s, hex(reinterpret_cast<uintptr_t>(this), Lowercase));
     if (node())
         builder.append(' ', node()->debugDescription());
-
+    
     return builder.toString();
 }
 

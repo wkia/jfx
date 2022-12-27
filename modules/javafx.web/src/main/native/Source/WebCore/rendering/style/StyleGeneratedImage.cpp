@@ -29,7 +29,7 @@
 #include "StyleResolver.h"
 
 namespace WebCore {
-
+    
 StyleGeneratedImage::StyleGeneratedImage(Ref<CSSImageGeneratorValue>&& value)
     : m_imageGeneratorValue(WTFMove(value))
     , m_fixedSize(m_imageGeneratorValue->isFixedSize())

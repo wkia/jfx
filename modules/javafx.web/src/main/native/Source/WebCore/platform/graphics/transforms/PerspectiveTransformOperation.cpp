@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -43,13 +43,13 @@ Ref<TransformOperation> PerspectiveTransformOperation::blend(const TransformOper
 {
     if (from && !from->isSameType(*this))
         return *this;
-
+    
     if (blendToIdentity) {
         double p = floatValueForLength(m_p, 1);
         p = WebCore::blend(p, 1.0, context); // FIXME: this seems wrong. https://bugs.webkit.org/show_bug.cgi?id=52700
         return PerspectiveTransformOperation::create(Length(clampToPositiveInteger(p), LengthType::Fixed));
     }
-
+    
     const PerspectiveTransformOperation* fromOp = downcast<PerspectiveTransformOperation>(from);
     Length fromP = fromOp ? fromOp->m_p : Length(m_p.type());
     Length toP = m_p;

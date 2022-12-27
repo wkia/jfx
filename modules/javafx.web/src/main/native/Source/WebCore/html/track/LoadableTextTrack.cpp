@@ -70,10 +70,10 @@ void LoadableTextTrack::scheduleLoad(const URL& url)
 
     // 2. Let URL be the track URL of the track element.
     m_url = url;
-
+    
     if (m_loadPending)
         return;
-
+    
     // 3. Asynchronously run the remaining steps, while continuing with whatever task
     // was responsible for creating the text track or changing the text track mode.
     m_trackElement->scheduleTask([this]() mutable {
@@ -106,7 +106,7 @@ void LoadableTextTrack::newCuesAvailable(TextTrackLoader& loader)
     ASSERT_UNUSED(loader, m_loader.get() == &loader);
 
     if (!m_cues)
-        m_cues = TextTrackCueList::create();
+        m_cues = TextTrackCueList::create();    
 
     for (auto& newCue : m_loader->getNewCues()) {
         newCue->setTrack(this);

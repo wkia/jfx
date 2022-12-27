@@ -198,7 +198,7 @@ FunctionExecutable* UnlinkedFunctionExecutable::link(VM& vm, ScriptExecutable* t
 }
 
 UnlinkedFunctionExecutable* UnlinkedFunctionExecutable::fromGlobalCode(
-    const Identifier& name, JSGlobalObject* globalObject, const SourceCode& source,
+    const Identifier& name, JSGlobalObject* globalObject, const SourceCode& source, 
     JSObject*& exception, int overrideLineNumber, std::optional<int> functionConstructorParametersEndPosition)
 {
     ParserError error;
@@ -219,7 +219,7 @@ UnlinkedFunctionExecutable* UnlinkedFunctionExecutable::fromGlobalCode(
 }
 
 UnlinkedFunctionCodeBlock* UnlinkedFunctionExecutable::unlinkedCodeBlockFor(
-    VM& vm, const SourceCode& source, CodeSpecializationKind specializationKind,
+    VM& vm, const SourceCode& source, CodeSpecializationKind specializationKind, 
     OptionSet<CodeGenerationMode> codeGenerationMode, ParserError& error, SourceParseMode parseMode)
 {
     if (m_isCached)
@@ -236,10 +236,10 @@ UnlinkedFunctionCodeBlock* UnlinkedFunctionExecutable::unlinkedCodeBlockFor(
     }
 
     UnlinkedFunctionCodeBlock* result = generateUnlinkedFunctionCodeBlock(
-        vm, this, source, specializationKind, codeGenerationMode,
-        isBuiltinFunction() ? UnlinkedBuiltinFunction : UnlinkedNormalFunction,
+        vm, this, source, specializationKind, codeGenerationMode, 
+        isBuiltinFunction() ? UnlinkedBuiltinFunction : UnlinkedNormalFunction, 
         error, parseMode);
-
+    
     if (error.isValid())
         return nullptr;
 

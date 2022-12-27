@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -49,10 +49,10 @@ bool ExecutionCounter<countingVariant>::checkIfThresholdCrossedAndSet(CodeBlock*
 {
     if (hasCrossedThreshold(codeBlock))
         return true;
-
+    
     if (setThreshold(codeBlock))
         return true;
-
+    
     return false;
 }
 
@@ -89,12 +89,12 @@ double applyMemoryUsageHeuristics(int32_t value, CodeBlock* codeBlock)
 int32_t applyMemoryUsageHeuristicsAndConvertToInt(int32_t value, CodeBlock* codeBlock)
 {
     double doubleResult = applyMemoryUsageHeuristics(value, codeBlock);
-
+    
     ASSERT(doubleResult >= 0);
-
+    
     if (doubleResult > std::numeric_limits<int32_t>::max())
         return std::numeric_limits<int32_t>::max();
-
+    
     return static_cast<int32_t>(doubleResult);
 }
 
@@ -118,17 +118,17 @@ bool ExecutionCounter<countingVariant>::hasCrossedThreshold(CodeBlock* codeBlock
     // total and our target according to memory heuristics is small. Our definition of
     // small is arbitrarily picked to be half of the original threshold (i.e.
     // m_activeThreshold).
-
+    
     double modifiedThreshold = applyMemoryUsageHeuristics(m_activeThreshold, codeBlock);
-
+    
     double actualCount = static_cast<double>(m_totalCount) + m_counter;
     double desiredCount = modifiedThreshold - static_cast<double>(
         std::min(m_activeThreshold, maximumExecutionCountsBetweenCheckpoints())) / 2;
-
+    
     bool result = actualCount >= desiredCount;
-
+    
     CODEBLOCK_LOG_EVENT(codeBlock, "thresholdCheck", ("activeThreshold = ", m_activeThreshold, ", modifiedThreshold = ", modifiedThreshold, ", actualCount = ", actualCount, ", desiredCount = ", desiredCount));
-
+    
     return result;
 }
 
@@ -139,20 +139,20 @@ bool ExecutionCounter<countingVariant>::setThreshold(CodeBlock* codeBlock)
         deferIndefinitely();
         return false;
     }
-
+        
     // Compute the true total count.
     double trueTotalCount = count();
-
+    
     // Correct the threshold for current memory usage.
     double threshold = applyMemoryUsageHeuristics(m_activeThreshold, codeBlock);
-
+        
     // Threshold must be non-negative and not NaN.
     ASSERT(threshold >= 0);
-
+        
     // Adjust the threshold according to the number of executions we have already
     // seen. This shouldn't go negative, but it might, because of round-off errors.
     threshold -= trueTotalCount;
-
+        
     if (threshold <= 0) {
         m_counter = 0;
         m_totalCount = trueTotalCount;
@@ -160,11 +160,11 @@ bool ExecutionCounter<countingVariant>::setThreshold(CodeBlock* codeBlock)
     }
 
     threshold = clippedThreshold(codeBlock ? codeBlock->globalObject() : nullptr, threshold);
-
+    
     m_counter = static_cast<int32_t>(-threshold);
-
+        
     m_totalCount = trueTotalCount + threshold;
-
+        
     return false;
 }
 

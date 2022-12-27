@@ -70,7 +70,7 @@ public:
     virtual Ref<BasicShape> blend(const BasicShape& from, const BlendingContext&) const = 0;
 
     virtual bool operator==(const BasicShape&) const = 0;
-
+    
     virtual void dump(TextStream&) const = 0;
 };
 
@@ -101,7 +101,7 @@ public:
     {
         return BasicShapeCenterCoordinate(TopLeft, WebCore::blend(from.m_computedLength, m_computedLength, context));
     }
-
+    
     bool operator==(const BasicShapeCenterCoordinate& other) const
     {
         return m_direction == other.m_direction
@@ -152,7 +152,7 @@ public:
 
         return BasicShapeRadius(WebCore::blend(from.value(), value(), context));
     }
-
+    
     bool operator==(const BasicShapeRadius& other) const
     {
         return m_value == other.m_value && m_type == other.m_type;

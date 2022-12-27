@@ -19,7 +19,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -90,16 +90,16 @@ void PluginDocumentParser::createDocumentStructure()
 #endif
 
     rootElement->appendChild(body);
-
+        
     auto embedElement = HTMLEmbedElement::create(document);
-
+        
     m_embedElement = embedElement.ptr();
     embedElement->setAttributeWithoutSynchronization(widthAttr, AtomString("100%", AtomString::ConstructFromLiteral));
     embedElement->setAttributeWithoutSynchronization(heightAttr, AtomString("100%", AtomString::ConstructFromLiteral));
-
+    
     embedElement->setAttributeWithoutSynchronization(nameAttr, AtomString("plugin", AtomString::ConstructFromLiteral));
     embedElement->setAttributeWithoutSynchronization(srcAttr, document.url().string());
-
+    
     ASSERT(document.loader());
     if (auto loader = makeRefPtr(document.loader()))
         m_embedElement->setAttributeWithoutSynchronization(typeAttr, loader->writer().mimeType());
@@ -124,7 +124,7 @@ void PluginDocumentParser::appendBytes(DocumentWriter&, const uint8_t*, size_t)
     document()->updateLayout();
 
     // Below we assume that renderer->widget() to have been created by
-    // document()->updateLayout(). However, in some cases, updateLayout() will
+    // document()->updateLayout(). However, in some cases, updateLayout() will 
     // recurse too many times and delay its post-layout tasks (such as creating
     // the widget). Here we kick off the pending post-layout tasks so that we
     // can synchronously redirect data to the plugin.

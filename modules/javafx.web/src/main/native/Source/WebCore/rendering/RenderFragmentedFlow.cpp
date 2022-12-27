@@ -12,7 +12,7 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -113,7 +113,7 @@ void RenderFragmentedFlow::validateFragments()
             LayoutUnit previousFragmentLogicalWidth;
             LayoutUnit previousFragmentLogicalHeight;
             bool firstFragmentVisited = false;
-
+            
             for (auto& fragment : m_fragmentList) {
                 ASSERT(!fragment->needsLayout() || fragment->isRenderFragmentContainerSet());
 
@@ -304,7 +304,7 @@ RenderFragmentContainer* RenderFragmentedFlow::fragmentAtBlockOffset(const Rende
 LayoutPoint RenderFragmentedFlow::adjustedPositionRelativeToOffsetParent(const RenderBoxModelObject& boxModelObject, const LayoutPoint& startPoint) const
 {
     LayoutPoint referencePoint = startPoint;
-
+    
     const RenderBlock* objContainingBlock = boxModelObject.containingBlock();
     // FIXME: This needs to be adapted for different writing modes inside the flow thread.
     RenderFragmentContainer* startFragment = fragmentAtBlockOffset(objContainingBlock, referencePoint.y());
@@ -315,15 +315,15 @@ LayoutPoint RenderFragmentedFlow::adjustedPositionRelativeToOffsetParent(const R
         RenderBoxModelObject* currOffsetParent;
         while ((currOffsetParent = currObject->offsetParent())) {
             referencePoint.move(currObject->offsetLeft(), currObject->offsetTop());
-
+            
             // Since we're looking for the offset relative to the body, we must also
             // take into consideration the borders of the fragment's offsetParent.
             if (is<RenderBox>(*currOffsetParent) && !currOffsetParent->isBody())
                 referencePoint.move(downcast<RenderBox>(*currOffsetParent).borderLeft(), downcast<RenderBox>(*currOffsetParent).borderTop());
-
+            
             currObject = currOffsetParent;
         }
-
+        
         // We need to check if any of this box's containing blocks start in a different fragment
         // and if so, drop the object's top position (which was computed relative to its containing block
         // and is no longer valid) and recompute it using the fragment in which it flows as reference.
@@ -338,14 +338,14 @@ LayoutPoint RenderFragmentedFlow::adjustedPositionRelativeToOffsetParent(const R
             }
             objContainingBlock = objContainingBlock->containingBlock();
         }
-
+        
         if (wasComputedRelativeToOtherFragment) {
             if (is<RenderBox>(boxModelObject)) {
                 // Use borderBoxRectInFragment to account for variations such as percentage margins.
                 LayoutRect borderBoxRect = downcast<RenderBox>(boxModelObject).borderBoxRectInFragment(startFragment, RenderBox::DoNotCacheRenderBoxFragmentInfo);
                 referencePoint.move(borderBoxRect.location().x(), 0_lu);
             }
-
+            
             // Get the logical top coordinate of the current object.
             LayoutUnit top;
             if (is<RenderBlock>(boxModelObject))
@@ -353,19 +353,19 @@ LayoutPoint RenderFragmentedFlow::adjustedPositionRelativeToOffsetParent(const R
             else {
                 if (boxModelObject.containingBlock())
                     top = boxModelObject.containingBlock()->offsetFromLogicalTopOfFirstPage();
-
+                
                 if (is<RenderBox>(boxModelObject))
                     top += downcast<RenderBox>(boxModelObject).topLeftLocation().y();
                 else if (is<RenderInline>(boxModelObject))
                     top -= downcast<RenderInline>(boxModelObject).borderTop();
             }
-
+            
             // Get the logical top of the fragment this object starts in
             // and compute the object's top, relative to the fragment's top.
             LayoutUnit fragmentLogicalTop = startFragment->pageLogicalTopForOffset(top);
             LayoutUnit topRelativeToFragment = top - fragmentLogicalTop;
             referencePoint.setY(startFragmentBox->offsetTop() + topRelativeToFragment);
-
+            
             // Since the top has been overridden, check if the
             // relative/sticky positioning must be reconsidered.
             if (boxModelObject.isRelativelyPositioned())
@@ -373,12 +373,12 @@ LayoutPoint RenderFragmentedFlow::adjustedPositionRelativeToOffsetParent(const R
             else if (boxModelObject.isStickilyPositioned())
                 referencePoint.move(0_lu, boxModelObject.stickyPositionOffset().height());
         }
-
+        
         // Since we're looking for the offset relative to the body, we must also
         // take into consideration the borders of the fragment.
         referencePoint.move(startFragmentBox->borderLeft(), startFragmentBox->borderTop());
     }
-
+    
     return referencePoint;
 }
 
@@ -719,14 +719,14 @@ bool RenderFragmentedFlow::objectShouldFragmentInFlowFragment(const RenderObject
 {
     ASSERT(object);
     ASSERT(fragment);
-
+    
     RenderFragmentedFlow* fragmentedFlow = object->enclosingFragmentedFlow();
     if (fragmentedFlow != this)
         return false;
 
     if (!m_fragmentList.contains(const_cast<RenderFragmentContainer*>(fragment)))
         return false;
-
+    
     RenderFragmentContainer* enclosingBoxStartFragment = nullptr;
     RenderFragmentContainer* enclosingBoxEndFragment = nullptr;
     // If the box has no range, do not check fragmentInRange. Boxes inside inlines do not get ranges.
@@ -734,7 +734,7 @@ bool RenderFragmentedFlow::objectShouldFragmentInFlowFragment(const RenderObject
     if (computedFragmentRangeForBox(&object->enclosingBox(), enclosingBoxStartFragment, enclosingBoxEndFragment)
         && !fragmentInRange(fragment, enclosingBoxStartFragment, enclosingBoxEndFragment))
         return false;
-
+    
     return object->isBox() || object->isRenderInline();
 }
 
@@ -765,7 +765,7 @@ bool RenderFragmentedFlow::objectInFlowFragment(const RenderObject* object, cons
     if (!objectABBRect.width())
         objectABBRect.setWidth(1);
     if (!objectABBRect.height())
-        objectABBRect.setHeight(1);
+        objectABBRect.setHeight(1); 
     if (objectABBRect.intersects(fragment->absoluteBoundingBoxRect(true)))
         return true;
 
@@ -880,7 +880,7 @@ bool RenderFragmentedFlow::addForcedFragmentBreak(const RenderBlock* block, Layo
 void RenderFragmentedFlow::collectLayerFragments(LayerFragments& layerFragments, const LayoutRect& layerBoundingBox, const LayoutRect& dirtyRect)
 {
     ASSERT(!m_fragmentsInvalidated);
-
+    
     for (auto& fragment : m_fragmentList)
         fragment->collectLayerFragments(layerFragments, layerBoundingBox, dirtyRect);
 }
@@ -888,7 +888,7 @@ void RenderFragmentedFlow::collectLayerFragments(LayerFragments& layerFragments,
 LayoutRect RenderFragmentedFlow::fragmentsBoundingBox(const LayoutRect& layerBoundingBox)
 {
     ASSERT(!m_fragmentsInvalidated);
-
+    
     LayoutRect result;
     for (auto& fragment : m_fragmentList) {
         LayerFragments fragments;
@@ -900,7 +900,7 @@ LayoutRect RenderFragmentedFlow::fragmentsBoundingBox(const LayoutRect& layerBou
             result.unite(fragmentRect);
         }
     }
-
+    
     return result;
 }
 
@@ -1012,7 +1012,7 @@ void RenderFragmentedFlow::flipForWritingModeLocalCoordinates(LayoutRect& rect) 
 {
     if (!style().isFlippedBlocksWritingMode())
         return;
-
+    
     if (isHorizontalWritingMode())
         rect.setY(0 - rect.maxY());
     else
@@ -1083,7 +1083,7 @@ void RenderFragmentedFlow::addFragmentsOverflowFromChild(const RenderBox* box, c
 
         LayoutRect childLayoutOverflowRect = fragment->layoutOverflowRectForBoxForPropagation(child);
         childLayoutOverflowRect.move(delta);
-
+        
         fragment->addLayoutOverflowForBox(box, childLayoutOverflowRect);
 
         if (child->hasSelfPaintingLayer() || box->hasNonVisibleOverflow()) {
@@ -1099,7 +1099,7 @@ void RenderFragmentedFlow::addFragmentsOverflowFromChild(const RenderBox* box, c
             break;
     }
 }
-
+    
 void RenderFragmentedFlow::addFragmentsLayoutOverflow(const RenderBox* box, const LayoutRect& layoutOverflow)
 {
     RenderFragmentContainer* startFragment = nullptr;
@@ -1124,13 +1124,13 @@ void RenderFragmentedFlow::addFragmentsVisualOverflow(const RenderBox* box, cons
     RenderFragmentContainer* endFragment = nullptr;
     if (!getFragmentRangeForBox(box, startFragment, endFragment))
         return;
-
+    
     for (RenderFragmentContainerList::iterator iter = m_fragmentList.find(startFragment); iter != m_fragmentList.end(); ++iter) {
         RenderFragmentContainer* fragment = *iter;
         LayoutRect visualOverflowInFragment = fragment->rectFlowPortionForBox(box, visualOverflow);
-
+        
         fragment->addVisualOverflowForBox(box, visualOverflowInFragment);
-
+        
         if (fragment == endFragment)
             break;
     }

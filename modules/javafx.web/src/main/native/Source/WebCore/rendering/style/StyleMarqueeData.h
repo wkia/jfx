@@ -47,7 +47,7 @@ public:
 
     int loops; // -1 means infinite.
 
-    unsigned behavior : 2; // MarqueeBehavior
+    unsigned behavior : 2; // MarqueeBehavior 
     unsigned direction : 3; // MarqueeDirection
 
 private:

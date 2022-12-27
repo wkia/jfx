@@ -41,7 +41,7 @@ public:
         ConstraintVolatility,
         ConstraintConcurrency = ConstraintConcurrency::Concurrent,
         ConstraintParallelism = ConstraintParallelism::Sequential);
-
+    
     SimpleMarkingConstraint(
         CString abbreviatedName, CString name,
         MarkingConstraintExecutorPair&& executors,
@@ -50,9 +50,9 @@ public:
         : SimpleMarkingConstraint(abbreviatedName, name, WTFMove(executors), volatility, ConstraintConcurrency::Concurrent, parallelism)
     {
     }
-
+    
     JS_EXPORT_PRIVATE ~SimpleMarkingConstraint() final;
-
+    
 private:
     template<typename Visitor> ALWAYS_INLINE void executeImplImpl(Visitor&);
     void executeImpl(AbstractSlotVisitor&) final;

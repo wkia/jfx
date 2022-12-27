@@ -20,9 +20,9 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
-
+ 
 #pragma once
 
 #include <wtf/URL.h>
@@ -92,37 +92,37 @@ std::optional<UserScript> UserScript::decode(Decoder& decoder)
     decoder >> source;
     if (!source)
         return std::nullopt;
-
+    
     std::optional<URL> url;
     decoder >> url;
     if (!url)
         return std::nullopt;
-
+    
     std::optional<Vector<String>> allowlist;
     decoder >> allowlist;
     if (!allowlist)
         return std::nullopt;
-
+    
     std::optional<Vector<String>> blocklist;
     decoder >> blocklist;
     if (!blocklist)
         return std::nullopt;
-
+    
     std::optional<UserScriptInjectionTime> injectionTime;
     decoder >> injectionTime;
     if (!injectionTime)
         return std::nullopt;
-
+    
     std::optional<UserContentInjectedFrames> injectedFrames;
     decoder >> injectedFrames;
     if (!injectedFrames)
         return std::nullopt;
-
+    
     std::optional<WaitForNotificationBeforeInjecting> waitForNotification;
     decoder >> waitForNotification;
     if (!waitForNotification)
         return std::nullopt;
-
+    
     return {{
         WTFMove(*source),
         WTFMove(*url),

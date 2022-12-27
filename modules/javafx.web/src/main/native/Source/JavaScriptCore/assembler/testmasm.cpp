@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -732,7 +732,7 @@ void testStore64Imm64AddressPointer()
         invoke<size_t>(test);
         CHECK_EQ(dest, value);
     };
-
+    
     for (auto value : int64Operands())
         doTest(value);
 
@@ -947,9 +947,9 @@ void testMultiplyAddSignExtend32()
     auto add = compile([=] (CCallHelpers& jit) {
         emitFunctionPrologue(jit);
 
-        jit.multiplyAddSignExtend32(GPRInfo::argumentGPR0,
-            GPRInfo::argumentGPR1,
-            GPRInfo::argumentGPR2,
+        jit.multiplyAddSignExtend32(GPRInfo::argumentGPR0, 
+            GPRInfo::argumentGPR1, 
+            GPRInfo::argumentGPR2, 
             GPRInfo::returnValueGPR);
 
         emitFunctionEpilogue(jit);
@@ -970,9 +970,9 @@ void testMultiplyAddZeroExtend32()
     auto add = compile([=] (CCallHelpers& jit) {
         emitFunctionPrologue(jit);
 
-        jit.multiplyAddZeroExtend32(GPRInfo::argumentGPR0,
-            GPRInfo::argumentGPR1,
-            GPRInfo::argumentGPR2,
+        jit.multiplyAddZeroExtend32(GPRInfo::argumentGPR0, 
+            GPRInfo::argumentGPR1, 
+            GPRInfo::argumentGPR2, 
             GPRInfo::returnValueGPR);
 
         emitFunctionEpilogue(jit);
@@ -1101,9 +1101,9 @@ void testMultiplySubSignExtend32()
     auto sub = compile([=] (CCallHelpers& jit) {
         emitFunctionPrologue(jit);
 
-        jit.multiplySubSignExtend32(GPRInfo::argumentGPR1,
+        jit.multiplySubSignExtend32(GPRInfo::argumentGPR1, 
             GPRInfo::argumentGPR2,
-            GPRInfo::argumentGPR0,
+            GPRInfo::argumentGPR0, 
             GPRInfo::returnValueGPR);
 
         emitFunctionEpilogue(jit);
@@ -1124,9 +1124,9 @@ void testMultiplySubZeroExtend32()
     auto sub = compile([=] (CCallHelpers& jit) {
         emitFunctionPrologue(jit);
 
-        jit.multiplySubZeroExtend32(GPRInfo::argumentGPR1,
+        jit.multiplySubZeroExtend32(GPRInfo::argumentGPR1, 
             GPRInfo::argumentGPR2,
-            GPRInfo::argumentGPR0,
+            GPRInfo::argumentGPR0, 
             GPRInfo::returnValueGPR);
 
         emitFunctionEpilogue(jit);
@@ -1193,9 +1193,9 @@ void testExtractUnsignedBitfield32()
                 auto ubfx32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractUnsignedBitfield32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractUnsignedBitfield32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1217,9 +1217,9 @@ void testExtractUnsignedBitfield64()
                 auto ubfx64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractUnsignedBitfield64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractUnsignedBitfield64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1241,9 +1241,9 @@ void testInsertUnsignedBitfieldInZero32()
                 auto ubfiz32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertUnsignedBitfieldInZero32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertUnsignedBitfieldInZero32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1266,9 +1266,9 @@ void testInsertUnsignedBitfieldInZero64()
                 auto ubfiz64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertUnsignedBitfieldInZero64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertUnsignedBitfieldInZero64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1292,9 +1292,9 @@ void testInsertBitField32()
                 auto bfi32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertBitField32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertBitField32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::argumentGPR1);
                     jit.move(GPRInfo::argumentGPR1, GPRInfo::returnValueGPR);
 
@@ -1322,9 +1322,9 @@ void testInsertBitField64()
                 auto bfi64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertBitField64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertBitField64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::argumentGPR1);
                     jit.move(GPRInfo::argumentGPR1, GPRInfo::returnValueGPR);
 
@@ -1352,9 +1352,9 @@ void testExtractInsertBitfieldAtLowEnd32()
                 auto bfxil32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractInsertBitfieldAtLowEnd32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractInsertBitfieldAtLowEnd32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::argumentGPR1);
                     jit.move(GPRInfo::argumentGPR1, GPRInfo::returnValueGPR);
 
@@ -1382,9 +1382,9 @@ void testExtractInsertBitfieldAtLowEnd64()
                 auto bfxil64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractInsertBitfieldAtLowEnd64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractInsertBitfieldAtLowEnd64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::argumentGPR1);
                     jit.move(GPRInfo::argumentGPR1, GPRInfo::returnValueGPR);
 
@@ -1533,9 +1533,9 @@ void testInsertSignedBitfieldInZero32()
                 auto insertSignedBitfieldInZero32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertSignedBitfieldInZero32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertSignedBitfieldInZero32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1563,9 +1563,9 @@ void testInsertSignedBitfieldInZero64()
                 auto insertSignedBitfieldInZero64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.insertSignedBitfieldInZero64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.insertSignedBitfieldInZero64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1592,9 +1592,9 @@ void testExtractSignedBitfield32()
                 auto extractSignedBitfield32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractSignedBitfield32(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractSignedBitfield32(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1622,9 +1622,9 @@ void testExtractSignedBitfield64()
                 auto extractSignedBitfield64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.extractSignedBitfield64(GPRInfo::argumentGPR0,
-                        CCallHelpers::TrustedImm32(lsb),
-                        CCallHelpers::TrustedImm32(width),
+                    jit.extractSignedBitfield64(GPRInfo::argumentGPR0, 
+                        CCallHelpers::TrustedImm32(lsb), 
+                        CCallHelpers::TrustedImm32(width), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1653,9 +1653,9 @@ void testExtractRegister32()
                     auto extractRegister32 = compile([=] (CCallHelpers& jit) {
                         emitFunctionPrologue(jit);
 
-                        jit.extractRegister32(GPRInfo::argumentGPR0,
-                            GPRInfo::argumentGPR1,
-                            CCallHelpers::TrustedImm32(lsb),
+                        jit.extractRegister32(GPRInfo::argumentGPR0, 
+                            GPRInfo::argumentGPR1, 
+                            CCallHelpers::TrustedImm32(lsb), 
                             GPRInfo::returnValueGPR);
 
                         emitFunctionEpilogue(jit);
@@ -1690,9 +1690,9 @@ void testExtractRegister64()
                     auto extractRegister64 = compile([=] (CCallHelpers& jit) {
                         emitFunctionPrologue(jit);
 
-                        jit.extractRegister64(GPRInfo::argumentGPR0,
-                            GPRInfo::argumentGPR1,
-                            CCallHelpers::TrustedImm32(lsb),
+                        jit.extractRegister64(GPRInfo::argumentGPR0, 
+                            GPRInfo::argumentGPR1, 
+                            CCallHelpers::TrustedImm32(lsb), 
                             GPRInfo::returnValueGPR);
 
                         emitFunctionEpilogue(jit);
@@ -1721,9 +1721,9 @@ void testAddWithLeftShift32()
                 auto add32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addLeftShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addLeftShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1747,9 +1747,9 @@ void testAddWithRightShift32()
                 auto add32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1773,9 +1773,9 @@ void testAddWithUnsignedRightShift32()
                 auto add32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addUnsignedRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addUnsignedRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1799,9 +1799,9 @@ void testAddWithLeftShift64()
                 auto add64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addLeftShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addLeftShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1825,9 +1825,9 @@ void testAddWithRightShift64()
                 auto add64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1851,9 +1851,9 @@ void testAddWithUnsignedRightShift64()
                 auto add64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.addUnsignedRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.addUnsignedRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1877,9 +1877,9 @@ void testSubWithLeftShift32()
                 auto sub32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subLeftShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subLeftShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1903,9 +1903,9 @@ void testSubWithRightShift32()
                 auto sub32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1929,9 +1929,9 @@ void testSubWithUnsignedRightShift32()
                 auto sub32 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subUnsignedRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subUnsignedRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1955,9 +1955,9 @@ void testSubWithLeftShift64()
                 auto sub64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subLeftShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subLeftShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -1981,9 +1981,9 @@ void testSubWithRightShift64()
                 auto sub64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2007,9 +2007,9 @@ void testSubWithUnsignedRightShift64()
                 auto sub64 = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.subUnsignedRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.subUnsignedRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2069,9 +2069,9 @@ void testXorNotWithLeftShift32()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotLeftShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotLeftShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2095,9 +2095,9 @@ void testXorNotWithRightShift32()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2121,9 +2121,9 @@ void testXorNotWithUnsignedRightShift32()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotUnsignedRightShift32(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotUnsignedRightShift32(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2147,9 +2147,9 @@ void testXorNotWithLeftShift64()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotLeftShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotLeftShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2173,9 +2173,9 @@ void testXorNotWithRightShift64()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -2199,9 +2199,9 @@ void testXorNotWithUnsignedRightShift64()
                 auto test = compile([=] (CCallHelpers& jit) {
                     emitFunctionPrologue(jit);
 
-                    jit.xorNotUnsignedRightShift64(GPRInfo::argumentGPR0,
-                        GPRInfo::argumentGPR1,
-                        CCallHelpers::TrustedImm32(amount),
+                    jit.xorNotUnsignedRightShift64(GPRInfo::argumentGPR0, 
+                        GPRInfo::argumentGPR1, 
+                        CCallHelpers::TrustedImm32(amount), 
                         GPRInfo::returnValueGPR);
 
                     emitFunctionEpilogue(jit);
@@ -4505,7 +4505,7 @@ void testProbeWritesArgumentRegisters()
             cpu.gpr(GPRInfo::argumentGPR1) = testWord(1);
             cpu.gpr(GPRInfo::argumentGPR2) = testWord(2);
             cpu.gpr(GPRInfo::argumentGPR3) = testWord(3);
-
+            
             cpu.fpr(FPRInfo::fpRegT0) = bitwise_cast<double>(testWord64(0));
             cpu.fpr(FPRInfo::fpRegT1) = bitwise_cast<double>(testWord64(1));
         });
@@ -4643,7 +4643,7 @@ void testProbeModifiesStackPointer(WTF::Function<void*(Probe::Context&)> compute
 #if !(CPU(MIPS))
     uintptr_t modifiedFlags { 0 };
 #endif
-
+    
 #if CPU(X86) || CPU(X86_64)
     auto flagsSPR = X86Registers::eflags;
     uintptr_t flagsMask = 0xc5;

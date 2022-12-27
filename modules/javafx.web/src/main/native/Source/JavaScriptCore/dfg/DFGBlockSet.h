@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,26 +37,26 @@ class Graph;
 class BlockSet {
 public:
     BlockSet() { }
-
+    
     // Return true if the block was added, false if it was already present.
     bool add(BasicBlock* block)
     {
         return !m_set.set(block->index);
     }
-
+    
     // Return true if the block was removed, false if it was already absent.
     bool remove(BasicBlock* block)
     {
         return m_set.clear(block->index);
     }
-
+    
     bool contains(BasicBlock* block) const
     {
         if (!block)
             return false;
         return m_set.get(block->index);
     }
-
+    
     class iterator {
     public:
         iterator()
@@ -65,33 +65,33 @@ public:
             , m_index(0)
         {
         }
-
+        
         iterator& operator++()
         {
             m_index = m_set->m_set.findBit(m_index + 1, true);
             return *this;
         }
-
+        
         BasicBlock* operator*() const;
-
+        
         bool operator==(const iterator& other) const
         {
             return m_index == other.m_index;
         }
-
+        
         bool operator!=(const iterator& other) const
         {
             return !(*this == other);
         }
-
+        
     private:
         friend class BlockSet;
-
+        
         Graph* m_graph;
         const BlockSet* m_set;
         size_t m_index;
     };
-
+    
     class Iterable {
     public:
         Iterable(Graph& graph, const BlockSet& set)
@@ -99,7 +99,7 @@ public:
             , m_set(set)
         {
         }
-
+        
         iterator begin() const
         {
             iterator result;
@@ -108,7 +108,7 @@ public:
             result.m_index = m_set.m_set.findBit(0, true);
             return result;
         }
-
+        
         iterator end() const
         {
             iterator result;
@@ -117,19 +117,19 @@ public:
             result.m_index = m_set.m_set.size();
             return result;
         }
-
+        
     private:
         Graph& m_graph;
         const BlockSet& m_set;
     };
-
+    
     Iterable iterable(Graph& graph) const
     {
         return Iterable(graph, *this);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     BitVector m_set;
 };
@@ -140,7 +140,7 @@ public:
         : m_set(set)
     {
     }
-
+    
     bool operator()(BasicBlock* block) const
     {
         return m_set.add(block);

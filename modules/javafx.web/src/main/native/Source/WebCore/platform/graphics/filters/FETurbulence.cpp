@@ -235,7 +235,7 @@ ColorComponents<float, 4> FETurbulence::noise2D(const PaintingData& paintingData
             nextIndex = index + 1;
             fraction = position - index;
         }
-
+        
         void stitch(int size, int wrapSize)
         {
             // if (bx0 >= pStitchInfo->nWrapX)

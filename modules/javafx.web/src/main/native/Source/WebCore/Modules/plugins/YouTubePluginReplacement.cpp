@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -73,7 +73,7 @@ RenderPtr<RenderElement> YouTubePluginReplacement::createElementRenderer(HTMLPlu
 
     if (!m_embedShadowElement)
         return nullptr;
-
+    
     return m_embedShadowElement->createElementRenderer(WTFMove(style), insertionPosition);
 }
 
@@ -95,14 +95,14 @@ auto YouTubePluginReplacement::installReplacement(ShadowRoot& root) -> InstallRe
 
     iframeElement->setAttributeWithoutSynchronization(HTMLNames::srcAttr, youTubeURL(m_attributes.get("src")));
     iframeElement->setAttributeWithoutSynchronization(HTMLNames::frameborderAttr, AtomString("0", AtomString::ConstructFromLiteral));
-
+    
     // Disable frame flattening for this iframe.
     iframeElement->setAttributeWithoutSynchronization(HTMLNames::scrollingAttr, AtomString("no", AtomString::ConstructFromLiteral));
     m_embedShadowElement->appendChild(iframeElement);
 
     return { true };
 }
-
+    
 static URL createYouTubeURL(StringView videoID, StringView timeID)
 {
     ASSERT(!videoID.isEmpty());
@@ -113,32 +113,32 @@ static URL createYouTubeURL(StringView videoID, StringView timeID)
 static YouTubePluginReplacement::KeyValueMap queryKeysAndValues(StringView queryString)
 {
     YouTubePluginReplacement::KeyValueMap queryDictionary;
-
+    
     size_t queryLength = queryString.length();
     if (!queryLength)
         return queryDictionary;
-
+    
     size_t equalSearchLocation = 0;
     size_t equalSearchLength = queryLength;
-
+    
     while (equalSearchLocation < queryLength - 1 && equalSearchLength) {
-
+        
         // Search for "=".
         size_t equalLocation = queryString.find('=', equalSearchLocation);
         if (equalLocation == notFound)
             break;
-
+        
         size_t indexAfterEqual = equalLocation + 1;
         if (indexAfterEqual > queryLength - 1)
             break;
-
+        
         // Get the key before the "=".
         size_t keyLocation = equalSearchLocation;
         size_t keyLength = equalLocation - equalSearchLocation;
-
+        
         // Seach for the ampersand.
         size_t ampersandLocation = queryString.find('&', indexAfterEqual);
-
+        
         // Get the value after the "=", before the ampersand.
         size_t valueLocation = indexAfterEqual;
         size_t valueLength;
@@ -146,7 +146,7 @@ static YouTubePluginReplacement::KeyValueMap queryKeysAndValues(StringView query
             valueLength = ampersandLocation - indexAfterEqual;
         else
             valueLength = queryLength - indexAfterEqual;
-
+        
         // Save the key and the value.
         if (keyLength && valueLength) {
             String key = queryString.substring(keyLocation, keyLength).convertToASCIILowercase();
@@ -156,19 +156,19 @@ static YouTubePluginReplacement::KeyValueMap queryKeysAndValues(StringView query
             if (!key.isEmpty() && !value.isEmpty())
                 queryDictionary.add(key, value);
         }
-
+        
         if (ampersandLocation == notFound)
             break;
-
+        
         // Continue searching after the ampersand.
         size_t indexAfterAmpersand = ampersandLocation + 1;
         equalSearchLocation = indexAfterAmpersand;
         equalSearchLength = queryLength - indexAfterAmpersand;
     }
-
+    
     return queryDictionary;
 }
-
+    
 static bool isYouTubeURL(const URL& url)
 {
     auto hostName = url.host();
@@ -227,27 +227,27 @@ static URL processAndCreateYouTubeURL(const URL& url, bool& isYouTubeShortenedUR
         }
         fragment = emptyString();
     }
-
+    
     if (equalLettersIgnoringASCIICase(path, "/watch")) {
         if (!query.isEmpty()) {
             const auto& queryDictionary = queryKeysAndValues(query);
             String videoID = valueForKey(queryDictionary, "v");
-
+            
             if (!videoID.isEmpty()) {
                 const auto& fragmentDictionary = queryKeysAndValues(url.fragmentIdentifier());
                 String timeID = valueForKey(fragmentDictionary, "t");
                 return createYouTubeURL(videoID, timeID);
             }
         }
-
+        
         // May be a new-style link (see <rdar://problem/7733692>).
         if (fragment.startsWith('!')) {
             query = fragment.substring(1);
-
+            
             if (!query.isEmpty()) {
                 const auto& queryDictionary = queryKeysAndValues(query);
                 String videoID = valueForKey(queryDictionary, "v");
-
+                
                 if (!videoID.isEmpty()) {
                     String timeID = valueForKey(queryDictionary, "t");
                     return createYouTubeURL(videoID, timeID);
@@ -298,7 +298,7 @@ String YouTubePluginReplacement::youTubeURLFromAbsoluteURL(const URL& srcURL, co
     size_t locationOfPathBeforeVideoID = notFound;
     if (locationOfVideoIDInPath != notFound) {
         ASSERT(locationOfVideoIDInPath);
-
+    
         // From the original URL, we need to get the part before /path/VideoId.
         locationOfPathBeforeVideoID = StringView(srcString).find(srcPath.substring(0, locationOfVideoIDInPath));
     } else if (equalLettersIgnoringASCIICase(srcPath, "/watch")) {
@@ -326,7 +326,7 @@ String YouTubePluginReplacement::youTubeURLFromAbsoluteURL(const URL& srcURL, co
         query
     );
 }
-
+    
 bool YouTubePluginReplacement::supportsURL(const URL& url)
 {
     return isYouTubeURL(url);
@@ -336,5 +336,5 @@ bool YouTubePluginReplacement::isEnabledBySettings(const Settings& settings)
 {
     return settings.youTubeFlashPluginReplacementEnabled();
 }
-
+    
 }

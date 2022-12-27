@@ -71,10 +71,10 @@ template <typename T>
 void GCSegmentedArray<T>::expand()
 {
     ASSERT(m_segments.head()->m_top == s_segmentCapacity);
-
+    
     GCArraySegment<T>* nextSegment = GCArraySegment<T>::create();
     m_numberOfSegments++;
-
+    
 #if ASSERT_ENABLED
     nextSegment->m_top = 0;
 #endif

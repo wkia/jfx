@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -143,7 +143,7 @@ const int maxGLErrorsAllowedToConsole = 256;
 static const Seconds checkContextLossHandlingDelay { 3_s };
 
 namespace {
-
+    
     GCGLint clamp(GCGLint value, GCGLint min, GCGLint max)
     {
         if (value < min)
@@ -1021,10 +1021,10 @@ void WebGLRenderingContextBase::initializeNewContext()
     for (GCGLint i = 0; i < numCombinedTextureImageUnits; ++i)
         m_unrenderableTextureUnits.add(i);
 #endif
-
+    
     GCGLint numVertexAttribs = m_context->getInteger(GraphicsContextGL::MAX_VERTEX_ATTRIBS);
     m_maxVertexAttribs = numVertexAttribs;
-
+    
     m_maxTextureSize = m_context->getInteger(GraphicsContextGL::MAX_TEXTURE_SIZE);
     m_maxTextureLevel = WebGLTexture::computeLevelCount(m_maxTextureSize, m_maxTextureSize);
     m_maxCubeMapTextureSize = m_context->getInteger(GraphicsContextGL::MAX_CUBE_MAP_TEXTURE_SIZE);
@@ -1038,7 +1038,7 @@ void WebGLRenderingContextBase::initializeNewContext()
     m_backDrawBuffer = GraphicsContextGL::BACK;
     m_drawBuffersWebGLRequirementsChecked = false;
     m_drawBuffersSupported = false;
-
+    
     m_vertexAttribValue.resize(m_maxVertexAttribs);
 
 #if !USE(ANGLE)
@@ -2363,7 +2363,7 @@ bool WebGLRenderingContextBase::validateNPOTTextureLevel(GCGLsizei width, GCGLsi
 bool WebGLRenderingContextBase::validateElementArraySize(GCGLsizei count, GCGLenum type, GCGLintptr offset)
 {
     RefPtr<WebGLBuffer> elementArrayBuffer = m_boundVertexArrayObject->getElementArrayBuffer();
-
+    
     if (!elementArrayBuffer)
         return false;
 
@@ -2404,7 +2404,7 @@ bool WebGLRenderingContextBase::validateIndexArrayPrecise(GCGLsizei count, GCGLe
 {
     ASSERT(count >= 0 && offset >= 0);
     unsigned maxIndex = 0;
-
+    
     RefPtr<WebGLBuffer> elementArrayBuffer = m_boundVertexArrayObject->getElementArrayBuffer();
 
     if (!elementArrayBuffer)
@@ -2615,10 +2615,10 @@ bool WebGLRenderingContextBase::validateDrawElements(const char* functionName, G
 {
     if (isContextLostOrPending() || !validateDrawMode(functionName, mode))
         return false;
-
+    
     if (!validateStencilSettings(functionName))
         return false;
-
+    
     switch (type) {
     case GraphicsContextGL::UNSIGNED_BYTE:
     case GraphicsContextGL::UNSIGNED_SHORT:
@@ -2632,22 +2632,22 @@ bool WebGLRenderingContextBase::validateDrawElements(const char* functionName, G
         synthesizeGLError(GraphicsContextGL::INVALID_ENUM, functionName, "invalid type");
         return false;
     }
-
+    
     if (count < 0 || offset < 0) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, functionName, "count or offset < 0");
         return false;
     }
-
+    
     if (!count) {
         markContextChanged();
         return false;
     }
-
+    
     if (primitiveCount < 0) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, functionName, "primcount < 0");
         return false;
     }
-
+    
     if (!m_boundVertexArrayObject->getElementArrayBuffer()) {
         synthesizeGLError(GraphicsContextGL::INVALID_OPERATION, functionName, "no ELEMENT_ARRAY_BUFFER bound");
         return false;
@@ -2660,14 +2660,14 @@ bool WebGLRenderingContextBase::validateDrawElements(const char* functionName, G
     }
     if (!count)
         return false;
-
+    
     Checked<GCGLint, RecordOverflow> checkedCount(count);
     Checked<GCGLint, RecordOverflow> checkedPrimitiveCount(primitiveCount);
     if (checkedCount.hasOverflowed() || checkedPrimitiveCount.hasOverflowed()) {
         synthesizeGLError(GraphicsContextGL::INVALID_OPERATION, functionName, "attempt to access out of bounds arrays");
         return false;
     }
-
+    
     if (!validateIndexArrayConservative(type, numElements) || !validateVertexAttributes(numElements, checkedPrimitiveCount)) {
         if (!validateIndexArrayPrecise(checkedCount, type, static_cast<GCGLintptr>(offset), numElements) || !validateVertexAttributes(numElements, checkedPrimitiveCount)) {
             synthesizeGLError(GraphicsContextGL::INVALID_OPERATION, functionName, "attempt to access out of bounds arrays");
@@ -2681,13 +2681,13 @@ bool WebGLRenderingContextBase::validateDrawElements(const char* functionName, G
         return false;
     }
 #endif
-
+    
     const char* reason = "framebuffer incomplete";
     if (m_framebufferBinding && !m_framebufferBinding->onAccess(graphicsContextGL(), &reason)) {
         synthesizeGLError(GraphicsContextGL::INVALID_FRAMEBUFFER_OPERATION, functionName, reason);
         return false;
     }
-
+    
     return true;
 }
 #endif
@@ -7488,7 +7488,7 @@ void WebGLRenderingContextBase::vertexAttribfvImpl(const char* functionName, GCG
 {
     if (isContextLostOrPending())
         return;
-
+    
     auto data = list.data();
     if (!data) {
         synthesizeGLError(GraphicsContextGL::INVALID_VALUE, functionName, "no array");
@@ -7534,7 +7534,7 @@ void WebGLRenderingContextBase::vertexAttribfvImpl(const char* functionName, GCG
 void WebGLRenderingContextBase::initVertexAttrib0()
 {
     WebGLVertexArrayObjectBase::VertexAttribState& state = m_boundVertexArrayObject->getVertexAttribState(0);
-
+    
     m_vertexAttrib0Buffer = createBuffer();
     m_context->bindBuffer(GraphicsContextGL::ARRAY_BUFFER, m_vertexAttrib0Buffer->object());
     m_context->bufferData(GraphicsContextGL::ARRAY_BUFFER, 0, GraphicsContextGL::DYNAMIC_DRAW);

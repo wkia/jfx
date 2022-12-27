@@ -398,7 +398,7 @@ void HTMLLinkElement::removedFromAncestor(RemovalType removalType, ContainerNode
 
     if (wasLoading)
         removePendingSheet();
-
+    
     if (m_styleScope) {
         m_styleScope->removeStyleSheetCandidateNode(*this);
         m_styleScope = nullptr;
@@ -537,7 +537,7 @@ void HTMLLinkElement::dispatchPendingEvent(LinkEventSender* eventSender)
 
 DOMTokenList& HTMLLinkElement::relList()
 {
-    if (!m_relList)
+    if (!m_relList) 
         m_relList = makeUnique<DOMTokenList>(*this, HTMLNames::relAttr, [](Document& document, StringView token) {
             return LinkRelAttribute::isSupported(document, token);
         });
@@ -600,7 +600,7 @@ void HTMLLinkElement::addSubresourceAttributeURLs(ListHashSet<URL>& urls) const
 
     if (!m_relAttribute.isStyleSheet)
         return;
-
+    
     // Append the URL of this link element.
     addSubresourceURL(urls, href());
 

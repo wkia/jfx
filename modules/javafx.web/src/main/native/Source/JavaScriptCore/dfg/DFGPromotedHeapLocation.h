@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,7 +47,7 @@ struct Node;
 
 enum PromotedLocationKind {
     InvalidPromotedLocationKind,
-
+    
     ActivationScopePLoc,
     ActivationSymbolTablePLoc,
     ArgumentCountPLoc,
@@ -87,24 +87,24 @@ public:
     bool operator!() const { return m_kind == InvalidPromotedLocationKind; }
 
     explicit operator bool() const { return !!*this; }
-
+    
     PromotedLocationKind kind() const { return m_kind; }
     unsigned info() const { return m_info; }
-
+    
     unsigned imm1() const { return static_cast<uint32_t>(m_kind); }
     unsigned imm2() const { return static_cast<uint32_t>(m_info); }
-
+    
     unsigned hash() const
     {
         return m_kind + m_info;
     }
-
+    
     bool operator==(const PromotedLocationDescriptor& other) const
     {
         return m_kind == other.m_kind
             && m_info == other.m_info;
     }
-
+    
     bool operator!=(const PromotedLocationDescriptor& other) const
     {
         return !(*this == other);
@@ -128,7 +128,7 @@ public:
             return true;
         }
     }
-
+    
     void dump(PrintStream& out) const;
 
 private:
@@ -151,52 +151,52 @@ public:
         , m_meta(kind, info)
     {
     }
-
+    
     PromotedHeapLocation(
         PromotedLocationKind kind, Edge base, unsigned info = 0)
         : PromotedHeapLocation(kind, base.node(), info)
     {
     }
-
+    
     PromotedHeapLocation(Node* base, PromotedLocationDescriptor meta)
         : m_base(base)
         , m_meta(meta)
     {
     }
-
+    
     PromotedHeapLocation(WTF::HashTableDeletedValueType)
         : m_base(nullptr)
         , m_meta(InvalidPromotedLocationKind, 1)
     {
     }
-
+    
     Node* createHint(Graph&, NodeOrigin, Node* value);
-
+    
     bool operator!() const { return kind() == InvalidPromotedLocationKind; }
-
+    
     PromotedLocationKind kind() const { return m_meta.kind(); }
     Node* base() const { return m_base; }
     unsigned info() const { return m_meta.info(); }
     PromotedLocationDescriptor descriptor() const { return m_meta; }
-
+    
     unsigned hash() const
     {
         return m_meta.hash() + WTF::PtrHash<Node*>::hash(m_base);
     }
-
+    
     bool operator==(const PromotedHeapLocation& other) const
     {
         return m_base == other.m_base
             && m_meta == other.m_meta;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return m_meta.isHashTableDeletedValue();
     }
-
+    
     void dump(PrintStream& out) const;
-
+    
 private:
     Node* m_base;
     PromotedLocationDescriptor m_meta;

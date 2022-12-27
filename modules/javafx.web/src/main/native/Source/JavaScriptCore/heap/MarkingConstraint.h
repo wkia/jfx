@@ -49,32 +49,32 @@ public:
         CString abbreviatedName, CString name, ConstraintVolatility,
         ConstraintConcurrency = ConstraintConcurrency::Concurrent,
         ConstraintParallelism = ConstraintParallelism::Sequential);
-
+    
     JS_EXPORT_PRIVATE virtual ~MarkingConstraint();
-
+    
     unsigned index() const { return m_index; }
-
+    
     const char* abbreviatedName() const { return m_abbreviatedName.data(); }
     const char* name() const { return m_name.data(); }
-
+    
     void resetStats();
-
+    
     size_t lastVisitCount() const { return m_lastVisitCount; }
-
+    
     // The following functions are only used by the real GC via the MarkingConstraintSolver.
     // Hence, we only need the SlotVisitor version.
     void execute(SlotVisitor&);
 
     JS_EXPORT_PRIVATE virtual double quickWorkEstimate(SlotVisitor&);
-
+    
     double workEstimate(SlotVisitor&);
-
+    
     void prepareToExecute(const AbstractLocker& constraintSolvingLocker, SlotVisitor&);
-
+    
     void doParallelWork(SlotVisitor&, SharedTask<void(SlotVisitor&)>&);
-
+    
     ConstraintVolatility volatility() const { return m_volatility; }
-
+    
     ConstraintConcurrency concurrency() const { return m_concurrency; }
     ConstraintParallelism parallelism() const { return m_parallelism; }
 
@@ -89,7 +89,7 @@ protected:
 
 private:
     friend class MarkingConstraintSet; // So it can set m_index.
-
+    
     CString m_abbreviatedName;
     CString m_name;
     size_t m_lastVisitCount { 0 };

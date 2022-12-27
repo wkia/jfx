@@ -164,7 +164,6 @@ const Shape& ShapeOutsideInfo::computedShape() const
 {
     if (Shape* shape = m_shape.get())
         return *shape;
-    SetForScope<bool> isInComputingShape(m_isComputingShape, true);
 
     const RenderStyle& style = m_renderer.style();
     ASSERT(m_renderer.containingBlock());
@@ -246,7 +245,7 @@ LayoutUnit ShapeOutsideInfo::logicalTopOffset() const
     case CSSBoxType::BoxMissing:
         break;
     }
-
+    
     ASSERT_NOT_REACHED();
     return 0_lu;
 }
@@ -256,12 +255,12 @@ static inline LayoutUnit borderStartWithStyleForWritingMode(const RenderBox& ren
     if (style.isHorizontalWritingMode()) {
         if (style.isLeftToRightDirection())
             return renderer.borderLeft();
-
+        
         return renderer.borderRight();
     }
     if (style.isLeftToRightDirection())
         return renderer.borderTop();
-
+    
     return renderer.borderBottom();
 }
 
@@ -270,12 +269,12 @@ static inline LayoutUnit borderAndPaddingStartWithStyleForWritingMode(const Rend
     if (style.isHorizontalWritingMode()) {
         if (style.isLeftToRightDirection())
             return renderer.borderLeft() + renderer.paddingLeft();
-
+        
         return renderer.borderRight() + renderer.paddingRight();
     }
     if (style.isLeftToRightDirection())
         return renderer.borderTop() + renderer.paddingTop();
-
+    
     return renderer.borderBottom() + renderer.paddingBottom();
 }
 
@@ -283,7 +282,7 @@ LayoutUnit ShapeOutsideInfo::logicalLeftOffset() const
 {
     if (m_renderer.isRenderFragmentContainer())
         return 0_lu;
-
+    
     switch (referenceBox(*m_renderer.style().shapeOutside())) {
     case CSSBoxType::MarginBox:
         return -m_renderer.marginStart(&m_renderer.containingBlock()->style());

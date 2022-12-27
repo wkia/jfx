@@ -29,7 +29,7 @@
 #include "JSCInlines.h"
 #include "MarkingConstraintSet.h"
 
-namespace JSC {
+namespace JSC { 
 
 MarkingConstraintSolver::MarkingConstraintSolver(MarkingConstraintSet& set)
     : m_heap(set.m_heap)
@@ -59,26 +59,26 @@ void MarkingConstraintSolver::execute(SchedulerPreference preference, ScopedLamb
 {
     m_pickNextIsStillActive = true;
     RELEASE_ASSERT(!m_numThreadsThatMayProduceWork);
-
+    
     if (Options::useParallelMarkingConstraintSolver()) {
         dataLogIf(Options::logGC(), preference == ParallelWorkFirst ? "P" : "N", "<");
-
+        
         m_heap.runFunctionInParallel(
             [&] (SlotVisitor& visitor) { runExecutionThread(visitor, preference, pickNext); });
-
+        
         dataLogIf(Options::logGC(), ">");
     } else
         runExecutionThread(m_mainVisitor, preference, pickNext);
-
+    
     RELEASE_ASSERT(!m_pickNextIsStillActive);
     RELEASE_ASSERT(!m_numThreadsThatMayProduceWork);
-
+        
     if (!m_toExecuteSequentially.isEmpty()) {
         for (unsigned indexToRun : m_toExecuteSequentially)
             execute(*m_set.m_set[indexToRun]);
         m_toExecuteSequentially.clear();
     }
-
+        
     RELEASE_ASSERT(m_toExecuteInParallel.isEmpty());
 }
 
@@ -102,10 +102,10 @@ void MarkingConstraintSolver::converge(const Vector<MarkingConstraint*>& order)
 {
     if (didVisitSomething())
         return;
-
+    
     if (order.isEmpty())
         return;
-
+        
     size_t index = 0;
 
     // We want to execute the first constraint sequentially if we think it will quickly give us a
@@ -119,24 +119,24 @@ void MarkingConstraintSolver::converge(const Vector<MarkingConstraint*>& order)
     // one, it has an opportunity to generate as much work as it possibly can.
     if (order[index]->quickWorkEstimate(m_mainVisitor) > 0.) {
         execute(*order[index++]);
-
+        
         if (m_toExecuteInParallel.isEmpty()
             && (order.isEmpty() || didVisitSomething()))
             return;
     }
-
+    
     auto pickNext = scopedLambda<std::optional<unsigned>()>(
         [&] () -> std::optional<unsigned> {
             if (didVisitSomething())
                 return std::nullopt;
-
+            
             if (index >= order.size())
                 return std::nullopt;
-
+            
             MarkingConstraint& constraint = *order[index++];
             return constraint.index();
         });
-
+    
     execute(ParallelWorkFirst, pickNext);
 }
 
@@ -144,7 +144,7 @@ void MarkingConstraintSolver::execute(MarkingConstraint& constraint)
 {
     if (m_executed.get(constraint.index()))
         return;
-
+    
     constraint.prepareToExecute(NoLockingNecessary, m_mainVisitor);
     constraint.execute(m_mainVisitor);
     m_executed.set(constraint.index());
@@ -165,32 +165,32 @@ void MarkingConstraintSolver::runExecutionThread(SlotVisitor& visitor, Scheduler
         TaskWithConstraint task;
         {
             Locker locker { m_lock };
-
+                        
             for (;;) {
                 auto tryParallelWork = [&] () -> bool {
                     if (m_toExecuteInParallel.isEmpty())
                         return false;
-
+                    
                     task = m_toExecuteInParallel.first();
                     constraint = task.constraint;
                     doParallelWorkMode = true;
                     return true;
                 };
-
+                
                 auto tryNextConstraint = [&] () -> bool {
                     if (!m_pickNextIsStillActive)
                         return false;
-
+                    
                     for (;;) {
                         std::optional<unsigned> pickResult = pickNext();
                         if (!pickResult) {
                             m_pickNextIsStillActive = false;
                             return false;
                         }
-
+                        
                         if (m_executed.get(*pickResult))
                             continue;
-
+                                    
                         MarkingConstraint& candidateConstraint = *m_set.m_set[*pickResult];
                         if (candidateConstraint.concurrency() == ConstraintConcurrency::Sequential) {
                             m_toExecuteSequentially.append(*pickResult);
@@ -205,7 +205,7 @@ void MarkingConstraintSolver::runExecutionThread(SlotVisitor& visitor, Scheduler
                         return true;
                     }
                 };
-
+                
                 if (preference == ParallelWorkFirst) {
                     if (tryParallelWork() || tryNextConstraint())
                         break;
@@ -213,19 +213,19 @@ void MarkingConstraintSolver::runExecutionThread(SlotVisitor& visitor, Scheduler
                     if (tryNextConstraint() || tryParallelWork())
                         break;
                 }
-
+                
                 // This means that we have nothing left to run. The only way for us to have more work is
                 // if someone is running a constraint that may produce parallel work.
-
+                
                 if (!m_numThreadsThatMayProduceWork)
                     return;
-
+                
                 // FIXME: Any waiting could be replaced with just running the SlotVisitor.
                 // I wonder if that would be profitable.
                 m_condition.wait(m_lock);
             }
         }
-
+                    
         if (doParallelWorkMode)
             constraint->doParallelWork(visitor, *task.task);
         else {
@@ -233,16 +233,16 @@ void MarkingConstraintSolver::runExecutionThread(SlotVisitor& visitor, Scheduler
                 visitor.m_currentConstraint = constraint;
                 visitor.m_currentSolver = this;
             }
-
+            
             constraint->execute(visitor);
-
+            
             visitor.m_currentConstraint = nullptr;
             visitor.m_currentSolver = nullptr;
         }
-
+        
         {
             Locker locker { m_lock };
-
+            
             if (doParallelWorkMode) {
                 if (!m_toExecuteInParallel.isEmpty()
                     && task == m_toExecuteInParallel.first())
@@ -254,7 +254,7 @@ void MarkingConstraintSolver::runExecutionThread(SlotVisitor& visitor, Scheduler
                     m_numThreadsThatMayProduceWork--;
                 m_executed.set(indexToRun);
             }
-
+                        
             m_condition.notifyAll();
         }
     }

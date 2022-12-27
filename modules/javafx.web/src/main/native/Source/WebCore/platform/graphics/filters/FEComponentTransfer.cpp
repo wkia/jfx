@@ -58,9 +58,9 @@ void FEComponentTransfer::computeTabularTable(LookupTable& values, const Compone
     const Vector<float>& tableValues = transferFunction.tableValues;
     unsigned n = tableValues.size();
     if (n < 1)
-        return;
+        return;            
     for (unsigned i = 0; i < values.size(); ++i) {
-        double c = i / 255.0;
+        double c = i / 255.0;                
         unsigned k = static_cast<unsigned>(c * (n - 1));
         double v1 = tableValues[k];
         double v2 = tableValues[std::min((k + 1), (n - 1))];

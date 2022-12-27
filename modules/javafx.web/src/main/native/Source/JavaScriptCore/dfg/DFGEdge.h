@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,7 +45,7 @@ public:
 #endif
     {
     }
-
+    
 #if USE(JSVALUE64)
     Node* node() const { return bitwise_cast<Node*>(m_encodedWord >> shift()); }
 #else
@@ -54,7 +54,7 @@ public:
 
     Node& operator*() const { return *node(); }
     Node* operator->() const { return node(); }
-
+    
     void setNode(Node* node)
     {
 #if USE(JSVALUE64)
@@ -63,7 +63,7 @@ public:
         m_node = node;
 #endif
     }
-
+    
     UseKind useKindUnchecked() const
     {
 #if USE(JSVALUE64)
@@ -91,7 +91,7 @@ public:
         m_encodedWord = makeWord(useKind, proofStatus(), killStatus());
 #endif
     }
-
+    
     ProofStatus proofStatusUnchecked() const
     {
         return proofStatusForIsProved(m_encodedWord & 1);
@@ -114,7 +114,7 @@ public:
     {
         return proofStatus() == IsProved;
     }
-
+    
     bool willNotHaveCheck() const
     {
         return isProved() || shouldNotHaveTypeCheck(useKind());
@@ -123,7 +123,7 @@ public:
     {
         return !willNotHaveCheck();
     }
-
+    
     KillStatus killStatusUnchecked() const
     {
         return killStatusForDoesKill(m_encodedWord & 2);
@@ -159,7 +159,7 @@ public:
 
     bool operator!() const { return !isSet(); }
     explicit operator bool() const { return isSet(); }
-
+    
     bool operator==(Edge other) const
     {
 #if USE(JSVALUE64)
@@ -172,9 +172,9 @@ public:
     {
         return !(*this == other);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
     unsigned hash() const
     {
 #if USE(JSVALUE64)
@@ -186,10 +186,10 @@ public:
 
 private:
     friend class AdjacencyList;
-
+    
 #if USE(JSVALUE64)
     static constexpr uint32_t shift() { return 8; }
-
+    
     static uintptr_t makeWord(Node* node, UseKind useKind, ProofStatus proofStatus, KillStatus killStatus)
     {
         ASSERT(sizeof(node) == 8);
@@ -212,13 +212,13 @@ private:
         }
         return result;
     }
-
+    
 #else
     static uintptr_t makeWord(UseKind useKind, ProofStatus proofStatus, KillStatus killStatus)
     {
         return (static_cast<uintptr_t>(useKind) << 2) | (DFG::doesKill(killStatus) << 1) | static_cast<uintptr_t>(DFG::isProved(proofStatus));
     }
-
+    
     Node* m_node;
 #endif
     // On 64-bit this holds both the pointer and the use kind, while on 32-bit

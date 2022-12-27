@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -256,9 +256,9 @@ public:
     };
 
     WEBCORE_EXPORT static Ref<GraphicsLayer> create(GraphicsLayerFactory*, GraphicsLayerClient&, Type = Type::Normal);
-
+    
     WEBCORE_EXPORT virtual ~GraphicsLayer();
-
+    
     // Unparent, clear the client, and clear the RefPtr.
     WEBCORE_EXPORT static void unparentAndClear(RefPtr<GraphicsLayer>&);
     // Clear the client, and clear the RefPtr, but leave parented.
@@ -283,10 +283,10 @@ public:
 
     GraphicsLayer* parent() const { return m_parent; };
     void setParent(GraphicsLayer*); // Internal use only.
-
+    
     // Returns true if the layer has the given layer as an ancestor (excluding self).
     bool hasAncestor(GraphicsLayer*) const;
-
+    
     const Vector<Ref<GraphicsLayer>>& children() const { return m_children; }
     Vector<Ref<GraphicsLayer>>& children() { return m_children; }
 
@@ -309,7 +309,7 @@ public:
 
     void setIsMaskLayer(bool isMask) { m_isMaskLayer = isMask; }
     bool isMaskLayer() const { return m_isMaskLayer; }
-
+    
     // The given layer will replicate this layer and its children; the replica renders behind this layer.
     WEBCORE_EXPORT virtual void setReplicatedByLayer(RefPtr<GraphicsLayer>&&);
     // Whether this layer is being replicated by another layer.
@@ -375,10 +375,10 @@ public:
 
     bool preserves3D() const { return m_preserves3D; }
     virtual void setPreserves3D(bool b) { m_preserves3D = b; }
-
+    
     bool masksToBounds() const { return m_masksToBounds; }
     virtual void setMasksToBounds(bool b) { m_masksToBounds = b; }
-
+    
     bool drawsContent() const { return m_drawsContent; }
     virtual void setDrawsContent(bool b) { m_drawsContent = b; }
 
@@ -387,7 +387,7 @@ public:
 
     bool userInteractionEnabled() const { return m_userInteractionEnabled; }
     virtual void setUserInteractionEnabled(bool b) { m_userInteractionEnabled = b; }
-
+    
     bool acceleratesDrawing() const { return m_acceleratesDrawing; }
     virtual void setAcceleratesDrawing(bool b) { m_acceleratesDrawing = b; }
 
@@ -470,7 +470,7 @@ public:
     // Set a rounded rect that will be used to clip the layer contents.
     FloatRoundedRect contentsClippingRect() const { return m_contentsClippingRect; }
     virtual void setContentsClippingRect(const FloatRoundedRect& roundedRect) { m_contentsClippingRect = roundedRect; }
-
+    
     // If true, contentsClippingRect is used to clip child GraphicsLayers.
     bool contentsRectClipsDescendants() const { return m_contentsRectClipsDescendants; }
     virtual void setContentsRectClipsDescendants(bool b) { m_contentsRectClipsDescendants = b; }
@@ -570,13 +570,13 @@ public:
     WEBCORE_EXPORT virtual void setZPosition(float);
 
     virtual FloatSize pixelAlignmentOffset() const { return FloatSize(); }
-
+    
     virtual void setAppliesPageScale(bool appliesScale = true) { m_appliesPageScale = appliesScale; }
     virtual bool appliesPageScale() const { return m_appliesPageScale; }
 
     float pageScaleFactor() const { return client().pageScaleFactor(); }
     float deviceScaleFactor() const { return client().deviceScaleFactor(); }
-
+    
     // Whether this layer can throw away backing store to save memory. False for layers that can be revealed by async scrolling.
     virtual void setAllowsBackingStoreDetaching(bool) { }
     virtual bool allowsBackingStoreDetaching() const { return true; }
@@ -659,7 +659,7 @@ protected:
     // Given a list of TransformAnimationValues, see if all the operations for each keyframe match. If so
     // return the index of the KeyframeValueList entry that has that list of operations (it may not be
     // the first entry because some keyframes might have an empty transform and those match any list).
-    // If the lists don't match return -1. On return, if hasBigRotation is true, functions contain
+    // If the lists don't match return -1. On return, if hasBigRotation is true, functions contain 
     // rotations of >= 180 degrees
     static int validateTransformOperations(const KeyframeValueList&, bool& hasBigRotation);
 
@@ -686,10 +686,10 @@ protected:
 
     GraphicsLayerClient* m_client; // Always non-null.
     String m_name;
-
+    
     // Offset from the owning renderer
     FloatSize m_offsetFromRenderer;
-
+    
     // Scroll offset of the content layer inside its scrolling parent layer.
     ScrollOffset m_scrollOffset;
 
@@ -709,10 +709,10 @@ protected:
     Color m_backgroundColor;
     float m_opacity { 1 };
     float m_zPosition { 0 };
-
+    
     FilterOperations m_filters;
     FilterOperations m_backdropFilters;
-
+    
 #if ENABLE(SCROLLING_THREAD)
     ScrollingNodeID m_scrollingNodeID { 0 };
 #endif

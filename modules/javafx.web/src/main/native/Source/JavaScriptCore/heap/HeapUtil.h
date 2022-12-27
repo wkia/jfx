@@ -42,7 +42,7 @@ namespace JSC {
 
 class HeapUtil {
 public:
-    // This function must be run after stopAllocation() is called and
+    // This function must be run after stopAllocation() is called and 
     // before liveness data is cleared to be accurate.
     template<typename Func>
     static void findGCObjectPointersForMarking(
@@ -50,12 +50,12 @@ public:
         void* passedPointer, const Func& func)
     {
         const HashSet<MarkedBlock*>& set = heap.objectSpace().blocks().set();
-
+        
         ASSERT(heap.objectSpace().isMarking());
         static constexpr bool isMarking = true;
-
+        
         char* pointer = static_cast<char*>(passedPointer);
-
+        
         // It could point to a large allocation.
         if (heap.objectSpace().preciseAllocationsForThisCollectionSize()) {
             if (heap.objectSpace().preciseAllocationsForThisCollectionBegin()[0]->aboveLowerBound(pointer)
@@ -70,7 +70,7 @@ public:
                         if (allocation->contains(pointer) && allocation->hasValidCell())
                             func(allocation->cell(), allocation->attributes().cellKind);
                     };
-
+                    
                     if (result > heap.objectSpace().preciseAllocationsForThisCollectionBegin())
                         attemptLarge(result[-1]);
                     attemptLarge(result[0]);
@@ -79,7 +79,7 @@ public:
                 }
             }
         }
-
+    
         MarkedBlock* candidate = MarkedBlock::blockFor(pointer);
         // It's possible for a butterfly pointer to point past the end of a butterfly. Check this now.
         if (pointer <= bitwise_cast<char*>(candidate) + sizeof(IndexingHeader)) {
@@ -94,17 +94,17 @@ public:
                     func(previousPointer, previousCandidate->handle().cellKind());
             }
         }
-
+    
         if (filter.ruleOut(bitwise_cast<Bits>(candidate))) {
             ASSERT(!candidate || !set.contains(candidate));
             return;
         }
-
+    
         if (!set.contains(candidate))
             return;
 
         HeapCell::Kind cellKind = candidate->handle().cellKind();
-
+        
         auto tryPointer = [&] (void* pointer) {
             bool isLive = candidate->handle().isLiveCell(markingVersion, newlyAllocatedVersion, isMarking, pointer);
             if (isLive)
@@ -114,14 +114,14 @@ public:
             // mark the former.
             return isLive && !mayHaveIndexingHeader(cellKind);
         };
-
+    
         if (isJSCellKind(cellKind)) {
             if (LIKELY(MarkedBlock::isAtomAligned(pointer))) {
                 if (tryPointer(pointer))
                     return;
             }
         }
-
+    
         // We could point into the middle of an object.
         char* alignedPointer = static_cast<char*>(candidate->handle().cellAlign(pointer));
         if (tryPointer(alignedPointer))
@@ -133,7 +133,7 @@ public:
             && pointer <= alignedPointer + sizeof(IndexingHeader))
             tryPointer(alignedPointer - candidate->cellSize());
     }
-
+    
     static bool isPointerGCObjectJSCell(Heap& heap, TinyBloomFilter filter, JSCell* pointer)
     {
         // It could point to a large allocation.
@@ -144,30 +144,30 @@ public:
                 return false;
             return set->contains(pointer);
         }
-
+    
         const HashSet<MarkedBlock*>& set = heap.objectSpace().blocks().set();
-
+        
         MarkedBlock* candidate = MarkedBlock::blockFor(pointer);
         if (filter.ruleOut(bitwise_cast<Bits>(candidate))) {
             ASSERT(!candidate || !set.contains(candidate));
             return false;
         }
-
+        
         if (!MarkedBlock::isAtomAligned(pointer))
             return false;
-
+        
         if (!set.contains(candidate))
             return false;
-
+        
         if (candidate->handle().cellKind() != HeapCell::JSCell)
             return false;
-
+        
         if (!candidate->handle().isLiveCell(pointer))
             return false;
-
+        
         return true;
     }
-
+    
     // This does not find the cell if the pointer is pointing at the middle of a JSCell.
     static bool isValueGCObject(
         Heap& heap, TinyBloomFilter filter, JSValue value)

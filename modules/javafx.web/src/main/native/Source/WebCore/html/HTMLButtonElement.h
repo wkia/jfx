@@ -35,7 +35,7 @@ public:
     static Ref<HTMLButtonElement> create(const QualifiedName&, Document&, HTMLFormElement*);
 
     WEBCORE_EXPORT void setType(const AtomString&);
-
+    
     const AtomString& value() const;
 
     bool willRespondToMouseClickEvents() final;

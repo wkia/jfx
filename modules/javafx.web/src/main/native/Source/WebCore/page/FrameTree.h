@@ -45,7 +45,7 @@ public:
     WEBCORE_EXPORT void setName(const AtomString&);
     WEBCORE_EXPORT void clearName();
     WEBCORE_EXPORT Frame* parent() const;
-
+    
     Frame* nextSibling() const { return m_nextSibling.get(); }
     Frame* previousSibling() const { return m_previousSibling.get(); }
     Frame* firstChild() const { return m_firstChild.get(); }
@@ -55,7 +55,7 @@ public:
     Frame* nextRenderedSibling() const;
 
     WEBCORE_EXPORT bool isDescendantOf(const Frame* ancestor) const;
-
+    
     WEBCORE_EXPORT Frame* traverseNext(const Frame* stayWithin = nullptr) const;
     // Rendered means being the main frame or having an ownerRenderer. It may not have been parented in the Widget tree yet (see WidgetHierarchyUpdatesSuspensionScope).
     WEBCORE_EXPORT Frame* traverseNextRendered(const Frame* stayWithin = nullptr) const;

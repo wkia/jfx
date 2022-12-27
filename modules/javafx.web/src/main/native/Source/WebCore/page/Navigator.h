@@ -51,7 +51,7 @@ public:
     bool onLine() const final;
     bool canShare(Document&, const ShareData&);
     void share(Document&, const ShareData&, Ref<DeferredPromise>&&);
-
+    
 #if PLATFORM(IOS_FAMILY)
     bool standalone() const;
 #endif

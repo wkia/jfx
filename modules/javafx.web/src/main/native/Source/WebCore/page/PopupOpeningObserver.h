@@ -34,5 +34,5 @@ public:
 protected:
     virtual ~PopupOpeningObserver() = default;
 };
-
+    
 } // namespace WebCore

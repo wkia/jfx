@@ -72,7 +72,7 @@ ExceptionOr<History::ScrollRestoration> History::scrollRestoration() const
     auto* historyItem = frame->loader().history().currentItem();
     if (!historyItem)
         return ScrollRestoration::Auto;
-
+    
     return historyItem->shouldRestoreScrollPosition() ? ScrollRestoration::Auto : ScrollRestoration::Manual;
 }
 
@@ -224,7 +224,7 @@ ExceptionOr<void> History::stateObjectAdded(RefPtr<SerializedScriptValue>&& data
         mainHistory.m_currentStateObjectTimeSpanStart = currentTimestamp;
         mainHistory.m_currentStateObjectTimeSpanObjectsAdded = 0;
     }
-
+    
     if (mainHistory.m_currentStateObjectTimeSpanObjectsAdded >= perStateObjectTimeSpanLimit) {
         if (stateObjectType == StateObjectType::Replace)
             return Exception { SecurityError, makeString("Attempt to use history.replaceState() more than ", perStateObjectTimeSpanLimit, " times per ", stateObjectTimeSpan.seconds(), " seconds") };

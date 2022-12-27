@@ -190,7 +190,7 @@ template<typename CharacterType> void ContentSecurityPolicySourceList::parse(Str
 
         ASSERT(buffer.atEnd() || isASCIISpace(*buffer));
     }
-
+    
     m_list.shrinkToFit();
 }
 
@@ -399,7 +399,7 @@ template<typename CharacterType> std::optional<ContentSecurityPolicySourceList::
 template<typename CharacterType> std::optional<String> ContentSecurityPolicySourceList::parsePath(StringParsingBuffer<CharacterType> buffer)
 {
     ASSERT(buffer.position() <= buffer.end());
-
+    
     auto begin = buffer.position();
     skipWhile<isPathComponentCharacter>(buffer);
     // path/to/file.js?query=string || path/to/file.js#anchor
@@ -418,22 +418,22 @@ template<typename CharacterType> std::optional<String> ContentSecurityPolicySour
 template<typename CharacterType> std::optional<ContentSecurityPolicySourceList::Port> ContentSecurityPolicySourceList::parsePort(StringParsingBuffer<CharacterType> buffer)
 {
     ASSERT(buffer.position() <= buffer.end());
-
+    
     if (!skipExactly(buffer, ':'))
         ASSERT_NOT_REACHED();
-
+    
     if (buffer.atEnd())
         return std::nullopt;
-
+    
     if (buffer.lengthRemaining() == 1 && *buffer == '*') {
         Port port;
         port.hasWildcard = true;
         return port;
     }
-
+    
     auto begin = buffer.position();
     skipWhile<isASCIIDigit>(buffer);
-
+    
     if (!buffer.atEnd())
         return std::nullopt;
 

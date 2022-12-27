@@ -96,3 +96,4 @@ inline void FEColorMatrix::calculateHueRotateComponents(float* components, float
 SPECIALIZE_TYPE_TRAITS_BEGIN(WebCore::FEColorMatrix)
     static bool isType(const WebCore::FilterEffect& effect) { return effect.filterEffectClassType() == WebCore::FilterEffect::Type::ColorMatrix; }
 SPECIALIZE_TYPE_TRAITS_END()
+

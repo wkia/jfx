@@ -149,7 +149,7 @@ public:
     float fillOpacity() const { return m_fillData->opacity; }
     SVGPaintType fillPaintType() const { return static_cast<SVGPaintType>(m_fillData->paintType); }
     const Color& fillPaintColor() const { return m_fillData->paintColor; }
-    const String& fillPaintUri() const { return m_fillData->paintUri; }
+    const String& fillPaintUri() const { return m_fillData->paintUri; }    
     float strokeOpacity() const { return m_strokeData->opacity; }
     SVGPaintType strokePaintType() const { return static_cast<SVGPaintType>(m_strokeData->paintType); }
     const Color& strokePaintColor() const { return m_strokeData->paintColor; }

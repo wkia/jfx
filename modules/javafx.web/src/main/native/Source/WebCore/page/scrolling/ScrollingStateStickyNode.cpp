@@ -126,7 +126,7 @@ void ScrollingStateStickyNode::reconcileLayerPositionForViewportRect(const Layou
         auto* graphicsLayer = static_cast<GraphicsLayer*>(layer());
 
         LOG_WITH_STREAM(Compositing, stream << "ScrollingStateStickyNode " << scrollingNodeID() << " reconcileLayerPositionForViewportRect " << action << " position of layer " << graphicsLayer->primaryLayerID() << " to " << position << " sticky offset " << m_constraints.stickyOffsetAtLastLayout());
-
+        
         switch (action) {
         case ScrollingLayerPositionAction::Set:
             graphicsLayer->setPosition(position);
@@ -135,7 +135,7 @@ void ScrollingStateStickyNode::reconcileLayerPositionForViewportRect(const Layou
         case ScrollingLayerPositionAction::SetApproximate:
             graphicsLayer->setApproximatePosition(position);
             break;
-
+        
         case ScrollingLayerPositionAction::Sync:
             graphicsLayer->syncPosition(position);
             break;

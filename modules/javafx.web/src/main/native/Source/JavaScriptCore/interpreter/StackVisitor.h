@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -99,7 +99,7 @@ public:
 
         ClonedArguments* createArguments(VM&);
         CallFrame* callFrame() const { return m_callFrame; }
-
+        
         void dump(PrintStream&, Indenter = Indenter()) const;
         void dump(PrintStream&, Indenter, WTF::Function<void(PrintStream&)> prefix) const;
 
@@ -197,7 +197,7 @@ public:
         m_callerFrame = visitor->callFrame();
         return StackVisitor::Done;
     }
-
+    
 private:
     mutable bool m_hasSkippedFirstFrame;
     mutable CallFrame* m_callerFrame;

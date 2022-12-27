@@ -28,7 +28,7 @@ namespace WebCore {
 
 class HitTestResult;
 class HTMLImageElement;
-
+    
 class HTMLMapElement final : public HTMLElement {
     WTF_MAKE_ISO_ALLOCATED(HTMLMapElement);
 public:
@@ -39,7 +39,7 @@ public:
     const AtomString& getName() const { return m_name; }
 
     bool mapMouseEvent(LayoutPoint location, const LayoutSize&, HitTestResult&);
-
+    
     HTMLImageElement* imageElement();
     WEBCORE_EXPORT Ref<HTMLCollection> areas();
 

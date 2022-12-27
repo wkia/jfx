@@ -160,7 +160,7 @@ void RenderRubyRun::layoutBlock(bool relayoutChildren, LayoutUnit pageHeight)
         firstLineRubyTextTop = rt->firstRootBox()->logicalTopLayoutOverflow();
         lastLineRubyTextBottom = rootBox->logicalBottomLayoutOverflow();
     }
-
+    
     if (isHorizontalWritingMode() && rt->style().rubyPosition() == RubyPosition::InterCharacter) {
         // Bopomofo. We need to move the RenderRubyText over to the right side and center it
         // vertically relative to the base.
@@ -189,7 +189,7 @@ void RenderRubyRun::layoutBlock(bool relayoutChildren, LayoutUnit pageHeight)
                 firstLineTop = rootBox->logicalTopLayoutOverflow();
             firstLineTop += rb->logicalTop();
         }
-
+        
         rt->setLogicalTop(-lastLineRubyTextBottom + firstLineTop);
     } else {
         LayoutUnit lastLineBottom = logicalHeight();

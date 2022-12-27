@@ -53,7 +53,7 @@ public:
     // and rows respectively, not necessarily the horizontal and vertical spacing respectively".
     LayoutUnit hBorderSpacing() const { return m_hSpacing; }
     LayoutUnit vBorderSpacing() const { return m_vSpacing; }
-
+    
     bool collapseBorders() const { return style().borderCollapse() == BorderCollapse::Collapse; }
 
     LayoutUnit borderStart() const override { return m_borderStart; }
@@ -170,7 +170,7 @@ public:
     void appendColumn(unsigned span);
     unsigned numEffCols() const { return m_columns.size(); }
     unsigned spanOfEffCol(unsigned effCol) const { return m_columns[effCol].span; }
-
+    
     unsigned colToEffCol(unsigned column) const
     {
         if (!m_hasCellColspanThatDeterminesTableWidth)
@@ -182,7 +182,7 @@ public:
             c += m_columns[effColumn].span;
         return effColumn;
     }
-
+    
     unsigned effColToCol(unsigned effCol) const
     {
         if (!m_hasCellColspanThatDeterminesTableWidth)
@@ -235,13 +235,13 @@ public:
     RenderTableCell* cellBelow(const RenderTableCell*) const;
     RenderTableCell* cellBefore(const RenderTableCell*) const;
     RenderTableCell* cellAfter(const RenderTableCell*) const;
-
+ 
     typedef Vector<CollapsedBorderValue> CollapsedBorderValues;
     bool collapsedBordersAreValid() const { return m_collapsedBordersValid; }
     void invalidateCollapsedBorders(RenderTableCell* cellWithStyleChange = nullptr);
     void collapsedEmptyBorderIsPresent() { m_collapsedEmptyBorderIsPresent = true; }
     const CollapsedBorderValue* currentBorderValue() const { return m_currentBorder; }
-
+    
     bool hasSections() const { return m_head || m_foot || m_firstBody; }
 
     void recalcSectionsIfNeeded() const
@@ -265,7 +265,7 @@ public:
     LayoutUnit offsetLeftForColumn(const RenderTableCol&) const;
     LayoutUnit offsetWidthForColumn(const RenderTableCol&) const;
     LayoutUnit offsetHeightForColumn(const RenderTableCol&) const;
-
+    
     void markForPaginationRelayoutIfNeeded() final;
 
     void willInsertTableColumn(RenderTableCol& child, RenderObject* beforeChild);
@@ -307,7 +307,7 @@ private:
     void invalidateCachedColumnOffsets();
 
     RenderBlock* firstLineBlock() const final;
-
+    
     void updateLogicalWidth() final;
 
     LayoutUnit convertStyleLogicalWidthToComputedWidth(const Length& styleLogicalWidth, LayoutUnit availableWidth);

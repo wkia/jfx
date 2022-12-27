@@ -310,7 +310,7 @@ void HTMLTableElement::collectPresentationalHintsForAttribute(const QualifiedNam
         addHTMLLengthToStyle(style, CSSPropertyWidth, value);
     else if (name == heightAttr)
         addHTMLLengthToStyle(style, CSSPropertyHeight, value);
-    else if (name == borderAttr)
+    else if (name == borderAttr) 
         addPropertyToPresentationalHintStyle(style, CSSPropertyBorderWidth, parseBorderWidthAttribute(value), CSSUnitType::CSS_PX);
     else if (name == bordercolorAttr) {
         if (!value.isEmpty())
@@ -431,7 +431,7 @@ const StyleProperties* HTMLTableElement::additionalPresentationalHintStyle() con
 {
     if (m_frameAttr)
         return 0;
-
+    
     if (!m_borderAttr && !m_borderColorAttr) {
         // Setting the border to 'hidden' allows it to win over any border
         // set on the table's cells during border-conflict resolution.
@@ -504,7 +504,7 @@ Ref<StyleProperties> HTMLTableElement::createSharedCellStyle() const
         style->setProperty(CSSPropertyBorderColor, cssValuePool.createInheritedValue());
         break;
     case NoBorders:
-        // If 'rules=none' then allow any borders set at cell level to take effect.
+        // If 'rules=none' then allow any borders set at cell level to take effect. 
         break;
     }
 

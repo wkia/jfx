@@ -45,9 +45,9 @@ Model::~Model() = default;
 TextStream& operator<<(TextStream& ts, const Model& model)
 {
     TextStream::GroupScope groupScope(ts);
-
+    
     ts.dumpProperty("data-size", model.data()->size());
-
+    
     return ts;
 }
 

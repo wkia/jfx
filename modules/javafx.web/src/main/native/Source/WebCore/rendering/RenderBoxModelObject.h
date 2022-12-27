@@ -111,7 +111,7 @@ class RenderBoxModelObject : public RenderLayerModelObject {
     WTF_MAKE_ISO_ALLOCATED(RenderBoxModelObject);
 public:
     virtual ~RenderBoxModelObject();
-
+    
     LayoutSize relativePositionOffset() const;
     LayoutSize relativePositionLogicalOffset() const { return style().isHorizontalWritingMode() ? relativePositionOffset() : relativePositionOffset().transposedSize(); }
 
@@ -230,7 +230,7 @@ public:
 
     RenderBoxModelObject* continuation() const;
     WEBCORE_EXPORT RenderInline* inlineContinuation() const;
-
+    
     void insertIntoContinuationChainAfter(RenderBoxModelObject&);
     void removeFromContinuationChain();
 
@@ -302,14 +302,14 @@ protected:
 
 private:
     ContinuationChainNode& ensureContinuationChainNode();
-
+    
     virtual LayoutRect frameRectForStickyPositioning() const = 0;
 
     LayoutSize calculateFillTileSize(const FillLayer&, const LayoutSize& scaledPositioningAreaSize) const;
 
     RoundedRect getBackgroundRoundedRect(const LayoutRect&, LegacyInlineFlowBox*, LayoutUnit inlineBoxWidth, LayoutUnit inlineBoxHeight,
         bool includeLogicalLeftEdge, bool includeLogicalRightEdge) const;
-
+    
     bool fixedBackgroundPaintsInLocalCoordinates() const;
 
     void clipBorderSidePolygon(GraphicsContext&, const RoundedRect& outerBorder, const RoundedRect& innerBorder,

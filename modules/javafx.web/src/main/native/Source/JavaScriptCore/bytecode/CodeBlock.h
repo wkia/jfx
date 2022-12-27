@@ -135,7 +135,7 @@ protected:
 
     void finishCreation(VM&, CopyParsedBlockTag, CodeBlock& other);
     bool finishCreation(VM&, ScriptExecutable* ownerExecutable, UnlinkedCodeBlock*, JSScope*);
-
+    
     void finishCreationCommon(VM&);
 
     WriteBarrier<JSGlobalObject> m_globalObject;
@@ -189,15 +189,15 @@ public:
                 codeBlocks.append(osrEntryBlock);
         }
     }
-
+    
     CodeSpecializationKind specializationKind() const
     {
         return specializationFromIsConstruct(isConstructor());
     }
 
-    CodeBlock* alternativeForJettison();
+    CodeBlock* alternativeForJettison();    
     JS_EXPORT_PRIVATE CodeBlock* baselineAlternative();
-
+    
     // FIXME: Get rid of this.
     // https://bugs.webkit.org/show_bug.cgi?id=123677
     CodeBlock* baselineVersion();
@@ -264,7 +264,7 @@ public:
     // allocations) between calling this and the last use of it.
     void getICStatusMap(const ConcurrentJSLocker&, ICStatusMap& result);
     void getICStatusMap(ICStatusMap& result);
-
+    
 #if ENABLE(JIT)
     struct JITData {
         WTF_MAKE_STRUCT_FAST_ALLOCATED;
@@ -321,7 +321,7 @@ public:
     // that there had been inlining. Chances are if you want to use this, you're really
     // looking for a CallLinkInfoMap to amortize the cost of calling this.
     CallLinkInfo* getCallLinkInfoForBytecodeIndex(BytecodeIndex);
-
+    
     void setJITCodeMap(JITCodeMap&& jitCodeMap)
     {
         ConcurrentJSLocker locker(m_lock);
@@ -390,7 +390,7 @@ public:
 
     // Exactly equivalent to codeBlock->ownerExecutable()->newReplacementCodeBlockFor(codeBlock->specializationKind())
     CodeBlock* newReplacement();
-
+    
     void setJITCode(Ref<JITCode>&& code)
     {
         if (!code->isShared())
@@ -419,7 +419,7 @@ public:
     {
         return JITCode::useDataIC(jitType());
     }
-
+    
 #if ENABLE(JIT)
     CodeBlock* replacement();
 
@@ -434,9 +434,9 @@ public:
 #endif
 
     void jettison(Profiler::JettisonReason, ReoptimizationMode = DontCountReoptimization, const FireDetail* = nullptr);
-
+    
     ScriptExecutable* ownerExecutable() const { return m_ownerExecutable.get(); }
-
+    
     ExecutableToCodeBlockEdge* ownerEdge() const { return m_ownerEdge.get(); }
 
     VM& vm() const { return *m_vm; }
@@ -455,7 +455,7 @@ public:
     {
         return m_scopeRegister;
     }
-
+    
     PutPropertySlot::Context putByIdContext() const
     {
         if (codeType() == EvalCode)
@@ -513,13 +513,13 @@ public:
 
 #if ENABLE(DFG_JIT)
     DFG::CodeOriginPool& codeOrigins();
-
+    
     // Having code origins implies that there has been some inlining.
     bool hasCodeOrigins()
     {
         return JITCode::isOptimizingJIT(jitType());
     }
-
+        
     bool canGetCodeOrigin(CallSiteIndex index)
     {
         if (!hasCodeOrigins())
@@ -576,7 +576,7 @@ public:
     FunctionExecutable* functionDecl(int index) { return m_functionDecls[index].get(); }
     int numberOfFunctionDecls() { return m_functionDecls.size(); }
     FunctionExecutable* functionExpr(int index) { return m_functionExprs[index].get(); }
-
+    
     const BitVector& bitVector(size_t i) { return m_unlinkedCode->bitVector(i); }
 
     Heap* heap() const { return &m_vm->heap; }
@@ -590,7 +590,7 @@ public:
     {
         return m_unlinkedCode->livenessAnalysis(this);
     }
-
+    
     void validate();
 
     // Jump Tables
@@ -761,7 +761,7 @@ public:
     void forceOptimizationSlowPathConcurrently();
 
     void setOptimizationThresholdBasedOnCompilationResult(CompilationResult);
-
+    
     BytecodeIndex bytecodeIndexForExit(BytecodeIndex) const;
     uint32_t osrExitCounter() const { return m_osrExitCounter; }
 
@@ -818,7 +818,7 @@ public:
     }
 
     bool wasCompiledWithDebuggingOpcodes() const { return m_unlinkedCode->wasCompiledWithDebuggingOpcodes(); }
-
+    
     // This is intentionally public; it's the responsibility of anyone doing any
     // of the following to hold the lock:
     //
@@ -930,11 +930,11 @@ private:
     template<typename Visitor> ALWAYS_INLINE void visitChildren(Visitor&);
 
     BytecodeLivenessAnalysis& livenessAnalysisSlow();
-
+    
     CodeBlock* specialOSREntryBlockOrNull();
-
+    
     void noticeIncomingCall(CallFrame* callerFrame);
-
+    
     double optimizationThresholdScalingFactor();
 
     void updateAllValueProfilePredictionsAndCountLiveness(unsigned& numberOfLiveNonArgumentValueProfiles, unsigned& numberOfSamplesInProfiles);
@@ -950,10 +950,10 @@ private:
     template<typename Visitor> bool shouldVisitStrongly(const ConcurrentJSLocker&, Visitor&);
     bool shouldJettisonDueToWeakReference(VM&);
     template<typename Visitor> bool shouldJettisonDueToOldAge(const ConcurrentJSLocker&, Visitor&);
-
+    
     template<typename Visitor> void propagateTransitions(const ConcurrentJSLocker&, Visitor&);
     template<typename Visitor> void determineLiveness(const ConcurrentJSLocker&, Visitor&);
-
+        
     template<typename Visitor> void stronglyVisitStrongReferences(const ConcurrentJSLocker&, Visitor&);
     template<typename Visitor> void stronglyVisitWeakReferences(const ConcurrentJSLocker&, Visitor&);
     template<typename Visitor> void visitOSRExitTargets(const ConcurrentJSLocker&, Visitor&);
@@ -1026,7 +1026,7 @@ private:
     FixedVector<WriteBarrier<FunctionExecutable>> m_functionExprs;
 
     WriteBarrier<CodeBlock> m_alternative;
-
+    
     BaselineExecutionCounter m_llintExecuteCounter;
 
     BaselineExecutionCounter m_jitExecuteCounter;
@@ -1068,7 +1068,7 @@ Exception* ScriptExecutable::prepareForExecution(VM& vm, JSFunction* function, J
             resultCodeBlock = jsCast<CodeBlock*>(jsCast<ExecutableType*>(this)->codeBlockFor(kind));
             return nullptr;
         }
-            RELEASE_ASSERT_NOT_REACHED();
+        RELEASE_ASSERT_NOT_REACHED();
         return nullptr;
     }
     return prepareForExecutionImpl(vm, function, scope, kind, resultCodeBlock);
@@ -1086,7 +1086,7 @@ void setPrinter(Printer::PrintRecord&, CodeBlock*);
 } // namespace JSC
 
 namespace WTF {
-
+    
 JS_EXPORT_PRIVATE void printInternal(PrintStream&, JSC::CodeBlock*);
 
 } // namespace WTF

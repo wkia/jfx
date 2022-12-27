@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,43 +40,43 @@ public:
         , m_mode(JITCompilationMode::InvalidCompilation)
     {
     }
-
+    
     JITCompilationKey(WTF::HashTableDeletedValueType)
         : m_profiledBlock(nullptr)
         , m_mode(JITCompilationMode::DFG)
     {
     }
-
+    
     JITCompilationKey(CodeBlock* profiledBlock, JITCompilationMode mode)
         : m_profiledBlock(profiledBlock)
         , m_mode(mode)
     {
     }
-
+    
     bool operator!() const
     {
         return !m_profiledBlock && m_mode == JITCompilationMode::InvalidCompilation;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return !m_profiledBlock && m_mode != JITCompilationMode::InvalidCompilation;
     }
-
+    
     CodeBlock* profiledBlock() const { return m_profiledBlock; }
     JITCompilationMode mode() const { return m_mode; }
-
+    
     bool operator==(const JITCompilationKey& other) const
     {
         return m_profiledBlock == other.m_profiledBlock
             && m_mode == other.m_mode;
     }
-
+    
     unsigned hash() const
     {
         return WTF::pairIntHash(WTF::PtrHash<CodeBlock*>::hash(m_profiledBlock), static_cast<std::underlying_type<JITCompilationMode>::type>(m_mode));
     }
-
+    
     void dump(PrintStream&) const;
 
 private:

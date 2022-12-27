@@ -253,7 +253,7 @@ void RenderFragmentContainer::repaintFragmentedFlowContentRectangle(const Layout
 
     // Now switch to the fragment's writing mode coordinate space and let it repaint itself.
     flipForWritingMode(clippedRect);
-
+    
     // Issue the repaint.
     repaintRectangle(clippedRect);
 }
@@ -276,7 +276,7 @@ LayoutRect RenderFragmentContainer::fragmentedFlowContentRectangle(const LayoutR
 
     // Now switch to the fragment's writing mode coordinate space and let it repaint itself.
     flipForWritingMode(clippedRect);
-
+    
     return clippedRect;
 }
 
@@ -284,9 +284,9 @@ Vector<LayoutRect> RenderFragmentContainer::fragmentRectsForFlowContentRect(cons
 {
     auto portionRect = fragmentedFlowPortionRect();
     auto fragmentLocation = contentBoxRect().location();
-
+    
     auto fragmentRect = contentRect;
-
+    
     auto flippedFragmentedFlowPortionRect = portionRect;
     fragmentedFlow()->flipForWritingMode(flippedFragmentedFlowPortionRect);
     fragmentRect.setLocation(fragmentLocation + (fragmentRect.location() - flippedFragmentedFlowPortionRect.location()));
@@ -305,7 +305,7 @@ void RenderFragmentContainer::attachFragment()
 {
     if (renderTreeBeingDestroyed())
         return;
-
+    
     // A fragment starts off invalid.
     setIsValid(false);
 
@@ -313,7 +313,7 @@ void RenderFragmentContainer::attachFragment()
     // The flow thread lifetime is influenced by the number of fragments attached to it,
     // and we are attaching the fragment to the flow thread.
     installFragmentedFlow();
-
+    
     if (!m_fragmentedFlow)
         return;
 
@@ -440,17 +440,17 @@ void RenderFragmentContainer::ensureOverflowForBox(const RenderBox* box, RefPtr<
         overflow = boxInfo->overflow();
         return;
     }
-
+    
     LayoutRect borderBox = box->borderBoxRectInFragment(this);
     LayoutRect clientBox;
     ASSERT(m_fragmentedFlow->objectShouldFragmentInFlowFragment(box, this));
 
     if (!borderBox.isEmpty()) {
         borderBox = rectFlowPortionForBox(box, borderBox);
-
+        
         clientBox = box->clientBoxRectInFragment(this);
         clientBox = rectFlowPortionForBox(box, clientBox);
-
+        
         m_fragmentedFlow->flipForWritingModeLocalCoordinates(borderBox);
         m_fragmentedFlow->flipForWritingModeLocalCoordinates(clientBox);
     }
@@ -519,7 +519,7 @@ LayoutRect RenderFragmentContainer::layoutOverflowRectForBox(const RenderBox* bo
 {
     RefPtr<RenderOverflow> overflow;
     ensureOverflowForBox(box, overflow, true);
-
+    
     ASSERT(overflow);
     return overflow->layoutOverflowRect();
 }

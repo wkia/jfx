@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -50,10 +50,10 @@ BinarySwitch::BinarySwitch(GPRReg value, const Vector<int64_t>& cases, Type type
 
     if (BinarySwitchInternal::verbose)
         dataLog("Original cases: ", listDump(cases), "\n");
-
+    
     for (unsigned i = 0; i < cases.size(); ++i)
         m_cases.append(Case(cases[i], i));
-
+    
     std::sort(m_cases.begin(), m_cases.end());
 
     if (BinarySwitchInternal::verbose)
@@ -77,12 +77,12 @@ bool BinarySwitch::advance(MacroAssembler& jit)
         m_fallThrough.append(jit.jump());
         return false;
     }
-
+    
     if (m_index == m_branches.size()) {
         RELEASE_ASSERT(m_jumpStack.isEmpty());
         return false;
     }
-
+    
     for (;;) {
         const BranchCode& code = m_branches[m_index++];
         switch (code.kind) {
@@ -169,23 +169,23 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
             dataLog("==> ", code, "\n");
         m_branches.append(code);
     };
-
+    
     unsigned size = end - start;
-
+    
     RELEASE_ASSERT(size);
-
+    
     // This code uses some random numbers to keep things balanced. It's important to keep in mind
     // that this does not improve average-case throughput under the assumption that all cases fire
     // with equal probability. It just ensures that there will not be some switch structure that
     // when combined with some input will always produce pathologically good or pathologically bad
     // performance.
-
+    
     const unsigned leafThreshold = 3;
-
+    
     if (size <= leafThreshold) {
         if (BinarySwitchInternal::verbose)
             dataLog("It's a leaf.\n");
-
+        
         // It turns out that for exactly three cases or less, it's better to just compare each
         // case individually. This saves 1/6 of a branch on average, and up to 1/3 of a branch in
         // extreme cases where the divide-and-conquer bottoms out in a lot of 3-case subswitches.
@@ -195,9 +195,9 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
         // statements, we are more likely to hit one of the cases than we are to fall through to
         // default. Intuitively, if we wanted to improve the performance of default, we would
         // reduce the value of leafThreshold to 2 or even to 1. See below for a deeper discussion.
-
+        
         bool allConsecutive = false;
-
+        
         if ((hardStart || (start && m_cases[start - 1].value == m_cases[start].value - 1))
             && start + size < m_cases.size()
             && m_cases[start + size - 1].value == m_cases[start + size].value - 1) {
@@ -212,31 +212,31 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
 
         if (BinarySwitchInternal::verbose)
             dataLog("allConsecutive = ", allConsecutive, "\n");
-
+        
         Vector<unsigned, 3> localCaseIndices;
         for (unsigned i = 0; i < size; ++i)
             localCaseIndices.append(start + i);
-
+        
         std::shuffle(
             localCaseIndices.begin(), localCaseIndices.end(),
             RandomNumberGenerator(m_weakRandom));
-
+        
         for (unsigned i = 0; i < size - 1; ++i) {
             append(BranchCode(NotEqualToPush, localCaseIndices[i]));
             append(BranchCode(ExecuteCase, localCaseIndices[i]));
             append(BranchCode(Pop));
         }
-
+        
         if (!allConsecutive)
             append(BranchCode(NotEqualToFallThrough, localCaseIndices.last()));
-
+        
         append(BranchCode(ExecuteCase, localCaseIndices.last()));
         return;
     }
 
     if (BinarySwitchInternal::verbose)
         dataLog("It's not a leaf.\n");
-
+        
     // There are two different strategies we could consider here:
     //
     // Isolate median and split: pick a median and check if the comparison value is equal to it;
@@ -331,7 +331,7 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
     // default case would become 1/6 faster on average. But we believe that most switch statements
     // are more likely to take one of the cases than the default, so we use leafThreshold = 3
     // and get a 1/6 speed-up on average for taking an explicit case.
-
+        
     unsigned medianIndex = (start + end) / 2;
 
     if (BinarySwitchInternal::verbose)
@@ -363,10 +363,10 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
         medianIndex += m_weakRandom.getUint32() & 1;
     } else
         RELEASE_ASSERT(medianIndex - start == end - medianIndex);
-
+        
     RELEASE_ASSERT(medianIndex > start);
     RELEASE_ASSERT(medianIndex + 1 < end);
-
+        
     if (BinarySwitchInternal::verbose)
         dataLog("fixed medianIndex = ", medianIndex, "\n");
 

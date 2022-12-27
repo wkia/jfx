@@ -48,11 +48,6 @@ using GlyphBufferGlyph = CGGlyph;
 using GlyphBufferAdvance = CGSize;
 using GlyphBufferOrigin = CGPoint;
 using GlyphBufferStringOffset = CFIndex;
-#elif PLATFORM(JAVA)
-using GlyphBufferGlyph = jint;
-using GlyphBufferAdvance = FloatSize;
-using GlyphBufferOrigin = FloatPoint;
-using GlyphBufferStringOffset = unsigned;
 #else
 using GlyphBufferGlyph = Glyph;
 using GlyphBufferAdvance = FloatSize;

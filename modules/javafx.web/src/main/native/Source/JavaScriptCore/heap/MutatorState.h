@@ -30,13 +30,13 @@ namespace JSC {
 enum class MutatorState {
     // The mutator is running when it's not inside a Heap slow path.
     Running,
-
+    
     // The mutator is in an allocation slow path.
     Allocating,
-
+    
     // The mutator is sweeping.
     Sweeping,
-
+    
     // The mutator is collecting.
     Collecting
 };

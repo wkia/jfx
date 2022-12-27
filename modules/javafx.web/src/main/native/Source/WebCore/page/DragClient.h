@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -32,7 +32,7 @@
 #include "IntPoint.h"
 
 namespace WebCore {
-
+    
 class DataTransfer;
 class Element;
 class Frame;
@@ -51,7 +51,7 @@ public:
     virtual void willPerformDragSourceAction(DragSourceAction, const IntPoint&, DataTransfer&) = 0;
     virtual void didConcludeEditDrag() { }
     virtual OptionSet<DragSourceAction> dragSourceActionMaskForPoint(const IntPoint& rootViewPoint) = 0;
-
+    
     virtual void startDrag(DragItem, DataTransfer&, Frame&) = 0;
     virtual void dragEnded() { }
 
@@ -65,5 +65,5 @@ public:
 
     virtual ~DragClient() = default;
 };
-
+    
 } // namespace WebCore

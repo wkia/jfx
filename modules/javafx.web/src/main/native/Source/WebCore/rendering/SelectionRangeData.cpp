@@ -47,7 +47,7 @@ namespace WebCore {
 namespace {
 
 struct SelectionContext {
-
+    
     using RendererMap = HashMap<RenderObject*, std::unique_ptr<RenderSelectionInfo>>;
     using RenderBlockMap = HashMap<const RenderBlock*, std::unique_ptr<RenderBlockSelectionInfo>>;
 
@@ -164,13 +164,13 @@ void SelectionRangeData::repaint() const
 IntRect SelectionRangeData::collectBounds(ClipToVisibleContent clipToVisibleContent) const
 {
     LOG_WITH_STREAM(Selection, stream << "SelectionData::collectBounds (clip to visible " << (clipToVisibleContent == ClipToVisibleContent::Yes ? "yes" : "no"));
-
+    
     SelectionContext::RendererMap renderers;
     auto* start = m_renderRange.start();
     RenderObject* stop = nullptr;
     if (m_renderRange.end())
         stop = rendererAfterOffset(*m_renderRange.end(), m_renderRange.endOffset());
-
+    
     RenderRangeIterator selectionIterator(start);
     while (start && start != stop) {
         if ((start->canBeSelectionLeaf() || start == m_renderRange.start() || start == m_renderRange.end())
@@ -178,7 +178,7 @@ IntRect SelectionRangeData::collectBounds(ClipToVisibleContent clipToVisibleCont
             // Blocks are responsible for painting line gaps and margin gaps. They must be examined as well.
             renderers.set(start, makeUnique<RenderSelectionInfo>(*start, clipToVisibleContent == ClipToVisibleContent::Yes));
             LOG_WITH_STREAM(Selection, stream << " added start " << *start << " with rect " << renderers.get(start)->rect());
-
+            
             auto* block = start->containingBlock();
             while (block && !is<RenderView>(*block)) {
                 LOG_WITH_STREAM(Scrolling, stream << " added block " << *block);
@@ -192,7 +192,7 @@ IntRect SelectionRangeData::collectBounds(ClipToVisibleContent clipToVisibleCont
         }
         start = selectionIterator.next();
     }
-
+    
     // Now create a single bounding box rect that encloses the whole selection.
     LayoutRect selectionRect;
     for (auto& info : renderers.values()) {
@@ -200,7 +200,7 @@ IntRect SelectionRangeData::collectBounds(ClipToVisibleContent clipToVisibleCont
         LayoutRect currentRect = info->rect();
         if (currentRect.isEmpty())
             continue;
-
+        
         if (auto* repaintContainer = info->repaintContainer()) {
             FloatRect localRect = currentRect;
             FloatQuad absQuad = repaintContainer->localToAbsoluteQuad(localRect);
@@ -209,7 +209,7 @@ IntRect SelectionRangeData::collectBounds(ClipToVisibleContent clipToVisibleCont
         }
         selectionRect.unite(currentRect);
     }
-
+    
     LOG_WITH_STREAM(Selection, stream << " final rect " << selectionRect);
     return snappedIntRect(selectionRect);
 }
@@ -231,7 +231,7 @@ void SelectionRangeData::apply(const RenderRange& newSelection, RepaintMode bloc
         if (auto* end = m_renderRange.end())
             end->setSelectionStateIfNeeded(RenderObject::HighlightState::End);
     }
-
+    
     RenderObject* selectionEnd = nullptr;
     auto* selectionDataEnd = m_renderRange.end();
     if (selectionDataEnd)
@@ -244,10 +244,10 @@ void SelectionRangeData::apply(const RenderRange& newSelection, RepaintMode bloc
             continue;
         currentRenderer->setSelectionStateIfNeeded(RenderObject::HighlightState::Inside);
     }
-
+    
     if (blockRepaintMode != RepaintMode::Nothing)
         m_renderView.layer()->clearBlockSelectionGapsBounds();
-
+    
     // Now that the selection state has been updated for the new objects, walk them again and
     // put them in the new objects list.
     SelectionContext::RendererMap newSelectedRenderers;
@@ -276,10 +276,10 @@ void SelectionRangeData::apply(const RenderRange& newSelection, RepaintMode bloc
             }
         }
     }
-
+    
     if (blockRepaintMode == RepaintMode::Nothing)
         return;
-
+    
     // Have any of the old selected objects changed compared to the new selection?
     for (auto& selectedRendererInfo : oldSelectionData.renderers) {
         auto* renderer = selectedRendererInfo.key;
@@ -295,11 +295,11 @@ void SelectionRangeData::apply(const RenderRange& newSelection, RepaintMode bloc
             }
         }
     }
-
+    
     // Any new objects that remain were not found in the old objects dict, and so they need to be updated.
     for (auto& selectedRendererInfo : newSelectedRenderers)
         selectedRendererInfo.value->repaint();
-
+    
     // Have any of the old blocks changed?
     for (auto& selectedBlockInfo : oldSelectionData.blocks) {
         auto* block = selectedBlockInfo.key;
@@ -313,7 +313,7 @@ void SelectionRangeData::apply(const RenderRange& newSelection, RepaintMode bloc
             }
         }
     }
-
+    
     // Any new blocks that remain were not found in the old blocks dict, and so they need to be updated.
     for (auto& selectedBlockInfo : newSelectedBlocks)
         selectedBlockInfo.value->repaint();

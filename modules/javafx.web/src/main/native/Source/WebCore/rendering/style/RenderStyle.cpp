@@ -388,7 +388,7 @@ RenderStyle* RenderStyle::getCachedPseudoStyle(PseudoId pid) const
     if (!m_cachedPseudoStyles || !m_cachedPseudoStyles->size())
         return nullptr;
 
-    if (styleType() != PseudoId::None)
+    if (styleType() != PseudoId::None) 
         return nullptr;
 
     for (auto& pseudoStyle : *m_cachedPseudoStyles) {
@@ -441,7 +441,7 @@ bool RenderStyle::descendantAffectingNonInheritedPropertiesEqual(const RenderSty
 {
     if (m_rareNonInheritedData.ptr() == other.m_rareNonInheritedData.ptr())
         return true;
-
+    
     return m_rareNonInheritedData->alignItems == other.m_rareNonInheritedData->alignItems
         && m_rareNonInheritedData->justifyItems == other.m_rareNonInheritedData->justifyItems;
 }
@@ -609,7 +609,7 @@ static bool positionChangeIsMovementOnly(const LengthBox& a, const LengthBox& b,
         return false;
     if (!a.top().isIntrinsicOrAuto() && !a.bottom().isIntrinsicOrAuto())
         return false;
-    // If our width is auto and left or right is specified then this
+    // If our width is auto and left or right is specified then this 
     // is not just a movement - we need to resize to our container.
     if ((!a.left().isIntrinsicOrAuto() || !a.right().isIntrinsicOrAuto()) && width.isIntrinsicOrAuto())
         return false;
@@ -971,7 +971,7 @@ bool RenderStyle::changeRequiresPositionedLayoutOnly(const RenderStyle& other, O
         if (position() == PositionType::Absolute && positionChangeIsMovementOnly(m_surroundData->offset, other.m_surroundData->offset, m_boxData->width()))
             return true;
     }
-
+    
     return false;
 }
 
@@ -1225,7 +1225,7 @@ StyleDifference RenderStyle::diff(const RenderStyle& other, OptionSet<StyleDiffe
 
     // FIXME: RecompositeLayer should also behave as a priority bit (e.g when the style change requires layout, we know that
     // the content also needs repaint and it will eventually get repainted,
-    // but a repaint type of change (e.g. color change) does not necessarily trigger recomposition).
+    // but a repaint type of change (e.g. color change) does not necessarily trigger recomposition). 
     if (changeRequiresRecompositeLayer(other, changedContextSensitiveProperties))
         return StyleDifference::RecompositeLayer;
 
@@ -1958,7 +1958,7 @@ LayoutBoxExtent RenderStyle::shadowExtent(const ShadowData* shadow)
         bottom = std::max<LayoutUnit>(bottom, shadow->y() + extentAndSpread);
         left = std::min<LayoutUnit>(left, shadow->x() - extentAndSpread);
     }
-
+    
     return { top, right, bottom, left };
 }
 
@@ -2126,7 +2126,7 @@ Color RenderStyle::visitedDependentColor(CSSPropertyID colorProperty) const
     if (isInSubtreeWithBlendMode())
         return unvisitedColor;
 #endif
-
+    
     Color visitedColor = colorResolvingCurrentColor(colorProperty, true);
 
     // FIXME: Technically someone could explicitly specify the color transparent, but for now we'll just
@@ -2380,9 +2380,9 @@ void RenderStyle::setColumnStylesFromPaginationMode(const Pagination::Mode& pagi
 {
     if (paginationMode == Pagination::Unpaginated)
         return;
-
+    
     setColumnFill(ColumnFill::Auto);
-
+    
     switch (paginationMode) {
     case Pagination::LeftToRightPaginated:
         setColumnAxis(ColumnAxis::Horizontal);
@@ -2659,7 +2659,7 @@ float RenderStyle::computedStrokeWidth(const IntSize& viewportSize) const
     // back to the legacy Webkit text stroke combination in that case.
     if (!hasExplicitlySetStrokeColor())
         return textStrokeWidth();
-
+    
     const Length& length = strokeWidth();
 
     if (length.isPercent()) {
@@ -2670,10 +2670,10 @@ float RenderStyle::computedStrokeWidth(const IntSize& viewportSize) const
             return 0;
         return result.releaseReturnValue();
     }
-
+    
     if (length.isAuto() || !length.isSpecified())
         return 0;
-
+    
     return floatValueForLength(length, viewportSize.width());
 }
 

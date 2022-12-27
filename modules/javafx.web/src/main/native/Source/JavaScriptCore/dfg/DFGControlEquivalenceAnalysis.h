@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -41,7 +41,7 @@ public:
         , m_backwardsDominators(graph.ensureBackwardsDominators())
     {
     }
-
+    
     // This returns true iff:
     //
     // - If b executes then a must have executed before it (a dominates b).
@@ -66,7 +66,7 @@ public:
         return m_dominators.dominates(a, b)
             && m_backwardsDominators.dominates(b, a);
     }
-
+    
     // This returns true iff the execution of a implies that b also executes and vice-versa.
     bool areEquivalent(BasicBlock* a, BasicBlock* b)
     {

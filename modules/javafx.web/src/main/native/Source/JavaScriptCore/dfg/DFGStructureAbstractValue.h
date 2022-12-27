@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -58,7 +58,7 @@ public:
     {
         setClobbered(other.isClobbered());
     }
-
+    
     ALWAYS_INLINE StructureAbstractValue& operator=(RegisteredStructure structure)
     {
         m_set = RegisteredStructureSet(structure);
@@ -77,42 +77,42 @@ public:
         setClobbered(other.isClobbered());
         return *this;
     }
-
+    
     void clear()
     {
         m_set.clear();
         setClobbered(false);
     }
-
+    
     void makeTop()
     {
         m_set.deleteListIfNecessary();
         m_set.m_pointer = topValue;
     }
-
+    
 #if ASSERT_ENABLED
     void assertIsRegistered(Graph&) const;
 #else
     void assertIsRegistered(Graph&) const { }
 #endif
-
+    
     void clobber();
     void observeInvalidationPoint() { setClobbered(false); }
-
+    
     void observeTransition(RegisteredStructure from, RegisteredStructure to);
     void observeTransitions(const TransitionVector&);
-
+    
     static StructureAbstractValue top()
     {
         StructureAbstractValue result;
         result.m_set.m_pointer = topValue;
         return result;
     }
-
+    
     bool isClear() const { return m_set.isEmpty(); }
     bool isTop() const { return m_set.m_pointer == topValue; }
     bool isNeitherClearNorTop() const { return !isClear() && !isTop(); }
-
+    
     // A clobbered abstract value means that the set currently contains the m_set set of
     // structures plus TOP, except that the "plus TOP" will go away at the next invalidation
     // point. Note that it's tempting to think of this as "the set of structures in m_set plus
@@ -131,30 +131,30 @@ public:
 
     // An infinite structure abstract value may currently have any structure.
     bool isInfinite() const { return !isFinite(); }
-
+    
     bool add(RegisteredStructure);
-
+    
     bool merge(const RegisteredStructureSet& other);
-
+    
     ALWAYS_INLINE bool merge(const StructureAbstractValue& other)
     {
         if (other.isClear())
             return false;
-
+        
         if (isTop())
             return false;
-
+        
         if (other.isTop()) {
             makeTop();
             return true;
         }
-
+        
         return mergeSlow(other);
     }
-
+    
     void filter(const RegisteredStructureSet& other);
     void filter(const StructureAbstractValue& other);
-
+    
     ALWAYS_INLINE void filter(SpeculatedType type)
     {
         if (!(type & SpecCell)) {
@@ -170,15 +170,15 @@ public:
         if (isNeitherClearNorTop())
             filterClassInfoSlow(classInfo);
     }
-
+    
     ALWAYS_INLINE bool operator==(const StructureAbstractValue& other) const
     {
         if ((m_set.isThin() && other.m_set.isThin()) || isTop() || other.isTop())
             return m_set.m_pointer == other.m_set.m_pointer;
-
+        
         return equalsSlow(other);
     }
-
+    
     const RegisteredStructureSet& set() const
     {
         ASSERT(!isTop());
@@ -190,19 +190,19 @@ public:
         RELEASE_ASSERT(isFinite());
         return m_set.toStructureSet();
     }
-
+    
     size_t size() const
     {
         ASSERT(!isTop());
         return m_set.size();
     }
-
+    
     RegisteredStructure at(size_t i) const
     {
         ASSERT(!isTop());
         return m_set.at(i);
     }
-
+    
     RegisteredStructure operator[](size_t i) const { return at(i); }
 
     // In most cases, what you really want to do is verify whether the set is top or clobbered, and
@@ -221,10 +221,10 @@ public:
         ASSERT(!isTop());
         m_set.forEach(functor);
     }
-
+    
     void dumpInContext(PrintStream&, DumpContext*) const;
     void dump(PrintStream&) const;
-
+    
     // The methods below are all conservative and err on the side of making 'this' appear bigger
     // than it is. For example, contains() may return true if the set is clobbered or TOP.
     // isSubsetOf() may return false in case of ambiguities. Therefore you should only perform
@@ -233,50 +233,50 @@ public:
 
     bool contains(RegisteredStructure) const;
     JS_EXPORT_PRIVATE bool contains(Structure* structure) const;
-
+    
     bool isSubsetOf(const RegisteredStructureSet& other) const;
     bool isSubsetOf(const StructureAbstractValue& other) const;
-
+    
     bool isSupersetOf(const RegisteredStructureSet& other) const;
     bool isSupersetOf(const StructureAbstractValue& other) const
     {
         return other.isSubsetOf(*this);
     }
-
+    
     bool overlaps(const RegisteredStructureSet& other) const;
     bool overlaps(const StructureAbstractValue& other) const;
 
     bool isSubClassOf(const ClassInfo*) const;
     bool isNotSubClassOf(const ClassInfo*) const;
-
+    
     void validateReferences(const TrackedReferences&) const;
-
+    
 private:
     static constexpr uintptr_t clobberedFlag = RegisteredStructureSet::reservedFlag;
     static constexpr uintptr_t topValue = RegisteredStructureSet::reservedValue;
     static constexpr unsigned polymorphismLimit = 10;
     static constexpr unsigned clobberedSupremacyThreshold = 2;
-
+    
     void filterSlow(SpeculatedType type);
     void filterClassInfoSlow(const ClassInfo*);
     bool mergeSlow(const StructureAbstractValue& other);
-
+    
     bool equalsSlow(const StructureAbstractValue& other) const;
-
+    
     void makeTopWhenThin()
     {
         ASSERT(m_set.isThin());
         m_set.m_pointer = topValue;
     }
-
+    
     bool mergeNotTop(const RegisteredStructureSet& other);
-
+    
     void setClobbered(bool clobbered)
     {
         ASSERT(!isTop() || !clobbered);
         m_set.setReservedFlag(clobbered);
     }
-
+    
     RegisteredStructureSet m_set;
 };
 

@@ -91,11 +91,11 @@ namespace JSC {
     public:
         Interpreter(VM &);
         ~Interpreter();
-
+        
 #if ENABLE(C_LOOP)
         CLoopStack& cloopStack() { return m_cloopStack; }
 #endif
-
+        
         static inline Opcode getOpcode(OpcodeID);
 
         static inline OpcodeID getOpcodeID(Opcode);
@@ -121,13 +121,13 @@ namespace JSC {
 
     private:
         enum ExecutionFlag { Normal, InitializeAndReturn };
-
+        
         static JSValue checkedReturn(JSValue returnValue)
         {
             ASSERT(returnValue);
             return returnValue;
         }
-
+        
         static JSObject* checkedReturn(JSObject* returnValue)
         {
             ASSERT(returnValue);
@@ -142,7 +142,7 @@ namespace JSC {
 #if ENABLE(C_LOOP)
         CLoopStack m_cloopStack;
 #endif
-
+        
 #if ENABLE(COMPUTED_GOTO_OPCODES)
 #if !ENABLE(LLINT_EMBEDDED_OPCODE_ID) || ASSERT_ENABLED
         static HashMap<Opcode, OpcodeID>& opcodeIDTable(); // Maps Opcode => OpcodeID.
@@ -176,7 +176,7 @@ namespace JSC {
     void setupVarargsFrameAndSetThis(JSGlobalObject*, CallFrame* execCaller, CallFrame* execCallee, JSValue thisValue, JSValue arguments, uint32_t firstVarArgOffset, uint32_t length);
     void setupForwardArgumentsFrame(JSGlobalObject*, CallFrame* execCaller, CallFrame* execCallee, uint32_t length);
     void setupForwardArgumentsFrameAndSetThis(JSGlobalObject*, CallFrame* execCaller, CallFrame* execCallee, JSValue thisValue, uint32_t length);
-
+    
 } // namespace JSC
 
 namespace WTF {

@@ -49,7 +49,7 @@ public:
     class Client {
     protected:
         virtual ~Client() = default;
-
+    
     public:
         virtual void willMoveToPage(PageOverlay&, Page*) = 0;
         virtual void didMoveToPage(PageOverlay&, Page*) = 0;
@@ -87,7 +87,7 @@ public:
     bool copyAccessibilityAttributeStringValueForPoint(String attribute, FloatPoint parameter, String& value);
     bool copyAccessibilityAttributeBoolValueForPoint(String attribute, FloatPoint parameter, bool& value);
     Vector<String> copyAccessibilityAttributeNames(bool parameterizedNames);
-
+    
     void startFadeInAnimation();
     void startFadeOutAnimation();
     WEBCORE_EXPORT void stopFadeOutAnimation();

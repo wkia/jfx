@@ -144,7 +144,7 @@ void HTMLStyleElement::notifyLoadedSheetAndAllCriticalSubresources(bool errorOcc
 }
 
 void HTMLStyleElement::addSubresourceAttributeURLs(ListHashSet<URL>& urls) const
-{
+{    
     HTMLElement::addSubresourceAttributeURLs(urls);
 
     if (auto styleSheet = makeRefPtr(this->sheet())) {

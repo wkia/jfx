@@ -127,7 +127,7 @@ NO_RETURN void ResourceUsageThread::threadBody()
 {
     // Wait a bit after waking up for the first time.
     WTF::sleep(10_ms);
-
+    
     while (true) {
         // Only do work if we have observers.
         waitUntilObservers();

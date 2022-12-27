@@ -91,7 +91,7 @@ bool RenderingUpdateScheduler::isScheduled() const
     ASSERT_IMPLIES(m_refreshTimer.get(), m_scheduled);
     return m_scheduled;
 }
-
+    
 void RenderingUpdateScheduler::startTimer(Seconds delay)
 {
     LOG_WITH_STREAM(EventLoop, stream << "RenderingUpdateScheduler for page " << &m_page << " startTimer(" << delay << ")");
@@ -126,7 +126,7 @@ void RenderingUpdateScheduler::displayRefreshFired()
     tracePoint(TriggerRenderingUpdate);
 
     clearScheduled();
-
+    
     if (m_page.chrome().client().shouldTriggerRenderingUpdate(m_rescheduledRenderingUpdateCount)) {
         triggerRenderingUpdate();
         m_rescheduledRenderingUpdateCount = 0;

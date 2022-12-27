@@ -56,30 +56,30 @@ struct PrettyPrinter {
         : out(out)
         , separator("|")
     { }
-
+    
     template<typename T>
     void print(const T& value)
     {
         out.print(separator, value);
     }
-
+    
     PrintStream& out;
     CommaPrinter separator;
 };
-
+    
 void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
 {
     StringPrintStream strStream;
     PrettyPrinter out(outStream);
     PrettyPrinter strOut(strStream);
-
+    
     if (value == SpecNone) {
         out.print("None");
         return;
     }
-
+    
     bool isTop = true;
-
+    
     if ((value & SpecCell) == SpecCell)
         strOut.print("Cell");
     else {
@@ -90,12 +90,12 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
                 strOut.print("OtherCell");
             else
                 isTop = false;
-
+    
             if (value & SpecObjectOther)
                 strOut.print("OtherObj");
             else
                 isTop = false;
-
+    
             if (value & SpecFinalObject)
                 strOut.print("Final");
             else
@@ -105,22 +105,22 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
                 strOut.print("Array");
             else
                 isTop = false;
-
+    
             if (value & SpecInt8Array)
                 strOut.print("Int8Array");
             else
                 isTop = false;
-
+    
             if (value & SpecInt16Array)
                 strOut.print("Int16Array");
             else
                 isTop = false;
-
+    
             if (value & SpecInt32Array)
                 strOut.print("Int32Array");
             else
                 isTop = false;
-
+    
             if (value & SpecUint8Array)
                 strOut.print("Uint8Array");
             else
@@ -130,22 +130,22 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
                 strOut.print("Uint8ClampedArray");
             else
                 isTop = false;
-
+    
             if (value & SpecUint16Array)
                 strOut.print("Uint16Array");
             else
                 isTop = false;
-
+    
             if (value & SpecUint32Array)
                 strOut.print("Uint32Array");
             else
                 isTop = false;
-
+    
             if (value & SpecFloat32Array)
                 strOut.print("Float32array");
             else
                 isTop = false;
-
+    
             if (value & SpecFloat64Array)
                 strOut.print("Float64Array");
             else
@@ -165,22 +165,22 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
                 strOut.print("Function");
             else
                 isTop = false;
-
+    
             if (value & SpecDirectArguments)
                 strOut.print("DirectArguments");
             else
                 isTop = false;
-
+    
             if (value & SpecScopedArguments)
                 strOut.print("ScopedArguments");
             else
                 isTop = false;
-
+    
             if (value & SpecStringObject)
                 strOut.print("StringObject");
             else
                 isTop = false;
-
+    
             if (value & SpecRegExpObject)
                 strOut.print("RegExpObject");
             else
@@ -239,7 +239,7 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
                 strOut.print("StringIdent");
             else
                 isTop = false;
-
+            
             if (value & SpecStringVar)
                 strOut.print("StringVar");
             else
@@ -251,7 +251,7 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
         else
             isTop = false;
     }
-
+    
     if (value == SpecInt32Only)
         strOut.print("Int32");
     else {
@@ -259,7 +259,7 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
             strOut.print("BoolInt32");
         else
             isTop = false;
-
+        
         if (value & SpecNonBoolInt32)
             strOut.print("NonBoolInt32");
         else
@@ -273,12 +273,12 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
             strOut.print("AnyIntAsDouble");
         else
             isTop = false;
-
+        
         if (value & SpecNonIntAsDouble)
             strOut.print("NonIntAsDouble");
         else
             isTop = false;
-
+        
         if (value & SpecDoublePureNaN)
             strOut.print("DoublePureNaN");
         else
@@ -303,17 +303,17 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
 
     if (value & SpecDoubleImpureNaN)
         strOut.print("DoubleImpureNaN");
-
+    
     if (value & SpecBoolean)
         strOut.print("Bool");
     else
         isTop = false;
-
+    
     if (value & SpecOther)
         strOut.print("Other");
     else
         isTop = false;
-
+    
     if (value & SpecEmpty)
         strOut.print("Empty");
     else
@@ -328,7 +328,7 @@ void dumpSpeculation(PrintStream& outStream, SpeculatedType value)
             strOut.print("NonInt32AsInt52");
     } else
         isTop = false;
-
+    
     if (value == SpecBytecodeTop)
         out.print("BytecodeTop");
     else if (value == SpecHeapTop)
@@ -469,11 +469,11 @@ SpeculatedType speculationFromClassInfoInheritance(const ClassInfo* classInfo)
     static_assert(std::is_final_v<JSFinalObject>);
     if (classInfo == JSFinalObject::info())
         return SpecFinalObject;
-
+    
     static_assert(std::is_final_v<DirectArguments>);
     if (classInfo == DirectArguments::info())
         return SpecDirectArguments;
-
+    
     static_assert(std::is_final_v<ScopedArguments>);
     if (classInfo == ScopedArguments::info())
         return SpecScopedArguments;
@@ -524,13 +524,13 @@ SpeculatedType speculationFromClassInfoInheritance(const ClassInfo* classInfo)
 
     if (classInfo->isSubClassOf(JSPromise::info()))
         return SpecPromiseObject;
-
+    
     if (isTypedView(classInfo->typedArrayStorageType))
         return speculationFromTypedArrayType(classInfo->typedArrayStorageType);
-
+    
     if (classInfo->isSubClassOf(JSObject::info()))
         return SpecObjectOther;
-
+    
     return SpecCellOther;
 }
 
@@ -652,28 +652,28 @@ TypedArrayType typedArrayTypeFromSpeculation(SpeculatedType type)
 {
     if (isInt8ArraySpeculation(type))
         return TypeInt8;
-
+        
     if (isInt16ArraySpeculation(type))
         return TypeInt16;
-
+        
     if (isInt32ArraySpeculation(type))
         return TypeInt32;
-
+        
     if (isUint8ArraySpeculation(type))
         return TypeUint8;
-
+        
     if (isUint8ClampedArraySpeculation(type))
         return TypeUint8Clamped;
-
+        
     if (isUint16ArraySpeculation(type))
         return TypeUint16;
-
+        
     if (isUint32ArraySpeculation(type))
         return TypeUint32;
-
+        
     if (isFloat32ArraySpeculation(type))
         return TypeFloat32;
-
+        
     if (isFloat64ArraySpeculation(type))
         return TypeFloat64;
 
@@ -682,7 +682,7 @@ TypedArrayType typedArrayTypeFromSpeculation(SpeculatedType type)
 
     if (isBigUint64ArraySpeculation(type))
         return TypeBigUint64;
-
+    
     return NotTypedArray;
 }
 
@@ -752,24 +752,24 @@ bool valuesCouldBeEqual(SpeculatedType a, SpeculatedType b)
 {
     a = leastUpperBoundOfEquivalentSpeculations(a);
     b = leastUpperBoundOfEquivalentSpeculations(b);
-
+    
     // Anything could be equal to a string.
     if (a & SpecString)
         return true;
     if (b & SpecString)
         return true;
-
+    
     // If both sides are definitely only objects, then equality is fairly sane.
     if (isObjectSpeculation(a) && isObjectSpeculation(b))
         return !!(a & b);
-
+    
     // If either side could be an object or not, then we could call toString or
     // valueOf, which could return anything.
     if (a & SpecObject)
         return true;
     if (b & SpecObject)
         return true;
-
+    
     // Neither side is an object or string, so the world is relatively sane.
     return !!(a & b);
 }

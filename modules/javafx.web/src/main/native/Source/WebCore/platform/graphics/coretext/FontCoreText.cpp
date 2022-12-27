@@ -195,7 +195,7 @@ void Font::platformInit()
         descent = 3;
     }
 #endif
-
+    
     if (platformData().orientation() == FontOrientation::Vertical && !isTextOrientationFallback())
         m_hasVerticalGlyphs = fontHasVerticalGlyphs(m_platformData.ctFont());
 

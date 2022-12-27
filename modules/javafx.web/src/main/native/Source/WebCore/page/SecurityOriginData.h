@@ -44,7 +44,7 @@ struct SecurityOriginData {
         : protocol(WTF::HashTableDeletedValue)
     {
     }
-
+    
     WEBCORE_EXPORT static SecurityOriginData fromFrame(Frame*);
     static SecurityOriginData fromURL(const URL& url)
     {
@@ -70,7 +70,7 @@ struct SecurityOriginData {
     // file names. This format should be used in storage APIs only.
     WEBCORE_EXPORT String databaseIdentifier() const;
     WEBCORE_EXPORT static std::optional<SecurityOriginData> fromDatabaseIdentifier(const String&);
-
+    
     template<class Encoder> void encode(Encoder&) const;
     template<class Decoder> static std::optional<SecurityOriginData> decode(Decoder&);
 
@@ -78,12 +78,12 @@ struct SecurityOriginData {
     {
         return protocol.isNull() && host.isNull() && port == std::nullopt;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return protocol.isHashTableDeletedValue();
     }
-
+    
     WEBCORE_EXPORT String toString() const;
 
 #if !LOG_DISABLED
@@ -109,17 +109,17 @@ std::optional<SecurityOriginData> SecurityOriginData::decode(Decoder& decoder)
     decoder >> protocol;
     if (!protocol)
         return std::nullopt;
-
+    
     std::optional<String> host;
     decoder >> host;
     if (!host)
         return std::nullopt;
-
+    
     std::optional<std::optional<uint16_t>> port;
     decoder >> port;
     if (!port)
         return std::nullopt;
-
+    
     SecurityOriginData data { WTFMove(*protocol), WTFMove(*host), WTFMove(*port) };
     if (data.isHashTableDeletedValue())
         return std::nullopt;

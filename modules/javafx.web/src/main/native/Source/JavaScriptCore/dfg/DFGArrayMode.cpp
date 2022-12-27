@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -79,7 +79,7 @@ ArrayMode ArrayMode::fromObserved(const ConcurrentJSLocker& locker, ArrayProfile
         if (action == Array::Write)
             return ArrayMode(Array::SelectUsingArguments, Array::Array, Array::OutOfBounds, Array::Convert, action);
         return ArrayMode(Array::Undecided, Array::Array, Array::OutOfBounds, Array::AsIs, action).withProfile(locker, profile, makeSafe);
-
+        
     case asArrayModesIgnoringTypedArrays(NonArray) | asArrayModesIgnoringTypedArrays(ArrayWithUndecided):
         if (action == Array::Write && !profile->mayInterceptIndexedAccesses(locker))
             return ArrayMode(Array::SelectUsingArguments, Array::PossiblyArray, Array::OutOfBounds, Array::Convert, action);
@@ -157,10 +157,10 @@ ArrayMode ArrayMode::fromObserved(const ConcurrentJSLocker& locker, ArrayProfile
 
         if ((observed & asArrayModesIgnoringTypedArrays(NonArray)) && profile->mayInterceptIndexedAccesses(locker))
             return ArrayMode(Array::SelectUsingPredictions).withSpeculationFromProfile(locker, profile, makeSafe);
-
+        
         Array::Type type;
         Array::Class arrayClass;
-
+        
         if (shouldUseSlowPutArrayStorage(observed))
             type = Array::SlowPutArrayStorage;
         else if (shouldUseFastArrayStorage(observed))
@@ -173,7 +173,7 @@ ArrayMode ArrayMode::fromObserved(const ConcurrentJSLocker& locker, ArrayProfile
             type = Array::Int32;
         else
             type = Array::SelectUsingArguments;
-
+        
         if (hasSeenArray(observed) && hasSeenNonArray(observed))
             arrayClass = Array::PossiblyArray;
         else if (hasSeenArray(observed))
@@ -182,7 +182,7 @@ ArrayMode ArrayMode::fromObserved(const ConcurrentJSLocker& locker, ArrayProfile
             arrayClass = nonArray;
         else
             arrayClass = Array::PossiblyArray;
-
+        
         return ArrayMode(type, arrayClass, Array::Convert, action).withProfile(locker, profile, makeSafe);
     }
 }
@@ -208,14 +208,14 @@ ArrayMode ArrayMode::refine(
         // to fix that, but for now I'm leaving it as-is.
         return ArrayMode(Array::ForceExit, action());
     }
-
+    
     if (!isInt32Speculation(index))
         return ArrayMode(Array::Generic, action());
-
+    
     // If we had exited because of an exotic object behavior, then don't try to specialize.
     if (graph.hasExitSite(node->origin.semantic, ExoticObjectMode))
         return ArrayMode(Array::Generic, action());
-
+    
     // Note: our profiling currently doesn't give us good information in case we have
     // an unlikely control flow path that sets the base to a non-cell value. Value
     // profiling and prediction propagation will probably tell us that the value is
@@ -235,7 +235,7 @@ ArrayMode ArrayMode::refine(
         }
         return result;
     };
-
+    
     switch (type()) {
     case Array::SelectUsingArguments:
         if (!value)
@@ -274,12 +274,12 @@ ArrayMode ArrayMode::refine(
         if (isFullNumberSpeculation(value))
             return withTypeAndConversion(Array::Double, Array::Convert);
         return withTypeAndConversion(Array::Contiguous, Array::Convert);
-
+        
     case Array::Double:
         if (!value || isFullNumberSpeculation(value))
             return *this;
         return withTypeAndConversion(Array::Contiguous, Array::Convert);
-
+        
     case Array::Contiguous:
         return *this;
 
@@ -303,10 +303,10 @@ ArrayMode ArrayMode::refine(
     case Array::Unprofiled:
     case Array::SelectUsingPredictions: {
         base &= ~SpecOther;
-
+        
         if (isStringSpeculation(base))
             return withType(Array::String);
-
+        
         if (isDirectArgumentsSpeculation(base) || isScopedArgumentsSpeculation(base)) {
             // Handle out-of-bounds accesses as generic accesses.
             Array::Type type = isDirectArgumentsSpeculation(base) ? Array::DirectArguments : Array::ScopedArguments;
@@ -319,7 +319,7 @@ ArrayMode ArrayMode::refine(
             }
             return withType(type);
         }
-
+        
         ArrayMode result;
         switch (node->op()) {
         case PutByVal:
@@ -328,7 +328,7 @@ ArrayMode ArrayMode::refine(
             else
                 result = withSpeculation(Array::InBounds);
             break;
-
+            
         default:
             result = withSpeculation(Array::InBounds);
             break;
@@ -336,28 +336,28 @@ ArrayMode ArrayMode::refine(
 
         if (isInt8ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Int8Array));
-
+        
         if (isInt16ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Int16Array));
-
+        
         if (isInt32ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Int32Array));
-
+        
         if (isUint8ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Uint8Array));
-
+        
         if (isUint8ClampedArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Uint8ClampedArray));
-
+        
         if (isUint16ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Uint16Array));
-
+        
         if (isUint32ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Uint32Array));
-
+        
         if (isFloat32ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Float32Array));
-
+        
         if (isFloat64ArraySpeculation(base))
             return typedArrayResult(result.withType(Array::Float64Array));
 
@@ -380,7 +380,7 @@ ArrayMode ArrayMode::refine(
 Structure* ArrayMode::originalArrayStructure(Graph& graph, const CodeOrigin& codeOrigin) const
 {
     JSGlobalObject* globalObject = graph.globalObjectFor(codeOrigin);
-
+    
     switch (arrayClass()) {
     case Array::OriginalCopyOnWriteArray: {
         if (conversion() == Array::AsIs) {
@@ -416,15 +416,15 @@ Structure* ArrayMode::originalArrayStructure(Graph& graph, const CodeOrigin& cod
             return nullptr;
         }
     }
-
+        
     case Array::OriginalNonArray: {
         TypedArrayType type = typedArrayType();
         if (type == NotTypedArray)
             return nullptr;
-
+        
         return globalObject->typedArrayStructureConcurrently(type);
     }
-
+        
     default:
         return nullptr;
     }
@@ -506,28 +506,28 @@ bool ArrayMode::alreadyChecked(Graph& graph, Node* node, const AbstractValue& va
     switch (type()) {
     case Array::Generic:
         return true;
-
+        
     case Array::ForceExit:
         return false;
-
+        
     case Array::String:
         return speculationChecked(value.m_type, SpecString);
-
+        
     case Array::Int32:
         return alreadyChecked(graph, node, value, Int32Shape);
-
+        
     case Array::Double:
         return alreadyChecked(graph, node, value, DoubleShape);
-
+        
     case Array::Contiguous:
         return alreadyChecked(graph, node, value, ContiguousShape);
-
+        
     case Array::ArrayStorage:
         return alreadyChecked(graph, node, value, ArrayStorageShape);
 
     case Array::Undecided:
         return alreadyChecked(graph, node, value, UndecidedShape);
-
+        
     case Array::SlowPutArrayStorage:
         switch (arrayClass()) {
         case Array::OriginalArray:
@@ -535,7 +535,7 @@ bool ArrayMode::alreadyChecked(Graph& graph, Node* node, const AbstractValue& va
             CRASH();
             return false;
         }
-
+        
         case Array::Array: {
             if (arrayModesAlreadyChecked(value.m_arrayModes, asArrayModesIgnoringTypedArrays(ArrayWithArrayStorage) | asArrayModesIgnoringTypedArrays(ArrayWithSlowPutArrayStorage)))
                 return true;
@@ -584,31 +584,31 @@ bool ArrayMode::alreadyChecked(Graph& graph, Node* node, const AbstractValue& va
         default:
             CRASH();
         }
-
+        
     case Array::DirectArguments:
         return speculationChecked(value.m_type, SpecDirectArguments);
-
+        
     case Array::ScopedArguments:
         return speculationChecked(value.m_type, SpecScopedArguments);
-
+        
     case Array::Int8Array:
         return speculationChecked(value.m_type, SpecInt8Array);
-
+        
     case Array::Int16Array:
         return speculationChecked(value.m_type, SpecInt16Array);
-
+        
     case Array::Int32Array:
         return speculationChecked(value.m_type, SpecInt32Array);
-
+        
     case Array::Uint8Array:
         return speculationChecked(value.m_type, SpecUint8Array);
-
+        
     case Array::Uint8ClampedArray:
         return speculationChecked(value.m_type, SpecUint8ClampedArray);
-
+        
     case Array::Uint16Array:
         return speculationChecked(value.m_type, SpecUint16Array);
-
+        
     case Array::Uint32Array:
         return speculationChecked(value.m_type, SpecUint32Array);
 
@@ -632,7 +632,7 @@ bool ArrayMode::alreadyChecked(Graph& graph, Node* node, const AbstractValue& va
     case Array::SelectUsingArguments:
         break;
     }
-
+    
     CRASH();
     return false;
 }

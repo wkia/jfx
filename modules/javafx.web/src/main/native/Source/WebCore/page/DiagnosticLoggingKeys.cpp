@@ -843,6 +843,6 @@ String DiagnosticLoggingKeys::backgroundCPUUsageToDiagnosticLoggingKey(double cp
         return "50to70"_s;
     return "over70"_s;
 }
-
+    
 } // namespace WebCore
 

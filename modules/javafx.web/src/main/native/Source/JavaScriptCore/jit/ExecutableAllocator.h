@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -73,7 +73,7 @@ public:
     RefPtr<ExecutableMemoryHandle> allocate(size_t, JITCompilationEffort) { return nullptr; }
 
     static void setJITEnabled(bool) { };
-
+    
     bool isValidExecutableMemory(const AbstractLocker&, void*) { return false; }
 
     static size_t committedByteCount() { return 0; }
@@ -160,15 +160,15 @@ public:
     bool isValid() const;
 
     static bool underMemoryPressure();
-
+    
     static double memoryPressureMultiplier(size_t addedMemoryUsage);
-
+    
 #if ENABLE(META_ALLOCATOR_PROFILE)
     static void dumpProfile();
 #else
     static void dumpProfile() { }
 #endif
-
+    
     JS_EXPORT_PRIVATE static void setJITEnabled(bool);
 
     RefPtr<ExecutableMemoryHandle> allocate(size_t sizeInBytes, JITCompilationEffort);

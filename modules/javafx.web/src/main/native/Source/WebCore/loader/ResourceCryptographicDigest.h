@@ -62,7 +62,7 @@ struct ResourceCryptographicDigest {
 
 struct EncodedResourceCryptographicDigest {
     using Algorithm = ResourceCryptographicDigest::Algorithm;
-
+    
     Algorithm algorithm;
     String digest;
 };

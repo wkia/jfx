@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -33,13 +33,13 @@ struct InlineCallFrame;
 
 struct TerminatedCodeOrigin {
     TerminatedCodeOrigin() { }
-
+    
     TerminatedCodeOrigin(const CodeOrigin& codeOrigin, InlineCallFrame* terminal)
         : codeOrigin(codeOrigin)
         , terminal(terminal)
     {
     }
-
+    
     CodeOrigin codeOrigin;
     InlineCallFrame* terminal { nullptr };
 };
@@ -49,7 +49,7 @@ struct TerminatedCodeOriginHashTranslator {
     {
         return value.codeOrigin.approximateHash(value.terminal);
     }
-
+    
     static bool equal(const CodeOrigin& a, const TerminatedCodeOrigin& b)
     {
         return b.codeOrigin.isApproximatelyEqualTo(a, b.terminal);

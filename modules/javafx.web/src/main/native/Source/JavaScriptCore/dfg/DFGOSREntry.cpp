@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -44,7 +44,7 @@ void OSREntryData::dumpInContext(PrintStream& out, DumpContext* context) const
 {
     out.print(m_bytecodeIndex, ", machine code = ", RawPointer(m_machineCode.executableAddress()));
     out.print(", stack rules = [");
-
+    
     auto printOperand = [&] (VirtualRegister reg) {
         out.print(inContext(m_expectedValues.operand(reg), context), " (");
         VirtualRegister toReg;
@@ -72,7 +72,7 @@ void OSREntryData::dumpInContext(PrintStream& out, DumpContext* context) const
             out.print(", forced machine int");
         out.print(")");
     };
-
+    
     CommaPrinter comma;
     for (size_t argumentIndex = m_expectedValues.numberOfArguments(); argumentIndex--;) {
         out.print(comma, "arg", argumentIndex, ":");
@@ -82,7 +82,7 @@ void OSREntryData::dumpInContext(PrintStream& out, DumpContext* context) const
         out.print(comma, "loc", localIndex, ":");
         printOperand(virtualRegisterForLocal(localIndex));
     }
-
+    
     out.print("], machine stack used = ", m_machineStackUsed);
 }
 
@@ -106,15 +106,15 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     dataLogLnIf(Options::verboseOSR(),
         "DFG OSR in ", *codeBlock->alternative(), " -> ", *codeBlock,
         " from ", bytecodeIndex);
-
+    
     sanitizeStackForVM(vm);
-
+    
     if (bytecodeIndex)
         codeBlock->ownerExecutable()->setDidTryToEnterInLoop(true);
-
+    
     if (codeBlock->jitType() != JITType::DFGJIT) {
         RELEASE_ASSERT(codeBlock->jitType() == JITType::FTLJIT);
-
+        
         // When will this happen? We could have:
         //
         // - An exit from the FTL JIT into the baseline JIT followed by an attempt
@@ -131,21 +131,21 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
         //   might be worth addressing this case, but I just think this case will
         //   be super rare. For now, if it does happen, it'll cause some compilation
         //   thrashing.
-
+        
         dataLogLnIf(Options::verboseOSR(), "    OSR failed because the target code block is not DFG.");
         return nullptr;
     }
-
+    
     JITCode* jitCode = codeBlock->jitCode()->dfg();
     OSREntryData* entry = jitCode->osrEntryDataForBytecodeIndex(bytecodeIndex);
-
+    
     if (!entry) {
         dataLogLnIf(Options::verboseOSR(), "    OSR failed because the entrypoint was optimized out.");
         return nullptr;
     }
-
+    
     ASSERT(entry->m_bytecodeIndex == bytecodeIndex);
-
+    
     // The code below checks if it is safe to perform OSR entry. It may find
     // that it is unsafe to do so, for any number of reasons, which are documented
     // below. If the code decides not to OSR then it returns 0, and it's the caller's
@@ -153,7 +153,7 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     // both safe and efficient to continue executing baseline code for now. This
     // should almost certainly include calling either codeBlock->optimizeAfterWarmUp()
     // or codeBlock->dontOptimizeAnytimeSoon().
-
+    
     // 1) Verify predictions. If the predictions are inconsistent with the actual
     //    values, then OSR entry is not possible at this time. It's tempting to
     //    assume that we could somehow avoid this case. We can certainly avoid it
@@ -169,14 +169,14 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     //    just an anomaly in the sense that the older CodeBlock simply went off
     //    into a less-likely path. So, the wisest course of action is to simply not
     //    OSR at this time.
-
+    
     for (size_t argument = 0; argument < entry->m_expectedValues.numberOfArguments(); ++argument) {
         JSValue value;
         if (!argument)
             value = callFrame->thisValue();
         else
             value = callFrame->argument(argument - 1);
-
+        
         if (!entry->m_expectedValues.argument(argument).validateOSREntryValue(value, FlushedJSValue)) {
             dataLogLnIf(Options::verboseOSR(),
                 "    OSR failed because argument ", argument, " is ", value,
@@ -184,7 +184,7 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
             return nullptr;
         }
     }
-
+    
     for (size_t local = 0; local < entry->m_expectedValues.numberOfLocals(); ++local) {
         int localOffset = virtualRegisterForLocal(local).offset();
         JSValue value = callFrame->registers()[localOffset].asanUnsafeJSValue();
@@ -228,20 +228,20 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     //    boundaries to start throwing RangeErrors. Although that would be possible,
     //    it seems silly: you'd be diverting the program to error handling when it
     //    would have otherwise just kept running albeit less quickly.
-
+    
     unsigned frameSizeForCheck = jitCode->common.requiredRegisterCountForExecutionAndExit();
     if (UNLIKELY(!vm.ensureStackCapacityFor(&callFrame->registers()[virtualRegisterForLocal(frameSizeForCheck - 1).offset()]))) {
         dataLogLnIf(Options::verboseOSR(), "    OSR failed because stack growth failed.");
         return nullptr;
     }
-
+    
     dataLogLnIf(Options::verboseOSR(), "    OSR should succeed.");
 
     // At this point we're committed to entering. We will do some work to set things up,
     // but we also rely on our caller recognizing that when we return a non-null pointer,
     // that means that we're already past the point of no return and we must succeed at
     // entering.
-
+    
     // 3) Set up the data in the scratch buffer and perform data format conversions.
 
     unsigned frameSize = jitCode->common.frameRegisterCount;
@@ -249,9 +249,9 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     unsigned maxFrameSize = std::max(frameSize, baselineFrameSize);
 
     Register* scratch = bitwise_cast<Register*>(vm.scratchBufferForSize(sizeof(Register) * (2 + CallFrame::headerSizeInRegisters + maxFrameSize))->dataBuffer());
-
+    
     *bitwise_cast<size_t*>(scratch + 0) = frameSize;
-
+    
     void* targetPC = entry->m_machineCode.executableAddress();
     RELEASE_ASSERT(codeBlock->jitCode()->contains(entry->m_machineCode.untaggedExecutableAddress()));
     dataLogLnIf(Options::verboseOSR(), "    OSR using target PC ", RawPointer(targetPC));
@@ -259,32 +259,32 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
     *bitwise_cast<void**>(scratch + 1) = tagCodePtrWithStackPointerForJITCall(untagCodePtr<OSREntryPtrTag>(targetPC), callFrame);
 
     Register* pivot = scratch + 2 + CallFrame::headerSizeInRegisters;
-
+    
     for (int index = -CallFrame::headerSizeInRegisters; index < static_cast<int>(baselineFrameSize); ++index) {
         VirtualRegister reg(-1 - index);
-
+        
         if (reg.isLocal()) {
             if (entry->m_localsForcedDouble.get(reg.toLocal())) {
                 *bitwise_cast<double*>(pivot + index) = callFrame->registers()[reg.offset()].asanUnsafeJSValue().asNumber();
                 continue;
             }
-
+            
             if (entry->m_localsForcedAnyInt.get(reg.toLocal())) {
                 *bitwise_cast<int64_t*>(pivot + index) = callFrame->registers()[reg.offset()].asanUnsafeJSValue().asAnyInt() << JSValue::int52ShiftAmount;
                 continue;
             }
         }
-
+        
         pivot[index] = callFrame->registers()[reg.offset()].asanUnsafeJSValue();
     }
-
+    
     // 4) Reshuffle those registers that need reshuffling.
     Vector<JSValue> temporaryLocals(entry->m_reshufflings.size());
     for (unsigned i = entry->m_reshufflings.size(); i--;)
         temporaryLocals[i] = pivot[VirtualRegister(entry->m_reshufflings[i].fromOffset).toLocal()].asanUnsafeJSValue();
     for (unsigned i = entry->m_reshufflings.size(); i--;)
         pivot[VirtualRegister(entry->m_reshufflings[i].toOffset).toLocal()] = temporaryLocals[i];
-
+    
     // 5) Clear those parts of the call frame that the DFG ain't using. This helps GC on
     //    some programs by eliminating some stale pointer pathologies.
     for (unsigned i = frameSize; i--;) {
@@ -307,7 +307,7 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
             continue;
         RELEASE_ASSERT(currentEntry.reg().isGPR());
         RegisterAtOffset* calleeSavesEntry = allCalleeSaves->find(currentEntry.reg());
-
+        
         if constexpr (CallerFrameAndPC::sizeInRegisters == 2)
             *(bitwise_cast<intptr_t*>(pivot - 1) - currentEntry.offsetAsIndex()) = record->calleeSaveRegistersBuffer[calleeSavesEntry->offsetAsIndex()];
         else {
@@ -335,11 +335,11 @@ void* prepareOSREntry(VM& vm, CallFrame* callFrame, CodeBlock* codeBlock, Byteco
         }
     }
 #endif
-
+    
     // 7) Fix the call frame to have the right code block.
-
+    
     *bitwise_cast<CodeBlock**>(pivot - (CallFrameSlot::codeBlock + 1)) = codeBlock;
-
+    
     dataLogLnIf(Options::verboseOSR(), "    OSR returning data buffer ", RawPointer(scratch));
     return scratch;
 }
@@ -385,7 +385,7 @@ MacroAssemblerCodePtr<ExceptionHandlerPtrTag> prepareCatchOSREntry(VM& vm, CallF
             break;
         case DFG::FlushedJSValue:
             // An argument is trivially a JSValue.
-            break;
+            break; 
         default:
             RELEASE_ASSERT_NOT_REACHED();
         }

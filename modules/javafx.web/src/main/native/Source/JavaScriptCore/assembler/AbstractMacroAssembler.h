@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -62,7 +62,7 @@ public:
         Success,
         Failure
     };
-
+    
     static StatusCondition invert(StatusCondition condition)
     {
         switch (condition) {
@@ -96,7 +96,7 @@ public:
     typedef typename AssemblerType::RegisterID RegisterID;
     typedef typename AssemblerType::SPRegisterID SPRegisterID;
     typedef typename AssemblerType::FPRegisterID FPRegisterID;
-
+    
     static constexpr RegisterID firstRegister() { return AssemblerType::firstRegister(); }
     static constexpr RegisterID lastRegister() { return AssemblerType::lastRegister(); }
     static constexpr unsigned numberOfRegisters() { return AssemblerType::numberOfRegisters(); }
@@ -132,7 +132,7 @@ public:
     };
 
     struct BaseIndex;
-
+    
     static RegisterID withSwappedRegister(RegisterID original, RegisterID left, RegisterID right)
     {
         if (original == left)
@@ -141,7 +141,7 @@ public:
             return left;
         return original;
     }
-
+    
     // Address:
     //
     // Describes a simple base-offset address.
@@ -151,19 +151,19 @@ public:
             , offset(offset)
         {
         }
-
+        
         Address withOffset(int32_t additionalOffset)
         {
             return Address(base, offset + additionalOffset);
         }
-
+        
         Address withSwappedRegister(RegisterID left, RegisterID right)
         {
             return Address(AbstractMacroAssembler::withSwappedRegister(base, left, right), offset);
         }
-
+        
         BaseIndex indexedBy(RegisterID index, Scale) const;
-
+        
         RegisterID base;
         int32_t offset;
     };
@@ -174,7 +174,7 @@ public:
             , offset(offset)
         {
         }
-
+        
         RegisterID base;
         intptr_t offset;
     };
@@ -227,13 +227,13 @@ public:
             ASSERT(extend == Extend::None);
 #endif
         }
-
+        
         RegisterID base;
         RegisterID index;
         Scale scale;
         int32_t offset;
         Extend extend;
-
+        
         BaseIndex withOffset(int32_t additionalOffset)
         {
             return BaseIndex(base, index, scale, offset + additionalOffset);
@@ -299,7 +299,7 @@ public:
     // from pointers used as absolute addresses to memory operations
     struct TrustedImmPtr : public TrustedImm {
         TrustedImmPtr() { }
-
+        
         explicit TrustedImmPtr(const void* value)
             : m_value(value)
         {
@@ -351,7 +351,7 @@ public:
     // immediate values.
     struct TrustedImm32 : public TrustedImm {
         constexpr TrustedImm32() = default;
-
+        
         explicit constexpr TrustedImm32(int32_t value)
             : m_value(value)
         {
@@ -382,7 +382,7 @@ public:
         const TrustedImm32& asTrustedImm32() const { return *this; }
 
     };
-
+    
     // TrustedImm64:
     //
     // A 64bit immediate operand to an instruction - this is wrapped in a
@@ -391,7 +391,7 @@ public:
     // immediate values.
     struct TrustedImm64 : TrustedImm {
         TrustedImm64() { }
-
+        
         explicit TrustedImm64(int64_t value)
             : m_value(value)
         {
@@ -421,7 +421,7 @@ public:
 #endif
         const TrustedImm64& asTrustedImm64() const { return *this; }
     };
-
+    
     // Section 2: MacroAssembler code buffer handles
     //
     // The following types are used to reference items in the code buffer
@@ -459,7 +459,7 @@ public:
     private:
         AssemblerLabel m_label;
     };
-
+    
     // ConvertibleLoadLabel:
     //
     // A ConvertibleLoadLabel records a loadPtr instruction that can be patched to an addPtr
@@ -473,17 +473,17 @@ public:
     class ConvertibleLoadLabel {
         friend class AbstractMacroAssembler<AssemblerType>;
         friend class LinkBuffer;
-
+        
     public:
         ConvertibleLoadLabel()
         {
         }
-
+        
         ConvertibleLoadLabel(AbstractMacroAssemblerType* masm)
             : m_label(masm->m_assembler.labelIgnoringWatchpoints())
         {
         }
-
+        
         bool isSet() const { return m_label.isSet(); }
     private:
         AssemblerLabel m_label;
@@ -507,7 +507,7 @@ public:
         }
 
         bool isSet() const { return m_label.isSet(); }
-
+        
     private:
         AssemblerLabel m_label;
     };
@@ -546,7 +546,7 @@ public:
         DataLabelCompact()
         {
         }
-
+        
         DataLabelCompact(AbstractMacroAssemblerType* masm)
             : m_label(masm->m_assembler.label())
         {
@@ -586,7 +586,7 @@ public:
             : m_flags(None)
         {
         }
-
+        
         Call(AssemblerLabel jmp, Flags flags)
             : m_label(jmp)
             , m_flags(flags)
@@ -658,12 +658,12 @@ public:
             ASSERT((type == ARM64Assembler::JumpTestBit) || (type == ARM64Assembler::JumpTestBitFixedSize));
         }
 #else
-        Jump(AssemblerLabel jmp)
+        Jump(AssemblerLabel jmp)    
             : m_label(jmp)
         {
         }
 #endif
-
+        
         Label label() const
         {
             Label result;
@@ -692,7 +692,7 @@ public:
             masm->m_assembler.linkJump(m_label, masm->m_assembler.label());
 #endif
         }
-
+        
         void linkTo(Label label, AbstractMacroAssemblerType* masm) const
         {
 #if ENABLE(DFG_REGISTER_ALLOCATION_VALIDATION)
@@ -751,9 +751,9 @@ public:
     class JumpList {
     public:
         typedef Vector<Jump, 2> JumpVector;
-
+        
         JumpList() { }
-
+        
         JumpList(Jump jump)
         {
             if (jump.isSet())
@@ -766,20 +766,20 @@ public:
             for (size_t i = 0; i < size; ++i)
                 m_jumps[i].link(masm);
         }
-
+        
         void linkTo(Label label, AbstractMacroAssemblerType* masm) const
         {
             size_t size = m_jumps.size();
             for (size_t i = 0; i < size; ++i)
                 m_jumps[i].linkTo(label, masm);
         }
-
+        
         void append(Jump jump)
         {
             if (jump.isSet())
                 m_jumps.append(jump);
         }
-
+        
         void append(const JumpList& other)
         {
             m_jumps.append(other.m_jumps.begin(), other.m_jumps.size());
@@ -789,12 +789,12 @@ public:
         {
             return !m_jumps.size();
         }
-
+        
         void clear()
         {
             m_jumps.clear();
         }
-
+        
         const JumpVector& jumps() const { return m_jumps; }
 
     private:
@@ -816,25 +816,25 @@ public:
         return label();
     }
 #endif
-
+    
     Label label()
     {
         return Label(this);
     }
-
+    
     void padBeforePatch()
     {
         // Rely on the fact that asking for a label already does the padding.
         (void)label();
     }
-
+    
     Label watchpointLabel()
     {
         Label result;
         result.m_label = m_assembler.labelForWatchpoint();
         return result;
     }
-
+    
     Label align()
     {
         m_assembler.align(16);
@@ -931,7 +931,7 @@ public:
     {
         AssemblerType::relinkJump(jump.dataLocation(), destination.dataLocation());
     }
-
+    
     template<PtrTag jumpTag>
     static void repatchJumpToNop(CodeLocationJump<jumpTag> jump)
     {
@@ -991,7 +991,7 @@ public:
     {
         return AssemblerType::readPointer(dataLabelPtr.dataLocation());
     }
-
+    
     template<PtrTag tag>
     static void replaceWithLoad(CodeLocationConvertibleLoad<tag> label)
     {

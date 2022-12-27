@@ -132,7 +132,7 @@ public:
 
     static inline bool isValidSettingDelimiter(UChar c)
     {
-        // ... a WebVTT cue consists of zero or more of the following components, in any order, separated from each other by one or more
+        // ... a WebVTT cue consists of zero or more of the following components, in any order, separated from each other by one or more 
         // U+0020 SPACE characters or U+0009 CHARACTER TABULATION (tab) characters.
         return c == ' ' || c == '\t';
     }
@@ -153,7 +153,7 @@ public:
     Vector<Ref<WebVTTCueData>> takeCues();
     Vector<Ref<VTTRegion>> takeRegions();
     Vector<String> takeStyleSheets();
-
+    
     // Create the DocumentFragment representation of the WebVTT cue text.
     static Ref<DocumentFragment> createDocumentFragmentFromCueText(Document&, const String&);
 
@@ -193,7 +193,7 @@ private:
     String m_currentSettings;
     RefPtr<VTTRegion> m_currentRegion;
     String m_currentSourceStyleSheet;
-
+    
     WebVTTParserClient& m_client;
 
     Vector<Ref<WebVTTCueData>> m_cuelist;

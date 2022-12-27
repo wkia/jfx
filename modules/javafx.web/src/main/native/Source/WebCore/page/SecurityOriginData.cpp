@@ -53,7 +53,7 @@ SecurityOriginData SecurityOriginData::fromFrame(Frame* frame)
 {
     if (!frame)
         return SecurityOriginData { };
-
+    
     auto* document = frame->document();
     if (!document)
         return SecurityOriginData { };
@@ -87,17 +87,17 @@ std::optional<SecurityOriginData> SecurityOriginData::fromDatabaseIdentifier(con
     size_t separator1 = databaseIdentifier.find(separatorCharacter);
     if (separator1 == notFound)
         return std::nullopt;
-
+    
     // Make sure there's a second separator
     size_t separator2 = databaseIdentifier.reverseFind(separatorCharacter);
     if (separator2 == notFound)
         return std::nullopt;
-
+    
     // Ensure there were at least 2 separator characters. Some hostnames on intranets have
     // underscores in them, so we'll assume that any additional underscores are part of the host.
     if (separator1 == separator2)
         return std::nullopt;
-
+    
     // Make sure the port section is a valid port number or doesn't exist.
     auto portLength = databaseIdentifier.length() - separator2 - 1;
     auto port = parseIntegerAllowingTrailingJunk<uint16_t>(StringView { databaseIdentifier }.right(portLength));

@@ -510,7 +510,7 @@ void HTMLTextFormControlElement::selectionChanged(bool shouldFireSelectEvent)
     // FIXME: Don't re-compute selection start and end if this function was called inside setSelectionRange.
     // selectionStart() or selectionEnd() will return cached selection when this node doesn't have focus
     cacheSelection(computeSelectionStart(), computeSelectionEnd(), computeSelectionDirection());
-
+    
     if (shouldFireSelectEvent && m_cachedSelectionStart != m_cachedSelectionEnd)
         dispatchEvent(Event::create(eventNames().selectEvent, Event::CanBubble::Yes, Event::IsCancelable::No));
 }
@@ -754,7 +754,7 @@ HTMLTextFormControlElement* enclosingTextFormControl(const Position& position)
     ASSERT(position.isNull() || position.anchorType() == Position::PositionIsOffsetInAnchor
         || position.containerNode() || !position.anchorNode()->shadowHost()
         || hasShadowRootParent(*position.anchorNode()));
-
+        
     RefPtr<Node> container = position.containerNode();
     if (!container)
         return nullptr;
@@ -772,10 +772,10 @@ String HTMLTextFormControlElement::directionForFormData() const
             if (equalLettersIgnoringASCIICase(value, "ltr"))
                 return TextDirection::LTR;
             if (equalLettersIgnoringASCIICase(value, "auto")) {
-            bool isAuto;
+                bool isAuto;
                 return element.directionalityIfhasDirAutoAttribute(isAuto);
+            }
         }
-    }
         return TextDirection::LTR;
     }();
 
@@ -819,7 +819,7 @@ void HTMLTextFormControlElement::adjustInnerTextStyle(const RenderStyle& parentS
     if (textBlockStyle.textSecurity() != TextSecurity::None && !textBlockStyle.isLeftToRightDirection()) {
         // Preserve the alignment but force the direction to LTR so that the last-typed, unmasked character
         // (which cannot have RTL directionality) will appear to the right of the masked characters. See <rdar://problem/7024375>.
-
+        
         switch (textBlockStyle.textAlign()) {
         case TextAlignMode::Start:
         case TextAlignMode::Justify:

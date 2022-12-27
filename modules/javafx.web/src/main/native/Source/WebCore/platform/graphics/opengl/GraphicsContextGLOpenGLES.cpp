@@ -23,7 +23,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -134,7 +134,7 @@ bool GraphicsContextGLOpenGL::reshapeFBOs(const IntSize& size)
     ExtensionsGLOpenGLES& extensions = static_cast<ExtensionsGLOpenGLES&>(getExtensions());
     if (extensions.isImagination() && attributes.antialias) {
         GLint maxSampleCount;
-        ::glGetIntegerv(ExtensionsGL::MAX_SAMPLES_IMG, &maxSampleCount);
+        ::glGetIntegerv(ExtensionsGL::MAX_SAMPLES_IMG, &maxSampleCount); 
         GLint sampleCount = std::min(8, maxSampleCount);
 
         extensions.framebufferTexture2DMultisampleIMG(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0, sampleCount);

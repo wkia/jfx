@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -35,7 +35,7 @@
 #include <wtf/text/CString.h>
 
 namespace WebCore {
-
+ 
 static inline bool fallbackURLLongerThan(const std::pair<URL, URL>& lhs, const std::pair<URL, URL>& rhs)
 {
     return lhs.first.string().length() > rhs.first.string().length();
@@ -50,7 +50,7 @@ ApplicationCache::~ApplicationCache()
     if (m_group)
         m_group->cacheDestroyed(*this);
 }
-
+    
 void ApplicationCache::setGroup(ApplicationCacheGroup* group)
 {
     ASSERT(!m_group || group == m_group);
@@ -81,7 +81,7 @@ void ApplicationCache::setManifestResource(Ref<ApplicationCacheResource>&& manif
 
     addResource(WTFMove(manifest));
 }
-
+    
 void ApplicationCache::addResource(Ref<ApplicationCacheResource>&& resource)
 {
     auto& url = resource->url();
@@ -106,7 +106,7 @@ ApplicationCacheResource* ApplicationCache::resourceForURL(const String& url)
 {
     ASSERT(!URL({ }, url).hasFragmentIdentifier());
     return m_resources.get(url);
-}
+}    
 
 bool ApplicationCache::requestIsHTTPOrHTTPSGet(const ResourceRequest& request)
 {
@@ -162,11 +162,11 @@ bool ApplicationCache::urlMatchesFallbackNamespace(const URL& url, URL* fallback
 void ApplicationCache::clearStorageID()
 {
     m_storageID = 0;
-
+    
     for (const auto& resource : m_resources.values())
         resource->clearStorageID();
 }
-
+    
 #ifndef NDEBUG
 void ApplicationCache::dump()
 {

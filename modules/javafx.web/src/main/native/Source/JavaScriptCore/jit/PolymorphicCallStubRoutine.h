@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -45,14 +45,14 @@ public:
         : m_callLinkInfo(info)
     {
     }
-
+    
     ~PolymorphicCallNode();
-
+    
     void unlink(VM&);
 
     bool hasCallLinkInfo(CallLinkInfo* info) { return m_callLinkInfo.get() == info; }
     void clearCallLinkInfo();
-
+    
 private:
     PackedPtr<CallLinkInfo> m_callLinkInfo;
 };
@@ -63,18 +63,18 @@ public:
         : m_codeBlock(nullptr)
     {
     }
-
+    
     PolymorphicCallCase(CallVariant variant, CodeBlock* codeBlock)
         : m_variant(variant)
         , m_codeBlock(codeBlock)
     {
     }
-
+    
     CallVariant variant() const { return m_variant; }
     CodeBlock* codeBlock() const { return m_codeBlock; }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     CallVariant m_variant;
     CodeBlock* m_codeBlock;
@@ -86,15 +86,15 @@ public:
         const MacroAssemblerCodeRef<JITStubRoutinePtrTag>&, VM&, const JSCell* owner,
         CallFrame* callerFrame, CallLinkInfo&, const Vector<PolymorphicCallCase>&,
         UniqueArray<uint32_t>&& fastCounts);
-
+    
     ~PolymorphicCallStubRoutine() final;
-
+    
     CallVariantList variants() const;
     bool hasEdges() const;
     CallEdgeList edges() const;
 
     void clearCallNodesFor(CallLinkInfo*);
-
+    
     template<typename Functor>
     void forEachDependentCell(const Functor& functor)
     {

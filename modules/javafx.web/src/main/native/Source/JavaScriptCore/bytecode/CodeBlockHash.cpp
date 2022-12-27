@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -86,12 +86,12 @@ CodeBlockHash::CodeBlockHash(const SourceCode& sourceCode, CodeSpecializationKin
 void CodeBlockHash::dump(PrintStream& out) const
 {
     std::array<char, 7> buffer = integerToSixCharacterHashString(m_hash);
-
+    
 #if ASSERT_ENABLED
     CodeBlockHash recompute(buffer.data());
     ASSERT(recompute == *this);
 #endif // ASSERT_ENABLED
-
+    
     out.print(buffer.data());
 }
 

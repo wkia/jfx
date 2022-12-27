@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -46,7 +46,7 @@ public:
 
     TransformationMatrix matrix() const {return m_matrix; }
 
-private:
+private:    
     bool isIdentity() const override { return m_matrix.isIdentity(); }
     bool isAffectedByTransformOrigin() const final { return !isIdentity(); }
 
@@ -61,7 +61,7 @@ private:
     }
 
     Ref<TransformOperation> blend(const TransformOperation* from, const BlendingContext&, bool blendToIdentity = false) override;
-
+    
     void dump(WTF::TextStream&) const final;
 
     Matrix3DTransformOperation(const TransformationMatrix& mat)

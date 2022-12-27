@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -54,10 +54,10 @@ public:
         std::unique_ptr<DOMAttributeAnnotation> = nullptr);
 
     ~GetByVariant();
-
+    
     GetByVariant(const GetByVariant&);
     GetByVariant& operator=(const GetByVariant&);
-
+    
     bool isSet() const { return !!m_structureSet.size(); }
     explicit operator bool() const { return isSet(); }
     const StructureSet& structureSet() const { return m_structureSet; }
@@ -65,7 +65,7 @@ public:
 
     // A non-empty condition set means that this is a prototype load.
     const ObjectPropertyConditionSet& conditionSet() const { return m_conditionSet; }
-
+    
     PropertyOffset offset() const { return m_offset; }
     CallLinkStatus* callLinkStatus() const { return m_callLinkStatus.get(); }
     JSFunction* intrinsicFunction() const { return m_intrinsicFunction; }
@@ -76,11 +76,11 @@ public:
     bool isPropertyUnset() const { return offset() == invalidOffset; }
 
     bool attemptToMerge(const GetByVariant& other);
-
+    
     DECLARE_VISIT_AGGREGATE;
     template<typename Visitor> void markIfCheap(Visitor&);
     bool finalize(VM&);
-
+    
     void dump(PrintStream&) const;
     void dumpInContext(PrintStream&, DumpContext*) const;
 
@@ -96,12 +96,12 @@ public:
         }
         return structureSet().overlaps(other.structureSet());
     }
-
+    
 private:
     friend class GetByStatus;
 
     bool canMergeIntrinsicStructures(const GetByVariant&) const;
-
+    
     StructureSet m_structureSet;
     ObjectPropertyConditionSet m_conditionSet;
     PropertyOffset m_offset;

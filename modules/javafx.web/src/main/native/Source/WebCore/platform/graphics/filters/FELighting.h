@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -63,10 +63,10 @@ protected:
         DiffuseLighting,
         SpecularLighting
     };
-
+    
     struct AlphaWindow {
         uint8_t alpha[3][3] { };
-
+        
         // The implementations are lined up to make comparing indices easier.
         uint8_t topLeft() const             { return alpha[0][0]; }
         uint8_t left() const                { return alpha[1][0]; }
@@ -89,7 +89,7 @@ protected:
             alpha[0] = alpha[1];
             alpha[1] = alpha[2];
         }
-
+        
         void shift()
         {
             shiftRow(alpha[0]);

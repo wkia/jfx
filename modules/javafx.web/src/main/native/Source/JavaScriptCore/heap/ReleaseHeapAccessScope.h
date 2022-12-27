@@ -44,7 +44,7 @@ public:
     {
         m_heap.releaseAccess();
     }
-
+    
     ~ReleaseHeapAccessScope()
     {
         m_heap.acquireAccess();

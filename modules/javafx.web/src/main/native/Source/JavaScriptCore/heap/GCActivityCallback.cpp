@@ -6,13 +6,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *     notice, this list of conditions and the following disclaimer. 
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *     documentation and/or other materials provided with the distribution. 
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -47,7 +47,7 @@ void GCActivityCallback::doWork(VM& vm)
 {
     if (!isEnabled())
         return;
-
+    
     ASSERT(vm.currentThreadIsHoldingAPILock());
     Heap& heap = vm.heap;
     if (heap.isDeferred()) {
@@ -72,7 +72,7 @@ void GCActivityCallback::scheduleTimer(Seconds newDelay)
 
 void GCActivityCallback::didAllocate(Heap& heap, size_t bytes)
 {
-    // The first byte allocated in an allocation cycle will report 0 bytes to didAllocate.
+    // The first byte allocated in an allocation cycle will report 0 bytes to didAllocate. 
     // We pretend it's one byte so that we don't ignore this allocation entirely.
     if (!bytes)
         bytes = 1;

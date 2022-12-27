@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,20 +37,20 @@ class InstanceOfVariant {
 public:
     InstanceOfVariant() = default;
     InstanceOfVariant(const StructureSet&, const ObjectPropertyConditionSet&, JSObject* prototype, bool isHit);
-
+    
     explicit operator bool() const { return !!m_structureSet.size(); }
-
+    
     const StructureSet& structureSet() const { return m_structureSet; }
     StructureSet& structureSet() { return m_structureSet; }
-
+    
     const ObjectPropertyConditionSet& conditionSet() const { return m_conditionSet; }
-
+    
     JSObject* prototype() const { return m_prototype; }
-
+    
     bool isHit() const { return m_isHit; }
-
+    
     bool attemptToMerge(const InstanceOfVariant& other);
-
+    
     void dump(PrintStream&) const;
     void dumpInContext(PrintStream&, DumpContext*) const;
 
@@ -58,10 +58,10 @@ public:
     {
         return structureSet().overlaps(other.structureSet());
     }
-
+    
 private:
     friend class InstanceOfStatus;
-
+    
     StructureSet m_structureSet;
     ObjectPropertyConditionSet m_conditionSet;
     JSObject* m_prototype { nullptr };

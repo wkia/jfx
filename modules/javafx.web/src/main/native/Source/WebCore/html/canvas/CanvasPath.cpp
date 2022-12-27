@@ -175,7 +175,7 @@ ExceptionOr<void> CanvasPath::arc(float x, float y, float radius, float startAng
     m_path.addArc(FloatPoint(x, y), radius, startAngle, endAngle, anticlockwise);
     return { };
 }
-
+    
 ExceptionOr<void> CanvasPath::ellipse(float x, float y, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise)
 {
     if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(radiusX) || !std::isfinite(radiusY) || !std::isfinite(rotation) || !std::isfinite(startAngle) || !std::isfinite(endAngle))

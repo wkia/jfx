@@ -386,7 +386,7 @@ bool SecurityOrigin::canDisplay(const URL& url) const
 
     if (url.pathEnd() > maximumURLSize)
         return false;
-
+    
 #if !PLATFORM(IOS_FAMILY) && !ENABLE(BUBBLEWRAP_SANDBOX)
     if (m_data.protocol == "file" && url.isLocalFile() && !FileSystem::filesHaveSameVolume(m_filePath, url.fileSystemPath()))
         return false;
@@ -422,7 +422,7 @@ bool SecurityOrigin::canAccessStorage(const SecurityOrigin* topOrigin, ShouldAll
 
     if (isLocal() && !needsStorageAccessFromFileURLsQuirk() && !m_universalAccess && shouldAllowFromThirdParty != AlwaysAllowFromThirdParty)
         return false;
-
+    
     if (m_storageBlockingPolicy == StorageBlockingPolicy::BlockAll)
         return false;
 
@@ -597,11 +597,11 @@ Ref<SecurityOrigin> SecurityOrigin::create(const String& protocol, const String&
     return origin;
 }
 
-bool SecurityOrigin::equal(const SecurityOrigin* other) const
+bool SecurityOrigin::equal(const SecurityOrigin* other) const 
 {
     if (other == this)
         return true;
-
+    
     if (!isSameSchemeHostPort(*other))
         return false;
 

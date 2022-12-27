@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -48,7 +48,7 @@ struct InlineCallFrame {
         CallVarargs,
         ConstructVarargs,
         TailCallVarargs,
-
+        
         // For these, the stackOffset incorporates the argument count plus the true return PC
         // slot.
         GetterCall,
@@ -85,7 +85,7 @@ struct InlineCallFrame {
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static Kind varargsKindFor(CallMode callMode)
     {
         switch (callMode) {
@@ -98,7 +98,7 @@ struct InlineCallFrame {
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static CodeSpecializationKind specializationKindFor(Kind kind)
     {
         switch (kind) {
@@ -115,7 +115,7 @@ struct InlineCallFrame {
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static bool isVarargs(Kind kind)
     {
         switch (kind) {
@@ -174,7 +174,7 @@ struct InlineCallFrame {
         CodeOrigin* caller = getCallerSkippingTailCalls();
         return caller ? caller->inlineCallFrame() : nullptr;
     }
-
+    
     FixedVector<ValueRecovery> m_argumentsWithFixup; // Includes 'this' and arity fixups.
     WriteBarrier<CodeBlock> baselineCodeBlock;
     CodeOrigin directCaller;
@@ -187,7 +187,7 @@ struct InlineCallFrame {
     VirtualRegister argumentCountRegister; // Only set when we inline a varargs call.
 
     ValueRecovery calleeRecovery;
-
+    
     // There is really no good notion of a "default" set of values for
     // InlineCallFrame's fields. This constructor is here just to reduce confusion if
     // we forgot to initialize explicitly.
@@ -199,7 +199,7 @@ struct InlineCallFrame {
         , isClosureCall(false)
     {
     }
-
+    
     bool isVarargs() const
     {
         return isVarargs(static_cast<Kind>(kind));
@@ -208,14 +208,14 @@ struct InlineCallFrame {
     CodeSpecializationKind specializationKind() const { return specializationKindFor(static_cast<Kind>(kind)); }
 
     JSFunction* calleeConstant() const;
-
+    
     // Get the callee given a machine call frame to which this InlineCallFrame belongs.
     JSFunction* calleeForCallFrame(CallFrame*) const;
-
+    
     CString inferredName() const;
     CodeBlockHash hash() const;
     CString hashAsStringIfPossible() const;
-
+    
     void setStackOffset(signed offset)
     {
         stackOffset = offset;

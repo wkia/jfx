@@ -67,7 +67,7 @@ void RenderSVGResourceFilter::removeAllClientsFromCache(bool markForInvalidation
 void RenderSVGResourceFilter::removeClientFromCache(RenderElement& client, bool markForInvalidation)
 {
     LOG(Filters, "RenderSVGResourceFilter %p removing client %p", this, &client);
-
+    
     auto findResult = m_rendererFilterDataMap.find(&client);
     if (findResult != m_rendererFilterDataMap.end()) {
         FilterData& filterData = *findResult->value;
@@ -92,7 +92,7 @@ std::unique_ptr<SVGFilterBuilder> RenderSVGResourceFilter::buildPrimitives(SVGFi
     auto builder = makeUnique<SVGFilterBuilder>(SourceGraphic::create(filter));
     builder->setPrimitiveUnits(filterElement().primitiveUnits());
     builder->setTargetBoundingBox(targetBoundingBox);
-
+    
     for (auto& element : childrenOfType<SVGFilterPrimitiveStandardAttributes>(filterElement())) {
         auto effect = element.build(builder.get(), filter);
         if (!effect) {
@@ -135,7 +135,7 @@ bool RenderSVGResourceFilter::applyResource(RenderElement& renderer, const Rende
     if (filterData->boundaries.isEmpty())
         return false;
 
-    // Determine absolute transformation matrix for filter.
+    // Determine absolute transformation matrix for filter. 
     AffineTransform absoluteTransform = SVGRenderingContext::calculateTransformationToOutermostCoordinateSystem(renderer);
     if (!absoluteTransform.isInvertible())
         return false;
@@ -209,12 +209,12 @@ bool RenderSVGResourceFilter::applyResource(RenderElement& renderer, const Rende
         m_rendererFilterDataMap.set(&renderer, WTFMove(filterData));
         return false;
     }
-
+    
     // Set the rendering mode from the page's settings.
     filterData->filter->setRenderingMode(renderingMode);
 
     GraphicsContext& sourceGraphicContext = sourceGraphic->context();
-
+  
     filterData->sourceGraphicBuffer = WTFMove(sourceGraphic);
     filterData->savedContext = context;
 

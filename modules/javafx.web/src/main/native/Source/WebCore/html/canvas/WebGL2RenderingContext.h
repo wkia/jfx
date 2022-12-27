@@ -56,7 +56,7 @@ public:
     void bufferSubData(GCGLenum target, long long offset, const ArrayBufferView& data, GCGLuint srcOffset, GCGLuint length);
     void copyBufferSubData(GCGLenum readTarget, GCGLenum writeTarget, GCGLint64 readOffset, GCGLint64 writeOffset, GCGLint64 size);
     void getBufferSubData(GCGLenum target, long long srcByteOffset, RefPtr<ArrayBufferView>&& dstData, GCGLuint dstOffset = 0, GCGLuint length = 0);
-
+    
     // Framebuffer objects
     WebGLAny getFramebufferAttachmentParameter(GCGLenum target, GCGLenum attachment, GCGLenum pname) final;
     void bindFramebuffer(GCGLenum target, WebGLFramebuffer*) final;
@@ -67,10 +67,10 @@ public:
     void invalidateFramebuffer(GCGLenum target, const Vector<GCGLenum>& attachments);
     void invalidateSubFramebuffer(GCGLenum target, const Vector<GCGLenum>& attachments, GCGLint x, GCGLint y, GCGLsizei width, GCGLsizei height);
     void readBuffer(GCGLenum src);
-
+    
     // Renderbuffer objects
     void renderbufferStorageMultisample(GCGLenum target, GCGLsizei samples, GCGLenum internalformat, GCGLsizei width, GCGLsizei height);
-
+    
     // Texture objects
     WebGLAny getTexParameter(GCGLenum target, GCGLenum pname) final;
     void texStorage2D(GCGLenum target, GCGLsizei levels, GCGLenum internalFormat, GCGLsizei width, GCGLsizei height);
@@ -182,14 +182,14 @@ public:
     void drawArraysInstanced(GCGLenum mode, GCGLint first, GCGLsizei count, GCGLsizei instanceCount);
     void drawElementsInstanced(GCGLenum mode, GCGLsizei count, GCGLenum type, GCGLint64 offset, GCGLsizei instanceCount);
     void drawRangeElements(GCGLenum mode, GCGLuint start, GCGLuint end, GCGLsizei count, GCGLenum type, GCGLint64 offset);
-
+    
     // Multiple render targets
     void drawBuffers(const Vector<GCGLenum>& buffers);
     void clearBufferiv(GCGLenum buffer, GCGLint drawbuffer, Int32List&& values, GCGLuint srcOffset);
     void clearBufferuiv(GCGLenum buffer, GCGLint drawbuffer, Uint32List&& values, GCGLuint srcOffset);
     void clearBufferfv(GCGLenum buffer, GCGLint drawbuffer, Float32List&& values, GCGLuint srcOffset);
     void clearBufferfi(GCGLenum buffer, GCGLint drawbuffer, GCGLfloat depth, GCGLint stencil);
-
+    
     // Query objects
     RefPtr<WebGLQuery> createQuery();
     void deleteQuery(WebGLQuery*);
@@ -198,7 +198,7 @@ public:
     void endQuery(GCGLenum target);
     RefPtr<WebGLQuery> getQuery(GCGLenum target, GCGLenum pname);
     WebGLAny getQueryParameter(WebGLQuery&, GCGLenum pname);
-
+    
     // Sampler objects
     RefPtr<WebGLSampler> createSampler();
     void deleteSampler(WebGLSampler*);
@@ -207,7 +207,7 @@ public:
     void samplerParameteri(WebGLSampler&, GCGLenum pname, GCGLint param);
     void samplerParameterf(WebGLSampler&, GCGLenum pname, GCGLfloat param);
     WebGLAny getSamplerParameter(WebGLSampler&, GCGLenum pname);
-
+    
     // Sync objects
     RefPtr<WebGLSync> fenceSync(GCGLenum condition, GCGLbitfield flags);
     GCGLboolean isSync(WebGLSync*);
@@ -215,7 +215,7 @@ public:
     GCGLenum clientWaitSync(WebGLSync&, GCGLbitfield flags, GCGLuint64 timeout);
     void waitSync(WebGLSync&, GCGLbitfield flags, GCGLint64 timeout);
     WebGLAny getSyncParameter(WebGLSync&, GCGLenum pname);
-
+    
     // Transform feedback
     RefPtr<WebGLTransformFeedback> createTransformFeedback();
     void deleteTransformFeedback(WebGLTransformFeedback* id);
@@ -227,7 +227,7 @@ public:
     RefPtr<WebGLActiveInfo> getTransformFeedbackVarying(WebGLProgram&, GCGLuint index);
     void pauseTransformFeedback();
     void resumeTransformFeedback();
-
+    
     // Uniform buffer objects and transform feedback buffers
     void bindBufferBase(GCGLenum target, GCGLuint index, WebGLBuffer*);
     void bindBufferRange(GCGLenum target, GCGLuint index, WebGLBuffer*, GCGLint64 offset, GCGLint64 size);
@@ -238,13 +238,13 @@ public:
     WebGLAny getActiveUniformBlockParameter(WebGLProgram&, GCGLuint uniformBlockIndex, GCGLenum pname);
     WebGLAny getActiveUniformBlockName(WebGLProgram&, GCGLuint uniformBlockIndex);
     void uniformBlockBinding(WebGLProgram&, GCGLuint uniformBlockIndex, GCGLuint uniformBlockBinding);
-
+    
     // Vertex array objects
     RefPtr<WebGLVertexArrayObject> createVertexArray();
     void deleteVertexArray(WebGLVertexArrayObject* vertexArray);
     GCGLboolean isVertexArray(WebGLVertexArrayObject* vertexArray);
     void bindVertexArray(WebGLVertexArrayObject* vertexArray);
-
+    
     WebGLExtension* getExtension(const String&) final;
     std::optional<Vector<String>> getSupportedExtensions() final;
     WebGLAny getParameter(GCGLenum pname) final;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -43,7 +43,7 @@ public:
 
 private:
     friend class SpeculativeJIT;
-
+    
     OSRExitJumpPlaceholder(unsigned index)
         : m_index(index)
     {
@@ -51,10 +51,10 @@ private:
 
 public:
     bool operator!() const { return m_index == std::numeric_limits<unsigned>::max(); }
-
+    
     void fill(JITCompiler&, const MacroAssembler::JumpList&);
     void fill(SpeculativeJIT*, const MacroAssembler::JumpList&);
-
+    
 private:
     unsigned m_index;
 };

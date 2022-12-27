@@ -48,7 +48,7 @@ ScrollingTreeFrameScrollingNode::~ScrollingTreeFrameScrollingNode() = default;
 void ScrollingTreeFrameScrollingNode::commitStateBeforeChildren(const ScrollingStateNode& stateNode)
 {
     ScrollingTreeScrollingNode::commitStateBeforeChildren(stateNode);
-
+    
     const ScrollingStateFrameScrollingNode& state = downcast<ScrollingStateFrameScrollingNode>(stateNode);
 
     if (state.hasChangedProperty(ScrollingStateNode::Property::FrameScaleFactor))

@@ -65,7 +65,7 @@ private:
     const char* renderName() const final { return "RenderListItem"; }
 
     bool isListItem() const final { return true; }
-
+    
     void insertedIntoTree(IsInternalMove) final;
     void willBeRemovedFromTree(IsInternalMove) final;
 

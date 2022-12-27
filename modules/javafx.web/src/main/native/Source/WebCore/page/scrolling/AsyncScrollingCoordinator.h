@@ -152,9 +152,9 @@ private:
 
     void setEventTrackingRegionsDirty();
     void updateEventTrackingRegions();
-
+    
     void updateScrollPositionAfterAsyncScroll(ScrollingNodeID, const FloatPoint&, std::optional<FloatPoint> layoutViewportOrigin, ScrollType, ScrollingLayerPositionAction);
-
+    
     FrameView* frameViewForScrollingNode(ScrollingNodeID) const;
 
     std::unique_ptr<ScrollingStateTree> m_scrollingStateTree;
@@ -174,7 +174,7 @@ public:
                 m_scrollingTree->lockLayersForHitTesting();
         }
     }
-
+    
     ~LayerTreeHitTestLocker()
     {
         if (m_scrollingTree)

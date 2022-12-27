@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -183,34 +183,34 @@ public:
         : m_reallyAdded(false)
     {
     }
-
+    
     void addLazily(const WatchpointSetType& set)
     {
         m_sets.add(set);
     }
-
+    
     void reallyAdd(CodeBlock* codeBlock, WatchpointCollector& collector)
     {
         if (collector.mode() == WatchpointRegistrationMode::Add)
             RELEASE_ASSERT(!m_reallyAdded);
-
+        
         for (auto& set : m_sets)
             Adaptor::add(codeBlock, set, collector);
-
+        
         if (collector.mode() == WatchpointRegistrationMode::Add)
             m_reallyAdded = true;
     }
-
+    
     bool areStillValid() const
     {
         for (auto& set : m_sets) {
             if (Adaptor::hasBeenInvalidated(set))
                 return false;
         }
-
+        
         return true;
     }
-
+    
     bool isWatched(const WatchpointSetType& set) const
     {
         return m_sets.contains(set);
@@ -234,26 +234,26 @@ class DesiredWatchpoints {
 public:
     DesiredWatchpoints();
     ~DesiredWatchpoints();
-
+    
     void addLazily(WatchpointSet*);
     void addLazily(InlineWatchpointSet&);
     void addLazily(SymbolTable*);
     void addLazily(FunctionExecutable*);
     void addLazily(JSArrayBufferView*);
-
+    
     // It's recommended that you don't call this directly. Use Graph::watchCondition(), which does
     // the required GC magic as well as some other bookkeeping.
     void addLazily(const ObjectPropertyCondition&);
 
     void addLazily(DesiredGlobalProperty&&);
-
+    
     bool consider(Structure*);
-
+    
     void reallyAdd(CodeBlock*, DesiredIdentifiers&, CommonData*);
-
+    
     bool areStillValid() const;
     bool areStillValidOnMainThread(VM&, DesiredIdentifiers&);
-
+    
     bool isWatched(WatchpointSet* set)
     {
         return m_sets.isWatched(set);
@@ -279,7 +279,7 @@ public:
         return m_adaptiveStructureSets.isWatched(key);
     }
     void dumpInContext(PrintStream&, DumpContext*) const;
-
+    
 private:
     GenericDesiredWatchpoints<WatchpointSet*> m_sets;
     GenericDesiredWatchpoints<InlineWatchpointSet*> m_inlineSets;

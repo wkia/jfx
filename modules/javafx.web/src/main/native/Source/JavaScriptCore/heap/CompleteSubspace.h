@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -36,27 +36,27 @@ public:
 
     // In some code paths, we need it to be a compile error to call the virtual version of one of
     // these functions. That's why we do final methods the old school way.
-
+    
     // FIXME: Currently subspaces speak of BlockDirectories as "allocators", but that's temporary.
     // https://bugs.webkit.org/show_bug.cgi?id=181559
     Allocator allocatorFor(size_t, AllocatorForMode) final;
     Allocator allocatorForNonVirtual(size_t, AllocatorForMode);
-
+    
     void* allocate(VM&, size_t, GCDeferralContext*, AllocationFailureMode) final;
     void* allocateNonVirtual(VM&, size_t, GCDeferralContext*, AllocationFailureMode);
     void* reallocatePreciseAllocationNonVirtual(VM&, HeapCell*, size_t, GCDeferralContext*, AllocationFailureMode);
-
+    
     static ptrdiff_t offsetOfAllocatorForSizeStep() { return OBJECT_OFFSETOF(CompleteSubspace, m_allocatorForSizeStep); }
-
+    
     Allocator* allocatorForSizeStep() { return &m_allocatorForSizeStep[0]; }
 
 private:
     JS_EXPORT_PRIVATE Allocator allocatorForSlow(size_t);
-
+    
     // These slow paths are concerned with large allocations and allocator creation.
     JS_EXPORT_PRIVATE void* allocateSlow(VM&, size_t, GCDeferralContext*, AllocationFailureMode);
     void* tryAllocateSlow(VM&, size_t, GCDeferralContext*);
-
+    
     std::array<Allocator, MarkedSpace::numSizeClasses> m_allocatorForSizeStep;
     Vector<std::unique_ptr<BlockDirectory>> m_directories;
     Vector<std::unique_ptr<LocalAllocator>> m_localAllocators;

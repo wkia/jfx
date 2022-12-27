@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -168,7 +168,7 @@ public:
 
                     currentBlockAccessData.operand(operand) = accessData;
 
-                    insertionSet.insertNode(index, SpecNone,
+                    insertionSet.insertNode(index, SpecNone, 
                         Flush, origin, OpInfo(accessData));
                 }
             };
@@ -199,7 +199,7 @@ public:
                     if (!variableAccessData)
                         variableAccessData = newVariableAccessData(operand);
 
-                    insertionSet.insertNode(nodeIndex, SpecNone,
+                    insertionSet.insertNode(nodeIndex, SpecNone, 
                         Flush, node->origin, OpInfo(variableAccessData));
                 }
             }
@@ -217,7 +217,7 @@ public:
     VariableAccessData* newVariableAccessData(Operand operand)
     {
         ASSERT(!operand.isConstant());
-
+        
         m_graph.m_variableAccessData.append(operand);
         return &m_graph.m_variableAccessData.last();
     }

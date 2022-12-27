@@ -162,7 +162,7 @@ static inline bool isChainableResource(const SVGElement& element, const SVGEleme
 
     if (is<SVGGradientElement>(element))
         return is<SVGGradientElement>(linkedResource);
-
+    
     if (is<SVGFilterElement>(element))
         return is<SVGFilterElement>(linkedResource);
 
@@ -443,7 +443,7 @@ bool SVGResources::resourceDestroyed(RenderSVGResourceContainer& resource)
         break;
     case ClipperResourceType:
         if (!m_clipperFilterMaskerData)
-            break;
+            break; 
         if (m_clipperFilterMaskerData->clipper == &resource) {
             m_clipperFilterMaskerData->clipper->removeAllClientsFromCache();
             m_clipperFilterMaskerData->clipper = nullptr;

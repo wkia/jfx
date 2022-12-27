@@ -129,12 +129,12 @@ unsigned HTMLMarqueeElement::scrollAmount() const
 {
     return limitToOnlyHTMLNonNegative(attributeWithoutSynchronization(scrollamountAttr), RenderStyle::initialMarqueeIncrement().intValue());
 }
-
+    
 void HTMLMarqueeElement::setScrollAmount(unsigned scrollAmount)
 {
     setUnsignedIntegralAttribute(scrollamountAttr, limitToOnlyHTMLNonNegative(scrollAmount, RenderStyle::initialMarqueeIncrement().intValue()));
 }
-
+    
 unsigned HTMLMarqueeElement::scrollDelay() const
 {
     return limitToOnlyHTMLNonNegative(attributeWithoutSynchronization(scrolldelayAttr), RenderStyle::initialMarqueeSpeed());
@@ -144,13 +144,13 @@ void HTMLMarqueeElement::setScrollDelay(unsigned scrollDelay)
 {
     setUnsignedIntegralAttribute(scrolldelayAttr, limitToOnlyHTMLNonNegative(scrollDelay, RenderStyle::initialMarqueeSpeed()));
 }
-
+    
 int HTMLMarqueeElement::loop() const
 {
     int loopValue = getIntegralAttribute(loopAttr);
     return loopValue > 0 ? loopValue : -1;
 }
-
+    
 ExceptionOr<void> HTMLMarqueeElement::setLoop(int loop)
 {
     if (loop <= 0 && loop != -1)

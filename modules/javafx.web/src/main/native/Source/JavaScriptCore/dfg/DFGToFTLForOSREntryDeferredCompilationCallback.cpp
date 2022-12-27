@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -64,9 +64,9 @@ void ToFTLForOSREntryDeferredCompilationCallback::compilationDidComplete(
     dataLogLnIf(Options::verboseOSR(),
         "Optimizing compilation of ", *codeBlock, " (for ", *profiledDFGCodeBlock,
         ") result: ", result);
-
+    
     JITCode* jitCode = profiledDFGCodeBlock->jitCode()->dfg();
-
+        
     switch (result) {
     case CompilationSuccessful: {
         jitCode->setOSREntryBlock(codeBlock->vm(), profiledDFGCodeBlock, codeBlock);
@@ -86,7 +86,7 @@ void ToFTLForOSREntryDeferredCompilationCallback::compilationDidComplete(
         jitCode->osrEntryRetry = 0;
         break;
     }
-
+    
     DeferredCompilationCallback::compilationDidComplete(codeBlock, profiledDFGCodeBlock, result);
 }
 

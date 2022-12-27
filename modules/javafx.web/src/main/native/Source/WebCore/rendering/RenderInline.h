@@ -76,7 +76,7 @@ public:
 #if PLATFORM(IOS_FAMILY)
     void absoluteQuadsForSelection(Vector<FloatQuad>& quads) const override;
 #endif
-
+    
     LayoutSize offsetForInFlowPositionedInline(const RenderBox* child) const;
 
     void addFocusRingRects(Vector<LayoutRect>&, const LayoutPoint& additionalOffset, const RenderLayerModelObject* paintContainer = 0) final;
@@ -145,7 +145,7 @@ private:
 
     LayoutUnit lineHeight(bool firstLine, LineDirectionMode, LinePositionMode = PositionOnContainingLine) const final;
     LayoutUnit baselinePosition(FontBaseline, bool firstLine, LineDirectionMode, LinePositionMode = PositionOnContainingLine) const final;
-
+    
     void updateHitTestResult(HitTestResult&, const LayoutPoint&) final;
 
     void imageChanged(WrappedImagePtr, const IntRect* = 0) final;

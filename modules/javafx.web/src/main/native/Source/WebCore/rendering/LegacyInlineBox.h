@@ -77,7 +77,7 @@ public:
 #if ENABLE(TREE_DEBUGGING)
     void showNodeTreeForThis() const;
     void showLineTreeForThis() const;
-
+    
     WEBCORE_EXPORT virtual void outputLineTreeAndMark(WTF::TextStream&, const LegacyInlineBox* markedBox, int depth) const;
     WEBCORE_EXPORT virtual void outputLineBox(WTF::TextStream&, bool mark, int depth) const;
     WEBCORE_EXPORT virtual const char* boxName() const;
@@ -109,7 +109,7 @@ public:
     virtual void setConstructed() { m_bitfields.setConstructed(true); }
 
     void setExtracted(bool extracted = true) { m_bitfields.setExtracted(extracted); }
-
+    
     void setIsFirstLine(bool firstLine) { m_bitfields.setFirstLine(firstLine); }
     bool isFirstLine() const { return m_bitfields.firstLine(); }
 
@@ -131,7 +131,7 @@ public:
     bool previousOnLineExists() const;
 
     virtual bool isLeaf() const { return true; }
-
+    
     LegacyInlineBox* nextLeafOnLine() const;
     LegacyInlineBox* previousLeafOnLine() const;
 
@@ -218,7 +218,7 @@ public:
     virtual void markDirty(bool dirty = true) { m_bitfields.setDirty(dirty); }
 
     WEBCORE_EXPORT virtual void dirtyLineBoxes();
-
+    
     WEBCORE_EXPORT virtual RenderObject::HighlightState selectionState();
 
     WEBCORE_EXPORT virtual bool canAccommodateEllipsis(bool ltr, int blockEdge, int ellipsisWidth) const;
@@ -242,12 +242,12 @@ public:
     }
 
     const RenderStyle& lineStyle() const { return m_bitfields.firstLine() ? renderer().firstLineStyle() : renderer().style(); }
-
+    
     VerticalAlign verticalAlign() const { return lineStyle().verticalAlign(); }
 
     // Use with caution! The type is not checked!
     RenderBoxModelObject* boxModelObject() const
-    {
+    { 
         if (!is<RenderText>(renderer()))
             return &downcast<RenderBoxModelObject>(renderer());
         return nullptr;
@@ -317,7 +317,7 @@ private:
             , m_endsWithBreak(false)
             , m_canHaveLeftExpansion(false)
             , m_canHaveRightExpansion(false)
-            , m_knownToHaveNoOverflow(true)
+            , m_knownToHaveNoOverflow(true)  
             , m_hasEllipsisBoxOrHyphen(false)
             , m_dirOverride(false)
             , m_behavesLikeText(false)
@@ -366,7 +366,7 @@ private:
 
     private:
         mutable unsigned m_nextOnLineExists : 1;
-
+        
     public:
         bool nextOnLineExists() const { return m_nextOnLineExists; }
         void setNextOnLineExists(bool nextOnLineExists) const { m_nextOnLineExists = nextOnLineExists; }
@@ -404,7 +404,7 @@ protected:
     bool canHaveRightExpansion() const { return m_bitfields.canHaveRightExpansion(); }
     bool forceRightExpansion() const { return m_bitfields.forceRightExpansion(); }
     bool forceLeftExpansion() const { return m_bitfields.forceLeftExpansion(); }
-
+    
     // For LegacyInlineFlowBox and LegacyInlineTextBox
     bool extracted() const { return m_bitfields.extracted(); }
 

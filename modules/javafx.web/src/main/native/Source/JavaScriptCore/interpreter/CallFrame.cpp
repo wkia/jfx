@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -247,6 +247,8 @@ SourceOrigin CallFrame::callerSourceOrigin(VM& vm)
 
 JSGlobalObject* CallFrame::globalObjectOfClosestCodeBlock(VM& vm, CallFrame* callFrame)
 {
+    // FIXME: We need to handle JSONP interpretation case in ProgramExecutable since it does not have vm.topCallFrame.
+    // rdar://83691438
     JSGlobalObject* globalObject = nullptr;
     StackVisitor::visit(callFrame, vm, [&](StackVisitor& visitor) {
         if (visitor->isWasmFrame()) {

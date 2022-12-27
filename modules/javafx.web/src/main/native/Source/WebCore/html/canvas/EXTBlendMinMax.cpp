@@ -45,7 +45,7 @@ WebGLExtension::ExtensionName EXTBlendMinMax::getName() const
 {
     return EXTBlendMinMaxName;
 }
-
+    
 } // namespace WebCore
 
 #endif // ENABLE(WEBGL)

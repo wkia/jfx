@@ -32,7 +32,7 @@
 #include "ResourceLoader.h"
 #include <wtf/CompletionHandler.h>
 #include <wtf/text/WTFString.h>
-
+ 
 namespace WebCore {
 
 class CachedResource;
@@ -79,7 +79,7 @@ private:
     void didFail(const ResourceError&) override;
     void willCancel(const ResourceError&) override;
     void didCancel(const ResourceError&) override;
-
+    
     void updateReferrerPolicy(const String&);
 
 #if PLATFORM(COCOA)

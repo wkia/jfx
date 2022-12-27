@@ -102,7 +102,7 @@ static std::optional<Vector<EncodedResourceCryptographicDigest>> parseIntegrityM
         return std::nullopt;
 
     std::optional<Vector<EncodedResourceCryptographicDigest>> result;
-
+    
     readCharactersForParsing(integrityMetadata, [&result] (auto buffer) {
         using CharacterType = typename decltype(buffer)::CharacterType;
         splitOnSpaces(buffer, IntegrityMetadataParser<CharacterType> { result });
@@ -138,13 +138,13 @@ static Vector<EncodedResourceCryptographicDigest> strongestMetadataFromSet(Vecto
             result.append(WTFMove(item));
             continue;
         }
-
+        
         // 2. Let currentAlgorithm be the alg component of strongest.
         auto currentAlgorithm = strongest;
 
         // 3. Let newAlgorithm be the alg component of item.
         auto newAlgorithm = item.algorithm;
-
+        
         // 4. If the result of getPrioritizedHashFunction(currentAlgorithm, newAlgorithm) is
         //    the empty string, add item to result. If the result is newAlgorithm, set strongest
         //    to item, set result to the empty set, and add item to result.
@@ -168,7 +168,7 @@ bool matchIntegrityMetadata(const CachedResource& resource, const String& integr
 
     // 1. Let parsedMetadata be the result of parsing metadataList.
     auto parsedMetadata = parseIntegrityMetadata(integrityMetadataList);
-
+    
     // 2. If parsedMetadata is no metadata, return true.
     if (!parsedMetadata)
         return true;
@@ -185,12 +185,12 @@ bool matchIntegrityMetadata(const CachedResource& resource, const String& integr
     auto metadata = strongestMetadataFromSet(WTFMove(*parsedMetadata));
 
     const auto* sharedBuffer = resource.resourceBuffer();
-
+    
     // 6. For each item in metadata:
     for (auto& item : metadata) {
         // 1. Let algorithm be the alg component of item.
         auto algorithm = item.algorithm;
-
+        
         // 2. Let expectedValue be the val component of item.
         auto expectedValue = decodeEncodedResourceCryptographicDigest(item);
 
@@ -201,7 +201,7 @@ bool matchIntegrityMetadata(const CachedResource& resource, const String& integr
         if (expectedValue && actualValue.value == expectedValue->value)
             return true;
     }
-
+    
     return false;
 }
 

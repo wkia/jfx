@@ -120,7 +120,7 @@ std::optional<PixelBuffer> ImageBufferBackend::getPixelBuffer(const PixelBufferF
         bytesPerRow(),
         static_cast<uint8_t*>(data) + sourceRectClipped.y() * source.bytesPerRow + sourceRectClipped.x() * 4
     };
-
+    
     PixelBufferConversionView destination {
         destinationFormat,
         static_cast<unsigned>(4 * sourceRectScaled.width()),

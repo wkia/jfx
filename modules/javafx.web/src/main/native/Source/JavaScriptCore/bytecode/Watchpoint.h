@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -44,7 +44,7 @@ class VM;
 
 class FireDetail {
     void* operator new(size_t) = delete;
-
+    
 public:
     FireDetail() = default;
     virtual ~FireDetail() = default;
@@ -57,7 +57,7 @@ public:
         : m_string(string)
     {
     }
-
+    
     void dump(PrintStream& out) const final;
 
 private:
@@ -188,13 +188,13 @@ public:
     {
         return adoptRef(*new WatchpointSet(state));
     }
-
+    
     // Fast way of getting the state, which only works from the main thread.
     WatchpointState stateOnJSThread() const
     {
         return static_cast<WatchpointState>(m_state);
     }
-
+    
     // It is safe to call this from another thread. It may return an old
     // state. Guarantees that if *first* read the state() of the thing being
     // watched and it returned IsWatched and *second* you actually read its
@@ -205,7 +205,7 @@ public:
         WatchpointState result = static_cast<WatchpointState>(m_state);
         return result;
     }
-
+    
     // It is safe to call this from another thread.  It may return true
     // even if the set actually had been invalidated, but that ought to happen
     // only in the case of races, and should be rare. Guarantees that if you
@@ -223,12 +223,12 @@ public:
     }
     // Like isStillValid(), may be called from another thread.
     bool hasBeenInvalidated() const { return !isStillValid(); }
-
+    
     // As a convenience, this will ignore 0. That's because code paths in the DFG
     // that create speculation watchpoints may choose to bail out if speculation
     // had already been terminated.
     void add(Watchpoint*);
-
+    
     // Force the watchpoint set to behave as if it was being watched even if no
     // watchpoints have been installed. This will result in invalidation if the
     // watchpoint would have fired. That's a pretty good indication that you
@@ -259,44 +259,44 @@ public:
         else
             fireAll(vm, detail);
     }
-
+    
     void touch(VM& vm, const char* reason)
     {
         touch(vm, StringFireDetail(reason));
     }
-
+    
     void invalidate(VM& vm, const FireDetail& detail)
     {
         if (state() == IsWatched)
             fireAll(vm, detail);
         m_state = IsInvalidated;
     }
-
+    
     void invalidate(VM& vm, const char* reason)
     {
         invalidate(vm, StringFireDetail(reason));
     }
-
+    
     bool isBeingWatched() const
     {
         return m_setIsNotEmpty;
     }
-
+    
     int8_t* addressOfState() { return &m_state; }
     static ptrdiff_t offsetOfState() { return OBJECT_OFFSETOF(WatchpointSet, m_state); }
     int8_t* addressOfSetIsNotEmpty() { return &m_setIsNotEmpty; }
-
+    
     JS_EXPORT_PRIVATE void fireAllSlow(VM&, const FireDetail&); // Call only if you've checked isWatched.
     JS_EXPORT_PRIVATE void fireAllSlow(VM&, DeferredWatchpointFire* deferredWatchpoints); // Ditto.
     JS_EXPORT_PRIVATE void fireAllSlow(VM&, const char* reason); // Ditto.
-
+    
 protected:
     JS_EXPORT_PRIVATE WatchpointSet(WatchpointState);
 
 private:
     void fireAllWatchpoints(VM&, const FireDetail&);
     void take(WatchpointSet* other);
-
+    
     friend class InlineWatchpointSet;
 
     int8_t m_state;
@@ -331,14 +331,14 @@ public:
         : m_data(encodeState(state))
     {
     }
-
+    
     ~InlineWatchpointSet()
     {
         if (isThin())
             return;
         freeFat();
     }
-
+    
     // Fast way of getting the state, which only works from the main thread.
     WatchpointState stateOnJSThread() const
     {
@@ -358,7 +358,7 @@ public:
             return fat(data)->state();
         return decodeState(data);
     }
-
+    
     // It is safe to call this from another thread.  It may return false
     // even if the set actually had been invalidated, but that ought to happen
     // only in the case of races, and should be rare.
@@ -366,15 +366,15 @@ public:
     {
         return state() == IsInvalidated;
     }
-
+    
     // Like hasBeenInvalidated(), may be called from another thread.
     bool isStillValid() const
     {
         return !hasBeenInvalidated();
     }
-
+    
     void add(Watchpoint*);
-
+    
     void startWatching()
     {
         if (isFat()) {
@@ -405,9 +405,9 @@ public:
         else
             m_data = encodeState(IsInvalidated);
     }
-
+    
     JS_EXPORT_PRIVATE void fireAll(VM&, const char* reason);
-
+    
     void touch(VM& vm, const FireDetail& detail)
     {
         if (isFat()) {
@@ -424,7 +424,7 @@ public:
             m_data = encodeState(IsInvalidated);
         WTF::storeStoreFence();
     }
-
+    
     void touch(VM& vm, const char* reason)
     {
         touch(vm, StringFireDetail(reason));
@@ -479,49 +479,49 @@ public:
             return fat();
         return inflateSlow();
     }
-
+    
 private:
     static constexpr uintptr_t IsThinFlag        = 1;
     static constexpr uintptr_t StateMask         = 6;
     static constexpr uintptr_t StateShift        = 1;
-
+    
     static bool isThin(uintptr_t data) { return data & IsThinFlag; }
     static bool isFat(uintptr_t data) { return !isThin(data); }
-
+    
     static WatchpointState decodeState(uintptr_t data)
     {
         ASSERT(isThin(data));
         return static_cast<WatchpointState>((data & StateMask) >> StateShift);
     }
-
+    
     static uintptr_t encodeState(WatchpointState state)
     {
         return (static_cast<uintptr_t>(state) << StateShift) | IsThinFlag;
     }
-
+    
     bool isThin() const { return isThin(m_data); }
     bool isFat() const { return isFat(m_data); };
-
+    
     static WatchpointSet* fat(uintptr_t data)
     {
         return bitwise_cast<WatchpointSet*>(data);
     }
-
+    
     WatchpointSet* fat()
     {
         ASSERT(isFat());
         return fat(m_data);
     }
-
+    
     const WatchpointSet* fat() const
     {
         ASSERT(isFat());
         return fat(m_data);
     }
-
+    
     JS_EXPORT_PRIVATE WatchpointSet* inflateSlow();
     JS_EXPORT_PRIVATE void freeFat();
-
+    
     uintptr_t m_data;
 };
 

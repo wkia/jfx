@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -182,7 +182,7 @@ char* newTypedArrayWithSize(JSGlobalObject* globalObject, VM& vm, Structure* str
         throwException(globalObject, scope, createRangeError(globalObject, "Requested length is negative"_s));
         return nullptr;
     }
-
+    
     if (vector)
         return bitwise_cast<char*>(ViewClass::createWithFastVector(globalObject, structure, size, untagArrayPtr(vector, size)));
 
@@ -603,10 +603,10 @@ JSC_DEFINE_JIT_OPERATION(operationValueAddNotNumber, EncodedJSValue, (JSGlobalOb
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue op1 = JSValue::decode(encodedOp1);
     JSValue op2 = JSValue::decode(encodedOp2);
-
+    
     return JSValue::encode(jsAddNonNumber(globalObject, op1, op2));
 }
 
@@ -834,7 +834,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValStrict, void, (JSGlobalObject* globalO
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<true, false>(globalObject, vm, encodedBase, encodedProperty, encodedValue);
 }
 
@@ -843,7 +843,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValNonStrict, void, (JSGlobalObject* glob
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<false, false>(globalObject, vm, encodedBase, encodedProperty, encodedValue);
 }
 
@@ -852,7 +852,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValCellStrict, void, (JSGlobalObject* glo
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<true, false>(globalObject, vm, JSValue::encode(cell), encodedProperty, encodedValue);
 }
 
@@ -861,7 +861,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValCellNonStrict, void, (JSGlobalObject* 
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<false, false>(globalObject, vm, JSValue::encode(cell), encodedProperty, encodedValue);
 }
 
@@ -908,12 +908,12 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValBeyondArrayBoundsStrict, void, (JSGlob
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (index >= 0) {
         object->putByIndexInline(globalObject, static_cast<uint32_t>(index), JSValue::decode(encodedValue), true);
         return;
     }
-
+    
     PutPropertySlot slot(object, true);
     object->methodTable(vm)->put(
         object, globalObject, Identifier::from(vm, index), JSValue::decode(encodedValue), slot);
@@ -924,12 +924,12 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValBeyondArrayBoundsNonStrict, void, (JSG
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (index >= 0) {
         object->putByIndexInline(globalObject, static_cast<uint32_t>(index), JSValue::decode(encodedValue), false);
         return;
     }
-
+    
     PutPropertySlot slot(object, false);
     object->methodTable(vm)->put(
         object, globalObject, Identifier::from(vm, index), JSValue::decode(encodedValue), slot);
@@ -940,14 +940,14 @@ JSC_DEFINE_JIT_OPERATION(operationPutDoubleByValBeyondArrayBoundsStrict, void, (
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue jsValue = JSValue(JSValue::EncodeAsDouble, value);
-
+    
     if (index >= 0) {
         object->putByIndexInline(globalObject, static_cast<uint32_t>(index), jsValue, true);
         return;
     }
-
+    
     PutPropertySlot slot(object, true);
     object->methodTable(vm)->put(
         object, globalObject, Identifier::from(vm, index), jsValue, slot);
@@ -958,14 +958,14 @@ JSC_DEFINE_JIT_OPERATION(operationPutDoubleByValBeyondArrayBoundsNonStrict, void
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSValue jsValue = JSValue(JSValue::EncodeAsDouble, value);
-
+    
     if (index >= 0) {
         object->putByIndexInline(globalObject, static_cast<uint32_t>(index), jsValue, false);
         return;
     }
-
+    
     PutPropertySlot slot(object, false);
     object->methodTable(vm)->put(
         object, globalObject, Identifier::from(vm, index), jsValue, slot);
@@ -1010,7 +1010,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectStrict, void, (JSGlobalObject* g
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<true, true>(globalObject, vm, encodedBase, encodedProperty, encodedValue);
 }
 
@@ -1019,7 +1019,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectNonStrict, void, (JSGlobalObject
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<false, true>(globalObject, vm, encodedBase, encodedProperty, encodedValue);
 }
 
@@ -1028,7 +1028,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectCellStrict, void, (JSGlobalObjec
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<true, true>(globalObject, vm, JSValue::encode(cell), encodedProperty, encodedValue);
 }
 
@@ -1037,7 +1037,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectCellNonStrict, void, (JSGlobalOb
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     putByValInternal<false, true>(globalObject, vm, JSValue::encode(cell), encodedProperty, encodedValue);
 }
 
@@ -1088,7 +1088,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectBeyondArrayBoundsStrict, void, (
         object->putDirectIndex(globalObject, static_cast<uint32_t>(index), JSValue::decode(encodedValue), 0, PutDirectIndexShouldThrow);
         return;
     }
-
+    
     PutPropertySlot slot(object, true);
     CommonSlowPaths::putDirectWithReify(vm, globalObject, object, Identifier::from(vm, index), JSValue::decode(encodedValue), slot);
 }
@@ -1103,7 +1103,7 @@ JSC_DEFINE_JIT_OPERATION(operationPutByValDirectBeyondArrayBoundsNonStrict, void
         object->putDirectIndex(globalObject, static_cast<uint32_t>(index), JSValue::decode(encodedValue));
         return;
     }
-
+    
     PutPropertySlot slot(object, false);
     CommonSlowPaths::putDirectWithReify(vm, globalObject, object, Identifier::from(vm, index), JSValue::decode(encodedValue), slot);
 }
@@ -1113,7 +1113,7 @@ JSC_DEFINE_JIT_OPERATION(operationArrayPush, EncodedJSValue, (JSGlobalObject* gl
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     array->pushInline(globalObject, JSValue::decode(encodedValue));
     return JSValue::encode(jsNumber(array->length()));
 }
@@ -1123,7 +1123,7 @@ JSC_DEFINE_JIT_OPERATION(operationArrayPushDouble, EncodedJSValue, (JSGlobalObje
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     array->pushInline(globalObject, JSValue(JSValue::EncodeAsDouble, value));
     return JSValue::encode(jsNumber(array->length()));
 }
@@ -1182,41 +1182,41 @@ JSC_DEFINE_JIT_OPERATION(operationArrayPop, EncodedJSValue, (JSGlobalObject* glo
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return JSValue::encode(array->pop(globalObject));
 }
-
+        
 JSC_DEFINE_JIT_OPERATION(operationArrayPopAndRecoverLength, EncodedJSValue, (JSGlobalObject* globalObject, JSArray* array))
 {
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     array->butterfly()->setPublicLength(array->butterfly()->publicLength() + 1);
-
+    
     return JSValue::encode(array->pop(globalObject));
 }
-
+        
 JSC_DEFINE_JIT_OPERATION(operationRegExpExecString, EncodedJSValue, (JSGlobalObject* globalObject, RegExpObject* regExpObject, JSString* argument))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return JSValue::encode(regExpObject->execInline(globalObject, argument));
 }
-
+        
 JSC_DEFINE_JIT_OPERATION(operationRegExpExec, EncodedJSValue, (JSGlobalObject* globalObject, RegExpObject* regExpObject, EncodedJSValue encodedArgument))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     auto scope = DECLARE_THROW_SCOPE(vm);
-
+    
     JSValue argument = JSValue::decode(encodedArgument);
 
     JSString* input = argument.toStringOrNull(globalObject);
@@ -1225,11 +1225,11 @@ JSC_DEFINE_JIT_OPERATION(operationRegExpExec, EncodedJSValue, (JSGlobalObject* g
         return encodedJSValue();
     RELEASE_AND_RETURN(scope, JSValue::encode(regExpObject->execInline(globalObject, input)));
 }
-
+        
 JSC_DEFINE_JIT_OPERATION(operationRegExpExecGeneric, EncodedJSValue, (JSGlobalObject* globalObject, EncodedJSValue encodedBase, EncodedJSValue encodedArgument))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -1237,7 +1237,7 @@ JSC_DEFINE_JIT_OPERATION(operationRegExpExecGeneric, EncodedJSValue, (JSGlobalOb
 
     JSValue base = JSValue::decode(encodedBase);
     JSValue argument = JSValue::decode(encodedArgument);
-
+    
     auto* regexp = jsDynamicCast<RegExpObject*>(vm, base);
     if (UNLIKELY(!regexp))
         return throwVMTypeError(globalObject, scope);
@@ -1366,11 +1366,11 @@ JSC_DEFINE_JIT_OPERATION(operationParseIntGeneric, EncodedJSValue, (JSGlobalObje
         return parseIntResult(parseInt(view, radix));
     });
 }
-
+        
 JSC_DEFINE_JIT_OPERATION(operationRegExpTestString, size_t, (JSGlobalObject* globalObject, RegExpObject* regExpObject, JSString* input))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -1381,7 +1381,7 @@ JSC_DEFINE_JIT_OPERATION(operationRegExpTestString, size_t, (JSGlobalObject* glo
 JSC_DEFINE_JIT_OPERATION(operationRegExpTest, size_t, (JSGlobalObject* globalObject, RegExpObject* regExpObject, EncodedJSValue encodedArgument))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -1397,7 +1397,7 @@ JSC_DEFINE_JIT_OPERATION(operationRegExpTest, size_t, (JSGlobalObject* globalObj
 JSC_DEFINE_JIT_OPERATION(operationRegExpTestGeneric, size_t, (JSGlobalObject* globalObject, EncodedJSValue encodedBase, EncodedJSValue encodedArgument))
 {
     SuperSamplerScope superSamplerScope(false);
-
+    
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
@@ -1424,10 +1424,10 @@ JSC_DEFINE_JIT_OPERATION(operationSubHeapBigInt, EncodedJSValue, (JSGlobalObject
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::sub(globalObject, leftOperand, rightOperand));
 }
 
@@ -1453,16 +1453,16 @@ JSC_DEFINE_JIT_OPERATION(operationMulHeapBigInt, EncodedJSValue, (JSGlobalObject
 
     return JSValue::encode(JSBigInt::multiply(globalObject, leftOperand, rightOperand));
 }
-
+    
 JSC_DEFINE_JIT_OPERATION(operationModHeapBigInt, EncodedJSValue, (JSGlobalObject* globalObject, JSCell* op1, JSCell* op2))
 {
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::remainder(globalObject, leftOperand, rightOperand));
 }
 
@@ -1471,10 +1471,10 @@ JSC_DEFINE_JIT_OPERATION(operationDivHeapBigInt, EncodedJSValue, (JSGlobalObject
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::divide(globalObject, leftOperand, rightOperand));
 }
 
@@ -1483,10 +1483,10 @@ JSC_DEFINE_JIT_OPERATION(operationPowHeapBigInt, EncodedJSValue, (JSGlobalObject
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::exponentiate(globalObject, leftOperand, rightOperand));
 }
 
@@ -1519,10 +1519,10 @@ JSC_DEFINE_JIT_OPERATION(operationAddHeapBigInt, EncodedJSValue, (JSGlobalObject
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::add(globalObject, leftOperand, rightOperand));
 }
 
@@ -1531,10 +1531,10 @@ JSC_DEFINE_JIT_OPERATION(operationBitRShiftHeapBigInt, EncodedJSValue, (JSGlobal
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::signedRightShift(globalObject, leftOperand, rightOperand));
 }
 
@@ -1543,10 +1543,10 @@ JSC_DEFINE_JIT_OPERATION(operationBitOrHeapBigInt, EncodedJSValue, (JSGlobalObje
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     JSBigInt* leftOperand = jsCast<JSBigInt*>(op1);
     JSBigInt* rightOperand = jsCast<JSBigInt*>(op2);
-
+    
     return JSValue::encode(JSBigInt::bitwiseOr(globalObject, leftOperand, rightOperand));
 }
 
@@ -1567,7 +1567,7 @@ JSC_DEFINE_JIT_OPERATION(operationCompareStrictEqCell, size_t, (JSGlobalObject* 
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return JSValue::strictEqualForCells(globalObject, op1, op2);
 }
 
@@ -1585,7 +1585,7 @@ JSC_DEFINE_JIT_OPERATION(operationToPrimitive, EncodedJSValue, (JSGlobalObject* 
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return JSValue::encode(JSValue::decode(value).toPrimitive(globalObject));
 }
 
@@ -1654,13 +1654,13 @@ JSC_DEFINE_JIT_OPERATION(operationGetByValWithThis, EncodedJSValue, (JSGlobalObj
             }
         }
     }
-
+    
     PropertySlot slot(thisVal, PropertySlot::PropertySlot::InternalMethodType::Get);
     if (std::optional<uint32_t> index = subscript.tryGetAsUint32Index()) {
         uint32_t i = *index;
         if (isJSString(baseValue) && asString(baseValue)->canGetIndex(i))
             return JSValue::encode(asString(baseValue)->getIndex(globalObject, i));
-
+        
         RELEASE_AND_RETURN(scope, JSValue::encode(baseValue.get(globalObject, i, slot)));
     }
 
@@ -1839,7 +1839,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewEmptyArray, char*, (VM* vmPointer, Structur
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return bitwise_cast<char*>(JSArray::create(vm, arrayStructure));
 }
 
@@ -2139,11 +2139,11 @@ JSC_DEFINE_JIT_OPERATION(operationCreateScopedArguments, JSCell*, (JSGlobalObjec
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     // We could pass the ScopedArgumentsTable* as an argument. We currently don't because I
     // didn't feel like changing the max number of arguments for a slow path call from 6 to 7.
     ScopedArgumentsTable* table = scope->symbolTable()->arguments();
-
+    
     return ScopedArguments::createByCopyingFrom(
         vm, structure, argumentStart, length, callee, table, scope);
 }
@@ -2179,28 +2179,28 @@ JSC_DEFINE_JIT_OPERATION(operationCreateDirectArgumentsDuringExit, JSCell*, (VM*
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     DeferGCForAWhile deferGC(vm.heap);
-
+    
     CodeBlock* codeBlock;
     if (inlineCallFrame)
         codeBlock = baselineCodeBlockForInlineCallFrame(inlineCallFrame);
     else
         codeBlock = callFrame->codeBlock();
-
+    
     unsigned length = argumentCount - 1;
     unsigned capacity = std::max(length, static_cast<unsigned>(codeBlock->numParameters() - 1));
     DirectArguments* result = DirectArguments::create(
         vm, codeBlock->globalObject()->directArgumentsStructure(), length, capacity);
-
+    
     result->setCallee(vm, callee);
-
+    
     Register* arguments =
         callFrame->registers() + (inlineCallFrame ? inlineCallFrame->stackOffset : 0) +
         CallFrame::argumentOffset(0);
     for (unsigned i = length; i--;)
         result->setIndexQuickly(vm, i, arguments[i].jsValue());
-
+    
     return result;
 }
 
@@ -2209,27 +2209,27 @@ JSC_DEFINE_JIT_OPERATION(operationCreateClonedArgumentsDuringExit, JSCell*, (VM*
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     DeferGCForAWhile deferGC(vm.heap);
-
+    
     CodeBlock* codeBlock;
     if (inlineCallFrame)
         codeBlock = baselineCodeBlockForInlineCallFrame(inlineCallFrame);
     else
         codeBlock = callFrame->codeBlock();
-
+    
     unsigned length = argumentCount - 1;
     JSGlobalObject* globalObject = codeBlock->globalObject();
     ClonedArguments* result = ClonedArguments::createEmpty(
         vm, globalObject->clonedArgumentsStructure(), callee, length);
-
+    
     Register* arguments =
         callFrame->registers() + (inlineCallFrame ? inlineCallFrame->stackOffset : 0) +
         CallFrame::argumentOffset(0);
     for (unsigned i = length; i--;)
         result->putDirectIndex(globalObject, i, arguments[i].jsValue());
 
-
+    
     return result;
 }
 
@@ -2252,7 +2252,7 @@ JSC_DEFINE_JIT_OPERATION(operationTypeOfIsObject, size_t, (JSGlobalObject* globa
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
 
     ASSERT(jsDynamicCast<JSObject*>(vm, object));
-
+    
     return jsTypeofIsObject(globalObject, object);
 }
 
@@ -2274,7 +2274,7 @@ JSC_DEFINE_JIT_OPERATION(operationObjectIsCallable, size_t, (JSGlobalObject* glo
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
 
     ASSERT(jsDynamicCast<JSObject*>(vm, object));
-
+    
     return object->isCallable(vm);
 }
 
@@ -2294,7 +2294,7 @@ JSC_DEFINE_JIT_OPERATION(operationTypeOfObject, JSCell*, (JSGlobalObject* global
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
 
     ASSERT(jsDynamicCast<JSObject*>(vm, object));
-
+    
     if (object->structure(vm)->masqueradesAsUndefined(globalObject))
         return vm.smallStrings.undefinedString();
     if (object->isCallable(vm))
@@ -2348,7 +2348,7 @@ JSC_DEFINE_JIT_OPERATION(operationEnsureInt32, char*, (VM* vmPointer, JSCell* ce
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (!cell->isObject())
         return nullptr;
 
@@ -2362,7 +2362,7 @@ JSC_DEFINE_JIT_OPERATION(operationEnsureDouble, char*, (VM* vmPointer, JSCell* c
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (!cell->isObject())
         return nullptr;
 
@@ -2376,10 +2376,10 @@ JSC_DEFINE_JIT_OPERATION(operationEnsureContiguous, char*, (VM* vmPointer, JSCel
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (!cell->isObject())
         return nullptr;
-
+    
     auto* result = reinterpret_cast<char*>(asObject(cell)->tryMakeWritableContiguous(vm).data());
     ASSERT((!isCopyOnWrite(asObject(cell)->indexingMode()) && hasContiguous(cell->indexingMode())) || !result);
     return result;
@@ -2390,7 +2390,7 @@ JSC_DEFINE_JIT_OPERATION(operationEnsureArrayStorage, char*, (VM* vmPointer, JSC
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (!cell->isObject())
         return nullptr;
 
@@ -2536,6 +2536,18 @@ JSC_DEFINE_JIT_OPERATION(operationEnumeratorInByVal, EncodedJSValue, (JSGlobalOb
 
     JSString* propertyName = jsSecureCast<JSString*>(vm, JSValue::decode(propertyNameValue));
     RELEASE_AND_RETURN(scope, JSValue::encode(jsBoolean(CommonSlowPaths::opInByVal(globalObject, base, propertyName))));
+}
+
+JSC_DEFINE_JIT_OPERATION(operationEnumeratorGetByValGeneric, EncodedJSValue, (JSGlobalObject* globalObject, JSCell* baseCell, EncodedJSValue propertyNameValue, uint32_t index, int32_t modeNumber, JSPropertyNameEnumerator* enumerator))
+{
+    VM& vm = globalObject->vm();
+    CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
+    JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
+    auto scope = DECLARE_THROW_SCOPE(vm);
+
+    JSValue property = JSValue::decode(propertyNameValue);
+    JSPropertyNameEnumerator::Mode mode = static_cast<JSPropertyNameEnumerator::Mode>(modeNumber);
+    RELEASE_AND_RETURN(scope, JSValue::encode(CommonSlowPaths::opEnumeratorGetByVal(globalObject, baseCell, property, index, mode, enumerator)));
 }
 
 JSC_DEFINE_JIT_OPERATION(operationEnumeratorHasOwnProperty, EncodedJSValue, (JSGlobalObject* globalObject, EncodedJSValue baseValue, EncodedJSValue propertyNameValue, uint32_t index, int32_t modeNumber))
@@ -2725,7 +2737,7 @@ JSC_DEFINE_JIT_OPERATION(operationSingleCharacterString, JSString*, (VM* vmPoint
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return jsSingleCharacterString(vm, static_cast<UChar>(character));
 }
 
@@ -2756,7 +2768,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewStringObject, JSCell*, (VM* vmPointer, JSSt
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return StringObject::create(vm, structure, string);
 }
 
@@ -2765,7 +2777,7 @@ JSC_DEFINE_JIT_OPERATION(operationToStringOnCell, JSString*, (JSGlobalObject* gl
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     return JSValue(cell).toString(globalObject);
 }
 
@@ -2831,7 +2843,7 @@ JSC_DEFINE_JIT_OPERATION(operationStrCat2, JSString*, (JSGlobalObject* globalObj
 
     RELEASE_AND_RETURN(scope, jsString(globalObject, str1, str2));
 }
-
+    
 JSC_DEFINE_JIT_OPERATION(operationStrCat3, JSString*, (JSGlobalObject* globalObject, EncodedJSValue a, EncodedJSValue b, EncodedJSValue c))
 {
     VM& vm = globalObject->vm();
@@ -2964,7 +2976,7 @@ JSC_DEFINE_JIT_OPERATION(operationSizeOfVarargs, UCPUStrictInt32, (JSGlobalObjec
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     JSValue arguments = JSValue::decode(encodedArguments);
-
+    
     return toUCPUStrictInt32(sizeOfVarargs(globalObject, arguments, firstVarArgOffset));
 }
 
@@ -3074,9 +3086,9 @@ JSC_DEFINE_JIT_OPERATION(operationLoadVarargs, void, (JSGlobalObject* globalObje
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     JSValue arguments = JSValue::decode(encodedArguments);
-
+    
     loadVarargs(globalObject, bitwise_cast<JSValue*>(&callFrame->r(firstElement)), arguments, offset, lengthIncludingThis - 1);
-
+    
     for (uint32_t i = lengthIncludingThis - 1; i < mandatoryMinimum; ++i)
         callFrame->r(firstElement + i) = jsUndefined();
 }
@@ -3135,7 +3147,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewRawObject, char*, (VM* vmPointer, Structure
         IndexingHeader header;
         header.setVectorLength(length);
         header.setPublicLength(0);
-
+        
         butterfly = Butterfly::create(
             vm, nullptr, 0, structure->outOfLineCapacity(),
             hasIndexedProperties(structure->indexingType()), header,
@@ -3152,12 +3164,12 @@ JSC_DEFINE_JIT_OPERATION(operationNewObjectWithButterfly, JSCell*, (VM* vmPointe
     VM& vm = *vmPointer;
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+    
     if (!butterfly) {
         butterfly = Butterfly::create(
             vm, nullptr, 0, structure->outOfLineCapacity(), false, IndexingHeader(), 0);
     }
-
+    
     if (structure->type() == JSType::ArrayType)
         return JSArray::createWithButterfly(vm, nullptr, structure, butterfly);
     return JSFinalObject::createWithButterfly(vm, structure, butterfly);
@@ -3179,7 +3191,7 @@ JSC_DEFINE_JIT_OPERATION(operationNewObjectWithButterflyWithIndexingHeaderAndVec
             vm, nullptr, 0, structure->outOfLineCapacity(), true, header,
             sizeof(EncodedJSValue) * length);
     }
-
+    
     if (structure->type() == JSType::ArrayType)
         return JSArray::createWithButterfly(vm, nullptr, structure, butterfly);
     return JSFinalObject::createWithButterfly(vm, structure, butterfly);
@@ -3319,11 +3331,11 @@ JSC_DEFINE_JIT_OPERATION(operationResolveScopeForHoistingFuncDeclInEval, Encoded
     VM& vm = globalObject->vm();
     CallFrame* callFrame = DECLARE_CALL_FRAME(vm);
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
-
+        
     JSValue resolvedScope = JSScope::resolveScopeForHoistingFuncDeclInEval(globalObject, scope, Identifier::fromUid(vm, impl));
     return JSValue::encode(resolvedScope);
 }
-
+    
 JSC_DEFINE_JIT_OPERATION(operationResolveScope, JSCell*, (JSGlobalObject* globalObject, JSScope* scope, UniquedStringImpl* impl))
 {
     VM& vm = globalObject->vm();
@@ -3735,21 +3747,21 @@ JSC_DEFINE_JIT_OPERATION(operationLinkDirectCall, void, (CallLinkInfo* callLinkI
     auto throwScope = DECLARE_THROW_SCOPE(vm);
 
     CodeSpecializationKind kind = callLinkInfo->specializationKind();
-
+    
     RELEASE_ASSERT(callLinkInfo->isDirect());
-
+    
     // This would happen if the executable died during GC but the CodeBlock did not die. That should
     // not happen because the CodeBlock should have a weak reference to any executable it uses for
     // this purpose.
     RELEASE_ASSERT(callLinkInfo->executable());
-
+    
     // Having a CodeBlock indicates that this is linked. We shouldn't be taking this path if it's
     // linked.
     RELEASE_ASSERT(!callLinkInfo->codeBlock());
-
+    
     // We just don't support this yet.
     RELEASE_ASSERT(!callLinkInfo->isVarargs());
-
+    
     ExecutableBase* executable = callLinkInfo->executable();
     RELEASE_ASSERT(callee->executable() == callLinkInfo->executable());
 
@@ -3765,7 +3777,7 @@ JSC_DEFINE_JIT_OPERATION(operationLinkDirectCall, void, (CallLinkInfo* callLinkI
         FunctionExecutable* functionExecutable = static_cast<FunctionExecutable*>(executable);
 
         RELEASE_ASSERT(isCall(kind) || functionExecutable->constructAbility() != ConstructAbility::CannotConstruct);
-
+        
         Exception* error = functionExecutable->prepareForExecution<FunctionExecutable>(vm, callee, scope, kind, codeBlock);
         EXCEPTION_ASSERT_UNUSED(throwScope, throwScope.exception() == error);
         if (UNLIKELY(error))
@@ -3776,7 +3788,7 @@ JSC_DEFINE_JIT_OPERATION(operationLinkDirectCall, void, (CallLinkInfo* callLinkI
         else
             codePtr = functionExecutable->entrypointFor(kind, ArityCheckNotRequired);
     }
-
+    
     linkDirectCall(callFrame, *callLinkInfo, codeBlock, codePtr);
 }
 
@@ -3785,7 +3797,7 @@ JSC_DEFINE_JIT_OPERATION(operationTriggerReoptimizationNow, void, (CodeBlock* co
     // It's sort of preferable that we don't GC while in here. Anyways, doing so wouldn't
     // really be profitable.
     DeferGCForAWhile deferGC(codeBlock->vm().heap);
-
+    
     sanitizeStackForVM(codeBlock->vm());
 
     dataLogLnIf(Options::verboseOSR(), *codeBlock, ": Entered reoptimize");
@@ -3802,12 +3814,12 @@ JSC_DEFINE_JIT_OPERATION(operationTriggerReoptimizationNow, void, (CodeBlock* co
         dataLogLnIf(Options::verboseOSR(), *codeBlock, ": Not reoptimizing because we've already been jettisoned.");
         return;
     }
-
+    
     // Otherwise, the replacement must be optimized code. Use this as an opportunity
     // to check our logic.
     ASSERT(codeBlock->hasOptimizedReplacement());
     ASSERT(JITCode::isOptimizingJIT(optimizedCodeBlock->jitType()));
-
+    
     bool didTryToEnterIntoInlinedLoops = false;
     for (InlineCallFrame* inlineCallFrame = exit->m_codeOrigin.inlineCallFrame(); inlineCallFrame; inlineCallFrame = inlineCallFrame->directCaller.inlineCallFrame()) {
         if (inlineCallFrame->baselineCodeBlock->ownerExecutable()->didTryToEnterInLoop()) {
@@ -3823,13 +3835,13 @@ JSC_DEFINE_JIT_OPERATION(operationTriggerReoptimizationNow, void, (CodeBlock* co
     bool didGetStuckInLoop =
         (codeBlock->checkIfOptimizationThresholdReached() || didTryToEnterIntoInlinedLoops)
         && optimizedCodeBlock->shouldReoptimizeFromLoopNow();
-
+    
     if (!didExitABunch && !didGetStuckInLoop) {
         dataLogLnIf(Options::verboseOSR(), *codeBlock, ": Not reoptimizing ", *optimizedCodeBlock, " because it either didn't exit enough or didn't loop enough after exit.");
         codeBlock->optimizeAfterLongWarmUp();
         return;
     }
-
+    
     optimizedCodeBlock->jettison(Profiler::JettisonDueToOSRExit, CountReoptimization);
 }
 
@@ -3861,17 +3873,17 @@ static void triggerFTLReplacementCompile(VM& vm, CodeBlock* codeBlock, JITCode* 
         jitCode->optimizeAfterWarmUp(codeBlock);
         return;
     }
-
+    
     JITWorklist::State worklistState = JITWorklist::ensureGlobalWorklist().completeAllReadyPlansForVM(
         vm, JITCompilationKey(codeBlock->baselineVersion(), JITCompilationMode::FTL));
-
+    
     if (worklistState == JITWorklist::Compiling) {
         CODEBLOCK_LOG_EVENT(codeBlock, "delayFTLCompile", ("still compiling"));
         jitCode->setOptimizationThresholdBasedOnCompilationResult(
             codeBlock, CompilationDeferred);
         return;
     }
-
+    
     if (codeBlock->hasOptimizedReplacement()) {
         CODEBLOCK_LOG_EVENT(codeBlock, "delayFTLCompile", ("has replacement"));
         // That's great, we've compiled the code - next time we call this function,
@@ -3879,7 +3891,7 @@ static void triggerFTLReplacementCompile(VM& vm, CodeBlock* codeBlock, JITCode* 
         jitCode->optimizeSoon(codeBlock);
         return;
     }
-
+    
     if (worklistState == JITWorklist::Compiled) {
         CODEBLOCK_LOG_EVENT(codeBlock, "delayFTLCompile", ("compiled and failed"));
         // This means that we finished compiling, but failed somehow; in that case the
@@ -3906,16 +3918,16 @@ JSC_DEFINE_JIT_OPERATION(operationTriggerTierUpNow, void, (VM* vmPointer))
     JITOperationPrologueCallFrameTracer tracer(vm, callFrame);
     DeferGCForAWhile deferGC(vm.heap);
     CodeBlock* codeBlock = callFrame->codeBlock();
-
+    
     sanitizeStackForVM(vm);
 
     if (codeBlock->jitType() != JITType::DFGJIT) {
         dataLog("Unexpected code block in DFG->FTL tier-up: ", *codeBlock, "\n");
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     JITCode* jitCode = codeBlock->jitCode()->dfg();
-
+    
     dataLogLnIf(Options::verboseOSR(),
         *codeBlock, ": Entered triggerTierUpNow with executeCounter = ", jitCode->tierUpCounter);
 
@@ -3951,7 +3963,7 @@ static char* tierUpCommon(VM& vm, CallFrame* callFrame, BytecodeIndex originByte
         vm, JITCompilationKey(codeBlock->baselineVersion(), JITCompilationMode::FTLForOSREntry));
 
     JITCode* jitCode = codeBlock->jitCode()->dfg();
-
+    
     bool triggeredSlowPathToStartCompilation = false;
     auto tierUpEntryTriggers = jitCode->tierUpEntryTriggers.find(originBytecodeIndex);
     if (tierUpEntryTriggers != jitCode->tierUpEntryTriggers.end()) {
@@ -4150,7 +4162,7 @@ static char* tierUpCommon(VM& vm, CallFrame* callFrame, BytecodeIndex originByte
             codeBlock, CompilationDeferred);
         return nullptr;
     }
-
+    
     CODEBLOCK_LOG_EVENT(jitCode->osrEntryBlock(), "osrEntry", ("at ", originBytecodeIndex));
     // It's possible that the for-entry compile already succeeded. In that case OSR
     // entry will succeed unless we ran out of stack. It's not clear what we should do.

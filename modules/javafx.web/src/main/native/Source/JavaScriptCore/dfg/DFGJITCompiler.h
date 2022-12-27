@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -90,13 +90,13 @@ public:
 
     JITCompiler(Graph& dfg);
     ~JITCompiler();
-
+    
     void compile();
     void compileFunction();
-
+    
     // Accessors for properties.
     Graph& graph() { return m_graph; }
-
+    
     // Methods to set labels for the disassembler.
     void setStartOfCode()
     {
@@ -105,24 +105,24 @@ public:
             return;
         m_disassembler->setStartOfCode(labelIgnoringWatchpoints());
     }
-
+    
     void setForBlockIndex(BlockIndex blockIndex)
     {
         if (LIKELY(!m_disassembler))
             return;
         m_disassembler->setForBlockIndex(blockIndex, labelIgnoringWatchpoints());
     }
-
+    
     void setForNode(Node* node)
     {
         if (LIKELY(!m_disassembler))
             return;
         m_disassembler->setForNode(node, labelIgnoringWatchpoints());
     }
-
+    
     void setEndOfMainPath();
     void setEndOfCode();
-
+    
     CallSiteIndex addCallSite(CodeOrigin codeOrigin)
     {
         return m_jitCode->common.codeOrigins->addCodeOrigin(codeOrigin);
@@ -159,7 +159,7 @@ public:
     {
         call(address, OperationPtrTag);
     }
-
+    
     void exceptionCheck();
 
     void exceptionCheckWithCallFrameRollback()
@@ -183,7 +183,7 @@ public:
     {
         m_getByIds.append(InlineCacheWrapper<JITGetByIdGenerator>(gen, slowPath));
     }
-
+    
     void addGetByIdWithThis(const JITGetByIdWithThisGenerator& gen, SlowPathGenerator* slowPath)
     {
         m_getByIdsWithThis.append(InlineCacheWrapper<JITGetByIdWithThisGenerator>(gen, slowPath));
@@ -193,7 +193,7 @@ public:
     {
         m_getByVals.append(InlineCacheWrapper<JITGetByValGenerator>(gen, slowPath));
     }
-
+    
     void addPutById(const JITPutByIdGenerator& gen, SlowPathGenerator* slowPath)
     {
         m_putByIds.append(InlineCacheWrapper<JITPutByIdGenerator>(gen, slowPath));
@@ -238,23 +238,23 @@ public:
     {
         m_jsCalls.append(JSCallRecord(slowPathStart, doneLocation, info));
     }
-
+    
     void addJSDirectCall(Label slowPath, CallLinkInfo* info)
     {
         m_jsDirectCalls.append(JSDirectCallRecord(slowPath, info));
     }
-
+    
     void addWeakReference(JSCell* target)
     {
         m_graph.m_plan.weakReferences().addLazily(target);
     }
-
+    
     void addWeakReferences(const StructureSet& structureSet)
     {
         for (unsigned i = structureSet.size(); i--;)
             addWeakReference(structureSet[i]);
     }
-
+    
     template<typename T>
     Jump branchWeakPtr(RelationalCondition cond, T left, JSCell* weakPtr)
     {
@@ -293,7 +293,7 @@ public:
     }
 
     RefPtr<JITCode> jitCode() { return m_jitCode; }
-
+    
     Vector<Label>& blockHeads() { return m_blockHeads; }
 
     CallSiteIndex recordCallSiteAndGenerateExceptionHandlingOSRExitIfNeeded(const CodeOrigin&, unsigned eventStreamIndex);
@@ -304,14 +304,14 @@ public:
 
 private:
     friend class OSRExitJumpPlaceholder;
-
+    
     // Internal implementation to compile.
     void compileEntry();
     void compileSetupRegistersForEntry();
     void compileEntryExecutionFlag();
     void compileBody();
     void link(LinkBuffer&);
-
+    
     void exitSpeculativeWithOSR(const OSRExit&, SpeculationRecovery*);
     void compileExceptionHandlers();
     void linkOSRExits();
@@ -325,9 +325,9 @@ private:
     Graph& m_graph;
 
     std::unique_ptr<Disassembler> m_disassembler;
-
+    
     RefPtr<JITCode> m_jitCode;
-
+    
     // Vector of calls out from JIT code, including exception handler information.
     // Count of the number of CallRecords with exception handlers.
     Vector<CallLinkRecord> m_calls;
@@ -344,23 +344,23 @@ private:
             , info(info)
         {
         }
-
+        
         Label slowPathStart;
         Label doneLocation;
         CallLinkInfo* info;
     };
-
+    
     struct JSDirectCallRecord {
         JSDirectCallRecord(Label slowPath, CallLinkInfo* info)
             : slowPath(slowPath)
             , info(info)
         {
         }
-
+        
         Label slowPath;
         CallLinkInfo* info;
     };
-
+    
     Vector<InlineCacheWrapper<JITGetByIdGenerator>, 4> m_getByIds;
     Vector<InlineCacheWrapper<JITGetByIdWithThisGenerator>, 4> m_getByIdsWithThis;
     Vector<InlineCacheWrapper<JITGetByValGenerator>, 4> m_getByVals;
@@ -379,14 +379,14 @@ private:
     Vector<DFG::OSREntryData> m_osrEntry;
     Vector<DFG::OSRExit> m_osrExit;
     Vector<DFG::SpeculationRecovery> m_speculationRecovery;
-
+    
     struct ExceptionHandlingOSRExitInfo {
         OSRExitCompilationInfo& exitInfo;
         HandlerInfo baselineExceptionHandler;
         CallSiteIndex callSiteIndex;
     };
     Vector<ExceptionHandlingOSRExitInfo> m_exceptionHandlerOSRExitCallSites;
-
+    
     std::unique_ptr<SpeculativeJIT> m_speculative;
     PCToCodeOriginMapBuilder m_pcToCodeOriginMapBuilder;
 };

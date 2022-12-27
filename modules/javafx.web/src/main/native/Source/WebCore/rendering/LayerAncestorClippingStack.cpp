@@ -59,7 +59,7 @@ bool LayerAncestorClippingStack::hasAnyScrollingLayers() const
         if (entry.clipData.isOverflowScroll)
             return true;
     }
-
+    
     return false;
 }
 
@@ -102,7 +102,7 @@ ScrollingNodeID LayerAncestorClippingStack::lastOverflowScrollProxyNodeID() cons
         if (entry.overflowScrollProxyNodeID)
             return entry.overflowScrollProxyNodeID;
     }
-
+    
     return 0;
 }
 
@@ -124,15 +124,15 @@ bool LayerAncestorClippingStack::updateWithClipData(ScrollingCoordinator* scroll
     int stackEntryCount = m_stack.size();
     for (int i = 0; i < clipEntryCount; ++i) {
         auto& clipDataEntry = clipDataStack[i];
-
+        
         if (i >= stackEntryCount) {
             m_stack.append({ WTFMove(clipDataEntry), 0, nullptr });
             stackChanged = true;
             continue;
         }
-
+        
         auto& existingEntry = m_stack[i];
-
+        
         if (existingEntry.clipData != clipDataEntry)
             stackChanged = true;
 
@@ -141,10 +141,10 @@ bool LayerAncestorClippingStack::updateWithClipData(ScrollingCoordinator* scroll
             scrollingCoordinator->unparentChildrenAndDestroyNode(existingEntry.overflowScrollProxyNodeID);
             existingEntry.overflowScrollProxyNodeID = 0;
         }
-
+        
         existingEntry.clipData = WTFMove(clipDataEntry);
     }
-
+    
     if (stackEntryCount > clipEntryCount) {
         for (int i = clipEntryCount; i < stackEntryCount; ++i) {
             auto& entry = m_stack[i];

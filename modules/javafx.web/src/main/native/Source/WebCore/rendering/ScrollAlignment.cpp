@@ -58,7 +58,7 @@ const ScrollAlignment ScrollAlignment::alignTopAlways = { Behavior::AlignTop, Be
 const ScrollAlignment ScrollAlignment::alignRightAlways = { Behavior::AlignRight, Behavior::AlignRight, Behavior::AlignRight };
 const ScrollAlignment ScrollAlignment::alignLeftAlways = { Behavior::AlignLeft, Behavior::AlignLeft, Behavior::AlignLeft };
 const ScrollAlignment ScrollAlignment::alignBottomAlways = { Behavior::AlignBottom, Behavior::AlignBottom, Behavior::AlignBottom };
-
+    
 TextStream& operator<<(TextStream& ts, ScrollAlignment::Behavior b)
 {
     switch (b) {
@@ -79,7 +79,7 @@ TextStream& operator<<(TextStream& ts, ScrollAlignment::Behavior b)
     }
     return ts;
 }
-
+    
 TextStream& operator<<(TextStream& ts, const ScrollAlignment& s)
 {
     return ts << "ScrollAlignment: visible: " << s.m_rectVisible << " hidden: " << s.m_rectHidden << " partial: " << s.m_rectPartial;

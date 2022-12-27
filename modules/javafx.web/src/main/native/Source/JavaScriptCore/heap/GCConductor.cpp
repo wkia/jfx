@@ -38,7 +38,7 @@ const char* gcConductorShortName(GCConductor conn)
     case GCConductor::Collector:
         return "C";
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 
@@ -58,7 +58,7 @@ void printInternal(PrintStream& out, GCConductor conn)
         out.print("Collector");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

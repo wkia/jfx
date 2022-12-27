@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -97,7 +97,7 @@ public:
 
     static constexpr unsigned minVagueness = 0;
     static constexpr unsigned maxVagueness = 2;
-
+    
     static Kind flipped(Kind kind)
     {
         switch (kind) {
@@ -113,7 +113,7 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return kind;
     }
-
+    
     Relationship()
         : m_left(nullptr)
         , m_right(nullptr)
@@ -121,7 +121,7 @@ public:
         , m_offset(0)
     {
     }
-
+    
     Relationship(NodeFlowProjection left, NodeFlowProjection right, Kind kind, int offset = 0)
         : m_left(left)
         , m_right(right)
@@ -132,7 +132,7 @@ public:
         RELEASE_ASSERT(m_right);
         RELEASE_ASSERT(m_left != m_right);
     }
-
+    
     static Relationship safeCreate(NodeFlowProjection left, NodeFlowProjection right, Kind kind, int offset = 0)
     {
         if (!left.isStillValid() || !right.isStillValid() || left == right)
@@ -141,19 +141,19 @@ public:
     }
 
     explicit operator bool() const { return !!m_left; }
-
+    
     NodeFlowProjection left() const { return m_left; }
     NodeFlowProjection right() const { return m_right; }
     Kind kind() const { return m_kind; }
     int offset() const { return m_offset; }
 
     unsigned vagueness() const { return vagueness(kind()); }
-
+    
     Relationship flipped() const
     {
         if (!*this)
             return Relationship();
-
+        
         // This should return Relationship() if -m_offset overflows. For example:
         //
         //     @a > @b - 2**31
@@ -175,18 +175,18 @@ public:
         //     @zero < @a - 2**31
         //
         // Which is absurd.
-
+        
         if (m_offset == std::numeric_limits<int>::min())
             return Relationship();
-
+        
         return Relationship(m_right, m_left, flipped(m_kind), -m_offset);
     }
-
+    
     Relationship inverse() const
     {
         if (!*this)
             return *this;
-
+        
         switch (m_kind) {
         case Equal:
             return Relationship(m_left, m_right, NotEqual, m_offset);
@@ -201,19 +201,19 @@ public:
                 return Relationship();
             return Relationship(m_left, m_right, LessThan, m_offset + 1);
         }
-
+        
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     bool isCanonical() const { return m_left < m_right; }
-
+    
     Relationship canonical() const
     {
         if (isCanonical())
             return *this;
         return flipped();
     }
-
+    
     bool sameNodesAs(const Relationship& other) const
     {
         return m_left == other.m_left
@@ -232,19 +232,19 @@ public:
             return (m_right->asInt32() + m_offset) == (other.m_right->asInt32() + other.m_offset);
         return false;
     }
-
+    
     bool operator==(const Relationship& other) const
     {
         return sameNodesAs(other)
             && m_kind == other.m_kind
             && m_offset == other.m_offset;
     }
-
+    
     bool operator!=(const Relationship& other) const
     {
         return !(*this == other);
     }
-
+    
     bool operator<(const Relationship& other) const
     {
         if (m_left != other.m_left)
@@ -255,7 +255,7 @@ public:
             return m_kind < other.m_kind;
         return m_offset < other.m_offset;
     }
-
+    
     // If possible, returns a form of this relationship where the given node is the left
     // side. Returns a null relationship if this relationship cannot say anything about this
     // node.
@@ -267,7 +267,7 @@ public:
             return flipped();
         return Relationship();
     }
-
+    
     void setLeft(NodeFlowProjection left)
     {
         RELEASE_ASSERT(left != m_right);
@@ -367,17 +367,17 @@ public:
             functor(*this);
             return;
         }
-
+        
         if (m_left != other.m_left)
             return;
-
+        
         if (m_right != other.m_right) {
             mergeConstantsImpl(other, functor);
             return;
         }
-
+        
         ASSERT(sameNodesAs(other));
-
+        
         // This does some interesting permutations to reduce the amount of duplicate code. For
         // example:
         //
@@ -394,44 +394,44 @@ public:
         Relationship a = *this;
         Relationship b = other;
         bool needFlip = false;
-
+        
         // Get rid of GreaterThan.
         if (a.m_kind == GreaterThan || b.m_kind == GreaterThan) {
             a = a.flipped();
             b = b.flipped();
-
+            
             // In rare cases, we might not be able to flip. Just give up on life in those
             // cases.
             if (!a || !b)
                 return;
-
+            
             needFlip = true;
-
+            
             // If we still have GreaterThan, then it means that we started with @a < @b and
             // @a > @b. That's pretty much always a tautology; we don't attempt to do smart
             // things for that case for now.
             if (a.m_kind == GreaterThan || b.m_kind == GreaterThan)
                 return;
         }
-
+        
         // Make sure that if we have a LessThan, then it's first.
         if (b.m_kind == LessThan)
             std::swap(a, b);
-
+        
         // Make sure that if we have a NotEqual, then it's first.
         if (b.m_kind == NotEqual)
             std::swap(a, b);
-
+        
         Relationship result = a.mergeImpl(b);
         if (!result)
             return;
-
+        
         if (needFlip)
             result = result.flipped();
-
+        
         functor(result);
     }
-
+    
     // Attempts to construct one Relationship that adequately summarizes the intersection of
     // this and other. Returns a null relationship if the filtration should be expressed as two
     // different relationships. Returning null is always safe because relationship lists in
@@ -445,14 +445,14 @@ public:
     {
         // We are only interested in merging relationships over the same nodes.
         ASSERT(sameNodesAs(other));
-
+        
         if (*this == other)
             return *this;
-
+        
         // From here we can assume that the two relationships are not identical. Usually we use
         // this to assume that we have different offsets anytime that everything but the offset
         // is identical.
-
+        
         // We want equality to take precedent over everything else, and we don't want multiple
         // independent claims of equality. That would just be a contradiction. When it does
         // happen, we will be conservative in the sense that we will pick one.
@@ -460,7 +460,7 @@ public:
             return *this;
         if (other.m_kind == Equal)
             return other;
-
+        
         // Useful helper for flipping.
         auto filterFlipped = [&] () -> Relationship {
             // If we cannot flip, then just conservatively return *this.
@@ -476,7 +476,7 @@ public:
                 return *this;
             return result;
         };
-
+        
         if (m_kind == NotEqual) {
             if (other.m_kind == NotEqual) {
                 // We could do something smarter here. We could even keep both NotEqual's. We
@@ -484,12 +484,12 @@ public:
                 // for now, we just pick one of them and hope for the best.
                 return *this;
             }
-
+            
             if (other.m_kind == GreaterThan) {
-                // Implement this in terms of NotEqual.filter(LessThan).
+                // Implement this in terms of NotEqual.filter(LessThan). 
                 return filterFlipped();
             }
-
+            
             ASSERT(other.m_kind == LessThan);
             // We have two claims:
             //     @a != @b + C
@@ -502,22 +502,22 @@ public:
             //     @a < @b + C
             //
             // Note that C == this.m_offset, D == other.m_offset.
-
+            
             if (m_offset == other.m_offset - 1)
                 return Relationship(m_left, m_right, LessThan, m_offset);
-
+            
             return other;
         }
-
+        
         if (other.m_kind == NotEqual)
             return other.filter(*this);
-
+        
         if (m_kind == LessThan) {
             if (other.m_kind == LessThan) {
                 return Relationship(
                     m_left, m_right, LessThan, std::min(m_offset, other.m_offset));
             }
-
+            
             ASSERT(other.m_kind == GreaterThan);
             if (sumOverflows<int>(m_offset, -1))
                 return Relationship();
@@ -525,10 +525,10 @@ public:
                 return Relationship();
             if (m_offset - 1 == other.m_offset + 1)
                 return Relationship(m_left, m_right, Equal, m_offset - 1);
-
+            
             return Relationship();
         }
-
+        
         ASSERT(m_kind == GreaterThan);
         return filterFlipped();
     }
@@ -550,7 +550,7 @@ public:
 
         int thisRight = m_right->asInt32();
         int otherRight = other.m_right->asInt32();
-
+        
         // Ignore funny business.
         if (sumOverflows<int>(otherRight, other.m_offset))
             return *this;
@@ -569,7 +569,7 @@ public:
             // valuable. Note that you have to be careful. We could refine NotEqual to LessThan, but only
             // if the LessThan subsumes the NotEqual.
             return *this;
-
+            
         case NotEqual:
             RELEASE_ASSERT_NOT_REACHED();
             return Relationship();
@@ -578,55 +578,55 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
         return Relationship();
     }
-
+    
     int minValueOfLeft() const
     {
         if (m_left->isInt32Constant())
             return m_left->asInt32();
-
+        
         if (m_kind == LessThan || m_kind == NotEqual)
             return std::numeric_limits<int>::min();
-
+        
         int minRightValue = std::numeric_limits<int>::min();
         if (m_right->isInt32Constant())
             minRightValue = m_right->asInt32();
-
+        
         if (m_kind == GreaterThan)
             return clampedSum(minRightValue, m_offset, 1);
         ASSERT(m_kind == Equal);
         return clampedSum(minRightValue, m_offset);
     }
-
+    
     int maxValueOfLeft() const
     {
         if (m_left->isInt32Constant())
             return m_left->asInt32();
-
+        
         if (m_kind == GreaterThan || m_kind == NotEqual)
             return std::numeric_limits<int>::max();
-
+        
         int maxRightValue = std::numeric_limits<int>::max();
         if (m_right->isInt32Constant())
             maxRightValue = m_right->asInt32();
-
+        
         if (m_kind == LessThan)
             return clampedSum(maxRightValue, m_offset, -1);
         ASSERT(m_kind == Equal);
         return clampedSum(maxRightValue, m_offset);
     }
-
+    
     void dump(PrintStream& out) const
     {
         // This prints out the relationship without any whitespace, like @x<@y+42. This
         // optimizes for the clarity of a list of relationships. It's easier to read something
         // like [@1<@2+3, @4==@5-6] than it would be if there was whitespace inside the
         // relationships.
-
+        
         if (!*this) {
             out.print("null");
             return;
         }
-
+        
         out.print(m_left);
         switch (m_kind) {
         case LessThan:
@@ -648,7 +648,7 @@ public:
         else if (m_offset < 0)
             out.print("-", -static_cast<int64_t>(m_offset));
     }
-
+    
 private:
     Relationship mergeImpl(const Relationship& other) const
     {
@@ -656,7 +656,7 @@ private:
         ASSERT(m_kind != GreaterThan);
         ASSERT(other.m_kind != GreaterThan);
         ASSERT(*this != other);
-
+        
         // The purpose of this method is to guarantee that:
         //
         // - We avoid having more than one Relationship over the same two nodes. Therefore, if
@@ -666,15 +666,15 @@ private:
         // - If the difference between two Relationships is just the m_offset, then we create a
         //   Relationship that has an offset of -1, 0, or 1. This is an essential convergence
         //   hack. We need -1 and 1 to support <= and >=.
-
+        
         // From here we can assume that the two relationships are not identical. Usually we use
         // this to assume that we have different offsets anytime that everything but the offset
         // is identical.
-
+        
         if (m_kind == NotEqual) {
             if (other.m_kind == NotEqual)
                 return Relationship(); // Different offsets, so tautology.
-
+            
             if (other.m_kind == Equal) {
                 if (m_offset != other.m_offset) {
                     // Saying that you might be B when you've already said that you're anything
@@ -685,10 +685,10 @@ private:
                 }
                 // Otherwise, same offsets: we're saying that you're either A or you're not
                 // equal to A.
-
+                
                 return Relationship();
             }
-
+            
             RELEASE_ASSERT(other.m_kind == LessThan);
             // We have these claims, and we're merging them:
             //     @a != @b + C
@@ -698,33 +698,33 @@ private:
             // If we have C < D, then the merge is a tautology.
             // If we have C > D, then we could keep both claims, but we are cheap, so we
             // don't. We just use the NotEqual.
-
+            
             if (m_offset < other.m_offset)
                 return Relationship();
-
+            
             return *this;
         }
-
+        
         if (m_kind == LessThan) {
             if (other.m_kind == LessThan) {
                 // Figure out what offset to select to merge them. The appropriate offsets are
                 // -1, 0, or 1.
-
+                
                 // First figure out what offset we'd like to use.
                 int bestOffset = std::max(m_offset, other.m_offset);
-
+                
                 // We have something like @a < @b + 2. We can't represent this under the
                 // -1,0,1 rule.
                 if (isGeneralOffset(bestOffset))
                     return Relationship(m_left, m_right, LessThan, std::max(bestOffset, -1));
-
+                
                 return Relationship();
             }
-
+            
             // The only thing left is Equal. We would have eliminated the GreaterThan's, and
             // if we merge LessThan and NotEqual, the NotEqual always comes first.
             RELEASE_ASSERT(other.m_kind == Equal);
-
+            
             // This is the really interesting case. We have:
             //
             //     @a < @b + C
@@ -736,23 +736,23 @@ private:
             // Therefore we'd like to return:
             //
             //     @a < @b + max(C, D + 1)
-
+            
             int bestOffset = std::max(m_offset, other.m_offset + 1);
-
+            
             // We have something like @a < @b + 2. We can't do it.
             if (isGeneralOffset(bestOffset))
                 return Relationship(m_left, m_right, LessThan, std::max(bestOffset, -1));
 
             return Relationship();
         }
-
+        
         // The only thing left is Equal, since we would have gotten rid of the GreaterThan's.
         RELEASE_ASSERT(m_kind == Equal);
-
+        
         // We would never see NotEqual, because those always come first. We would never
         // see GreaterThan, because we would have eliminated those. We would never see
         // LessThan, because those always come first.
-
+        
         RELEASE_ASSERT(other.m_kind == Equal);
         // We have @a == @b + C and @a == @b + D, where C != D. Turn this into some
         // inequality that involves a constant that is -1,0,1. Note that we will never have
@@ -762,30 +762,30 @@ private:
 
         Relationship lessThan;
         Relationship greaterThan;
-
+        
         int lessThanEqOffset = std::max(m_offset, other.m_offset);
         if (lessThanEqOffset >= -2 && lessThanEqOffset <= 0) {
             lessThan = Relationship(
                 m_left, other.m_right, LessThan, lessThanEqOffset + 1);
-
+            
             ASSERT(isGeneralOffset(lessThan.offset()));
         }
-
+        
         int greaterThanEqOffset = std::min(m_offset, other.m_offset);
         if (greaterThanEqOffset >= 0 && greaterThanEqOffset <= 2) {
             greaterThan = Relationship(
                 m_left, other.m_right, GreaterThan, greaterThanEqOffset - 1);
-
+            
             ASSERT(isGeneralOffset(greaterThan.offset()));
         }
-
+        
         if (lessThan) {
             // Both relationships cannot be valid; see above.
             RELEASE_ASSERT(!greaterThan);
-
+            
             return lessThan;
         }
-
+        
         return greaterThan;
     }
 
@@ -825,7 +825,7 @@ private:
                 // We want m_right + offset to be equal to upper. Hence we want offset to cancel
                 // with m_right. But there's more to it, since we want +1 to turn the LessThan into
                 // a LessThanOrEqual, and we want to make sure we don't end up with non-general
-                // offsets.
+                // offsets. 
                 int offset = static_cast<int>(std::max(
                     static_cast<int64_t>(1) + upper - static_cast<int64_t>(thisRight),
                     static_cast<int64_t>(-1)));
@@ -915,7 +915,7 @@ private:
                 // convergence: merging never introduces a new rule unless that rule is general.
                 if (!isGeneralOffset(other.m_offset))
                     return;
-
+                
                 functor(other);
                 return;
             } }
@@ -948,7 +948,7 @@ private:
                 // We have a claim that @x < @c || @x != @d. This isn't interesting.
                 return;
             } }
-
+            
             RELEASE_ASSERT_NOT_REACHED();
             return;
         }
@@ -989,7 +989,7 @@ private:
 
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     NodeFlowProjection m_left;
     NodeFlowProjection m_right;
     Kind m_kind;
@@ -1007,11 +1007,11 @@ public:
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == SSA);
-
+        
         // Before we do anything, make sure that we have a zero constant at the top.
         for (Node* node : *m_graph.block(0)) {
             if (node->isInt32Constant() && !node->asInt32()) {
@@ -1023,12 +1023,12 @@ public:
             m_zero = m_insertionSet.insertConstant(0, m_graph.block(0)->at(0)->origin, jsNumber(0));
             m_insertionSet.execute(m_graph.block(0));
         }
-
+        
         if (DFGIntegerRangeOptimizationPhaseInternal::verbose) {
             dataLog("Graph before integer range optimization:\n");
             m_graph.dump();
         }
-
+        
         // This performs a fixpoint over the blocks in reverse post-order. Logically, we
         // maintain a list of relationships at each point in the program. The list should be
         // read as an intersection. For example if we have {rel1, rel2, ..., relN}, you should
@@ -1079,7 +1079,7 @@ public:
         // a block. After the head of a block is set, we perform the merging as above. In all
         // other places where we would ordinarily need BOTTOM, we approximate it by having some
         // non-BOTTOM relationship.
-
+        
         BlockList postOrder = m_graph.blocksInPostOrder();
 
         // This loop analyzes the IR to give us m_relationshipsAtHead for each block. This
@@ -1110,15 +1110,15 @@ public:
                 DFG_ASSERT(
                     m_graph, nullptr,
                     block == m_graph.block(0) || m_seenBlocks.contains(block));
-
+            
                 m_relationships = m_relationshipsAtHead[block];
-
+            
                 for (auto* node : *block) {
                     if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                         dataLog("Analysis: at ", node, ": ", listDump(sortedRelationships()), "\n");
                     executeNode(node);
                 }
-
+                
                 // Now comes perhaps the most important piece of cleverness: if we Branch, and
                 // the predicate involves some relation over integers, we propagate different
                 // information to the taken and notTaken paths. This handles:
@@ -1131,13 +1131,13 @@ public:
                 if (terminal->op() == Branch) {
                     Relationship relationshipForTrue;
                     BranchData* branchData = terminal->branchData();
-
+                    
                     bool invert = false;
                     if (terminal->child1()->op() == LogicalNot) {
                         terminal = terminal->child1().node();
                         invert = true;
                     }
-
+                    
                     if (terminal->child1().useKind() == Int32Use) {
                         relationshipForTrue = Relationship::safeCreate(
                             terminal->child1().node(), m_zero, Relationship::NotEqual, 0);
@@ -1153,7 +1153,7 @@ public:
                         case CompareGreaterEq: {
                             if (!compare->isBinaryUseKind(Int32Use))
                                 break;
-
+                    
                             switch (compare->op()) {
                             case CompareEq:
                             case CompareStrictEq:
@@ -1187,19 +1187,19 @@ public:
                             }
                             break;
                         }
-
+                    
                         default:
                             break;
                         }
                     }
-
+                    
                     if (invert)
                         relationshipForTrue = relationshipForTrue.inverse();
-
+                    
                     if (relationshipForTrue) {
                         RelationshipMap forTrue = m_relationships;
                         RelationshipMap forFalse = m_relationships;
-
+                        
                         if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                             dataLog("Dealing with true:\n");
                         setRelationship(forTrue, relationshipForTrue);
@@ -1208,7 +1208,7 @@ public:
                                 dataLog("Dealing with false:\n");
                             setRelationship(forFalse, relationshipForFalse);
                         }
-
+                        
                         changed |= mergeTo(forTrue, branchData->taken.block);
                         changed |= mergeTo(forFalse, branchData->notTaken.block);
                         alreadyMerged = true;
@@ -1221,7 +1221,7 @@ public:
                 }
             }
         }
-
+        
         // Now we transform the code based on the results computed in the previous loop.
         changed = false;
         for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
@@ -1230,7 +1230,7 @@ public:
                 Node* node = block->at(nodeIndex);
                 if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                     dataLog("Transformation: at ", node, ": ", listDump(sortedRelationships()), "\n");
-
+                
                 // This ends up being pretty awkward to write because we need to decide if we
                 // optimize by using the relationships before the operation, but we need to
                 // call executeNode() before we optimize.
@@ -1280,11 +1280,11 @@ public:
                         break;
                     if (!node->child2()->isInt32Constant())
                         break;
-
+                    
                     auto iter = m_relationships.find(node->child1().node());
                     if (iter == m_relationships.end())
                         break;
-
+                    
                     int minValue = std::numeric_limits<int>::min();
                     int maxValue = std::numeric_limits<int>::max();
                     for (Relationship relationship : iter->value) {
@@ -1294,36 +1294,36 @@ public:
 
                     if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                         dataLog("    minValue = ", minValue, ", maxValue = ", maxValue, "\n");
-
+                    
                     if (sumOverflows<int>(minValue, node->child2()->asInt32()) ||
                         sumOverflows<int>(maxValue, node->child2()->asInt32()))
                         break;
 
                     if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                         dataLog("    It's in bounds.\n");
-
+                    
                     executeNode(block->at(nodeIndex));
                     node->setArithMode(Arith::Unchecked);
                     changed = true;
                     break;
                 }
-
+                    
                 case CheckInBounds: {
                     auto iter = m_relationships.find(node->child1().node());
                     if (iter == m_relationships.end())
                         break;
-
+                    
                     bool nonNegative = false;
                     bool lessThanLength = false;
                     for (Relationship relationship : iter->value) {
                         if (relationship.minValueOfLeft() >= 0)
                             nonNegative = true;
-
+                        
                         if (relationship.right() == node->child2().node()) {
                             if (relationship.kind() == Relationship::Equal
                                 && relationship.offset() < 0)
                                 lessThanLength = true;
-
+                            
                             if (relationship.kind() == Relationship::LessThan
                                 && relationship.offset() <= 0)
                                 lessThanLength = true;
@@ -1332,7 +1332,7 @@ public:
 
                     if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                         dataLogLn("CheckInBounds ", node, " has: ", nonNegative, " ", lessThanLength);
-
+                    
                     if (nonNegative && lessThanLength) {
                         executeNode(block->at(nodeIndex));
                         if (UNLIKELY(Options::validateBoundsCheckElimination()))
@@ -1369,11 +1369,11 @@ public:
                 default:
                     break;
                 }
-
+                
                 executeNode(block->at(nodeIndex));
             }
         }
-
+        
         return changed;
     }
 
@@ -1394,31 +1394,31 @@ private:
             setRelationship(Relationship(node, m_zero, Relationship::GreaterThan, -1));
             break;
         }
-
+            
         case ArithAdd: {
             // We're only interested in int32 additions and we currently only know how to
             // handle the non-wrapping ones.
             if (!node->isBinaryUseKind(Int32Use))
                 break;
-
+            
             // FIXME: We could handle the unchecked arithmetic case. We just do it don't right
             // now.
             if (node->arithMode() != Arith::CheckOverflow)
                 break;
-
+            
             // Handle add: @value + constant.
             if (!node->child2()->isInt32Constant())
                 break;
-
+            
             int offset = node->child2()->asInt32();
-
+            
             // We add a relationship for @add == @value + constant, and then we copy the
             // relationships for @value. This gives us a one-deep view of @value's existing
             // relationships, which matches the one-deep search in setRelationship().
-
+            
             setRelationship(
                 Relationship(node, node->child1().node(), Relationship::Equal, offset));
-
+            
             auto iter = m_relationships.find(node->child1().node());
             if (iter != m_relationships.end()) {
                 Vector<Relationship> toAdd;
@@ -1435,10 +1435,10 @@ private:
                     //
                     // And then carry the C over:
                     //     @add op @y + D + C
-
+                    
                     Relationship newRelationship = relationship;
                     ASSERT(newRelationship.left() == node->child1().node());
-
+                    
                     if (newRelationship.right() == node)
                         continue;
                     newRelationship.setLeft(node);
@@ -1448,10 +1448,10 @@ private:
                 for (Relationship relationship : toAdd)
                     setRelationship(relationship, 0);
             }
-
+            
             // Now we want to establish that both the input and the output of the addition are
             // within a particular range of integers.
-
+            
             if (offset > 0) {
                 // If we have "add: @value + 1" then we know that @value <= max - 1, i.e. that
                 // @value < max.
@@ -1462,7 +1462,7 @@ private:
                             std::numeric_limits<int>::max() - offset + 1),
                         0);
                 }
-
+                    
                 // If we have "add: @value + 1" then we know that @add >= min + 1, i.e. that
                 // @add > min.
                 if (!sumOverflows<int>(std::numeric_limits<int>::min(), offset, -1)) {
@@ -1473,7 +1473,7 @@ private:
                         0);
                 }
             }
-
+            
             if (offset < 0 && offset != std::numeric_limits<int>::min()) {
                 // If we have "add: @value - 1" then we know that @value >= min + 1, i.e. that
                 // @value > min.
@@ -1484,7 +1484,7 @@ private:
                             std::numeric_limits<int>::min() + offset - 1),
                         0);
                 }
-
+                
                 // If we have "add: @value + 1" then we know that @add <= max - 1, i.e. that
                 // @add < max.
                 if (!sumOverflows<int>(std::numeric_limits<int>::max(), -offset, 1)) {
@@ -1497,13 +1497,13 @@ private:
             }
             break;
         }
-
+            
         case GetArrayLength:
         case GetVectorLength: {
             setRelationship(Relationship(node, m_zero, Relationship::GreaterThan, -1));
             break;
         }
-
+            
         case Upsilon: {
             auto shadowNode = NodeFlowProjection(node->phi(), NodeFlowProjection::Shadow);
             // We must first remove all relationships involving the shadow node, because setEquivalence does not overwrite them.
@@ -1513,14 +1513,14 @@ private:
             setEquivalence(node->child1().node(), shadowNode);
             break;
         }
-
+            
         case Phi: {
             setEquivalence(
                 NodeFlowProjection(node, NodeFlowProjection::Shadow),
                 node);
             break;
         }
-
+            
         default:
             break;
         }
@@ -1541,11 +1541,11 @@ private:
             relationships.shrink(j);
         }
     }
-
+    
     void setEquivalence(NodeFlowProjection oldNode, NodeFlowProjection newNode)
     {
         setRelationship(Relationship::safeCreate(oldNode, newNode, Relationship::Equal, 0));
-
+        
         auto iter = m_relationships.find(oldNode);
         if (iter != m_relationships.end()) {
             Vector<Relationship> toAdd;
@@ -1561,25 +1561,25 @@ private:
                 setRelationship(relationship);
         }
     }
-
+            
     void setRelationship(Relationship relationship, unsigned timeToLive = 1)
     {
         setRelationship(m_relationships, relationship, timeToLive);
     }
-
+    
     void setRelationship(
         RelationshipMap& relationshipMap, Relationship relationship, unsigned timeToLive = 1)
     {
         setOneSide(relationshipMap, relationship, timeToLive);
         setOneSide(relationshipMap, relationship.flipped(), timeToLive);
     }
-
+    
     void setOneSide(
         RelationshipMap& relationshipMap, Relationship relationship, unsigned timeToLive = 1)
     {
         if (!relationship)
             return;
-
+        
         if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
             dataLogLn("    Setting: ", relationship, " (ttl = ", timeToLive, ")");
 
@@ -1671,11 +1671,11 @@ private:
 
             // FIXME: Also add filtration over statements about constants. For example, if we have
             // @x == @c and @x != @d, where @d > @c, then we want to turn @x != @d into @x < @d.
-
+            
             if (timeToLive && otherRelationship.kind() == Relationship::Equal) {
                 if (DFGIntegerRangeOptimizationPhaseInternal::verbose)
                     dataLog("      Considering (lhs): ", otherRelationship, "\n");
-
+                
                 // We have:
                 //     @a op @b + C
                 //     @a == @c + D
@@ -1686,7 +1686,7 @@ private:
                 //
                 // Where: @a == relationship.left(), @b == relationship.right(),
                 // @a == otherRelationship.left(), @c == otherRelationship.right().
-
+                
                 if (otherRelationship.offset() != std::numeric_limits<int>::min()) {
                     Relationship newRelationship = relationship;
                     if (newRelationship.right() != otherRelationship.right()) {
@@ -1725,13 +1725,13 @@ private:
 
         if (!found)
             relationships.append(relationship);
-
+        
         for (Relationship anotherRelationship : toAdd) {
             ASSERT(timeToLive);
             setOneSide(relationshipMap, anotherRelationship, timeToLive - 1);
         }
     }
-
+    
     bool mergeTo(RelationshipMap& relationshipMap, BasicBlock* target)
     {
         if (DFGIntegerRangeOptimizationPhaseInternal::verbose) {
@@ -1739,7 +1739,7 @@ private:
             dataLog("    Incoming: ", listDump(sortedRelationships(relationshipMap)), "\n");
             dataLog("    At head: ", listDump(sortedRelationships(m_relationshipsAtHead[target])), "\n");
         }
-
+        
         if (m_seenBlocks.add(target)) {
             // This is a new block. We copy subject to liveness pruning.
             auto isLive = [&] (NodeFlowProjection node) {
@@ -1747,11 +1747,11 @@ private:
                     return true;
                 return target->ssa->liveAtHead.contains(node);
             };
-
+            
             for (auto& entry : relationshipMap) {
                 if (!isLive(entry.key))
                     continue;
-
+                
                 Vector<Relationship> values;
                 for (Relationship relationship : entry.value) {
                     ASSERT(relationship.left() == entry.key);
@@ -1761,13 +1761,13 @@ private:
                         values.append(relationship);
                     }
                 }
-
+                
                 std::sort(values.begin(), values.end());
                 m_relationshipsAtHead[target].add(entry.key, values);
             }
             return true;
         }
-
+        
         // Merge by intersecting. We have no notion of BOTTOM, so we use the omission of
         // relationships for a pair of nodes to mean TOP. The reason why we don't need BOTTOM
         // is (1) we just overapproximate contradictions and (2) a value never having been
@@ -1818,7 +1818,7 @@ private:
                                     }
                                 }
                             }
-
+                            
                             // We need to filter() to avoid exponential explosion of identical
                             // relationships. We do this here to avoid making setOneSide() do
                             // more work, since we expect setOneSide() will be called more
@@ -1851,7 +1851,7 @@ private:
                                     }
                                 }
                             }
-
+                            
                             if (!found)
                                 mergedRelationships.append(newRelationship);
                         });
@@ -1860,16 +1860,16 @@ private:
             std::sort(mergedRelationships.begin(), mergedRelationships.end());
             if (entry.value == mergedRelationships)
                 continue;
-
+            
             entry.value = mergedRelationships;
             changed = true;
         }
         for (NodeFlowProjection node : toRemove)
             m_relationshipsAtHead[target].remove(node);
-
+        
         return changed;
     }
-
+        
     Vector<Relationship> sortedRelationships(const RelationshipMap& relationships)
     {
         Vector<Relationship> result;
@@ -1878,12 +1878,12 @@ private:
         std::sort(result.begin(), result.end());
         return result;
     }
-
+    
     Vector<Relationship> sortedRelationships()
     {
         return sortedRelationships(m_relationships);
     }
-
+    
     Node* m_zero;
     RelationshipMap m_relationships;
     BlockSet m_seenBlocks;
@@ -1892,7 +1892,7 @@ private:
 
     unsigned m_iterations { 0 };
 };
-
+    
 } // anonymous namespace
 
 bool performIntegerRangeOptimization(Graph& graph)

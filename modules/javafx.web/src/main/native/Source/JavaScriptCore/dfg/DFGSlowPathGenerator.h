@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -40,7 +40,7 @@ public:
     SlowPathGenerator(SpeculativeJIT* jit)
         : m_currentNode(jit->m_currentNode)
         , m_streamIndex(jit->m_stream->size())
-        , m_origin(jit->m_origin)
+        , m_origin(jit->m_origin) 
     {
     }
     virtual ~SlowPathGenerator() { }
@@ -82,13 +82,13 @@ public:
         , m_to(jit->m_jit.label())
     {
     }
-
+    
 protected:
     void linkFrom(SpeculativeJIT* jit)
     {
         m_from.link(&jit->m_jit);
     }
-
+    
     void jumpTo(SpeculativeJIT* jit)
     {
         jit->m_jit.jump().linkTo(m_to, &jit->m_jit);
@@ -117,12 +117,12 @@ public:
         if (m_spillMode == NeedToSpill)
             jit->silentSpillAllRegistersImpl(false, m_plans, extractResult(result));
     }
-
+    
     MacroAssembler::Call call() const override
     {
         return m_call;
     }
-
+    
 protected:
     void setUp(SpeculativeJIT* jit)
     {
@@ -132,12 +132,12 @@ protected:
                 jit->silentSpill(m_plans[i]);
         }
     }
-
+    
     void recordCall(MacroAssembler::Call call)
     {
         m_call = call;
     }
-
+    
     void tearDown(SpeculativeJIT* jit)
     {
         if (m_spillMode == NeedToSpill) {

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -52,7 +52,7 @@ class LICMPhase : public Phase {
         ClobberSet writes;
         BasicBlock* preHeader { nullptr };
     };
-
+    
 public:
     LICMPhase(Graph& graph)
         : Phase(graph, "LICM")
@@ -60,11 +60,11 @@ public:
         , m_interpreter(graph, m_state)
     {
     }
-
+    
     bool run()
     {
         DFG_ASSERT(m_graph, nullptr, m_graph.m_form == SSA);
-
+        
         m_graph.ensureSSADominators();
         m_graph.ensureSSANaturalLoops();
         m_graph.ensureControlEquivalenceAnalysis();
@@ -73,22 +73,22 @@ public:
             dataLog("Graph before LICM:\n");
             m_graph.dump();
         }
-
+        
         m_data.resize(m_graph.m_ssaNaturalLoops->numLoops());
-
+        
         // Figure out the set of things each loop writes to, not including blocks that
         // belong to inner loops. We fix this later.
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             // Skip blocks that are proved to not execute.
             // FIXME: This shouldn't be needed.
             // https://bugs.webkit.org/show_bug.cgi?id=128584
             if (!block->cfaHasVisited)
                 continue;
-
+            
             const NaturalLoop* loop = m_graph.m_ssaNaturalLoops->innerMostLoopOf(block);
             if (!loop)
                 continue;
@@ -103,20 +103,20 @@ public:
                 addWrites(m_graph, node, data.writes);
             }
         }
-
+        
         // For each loop:
         // - Identify its pre-header.
         // - Make sure its outer loops know what it clobbers.
         for (unsigned loopIndex = m_graph.m_ssaNaturalLoops->numLoops(); loopIndex--;) {
             const NaturalLoop& loop = m_graph.m_ssaNaturalLoops->loop(loopIndex);
             LoopData& data = m_data[loop.index()];
-
+            
             for (
                 const NaturalLoop* outerLoop = m_graph.m_ssaNaturalLoops->innerMostOuterLoop(loop);
                 outerLoop;
                 outerLoop = m_graph.m_ssaNaturalLoops->innerMostOuterLoop(*outerLoop))
                 m_data[outerLoop->index()].writes.addAll(data.writes);
-
+            
             BasicBlock* header = loop.header();
             BasicBlock* preHeader = nullptr;
             unsigned numberOfPreHeaders = 0; // We're cool if this is 1.
@@ -125,7 +125,7 @@ public:
             // loop header must have a predecessor. (Also, we don't allow the root block to be a loop,
             // which cuts out the one other way of having a loop header with only one predecessor.)
             DFG_ASSERT(m_graph, header->at(0), header->predecessors.size() > 1, header->predecessors.size());
-
+            
             for (unsigned i = header->predecessors.size(); i--;) {
                 BasicBlock* predecessor = header->predecessors[i];
                 if (m_graph.m_ssaDominators->dominates(header, predecessor))
@@ -157,12 +157,12 @@ public:
 
             if (!preHeader->terminal()->origin.exitOK)
                 continue;
-
+            
             data.preHeader = preHeader;
         }
-
+        
         m_graph.initializeNodeOwners();
-
+        
         // Walk all basic blocks that belong to loops, looking for hoisting opportunities.
         // We try to hoist to the outer-most loop that permits it. Hoisting is valid if:
         // - The node doesn't write anything.
@@ -191,17 +191,17 @@ public:
             const NaturalLoop* loop = m_graph.m_ssaNaturalLoops->innerMostLoopOf(block);
             if (!loop)
                 continue;
-
+            
             loopStack.shrink(0);
             for (
                 const NaturalLoop* current = loop;
                 current;
                 current = m_graph.m_ssaNaturalLoops->innerMostOuterLoop(*current))
                 loopStack.append(current);
-
+            
             // Remember: the loop stack has the inner-most loop at index 0, so if we want
             // to bias hoisting to outer loops then we need to use a reverse loop.
-
+            
             if (verbose) {
                 dataLog(
                     "Attempting to hoist out of block ", *block, " in loops:\n");
@@ -211,7 +211,7 @@ public:
                         m_data[loopStack[stackIndex]->index()].writes, "\n");
                 }
             }
-
+            
             for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                 Node*& nodeRef = block->at(nodeIndex);
                 if (nodeRef->op() == ForceOSRExit)
@@ -242,13 +242,13 @@ private:
                 dataLog("    Not hoisting ", node, " because the pre-header is invalid.\n");
             return false;
         }
-
+        
         if (!data.preHeader->cfaDidFinish) {
             if (verbose)
                 dataLog("    Not hoisting ", node, " because CFA is invalid.\n");
             return false;
         }
-
+        
         m_state.initializeTo(data.preHeader);
         ASSERT(m_state.isValid());
         NodeOrigin originalOrigin = node->origin;
@@ -334,7 +334,7 @@ private:
                 }
             }
         };
-
+        
         auto tryHoistChecks = [&] {
             if (addsBlindSpeculation && !canSpeculateBlindly)
                 return false;
@@ -414,7 +414,7 @@ private:
             }
             return tryHoistChecks();
         }
-
+        
         if (addsBlindSpeculation && !canSpeculateBlindly) {
             if (verbose) {
                 dataLog(
@@ -424,7 +424,7 @@ private:
             }
             return tryHoistChecks();
         }
-
+        
         if (!safeToExecute(m_state, m_graph, node)) {
             // See if we can rescue the situation by inserting blind speculations.
             bool ignoreEmptyChildren = true;
@@ -439,7 +439,7 @@ private:
                     [&] (Edge& edge) {
                         if (!(m_state.forNode(edge).m_type & SpecEmpty))
                             return;
-
+                        
                         Node* check = m_graph.addNode(CheckNotEmpty, originalOrigin, Edge(edge.node(), UntypedUse));
                         insertHoistedNode(check);
                     });
@@ -451,7 +451,7 @@ private:
                 return tryHoistChecks();
             }
         }
-
+        
         if (verbose) {
             dataLog(
                 "    Hoisting ", node, " from ", *fromBlock, " to ", *data.preHeader,
@@ -465,10 +465,10 @@ private:
             nodeRef = m_graph.addNode(CheckVarargs, originalOrigin, m_graph.copyVarargChildren(node));
         else
             nodeRef = m_graph.addNode(Check, originalOrigin, node->children);
-
+        
         return true;
     }
-
+    
     AtTailAbstractState m_state;
     AbstractInterpreter<AtTailAbstractState> m_interpreter;
     Vector<LoopData> m_data;

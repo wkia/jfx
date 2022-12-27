@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -88,23 +88,23 @@ public:
         , m_stubInfo(stubInfo)
     {
     }
-
+    
     using Node = Variant<StructureTransitionStructureStubClearingWatchpoint, AdaptiveValueStructureStubClearingWatchpoint>;
 
     Node& addWatchpoint(const ObjectPropertyCondition& key);
-
+    
     static void ensureReferenceAndInstallWatchpoint(
         std::unique_ptr<WatchpointsOnStructureStubInfo>& holderRef,
         CodeBlock*, StructureStubInfo*, const ObjectPropertyCondition& key);
     static Watchpoint* ensureReferenceAndAddWatchpoint(
         std::unique_ptr<WatchpointsOnStructureStubInfo>& holderRef,
         CodeBlock*, StructureStubInfo*);
-
+    
     CodeBlock* codeBlock() const { return m_codeBlock; }
     StructureStubInfo* stubInfo() const { return m_stubInfo; }
 
     bool isValid() const;
-
+    
 private:
     CodeBlock* m_codeBlock;
     StructureStubInfo* m_stubInfo;

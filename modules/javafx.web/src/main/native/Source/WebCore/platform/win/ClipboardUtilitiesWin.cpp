@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -81,7 +81,7 @@ static bool getDataMapItem(const DragDataMap* dataObject, FORMATETC* format, Str
     return true;
 }
 
-static bool getWebLocData(IDataObject* dataObject, String& url, String* title)
+static bool getWebLocData(IDataObject* dataObject, String& url, String* title) 
 {
     bool succeeded = false;
 #if USE(CF)
@@ -101,16 +101,16 @@ static bool getWebLocData(IDataObject* dataObject, String& url, String* title)
         goto exit;
 
     if (_wcsicmp(PathFindExtensionW(filename), L".url"))
-        goto exit;
-
+        goto exit;    
+    
     if (!GetPrivateProfileStringW(L"InternetShortcut", L"url", 0, urlBuffer, WTF_ARRAY_LENGTH(urlBuffer), filename))
         goto exit;
-
+    
     if (title) {
         PathRemoveExtension(filename);
         *title = String((UChar*)filename);
     }
-
+    
     url = String((UChar*)urlBuffer);
     succeeded = true;
 
@@ -122,7 +122,7 @@ exit:
     return succeeded;
 }
 
-static bool getWebLocData(const DragDataMap* dataObject, String& url, String* title)
+static bool getWebLocData(const DragDataMap* dataObject, String& url, String* title) 
 {
 #if USE(CF)
     WCHAR filename[MAX_PATH];
@@ -133,7 +133,7 @@ static bool getWebLocData(const DragDataMap* dataObject, String& url, String* ti
 
     wcscpy(filename, dataObject->get(cfHDropFormat()->cfFormat)[0].wideCharacters().data());
     if (_wcsicmp(PathFindExtensionW(filename), L".url"))
-        return false;
+        return false;    
 
     if (!GetPrivateProfileStringW(L"InternetShortcut", L"url", 0, urlBuffer, WTF_ARRAY_LENGTH(urlBuffer), filename))
         return false;
@@ -142,7 +142,7 @@ static bool getWebLocData(const DragDataMap* dataObject, String& url, String* ti
         PathRemoveExtension(filename);
         *title = String(filename);
     }
-
+    
     url = String(urlBuffer);
     return true;
 #else
@@ -169,7 +169,7 @@ static CLIPFORMAT registerClipboardFormat(LPCWSTR format)
 }
 
 // Firefox text/html
-static FORMATETC* texthtmlFormat()
+static FORMATETC* texthtmlFormat() 
 {
     static CLIPFORMAT cf = registerClipboardFormat(L"text/html");
     static FORMATETC texthtmlFormat = {cf, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -211,6 +211,18 @@ HGLOBAL createGlobalData(const Vector<char>& vector)
     char* buffer = static_cast<char*>(GlobalLock(vm));
     memcpy(buffer, vector.data(), vector.size());
     buffer[vector.size()] = 0;
+    GlobalUnlock(vm);
+    return vm;
+}
+
+HGLOBAL createGlobalData(const uint8_t* data, size_t length)
+{
+    HGLOBAL vm = ::GlobalAlloc(GPTR, length + 1);
+    if (!vm)
+        return 0;
+    uint8_t* buffer = static_cast<uint8_t*>(GlobalLock(vm));
+    memcpy(buffer, data, length);
+    buffer[length] = 0;
     GlobalUnlock(vm);
     return vm;
 }
@@ -272,7 +284,7 @@ void markupToCFHTML(const String& markup, const String& srcURL, Vector<char>& re
     const char* startMarkup = "<HTML>\n<BODY>\n<!--StartFragment-->\n";
     const char* endMarkup = "\n<!--EndFragment-->\n</BODY>\n</HTML>";
 
-    CString sourceURLUTF8 = srcURL == WTF::blankURL() ? "" : srcURL.utf8();
+    CString sourceURLUTF8 = srcURL == aboutBlankURL() ? "" : srcURL.utf8();
     CString markupUTF8 = markup.utf8();
 
     // calculate offsets
@@ -312,7 +324,7 @@ void replaceNewlinesWithWindowsStyleNewlines(String& str)
         if (str[index] != '\n' || (index > 0 && str[index - 1] == '\r'))
             result.append(str[index]);
         else
-            result.appendLiteral("\r\n");
+            result.append("\r\n");
     }
     str = result.toString();
 }
@@ -365,7 +377,7 @@ FORMATETC* filenameFormat()
 }
 
 // MSIE HTML Format
-FORMATETC* htmlFormat()
+FORMATETC* htmlFormat() 
 {
     static CLIPFORMAT cf = registerClipboardFormat(L"HTML Format");
     static FORMATETC htmlFormat = {cf, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -563,7 +575,7 @@ String getPlainText(IDataObject* dataObject)
 String getPlainText(const DragDataMap* data)
 {
     String text;
-
+    
     if (getDataMapItem(data, plainTextWFormat(), text))
         return text;
     if (getDataMapItem(data, plainTextFormat(), text))
@@ -791,7 +803,7 @@ void setCFData(IDataObject* data, FORMATETC* format, const Vector<String>& dataS
 
     SIZE_T dropFilesSize = sizeof(DROPFILES) + (sizeof(WCHAR) * (dataStrings.first().length() + 2));
     medium.hGlobal = ::GlobalAlloc(GHND | GMEM_SHARE, dropFilesSize);
-    if (!medium.hGlobal)
+    if (!medium.hGlobal) 
         return;
 
     DROPFILES* dropFiles = reinterpret_cast<DROPFILES *>(GlobalLock(medium.hGlobal));

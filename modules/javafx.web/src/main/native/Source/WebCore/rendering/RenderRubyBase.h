@@ -41,9 +41,9 @@ class RenderRubyBase final : public RenderBlockFlow {
 public:
     RenderRubyBase(Document&, RenderStyle&&);
     virtual ~RenderRubyBase();
-
+    
     const char* renderName() const override { return "RenderRubyBase (anonymous)"; }
-
+    
     RenderRubyRun* rubyRun() const;
 
     void setIsAfterExpansion(bool isAfterExpansion) { m_isAfterExpansion = isAfterExpansion; }
@@ -56,7 +56,7 @@ public:
         m_initialOffset = 0;
         m_isAfterExpansion = true;
     }
-
+    
     void cachePriorCharactersIfNeeded(const LazyLineBreakIterator&) override;
 
 private:

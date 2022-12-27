@@ -153,7 +153,7 @@ bool RenderSVGResourcePattern::applyResource(RenderElement& renderer, const Rend
         collectPatternAttributes(m_attributes);
         m_shouldCollectPatternAttributes = false;
     }
-
+    
     // Spec: When the geometry of the applicable element has no width or height and objectBoundingBox is specified,
     // then the given effect (e.g. a gradient or a filter) will be ignored.
     FloatRect objectBoundingBox = renderer.objectBoundingBox();
@@ -235,7 +235,7 @@ bool RenderSVGResourcePattern::buildTileImageTransform(RenderElement& renderer,
                                                        AffineTransform& tileImageTransform) const
 {
     FloatRect objectBoundingBox = renderer.objectBoundingBox();
-    patternBoundaries = calculatePatternBoundaries(attributes, objectBoundingBox, patternElement);
+    patternBoundaries = calculatePatternBoundaries(attributes, objectBoundingBox, patternElement); 
     if (patternBoundaries.width() <= 0 || patternBoundaries.height() <= 0)
         return false;
 

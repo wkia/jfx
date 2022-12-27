@@ -44,7 +44,7 @@
 
 #include <tchar.h>
 
-/*
+/* 
  * The following constants are used to determine how a widget is drawn using
  * Windows' Theme API. For more information on theme parts and states see
  * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/userex/topics/partsandstates.asp
@@ -309,7 +309,7 @@ Color RenderThemeWin::platformInactiveSelectionForegroundColor(OptionSet<StyleCo
 }
 
 static void fillFontDescription(FontCascadeDescription& fontDescription, LOGFONT& logFont, float fontSize)
-{
+{    
     fontDescription.setIsAbsoluteSize(true);
     fontDescription.setOneFamily(logFont.lfFaceName);
     fontDescription.setSpecifiedSize(fontSize);
@@ -327,7 +327,7 @@ void RenderThemeWin::updateCachedSystemFontDescription(CSSValueID valueID, FontC
         ncm.cbSize = sizeof(NONCLIENTMETRICS);
         ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
     }
-
+ 
     LOGFONT logFont;
     bool shouldUseDefaultControlFontPixelSize = false;
     switch (valueID) {
@@ -673,7 +673,7 @@ static void drawControl(GraphicsContext& context, const RenderObject& o, HANDLE 
 }
 
 bool RenderThemeWin::paintButton(const RenderObject& o, const PaintInfo& i, const IntRect& r)
-{
+{  
     drawControl(i.context(),  o, buttonTheme(), getThemeData(o), r);
     return false;
 }
@@ -738,7 +738,7 @@ bool RenderThemeWin::paintMenuList(const RenderObject& renderer, const PaintInfo
     }
 
     drawControl(paintInfo.context(), renderer, theme, ThemeData(part, determineState(renderer)), IntRect(rect));
-
+    
     paintMenuListButtonDecorations(downcast<RenderBox>(renderer), paintInfo, FloatRect(rect));
 
     return false;
@@ -759,7 +759,7 @@ void RenderThemeWin::adjustMenuListButtonStyle(RenderStyle& style, const Element
     const int dropDownBoxPaddingLeft   = style.direction() == TextDirection::LTR ? 4 : 4 + dropDownButtonWidth;
     // The <select> box must be at least 12px high for the button to render nicely on Windows
     const int dropDownBoxMinHeight = 12;
-
+    
     // Position the text correctly within the select box and make the box wide enough to fit the dropdown button
     style.setPaddingTop(Length(dropDownBoxPaddingTop, LengthType::Fixed));
     style.setPaddingRight(Length(dropDownBoxPaddingRight, LengthType::Fixed));
@@ -776,7 +776,7 @@ void RenderThemeWin::adjustMenuListButtonStyle(RenderStyle& style, const Element
     style.setMinHeight(Length(minHeight, LengthType::Fixed));
 
     style.setLineHeight(RenderStyle::initialLineHeight());
-
+    
     // White-space is locked to pre
     style.setWhiteSpace(WhiteSpace::Pre);
 }
@@ -809,7 +809,7 @@ const int trackWidth = 4;
 bool RenderThemeWin::paintSliderTrack(const RenderObject& o, const PaintInfo& i, const IntRect& r)
 {
     IntRect bounds = r;
-
+    
     if (o.style().appearance() ==  SliderHorizontalPart) {
         bounds.setHeight(trackWidth);
         bounds.setY(r.y() + r.height() / 2 - trackWidth / 2);
@@ -817,13 +817,13 @@ bool RenderThemeWin::paintSliderTrack(const RenderObject& o, const PaintInfo& i,
         bounds.setWidth(trackWidth);
         bounds.setX(r.x() + r.width() / 2 - trackWidth / 2);
     }
-
+    
     drawControl(i.context(),  o, sliderTheme(), getThemeData(o), bounds);
     return false;
 }
 
 bool RenderThemeWin::paintSliderThumb(const RenderObject& o, const PaintInfo& i, const IntRect& r)
-{
+{   
     drawControl(i.context(),  o, sliderTheme(), getThemeData(o), r);
     return false;
 }
@@ -868,7 +868,7 @@ bool RenderThemeWin::paintSearchFieldCancelButton(const RenderBox& o, const Pain
         return false;
 
     IntRect parentBox = downcast<RenderBox>(*o.parent()).absoluteContentBox();
-
+    
     // Make sure the scaled button stays square and will fit in its parent's box
     bounds.setHeight(std::min(parentBox.width(), std::min(parentBox.height(), bounds.height())));
     bounds.setWidth(bounds.height());
@@ -903,7 +903,7 @@ void RenderThemeWin::adjustSearchFieldResultsDecorationPartStyle(RenderStyle& st
 {
     // Scale the decoration size based on the font size
     float fontScale = style.computedFontPixelSize() / defaultControlFontPixelSize;
-    int magnifierSize = lroundf(std::min(std::max(minSearchFieldResultsDecorationSize, defaultSearchFieldResultsDecorationSize * fontScale),
+    int magnifierSize = lroundf(std::min(std::max(minSearchFieldResultsDecorationSize, defaultSearchFieldResultsDecorationSize * fontScale), 
                                      maxSearchFieldResultsDecorationSize));
     style.setWidth(Length(magnifierSize, LengthType::Fixed));
     style.setHeight(Length(magnifierSize, LengthType::Fixed));
@@ -915,9 +915,9 @@ bool RenderThemeWin::paintSearchFieldResultsDecorationPart(const RenderBox& o, c
     ASSERT(o.parent());
     if (!is<RenderBox>(o.parent()))
         return false;
-
+    
     IntRect parentBox = downcast<RenderBox>(*o.parent()).absoluteContentBox();
-
+    
     // Make sure the scaled decoration stays square and will fit in its parent's box
     bounds.setHeight(std::min(parentBox.width(), std::min(parentBox.height(), bounds.height())));
     bounds.setWidth(bounds.height());
@@ -925,7 +925,7 @@ bool RenderThemeWin::paintSearchFieldResultsDecorationPart(const RenderBox& o, c
     // Center the decoration vertically.  Round up though, so if it has to be one pixel off-center, it will
     // be one pixel closer to the bottom of the field.  This tends to look better with the text.
     bounds.setY(parentBox.y() + (parentBox.height() - bounds.height() + 1) / 2);
-
+    
     static Image& magnifierImage = Image::loadPlatformResource("searchMagnifier").leakRef();
     paintInfo.context().drawImage(magnifierImage, bounds);
     return false;
@@ -935,7 +935,7 @@ void RenderThemeWin::adjustSearchFieldResultsButtonStyle(RenderStyle& style, con
 {
     // Scale the button size based on the font size
     float fontScale = style.computedFontPixelSize() / defaultControlFontPixelSize;
-    int magnifierHeight = lroundf(std::min(std::max(minSearchFieldResultsDecorationSize, defaultSearchFieldResultsDecorationSize * fontScale),
+    int magnifierHeight = lroundf(std::min(std::max(minSearchFieldResultsDecorationSize, defaultSearchFieldResultsDecorationSize * fontScale), 
                                    maxSearchFieldResultsDecorationSize));
     int magnifierWidth = lroundf(magnifierHeight * defaultSearchFieldResultsButtonWidth / defaultSearchFieldResultsDecorationSize);
     style.setWidth(Length(magnifierWidth, LengthType::Fixed));
@@ -950,9 +950,9 @@ bool RenderThemeWin::paintSearchFieldResultsButton(const RenderBox& o, const Pai
         return false;
     if (!is<RenderBox>(o.parent()))
         return false;
-
+    
     IntRect parentBox = downcast<RenderBox>(*o.parent()).absoluteContentBox();
-
+    
     // Make sure the scaled decoration will fit in its parent's box
     bounds.setHeight(std::min(parentBox.height(), bounds.height()));
     bounds.setWidth(std::min<int>(parentBox.width(), bounds.height() * defaultSearchFieldResultsButtonWidth / defaultSearchFieldResultsDecorationSize));

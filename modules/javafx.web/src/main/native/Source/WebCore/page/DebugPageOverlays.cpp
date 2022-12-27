@@ -66,7 +66,7 @@ protected:
     // Returns true if the region changed.
     virtual bool updateRegion() = 0;
     void drawRegion(GraphicsContext&, const Region&, const Color&, const IntRect& dirtyRect);
-
+    
     Page& m_page;
     RefPtr<PageOverlay> m_overlay;
     std::unique_ptr<Region> m_region;
@@ -97,7 +97,7 @@ bool MouseWheelRegionOverlay::updateRegion()
     return false;
 #else
     auto region = makeUnique<Region>();
-
+    
     for (const Frame* frame = &m_page.mainFrame(); frame; frame = frame->tree().traverseNext()) {
         if (!frame->view() || !frame->document())
             continue;
@@ -106,7 +106,7 @@ bool MouseWheelRegionOverlay::updateRegion()
         frameRegion.first.translate(toIntSize(frame->view()->contentsToRootView(IntPoint())));
         region->unite(frameRegion.first);
     }
-
+    
     region->translate(m_overlay->viewToOverlayOffset());
 
     bool regionChanged = !m_region || !(*m_region == *region);
@@ -130,7 +130,7 @@ private:
 
     bool updateRegion() override;
     void drawRect(PageOverlay&, GraphicsContext&, const IntRect& dirtyRect) final;
-
+    
     EventTrackingRegions m_eventTrackingRegions;
 };
 
@@ -181,11 +181,11 @@ static void drawRightAlignedText(const String& text, GraphicsContext& context, c
 void NonFastScrollableRegionOverlay::drawRect(PageOverlay& pageOverlay, GraphicsContext& context, const IntRect&)
 {
     IntRect bounds = pageOverlay.bounds();
-
+    
     context.clearRect(bounds);
-
+    
     FloatRect legendRect = { bounds.maxX() - 30.0f, 10, 20, 20 };
-
+    
     FontCascadeDescription fontDescription;
     fontDescription.setOneFamily("Helvetica");
     fontDescription.setSpecifiedSize(12);

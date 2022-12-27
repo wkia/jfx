@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,7 +48,7 @@ CallLinkStatus::CallLinkStatus(JSValue value)
         m_couldTakeSlowPath = true;
         return;
     }
-
+    
     m_variants.append(CallVariant(value.asCell()));
 }
 
@@ -88,8 +88,8 @@ CallLinkStatus CallLinkStatus::computeFromLLInt(const ConcurrentJSLocker&, CodeB
     default:
         return CallLinkStatus();
     }
-
-
+    
+    
     return CallLinkStatus(callLinkInfo->lastSeenCallee());
 }
 
@@ -98,7 +98,7 @@ CallLinkStatus CallLinkStatus::computeFor(
     ExitSiteData exitSiteData)
 {
     ConcurrentJSLocker locker(profiledBlock->m_lock);
-
+    
     UNUSED_PARAM(profiledBlock);
     UNUSED_PARAM(bytecodeIndex);
     UNUSED_PARAM(map);
@@ -110,7 +110,7 @@ CallLinkStatus CallLinkStatus::computeFor(
             return takesSlowPath();
         return computeFromLLInt(locker, profiledBlock, bytecodeIndex);
     }
-
+    
     return computeFor(locker, profiledBlock, *callLinkInfo, exitSiteData);
 #else
     return CallLinkStatus();
@@ -136,11 +136,11 @@ CallLinkStatus::ExitSiteData CallLinkStatus::computeExitSiteData(CodeBlock* prof
             || codeBlock->hasExitSite(locker, DFG::FrequentExitSite(bytecodeIndex, BadExecutable, ExitFromAnything, inlineKind)),
             inlineKind);
     };
-
+    
     auto badFunction = [&] (ExitingInlineKind inlineKind) -> ExitFlag {
         return ExitFlag(codeBlock->hasExitSite(locker, DFG::FrequentExitSite(bytecodeIndex, BadConstantValue, ExitFromAnything, inlineKind)), inlineKind);
     };
-
+    
     exitSiteData.takesSlowPath |= takesSlowPath(ExitFromNotInlined);
     exitSiteData.takesSlowPath |= takesSlowPath(ExitFromInlined);
     exitSiteData.badFunction |= badFunction(ExitFromNotInlined);
@@ -149,7 +149,7 @@ CallLinkStatus::ExitSiteData CallLinkStatus::computeExitSiteData(CodeBlock* prof
     UNUSED_PARAM(profiledBlock);
     UNUSED_PARAM(bytecodeIndex);
 #endif
-
+    
     return exitSiteData;
 }
 
@@ -159,7 +159,7 @@ CallLinkStatus CallLinkStatus::computeFor(
 {
     // We don't really need this, but anytime we have to debug this code, it becomes indispensable.
     UNUSED_PARAM(profiledBlock);
-
+    
     CallLinkStatus result = computeFromCallLinkInfo(locker, callLinkInfo);
     result.m_maxArgumentCountIncludingThis = callLinkInfo.maxArgumentCountIncludingThis();
     return result;
@@ -171,10 +171,10 @@ CallLinkStatus CallLinkStatus::computeFromCallLinkInfo(
     // We cannot tell you anything about direct calls.
     if (callLinkInfo.isDirect())
         return CallLinkStatus();
-
+    
     if (callLinkInfo.clearedByGC() || callLinkInfo.clearedByVirtual())
         return takesSlowPath();
-
+    
     // Note that despite requiring that the locker is held, this code is racy with respect
     // to the CallLinkInfo: it may get cleared while this code runs! This is because
     // CallLinkInfo::unlink() may be called from a different CodeBlock than the one that owns
@@ -187,14 +187,14 @@ CallLinkStatus CallLinkStatus::computeFromCallLinkInfo(
     // only be deleted at next GC, so if we load a non-null one, then it must contain data
     // that is still marginally valid (i.e. the pointers ain't stale). This kind of raciness
     // is probably OK for now.
-
+    
     // PolymorphicCallStubRoutine is a GCAwareJITStubRoutine, so if non-null, it will stay alive
     // until next GC even if the CallLinkInfo is concurrently cleared. Also, the variants list is
     // never mutated after the PolymorphicCallStubRoutine is instantiated. We have some conservative
     // fencing in place to make sure that we see the variants list after construction.
     if (PolymorphicCallStubRoutine* stub = callLinkInfo.stub()) {
         WTF::dependentLoadLoadFence();
-
+        
         if (!stub->hasEdges()) {
             // This means we have an FTL profile, which has incomplete information.
             //
@@ -205,22 +205,22 @@ CallLinkStatus CallLinkStatus::computeFromCallLinkInfo(
             // profitable not to inline anything.
             return takesSlowPath();
         }
-
+        
         CallEdgeList edges = stub->edges();
-
+        
         // Now that we've loaded the edges list, there are no further concurrency concerns. We will
         // just manipulate and prune this list to our liking - mostly removing entries that are too
         // infrequent and ensuring that it's sorted in descending order of frequency.
-
+        
         RELEASE_ASSERT(edges.size());
-
+        
         std::sort(
             edges.begin(), edges.end(),
             [] (CallEdge a, CallEdge b) {
                 return a.count() > b.count();
             });
         RELEASE_ASSERT(edges.first().count() >= edges.last().count());
-
+        
         double totalCallsToKnown = 0;
         double totalCallsToUnknown = callLinkInfo.slowPathCount();
         CallVariantList variants;
@@ -239,35 +239,35 @@ CallLinkStatus CallLinkStatus::computeFromCallLinkInfo(
                 variants.append(edge.callee());
             }
         }
-
+        
         // Bail if we didn't find any calls that qualified.
         RELEASE_ASSERT(!!totalCallsToKnown == !!variants.size());
         if (variants.isEmpty())
             return takesSlowPath();
-
+        
         // We require that the distribution of callees is skewed towards a handful of common ones.
         if (totalCallsToKnown / totalCallsToUnknown < Options::minimumCallToKnownRate())
             return takesSlowPath();
-
+        
         RELEASE_ASSERT(totalCallsToKnown);
         RELEASE_ASSERT(variants.size());
-
+        
         CallLinkStatus result;
         result.m_variants = variants;
         result.m_couldTakeSlowPath = !!totalCallsToUnknown;
         result.m_isBasedOnStub = true;
         return result;
     }
-
+    
     CallLinkStatus result;
-
+    
     if (JSObject* target = callLinkInfo.lastSeenCallee()) {
         CallVariant variant(target);
         if (callLinkInfo.hasSeenClosure())
             variant = variant.despecifiedClosure();
         result.m_variants.append(variant);
     }
-
+    
     result.m_couldTakeSlowPath = !!callLinkInfo.slowPathCount();
 
     return result;
@@ -295,7 +295,7 @@ void CallLinkStatus::accountForExits(ExitSiteData exitSiteData, ExitingInlineKin
             m_couldTakeSlowPath = true;
         }
     }
-
+    
     if (exitSiteData.takesSlowPath.isSet(inlineKind))
         m_couldTakeSlowPath = true;
 }
@@ -311,12 +311,12 @@ CallLinkStatus CallLinkStatus::computeFor(
         dataLog("takesSlowPath = ", exitSiteData.takesSlowPath, "\n");
         dataLog("badFunction = ", exitSiteData.badFunction, "\n");
     }
-
+    
     for (const ICStatusContext* context : optimizedStack) {
         if (CallLinkStatusInternal::verbose)
             dataLog("Examining status in ", pointerDump(context->optimizedCodeBlock), "\n");
         ICStatus status = context->get(codeOrigin);
-
+        
         // If we have both a CallLinkStatus and a callLinkInfo for the same origin, then it means
         // one of two things:
         //
@@ -345,18 +345,18 @@ CallLinkStatus CallLinkStatus::computeFor(
         // Luckily, this case doesn't matter for the other ICStatuses, since they never do the
         // fast-path-slow-path control-flow-diamond style of IC inlining. It's either all fast
         // path or it's a full IC. So, for them, if there is an IC status then it means case (1).
-
+        
         bool checkStatusFirst = context->optimizedCodeBlock->jitType() == JITType::FTLJIT;
-
+        
         auto bless = [&] (CallLinkStatus& result) {
             if (!context->isInlined(codeOrigin))
                 result.merge(computeFor(profiledBlock, codeOrigin.bytecodeIndex(), baselineMap, exitSiteData));
         };
-
+        
         auto checkInfo = [&] () -> CallLinkStatus {
             if (!status.callLinkInfo)
                 return CallLinkStatus();
-
+            
             if (CallLinkStatusInternal::verbose)
                 dataLog("Have CallLinkInfo with CodeOrigin = ", status.callLinkInfo->codeOrigin(), "\n");
             CallLinkStatus result;
@@ -371,7 +371,7 @@ CallLinkStatus CallLinkStatus::computeFor(
             bless(result);
             return result;
         };
-
+        
         auto checkStatus = [&] () -> CallLinkStatus {
             if (!status.callStatus)
                 return CallLinkStatus();
@@ -382,7 +382,7 @@ CallLinkStatus CallLinkStatus::computeFor(
             bless(result);
             return result;
         };
-
+        
         if (checkStatusFirst) {
             if (CallLinkStatus result = checkStatus())
                 return result;
@@ -390,13 +390,13 @@ CallLinkStatus CallLinkStatus::computeFor(
                 return result;
             continue;
         }
-
+        
         if (CallLinkStatus result = checkInfo())
             return result;
         if (CallLinkStatus result = checkStatus())
             return result;
     }
-
+    
     return computeFor(profiledBlock, codeOrigin.bytecodeIndex(), baselineMap, exitSiteData);
 }
 #endif
@@ -434,7 +434,7 @@ bool CallLinkStatus::finalize(VM& vm)
 void CallLinkStatus::merge(const CallLinkStatus& other)
 {
     m_couldTakeSlowPath |= other.m_couldTakeSlowPath;
-
+    
     for (const CallVariant& otherVariant : other.m_variants) {
         bool found = false;
         for (CallVariant& thisVariant : m_variants) {
@@ -463,21 +463,21 @@ void CallLinkStatus::dump(PrintStream& out) const
         out.print("Not Set");
         return;
     }
-
+    
     CommaPrinter comma;
-
+    
     if (m_isProved)
         out.print(comma, "Statically Proved");
-
+    
     if (m_couldTakeSlowPath)
         out.print(comma, "Could Take Slow Path");
-
+    
     if (m_isBasedOnStub)
         out.print(comma, "Based On Stub");
-
+    
     if (!m_variants.isEmpty())
         out.print(comma, listDump(m_variants));
-
+    
     if (m_maxArgumentCountIncludingThis)
         out.print(comma, "maxArgumentCountIncludingThis = ", m_maxArgumentCountIncludingThis);
 }

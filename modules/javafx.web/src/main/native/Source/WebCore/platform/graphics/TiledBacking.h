@@ -57,7 +57,7 @@ public:
     virtual void setVisibleRect(const FloatRect&) = 0;
     virtual FloatRect visibleRect() const = 0;
 
-    // Only used to update the tile coverage map.
+    // Only used to update the tile coverage map. 
     virtual void setLayoutViewportRect(std::optional<FloatRect>) = 0;
 
     virtual void setCoverageRect(const FloatRect&) = 0;
@@ -70,7 +70,7 @@ public:
     virtual void setVelocity(const VelocityData&) = 0;
 
     virtual void setTileSizeUpdateDelayDisabledForTesting(bool) = 0;
-
+    
     enum {
         NotScrollable           = 0,
         HorizontallyScrollable  = 1 << 0,
@@ -108,7 +108,7 @@ public:
 
     virtual void setScrollingPerformanceTestingEnabled(bool) = 0;
     virtual bool scrollingPerformanceTestingEnabled() const = 0;
-
+    
     virtual double retainedTileBackingStoreMemory() const = 0;
 
     virtual void setHasMargins(bool marginTop, bool marginBottom, bool marginLeft, bool marginRight) = 0;

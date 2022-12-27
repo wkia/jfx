@@ -1083,7 +1083,7 @@ void RenderLayerScrollableArea::updateScrollbarPresenceAndState(std::optional<bo
     auto stateForScrollbar = [&](ScrollbarOrientation orientation, std::optional<bool> hasOverflow, ScrollbarState nonScrollableState) {
         if (hasOverflow)
             return *hasOverflow ? ScrollbarState::Enabled : nonScrollableState;
-
+        
         // If we don't have information about overflow (because we haven't done layout yet), just return the current state of the scrollbar.
         auto existingScrollbar = scrollbarForAxis(orientation);
         return (existingScrollbar && existingScrollbar->enabled()) ? ScrollbarState::Enabled : nonScrollableState;

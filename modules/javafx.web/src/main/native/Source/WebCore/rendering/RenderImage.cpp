@@ -375,7 +375,7 @@ void RenderImage::repaintOrMarkForLayout(ImageSizeChangeType imageSizeChange, co
         // so map from the bounds of the image to the contentsBox.
         repaintRect.intersect(enclosingIntRect(mapRect(*rect, FloatRect(FloatPoint(), imageResource().imageSize(1.0f)), repaintRect)));
     }
-
+        
     repaintRectangle(repaintRect);
 
     // Tell any potential compositing layers that the image needs updating.
@@ -543,7 +543,7 @@ void RenderImage::paintReplaced(PaintInfo& paintInfo, const LayoutPoint& paintOf
         }
         return;
     }
-
+    
     if (contentSize.isEmpty())
         return;
 
@@ -572,9 +572,9 @@ void RenderImage::paintReplaced(PaintInfo& paintInfo, const LayoutPoint& paintOf
 
     if (showBorderForIncompleteImage && (result != ImageDrawResult::DidDraw || (cachedImage() && cachedImage()->isLoading())))
         paintIncompleteImageOutline(paintInfo, paintOffset, missingImageBorderWidth);
-
+    
     if (cachedImage() && paintInfo.phase == PaintPhase::Foreground) {
-        // For now, count images as unpainted if they are still progressively loading. We may want
+        // For now, count images as unpainted if they are still progressively loading. We may want 
         // to refine this in the future to account for the portion of the image that has painted.
         LayoutRect visibleRect = intersection(replacedContentRect, contentBoxRect);
         if (cachedImage()->isLoading() || result == ImageDrawResult::DidRequestDecoding)
@@ -587,16 +587,16 @@ void RenderImage::paintReplaced(PaintInfo& paintInfo, const LayoutPoint& paintOf
 void RenderImage::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
     RenderReplaced::paint(paintInfo, paintOffset);
-
+    
     if (paintInfo.phase == PaintPhase::Outline)
         paintAreaElementFocusRing(paintInfo, paintOffset);
 }
-
+    
 void RenderImage::paintAreaElementFocusRing(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
     if (document().printing() || !frame().selection().isFocusedAndActive())
         return;
-
+    
     if (paintInfo.context().paintingDisabled() && !paintInfo.context().performingPaintInvalidation())
         return;
 
@@ -732,7 +732,7 @@ bool RenderImage::computeBackgroundIsKnownToBeObscured(const LayoutPoint& paintO
 {
     if (!hasBackground())
         return false;
-
+    
     LayoutRect paintedExtent;
     if (!getBackgroundPaintedExtent(paintOffset, paintedExtent))
         return false;

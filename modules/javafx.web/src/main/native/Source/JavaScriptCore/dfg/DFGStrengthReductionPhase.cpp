@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -44,20 +44,20 @@ namespace JSC { namespace DFG {
 
 class StrengthReductionPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     StrengthReductionPhase(Graph& graph)
         : Phase(graph, "strength reduction")
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_fixpointState == FixpointNotConverged);
-
+        
         m_changed = false;
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             m_block = m_graph.block(blockIndex);
             if (!m_block)
@@ -68,7 +68,7 @@ public:
             }
             m_insertionSet.execute(m_block);
         }
-
+        
         return m_changed;
     }
 
@@ -84,12 +84,12 @@ private:
                 break;
             }
             break;
-
+            
         case ArithBitXor:
         case ArithBitAnd:
             handleCommutativity();
             break;
-
+            
         case ArithBitLShift:
         case ArithBitRShift:
         case BitURShift:
@@ -98,7 +98,7 @@ private:
                 break;
             }
             break;
-
+            
         case UInt32ToNumber:
             if (m_node->child1()->op() == BitURShift
                 && m_node->child1()->child2()->isInt32Constant()
@@ -109,16 +109,16 @@ private:
                 break;
             }
             break;
-
+            
         case ArithAdd:
             handleCommutativity();
-
+            
             if (m_node->child2()->isInt32Constant() && !m_node->child2()->asInt32()) {
                 convertToIdentityOverChild1();
                 break;
             }
             break;
-
+            
         case ValueMul:
         case ValueBitOr:
         case ValueBitAnd:
@@ -225,7 +225,7 @@ private:
         case ValueRep:
         case Int52Rep: {
             // This short-circuits circuitous conversions, like ValueRep(Int52Rep(value)).
-
+            
             // The only speculation that we would do beyond validating that we have a type that
             // can be represented a certain way is an Int32 check that would appear on Int52Rep
             // nodes. For now, if we see this and the final type we want is an Int52, we use it
@@ -246,7 +246,7 @@ private:
                         // seriously circuitous conversions.
                         if (canonicalResultRepresentation(node->result()) != NodeResultJS)
                             break;
-
+                        
                         m_insertionSet.insertCheck(
                             m_nodeIndex, m_node->origin, Edge(node, Int32Use));
                     }
@@ -255,17 +255,17 @@ private:
                     m_changed = true;
                     break;
                 }
-
+                
                 switch (node->op()) {
                 case Int52Rep:
                     if (node->child1().useKind() != Int32Use)
                         break;
                     hadInt32Check = true;
                     continue;
-
+                    
                 case ValueRep:
                     continue;
-
+                    
                 default:
                     break;
                 }
@@ -273,7 +273,7 @@ private:
             }
             break;
         }
-
+            
         case Flush: {
             ASSERT(m_graph.m_form != SSA);
 
@@ -282,10 +282,10 @@ private:
                 // https://bugs.webkit.org/show_bug.cgi?id=150824
                 break;
             }
-
+            
             Node* setLocal = nullptr;
             Operand operand = m_node->operand();
-
+            
             for (unsigned i = m_nodeIndex; i--;) {
                 Node* node = m_block->at(i);
 
@@ -298,10 +298,10 @@ private:
                     break;
 
             }
-
+            
             if (!setLocal)
                 break;
-
+            
             // The Flush should become a PhantomLocal at this point. This means that we want the
             // local's value during OSR, but we don't care if the value is stored to the stack. CPS
             // rethreading can canonicalize PhantomLocals for us.
@@ -821,7 +821,7 @@ private:
             String string = stringNode->tryGetString(m_graph);
             if (!string)
                 break;
-
+            
             Node* regExpObjectNode = m_node->child2().node();
             RegExp* regExp;
             if (RegExpObject* regExpObject = regExpObjectNode->dynamicCastConstant<RegExpObject*>(vm()))
@@ -858,11 +858,11 @@ private:
                         ok = false;
                         break;
                     }
-
+                    
                     result.start = position;
                     result.end = ovector[1];
                 }
-
+                
                 if (!result)
                     break;
 
@@ -905,7 +905,7 @@ private:
                     Edge(regExpObjectNode, RegExpObjectUse),
                     m_insertionSet.insertConstantForUse(
                         m_nodeIndex, origin, jsNumber(0), UntypedUse));
-
+                
                 origin = origin.withInvalidExit();
             }
 
@@ -919,7 +919,7 @@ private:
             m_node->origin = origin;
             break;
         }
-
+            
         case Call:
         case Construct:
         case TailCallInlinedCaller:
@@ -934,7 +934,7 @@ private:
                 executable = callee->castOperand<FunctionExecutable*>();
                 callVariant = CallVariant(executable);
             }
-
+            
             if (!executable)
                 break;
 
@@ -943,7 +943,7 @@ private:
             // https://bugs.webkit.org/show_bug.cgi?id=220339
             if (executable->intrinsic() == WasmFunctionIntrinsic)
                 break;
-
+            
             if (FunctionExecutable* functionExecutable = jsDynamicCast<FunctionExecutable*>(vm(), executable)) {
                 if (m_node->op() == Construct && functionExecutable->constructAbility() == ConstructAbility::CannotConstruct)
                     break;
@@ -952,7 +952,7 @@ private:
                 // want to do too much of this.
                 unsigned numAllocatedArgs =
                     static_cast<unsigned>(functionExecutable->parameterCount()) + 1;
-
+                
                 if (numAllocatedArgs <= Options::maximumDirectCallStackSize()) {
                     m_graph.m_parameterSlots = std::max(
                         m_graph.m_parameterSlots,
@@ -971,7 +971,7 @@ private:
             break;
         }
     }
-
+            
     void convertToIdentityOverChild(unsigned childIndex)
     {
         ASSERT(!(m_node->flags() & NodeHasVarArgs));
@@ -980,12 +980,12 @@ private:
         m_node->convertToIdentity();
         m_changed = true;
     }
-
+    
     void convertToIdentityOverChild1()
     {
         convertToIdentityOverChild(0);
     }
-
+    
     void convertToIdentityOverChild2()
     {
         convertToIdentityOverChild(1);
@@ -996,7 +996,7 @@ private:
         m_insertionSet.insertCheck(m_graph, m_nodeIndex, node);
         node->convertToLazyJSConstant(m_graph, value);
     }
-
+    
     void handleCommutativity()
     {
         // It's definitely not sound to swap the lhs and rhs when we may be performing effectful
@@ -1007,7 +1007,7 @@ private:
         // If the right side is a constant then there is nothing left to do.
         if (m_node->child2()->hasConstant())
             return;
-
+        
         // This case ensures that optimizations that look for x + const don't also have
         // to look for const + x.
         if (m_node->child1()->hasConstant() && !m_node->child1()->asJSValue().isCell()) {
@@ -1015,7 +1015,7 @@ private:
             m_changed = true;
             return;
         }
-
+        
         // This case ensures that CSE is commutativity-aware.
         if (m_node->child1().node() > m_node->child2().node()) {
             std::swap(m_node->child1(), m_node->child2());
@@ -1028,14 +1028,14 @@ private:
     {
         m_nodeIndex += m_insertionSet.execute(m_block);
     }
-
+    
     InsertionSet m_insertionSet;
     BasicBlock* m_block;
     unsigned m_nodeIndex;
     Node* m_node;
     bool m_changed;
 };
-
+    
 bool performStrengthReduction(Graph& graph)
 {
     return runPhase<StrengthReductionPhase>(graph);

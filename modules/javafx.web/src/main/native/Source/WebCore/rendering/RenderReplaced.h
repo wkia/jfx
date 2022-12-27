@@ -46,9 +46,9 @@ public:
             return LayoutSize();
         return m_intrinsicSize;
     }
-
+    
     RoundedRect roundedContentBoxRect() const;
-
+    
     bool isContentLikelyVisibleInViewport();
     bool needsPreferredWidthsRecalculation() const override;
 
@@ -93,14 +93,14 @@ private:
     LayoutRect clippedOverflowRect(const RenderLayerModelObject* repaintContainer, VisibleRectContext) const override;
 
     VisiblePosition positionForPoint(const LayoutPoint&, const RenderFragmentContainer*) final;
-
+    
     bool canBeSelectionLeaf() const override { return true; }
 
     LayoutRect selectionRectForRepaint(const RenderLayerModelObject* repaintContainer, bool clipToVisibleContent = true) final;
     void computeAspectRatioInformationForRenderBox(RenderBox*, FloatSize& constrainedSize, double& intrinsicRatio) const;
 
     virtual bool shouldDrawSelectionTint() const;
-
+    
     Color calculateHighlightColor() const;
     bool isHighlighted(HighlightState, const HighlightData&) const;
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -67,20 +67,20 @@ static CompilationResult compileImpl(
     if (!Options::bytecodeRangeToDFGCompile().isInRange(codeBlock->instructionsSize())
         || !ensureGlobalDFGAllowlist().contains(codeBlock))
         return CompilationFailed;
-
+    
     numCompilations++;
-
+    
     ASSERT(codeBlock);
     ASSERT(codeBlock->alternative());
     ASSERT(JITCode::isBaselineCode(codeBlock->alternative()->jitType()));
     ASSERT(!profiledDFGCodeBlock || profiledDFGCodeBlock->jitType() == JITType::DFGJIT);
-
+    
     if (logCompilationChanges(mode))
         dataLog("DFG(Driver) compiling ", *codeBlock, " with ", mode, ", instructions size = ", codeBlock->instructionsSize(), "\n");
-
+    
     if (vm.typeProfiler())
         vm.typeProfilerLog()->processLogEntries(vm, "Preparing for DFG compilation."_s);
-
+    
     Ref<Plan> plan = adoptRef(
         *new Plan(codeBlock, profiledDFGCodeBlock, mode, osrEntryBytecodeIndex, mustHandleValues));
 

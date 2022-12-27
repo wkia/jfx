@@ -115,7 +115,7 @@ public:
     unsigned firstCharacterIndexStrippingSpaces() const;
     unsigned lastCharacterIndexStrippingSpaces() const;
     static bool isHangableStopOrComma(UChar);
-
+    
     WEBCORE_EXPORT virtual IntRect linesBoundingBox() const;
     LayoutRect linesVisualOverflowBoundingBox() const;
 
@@ -170,9 +170,9 @@ public:
     bool usesLegacyLineLayoutPath() const;
 
     StringView stringView(unsigned start = 0, std::optional<unsigned> stop = std::nullopt) const;
-
+    
     bool containsOnlyHTMLWhitespace(unsigned from, unsigned length) const;
-
+    
     bool canUseSimplifiedTextMeasuring() const { return m_canUseSimplifiedTextMeasuring; }
 
     Vector<std::pair<unsigned, unsigned>> draggedContentRangesBetweenOffsets(unsigned startOffset, unsigned endOffset) const;
@@ -207,7 +207,7 @@ private:
     void computePreferredLogicalWidths(float leadWidth, HashSet<const Font*>& fallbackFonts, GlyphOverflow&);
 
     bool computeCanUseSimpleFontCodePath() const;
-
+    
     bool nodeAtPoint(const HitTestRequest&, HitTestResult&, const HitTestLocation&, const LayoutPoint&, HitTestAction) final { ASSERT_NOT_REACHED(); return false; }
 
     float widthFromCache(const FontCascade&, unsigned start, unsigned len, float xPos, HashSet<const Font*>* fallbackFonts, GlyphOverflow*, const RenderStyle&) const;

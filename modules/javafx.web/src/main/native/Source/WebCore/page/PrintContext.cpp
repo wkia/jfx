@@ -102,7 +102,7 @@ FloatSize PrintContext::computedPageSize(FloatSize pageSize, FloatBoxExtent prin
     if (computedMargin == printMargin)
         return pageSize;
 
-    auto horizontalMarginDelta = (printMargin.left() - computedMargin.left()) + (printMargin.right() - computedMargin.right());
+    auto horizontalMarginDelta = (printMargin.left() - computedMargin.left()) + (printMargin.right() - computedMargin.right()); 
     auto verticalMarginDelta = (printMargin.top() - computedMargin.top()) + (printMargin.bottom() - computedMargin.bottom());
     return { pageSize.width() + horizontalMarginDelta, pageSize.height() + verticalMarginDelta };
 }
@@ -164,7 +164,7 @@ void PrintContext::computePageRectsWithPageSizeInternal(const FloatSize& pageSiz
     unsigned pageCount = ceilf((float)docLogicalHeight / pageLogicalHeight);
     for (unsigned i = 0; i < pageCount; ++i) {
         int pageLogicalTop = blockDirectionEnd > blockDirectionStart ?
-                                blockDirectionStart + i * pageLogicalHeight :
+                                blockDirectionStart + i * pageLogicalHeight : 
                                 blockDirectionStart - (i + 1) * pageLogicalHeight;
         if (allowInlineDirectionTiling) {
             for (int currentInlinePosition = inlineDirectionStart;

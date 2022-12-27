@@ -26,7 +26,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -47,7 +47,7 @@ void SpotLightSource::initPaintingData(const FilterEffect& filterEffect, Paintin
     // To scale Z, map a point offset from m_userSpacePosition in the x direction by z.
     FloatPoint mappedZ = filterEffect.mapPointFromUserSpaceToBuffer({ m_userSpacePosition.x() + m_userSpacePosition.z(), m_userSpacePosition.y() });
     m_bufferPosition.setZ(mappedZ.x() - m_bufferPosition.x());
-
+    
     paintingData.directionVector = m_userSpacePointsAt - m_userSpacePosition;
     paintingData.directionVector.normalize();
 

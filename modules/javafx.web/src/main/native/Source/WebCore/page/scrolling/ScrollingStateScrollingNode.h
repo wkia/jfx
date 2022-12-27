@@ -42,7 +42,7 @@ struct RequestedScrollData {
     FloatPoint scrollPosition;
     ScrollType scrollType { ScrollType::User };
     ScrollClamping clamping { ScrollClamping::Clamped };
-
+    
     bool operator==(const RequestedScrollData& other) const
     {
         return scrollPosition == other.scrollPosition

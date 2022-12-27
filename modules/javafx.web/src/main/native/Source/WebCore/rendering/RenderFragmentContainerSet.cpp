@@ -51,7 +51,7 @@ void RenderFragmentContainerSet::expandToEncompassFragmentedFlowContentsIfNeeded
     // of the flow thread content. This is because it is always capable of generating an
     // infinite number of boxes in order to hold all of the remaining content.
     auto rect = fragmentedFlowPortionRect();
-
+    
     // Get the offset within the flow thread in its block progression direction. Then get the
     // flow thread's remaining logical height including its overflow and expand our rect
     // to encompass that remaining height and overflow. The idea is that we will generate

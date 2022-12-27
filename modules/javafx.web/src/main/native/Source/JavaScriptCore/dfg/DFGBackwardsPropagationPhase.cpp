@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -40,7 +40,7 @@ public:
         : Phase(graph, "backwards propagation")
     {
     }
-
+    
     bool run()
     {
         m_changed = true;
@@ -50,16 +50,16 @@ public:
                 BasicBlock* block = m_graph.block(blockIndex);
                 if (!block)
                     continue;
-
+            
                 // Prevent a tower of overflowing additions from creating a value that is out of the
                 // safe 2^48 range.
                 m_allowNestedOverflowingAdditions = block->size() < (1 << 16);
-
+            
                 for (unsigned indexInBlock = block->size(); indexInBlock--;)
                     propagate(block->at(indexInBlock));
             }
         }
-
+        
         return true;
     }
 
@@ -71,7 +71,7 @@ private:
         double value = node->asNumber();
         return (value || 1.0 / value > 0.0);
     }
-
+    
     bool isNotPosZero(Node* node)
     {
         if (!node->isNumberConstant())
@@ -90,7 +90,7 @@ private:
         double immediate = immediateValue.asNumber();
         return immediate > -(static_cast<int64_t>(1) << power) && immediate < (static_cast<int64_t>(1) << power);
     }
-
+    
     template<int power>
     bool isWithinPowerOfTwoNonRecursive(Node* node)
     {
@@ -98,7 +98,7 @@ private:
             return false;
         return isWithinPowerOfTwoForConstant<power>(node);
     }
-
+    
     template<int power>
     bool isWithinPowerOfTwo(Node* node)
     {
@@ -108,16 +108,16 @@ private:
         case Int52Constant: {
             return isWithinPowerOfTwoForConstant<power>(node);
         }
-
+            
         case ValueBitAnd:
         case ArithBitAnd: {
             if (power > 31)
                 return true;
-
+            
             return isWithinPowerOfTwoNonRecursive<power>(node->child1().node())
                 || isWithinPowerOfTwoNonRecursive<power>(node->child2().node());
         }
-
+            
         case ArithBitOr:
         case ArithBitXor:
         case ValueBitOr:
@@ -126,13 +126,13 @@ private:
         case ArithBitLShift: {
             return power > 31;
         }
-
+            
         case ArithBitRShift:
         case ValueBitRShift:
         case BitURShift: {
             if (power > 31)
                 return true;
-
+            
             Node* shiftAmount = node->child2().node();
             if (!node->isNumberConstant())
                 return false;
@@ -141,7 +141,7 @@ private:
                 return false;
             return immediateValue.asInt32() > 32 - power;
         }
-
+            
         default:
             return false;
         }
@@ -176,11 +176,11 @@ private:
         }
         return changed;
     }
-
+    
     void propagate(Node* node)
     {
         NodeFlags flags = node->flags() & NodeBytecodeBackPropMask;
-
+        
         switch (node->op()) {
         case GetLocal: {
             VariableAccessData* variableAccessData = node->variableAccessData();
@@ -188,7 +188,7 @@ private:
             m_changed |= variableAccessData->mergeFlags(flags);
             break;
         }
-
+            
         case SetLocal: {
             VariableAccessData* variableAccessData = node->variableAccessData();
             if (!variableAccessData->isLoadedFrom())
@@ -199,18 +199,18 @@ private:
             node->child1()->mergeFlags(flags);
             break;
         }
-
+            
         case Flush: {
             VariableAccessData* variableAccessData = node->variableAccessData();
             m_changed |= variableAccessData->mergeFlags(NodeBytecodeUsesAsValue);
             break;
         }
-
+            
         case MovHint:
         case Check:
         case CheckVarargs:
             break;
-
+            
         case ValueBitNot:
         case ArithBitNot: {
             flags |= NodeBytecodeUsesAsInt;
@@ -239,7 +239,7 @@ private:
             node->child2()->mergeFlags(flags);
             break;
         }
-
+            
         case StringCharAt:
         case StringCharCodeAt:
         case StringCodePointAt: {
@@ -272,7 +272,7 @@ private:
             break;
         }
 
-
+            
         case UInt32ToNumber: {
             node->child1()->mergeFlags(flags);
             break;
@@ -287,7 +287,7 @@ private:
                 flags |= NodeBytecodeUsesAsNumber;
             if (!m_allowNestedOverflowingAdditions)
                 flags |= NodeBytecodeUsesAsNumber;
-
+            
             node->child1()->mergeFlags(flags);
             node->child2()->mergeFlags(flags);
             break;
@@ -301,7 +301,7 @@ private:
                 flags |= NodeBytecodeUsesAsNumber;
             if (!m_allowNestedOverflowingAdditions)
                 flags |= NodeBytecodeUsesAsNumber;
-
+            
             node->child1()->mergeFlags(flags);
             node->child2()->mergeFlags(flags);
             break;
@@ -322,12 +322,12 @@ private:
                 flags |= NodeBytecodeUsesAsNumber;
             if (!m_allowNestedOverflowingAdditions)
                 flags |= NodeBytecodeUsesAsNumber;
-
+            
             node->child1()->mergeFlags(flags);
             node->child2()->mergeFlags(flags);
             break;
         }
-
+            
         case ArithNegate: {
             flags &= ~NodeBytecodeUsesAsOther;
 
@@ -356,13 +356,13 @@ private:
             // check for overflow. Additionally, it will have to check for overflow
             // itself unless we can prove that there is no way for the values
             // produced to cause double rounding.
-
+            
             if (!isWithinPowerOfTwo<22>(node->child1().node())
                 && !isWithinPowerOfTwo<22>(node->child2().node()))
                 flags |= NodeBytecodeUsesAsNumber;
-
+            
             node->mergeFlags(flags);
-
+            
             flags |= NodeBytecodeUsesAsNumber | NodeBytecodeNeedsNegZero;
             flags &= ~NodeBytecodeUsesAsOther;
 
@@ -370,7 +370,7 @@ private:
             node->child2()->mergeFlags(flags);
             break;
         }
-
+            
         case ValueDiv:
         case ArithDiv: {
             flags |= NodeBytecodeUsesAsNumber | NodeBytecodeNeedsNegZero;
@@ -380,7 +380,7 @@ private:
             node->child2()->mergeFlags(flags);
             break;
         }
-
+            
         case ValueMod:
         case ArithMod: {
             flags |= NodeBytecodeUsesAsNumber;
@@ -397,7 +397,7 @@ private:
             m_graph.varArgChild(node, 1)->mergeFlags(NodeBytecodeUsesAsNumber | NodeBytecodeUsesAsOther | NodeBytecodeUsesAsInt | NodeBytecodeUsesAsArrayIndex);
             break;
         }
-
+            
         case NewTypedArray:
         case NewArrayWithSize: {
             // Negative zero is not observable. NaN versus undefined are only observable
@@ -406,13 +406,13 @@ private:
             node->child1()->mergeFlags(NodeBytecodeUsesAsInt | NodeBytecodeUsesAsNumber | NodeBytecodeUsesAsOther | NodeBytecodeUsesAsArrayIndex);
             break;
         }
-
+            
         case ToString:
         case CallStringConstructor: {
             node->child1()->mergeFlags(NodeBytecodeUsesAsNumber | NodeBytecodeUsesAsOther);
             break;
         }
-
+            
         case ToPrimitive:
         case ToNumber:
         case ToNumeric:
@@ -441,7 +441,7 @@ private:
             m_graph.varArgChild(node, 2)->mergeFlags(NodeBytecodeUsesAsValue);
             break;
         }
-
+            
         case Switch: {
             SwitchData* data = node->switchData();
             switch (data->kind) {
@@ -474,23 +474,23 @@ private:
             break;
         }
 
-        case Identity:
+        case Identity: 
             // This would be trivial to handle but we just assert that we cannot see these yet.
             RELEASE_ASSERT_NOT_REACHED();
             break;
-
+            
         // Note: ArithSqrt, ArithUnary and other math intrinsics don't have special
         // rules in here because they are always followed by Phantoms to signify that if the
         // method call speculation fails, the bytecode may use the arguments in arbitrary ways.
         // This corresponds to that possibility of someone doing something like:
         // Math.sin = function(x) { doArbitraryThingsTo(x); }
-
+            
         default:
             mergeDefaultFlags(node);
             break;
         }
     }
-
+    
     bool m_allowNestedOverflowingAdditions;
     bool m_changed;
 };

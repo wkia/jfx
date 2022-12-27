@@ -138,7 +138,7 @@ public:
     {
         auto lengthGPR = getCachedDataTempRegisterIDAndInvalidate();
         load32(length, lengthGPR);
-        auto scratch = validateAuth ? getCachedMemoryTempRegisterIDAndInvalidate() : InvalidGPRReg;
+        auto scratch = validateAuth ? getCachedMemoryTempRegisterIDAndInvalidate() : InvalidGPRReg; 
         untagArrayPtr(lengthGPR, target, validateAuth, scratch);
     }
 

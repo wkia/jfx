@@ -71,7 +71,7 @@ ApplicationCacheGroup::~ApplicationCacheGroup()
 
     m_storage->cacheGroupDestroyed(*this);
 }
-
+    
 ApplicationCache* ApplicationCacheGroup::cacheForMainRequest(const ResourceRequest& request, DocumentLoader* documentLoader)
 {
     if (!ApplicationCache::requestIsHTTPOrHTTPSGet(request))
@@ -93,7 +93,7 @@ ApplicationCache* ApplicationCacheGroup::cacheForMainRequest(const ResourceReque
 
     return group->newestCache();
 }
-
+    
 ApplicationCache* ApplicationCacheGroup::fallbackCacheForMainRequest(const ResourceRequest& request, DocumentLoader* documentLoader)
 {
     if (!ApplicationCache::requestIsHTTPOrHTTPSGet(request))
@@ -148,7 +148,7 @@ void ApplicationCacheGroup::selectCache(Frame& frame, const URL& passedManifestU
     manifestURL.removeFragmentIdentifier();
 
     auto* mainResourceCache = documentLoader.applicationCacheHost().mainResourceApplicationCache();
-
+    
     if (mainResourceCache) {
         ASSERT(mainResourceCache->group());
         if (manifestURL == mainResourceCache->group()->m_manifestURL) {
@@ -178,7 +178,7 @@ void ApplicationCacheGroup::selectCache(Frame& frame, const URL& passedManifestU
         return;
     }
 
-    // The resource was loaded from the network, check if it is a HTTP/HTTPS GET.
+    // The resource was loaded from the network, check if it is a HTTP/HTTPS GET.    
     auto loader = frame.loader().activeDocumentLoader();
     if (!loader)
         return;
@@ -329,7 +329,7 @@ void ApplicationCacheGroup::stopLoading()
     // FIXME: Resetting just a tiny part of the state in this function is confusing. Callers have to take care of a lot more.
     m_cacheBeingUpdated = nullptr;
     m_pendingEntries.clear();
-}
+}    
 
 void ApplicationCacheGroup::disassociateDocumentLoader(DocumentLoader& loader)
 {
@@ -426,7 +426,7 @@ void ApplicationCacheGroup::update(Frame& frame, ApplicationCacheUpdateOption up
         ASSERT(updateOption == ApplicationCacheUpdateWithBrowsingContext);
         postListenerTask(eventNames().checkingEvent, documentLoader);
     }
-
+    
     ASSERT(!m_manifestLoader);
     ASSERT(!m_entryLoader);
     ASSERT(!m_manifestResource);
@@ -498,9 +498,9 @@ void ApplicationCacheGroup::didFinishLoadingEntry(const URL& entryURL)
     InspectorInstrumentation::didFinishLoading(m_frame.get(), m_frame->loader().documentLoader(), m_currentResourceIdentifier, emptyMetrics, nullptr);
 
     ASSERT(m_pendingEntries.contains(entryURL.string()));
-
+    
     auto type = m_pendingEntries.take(entryURL.string());
-
+    
     ASSERT(m_cacheBeingUpdated);
 
     // Did we received a 304?
@@ -534,7 +534,7 @@ void ApplicationCacheGroup::didFinishLoadingEntry(const URL& entryURL)
         cacheUpdateFailed();
         return;
     }
-
+    
     // Load the next resource, if any.
     startLoadingEntry();
 }
@@ -594,7 +594,7 @@ void ApplicationCacheGroup::didFinishLoadingManifest()
     if (isUpgradeAttempt) {
         ApplicationCacheResource* newestManifest = m_newestCache->manifestResource();
         ASSERT(newestManifest);
-
+    
         // The resource will be null if HTTP response was 304 Not Modified.
         if (!m_manifestResource || newestManifest->data() == m_manifestResource->data()) {
             m_completionType = NoUpdate;
@@ -604,7 +604,7 @@ void ApplicationCacheGroup::didFinishLoadingManifest()
             return;
         }
     }
-
+    
     auto manifest = parseApplicationCacheManifest(m_manifestURL, m_manifestResource->response().mimeType(), m_manifestResource->data().data(), m_manifestResource->data().size());
     if (!manifest) {
         // At the time of this writing, lack of "CACHE MANIFEST" signature is the only reason for parseManifest to fail.
@@ -622,7 +622,7 @@ void ApplicationCacheGroup::didFinishLoadingManifest()
 
     // We have the manifest, now download the resources.
     setUpdateStatus(Downloading);
-
+    
     postListenerTask(eventNames().downloadingEvent, m_associatedDocumentLoaders);
 
     ASSERT(m_pendingEntries.isEmpty());
@@ -634,13 +634,13 @@ void ApplicationCacheGroup::didFinishLoadingManifest()
                 addEntry(urlAndResource.key, type);
         }
     }
-
+    
     for (const auto& explicitURL : manifest->explicitURLs)
         addEntry(explicitURL, ApplicationCacheResource::Explicit);
 
     for (auto& fallbackURL : manifest->fallbackURLs)
         addEntry(fallbackURL.second.string(), ApplicationCacheResource::Fallback);
-
+    
     m_cacheBeingUpdated->setOnlineAllowlist(manifest->onlineAllowedURLs);
     m_cacheBeingUpdated->setFallbackURLs(manifest->fallbackURLs);
     m_cacheBeingUpdated->setAllowsAllNetworkRequests(manifest->allowAllNetworkRequests);
@@ -716,7 +716,7 @@ void ApplicationCacheGroup::recalculateAvailableSpaceInQuota()
         m_availableSpaceInQuota = ApplicationCacheStorage::noQuota();
     }
 }
-
+    
 void ApplicationCacheGroup::manifestNotFound()
 {
     makeObsolete();
@@ -731,7 +731,7 @@ void ApplicationCacheGroup::manifestNotFound()
 
     while (!m_pendingMasterResourceLoaders.isEmpty()) {
         HashSet<DocumentLoader*>::iterator it = m_pendingMasterResourceLoaders.begin();
-
+        
         ASSERT((*it)->applicationCacheHost().candidateApplicationCacheGroup() == this);
         ASSERT(!(*it)->applicationCacheHost().applicationCache());
         (*it)->applicationCacheHost().setCandidateApplicationCacheGroup(nullptr);
@@ -739,7 +739,7 @@ void ApplicationCacheGroup::manifestNotFound()
     }
 
     m_downloadingPendingMasterResourceLoadersCount = 0;
-    setUpdateStatus(Idle);
+    setUpdateStatus(Idle);    
     m_frame = nullptr;
 
     if (m_caches.isEmpty()) {
@@ -887,7 +887,7 @@ void ApplicationCacheGroup::startLoadingEntry()
         deliverDelayedMainResources();
         return;
     }
-
+    
     auto firstPendingEntryURL = m_pendingEntries.begin()->key;
 
     postListenerTask(eventNames().progressEvent, m_progressTotal, m_progressDone, m_associatedDocumentLoaders);
@@ -1011,7 +1011,7 @@ void ApplicationCacheGroup::postListenerTask(const AtomString& eventType, int pr
     auto* frame = loader.frame();
     if (!frame)
         return;
-
+    
     ASSERT(frame->loader().documentLoader() == &loader);
 
     RefPtr<DocumentLoader> protectedLoader(&loader);

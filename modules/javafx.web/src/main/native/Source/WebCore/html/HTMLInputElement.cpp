@@ -1905,7 +1905,7 @@ bool HTMLInputElement::matchesIndeterminatePseudoClass() const
     return m_inputType->matchesIndeterminatePseudoClass();
 }
 
-bool HTMLInputElement::shouldAppearIndeterminate() const
+bool HTMLInputElement::shouldAppearIndeterminate() const 
 {
     return m_inputType->shouldAppearIndeterminate();
 }
@@ -1915,14 +1915,14 @@ MediaCaptureType HTMLInputElement::mediaCaptureType() const
 {
     if (!isFileUpload())
         return MediaCaptureTypeNone;
-
+    
     auto& captureAttribute = attributeWithoutSynchronization(captureAttr);
     if (captureAttribute.isNull())
         return MediaCaptureTypeNone;
-
+    
     if (equalLettersIgnoringASCIICase(captureAttribute, "user"))
         return MediaCaptureTypeUser;
-
+    
     return MediaCaptureTypeEnvironment;
 }
 #endif
@@ -2093,7 +2093,7 @@ ExceptionOr<void> HTMLInputElement::setSelectionRangeForBindings(int start, int 
 {
     if (!canHaveSelection())
         return Exception { TypeError };
-
+    
     setSelectionRange(start, end, direction);
     return { };
 }

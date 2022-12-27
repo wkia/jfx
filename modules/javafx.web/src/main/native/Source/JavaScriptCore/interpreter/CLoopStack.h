@@ -50,7 +50,7 @@ namespace JSC {
 
         CLoopStack(VM&);
         ~CLoopStack();
-
+        
         bool ensureCapacityFor(Register* newTopOfStack);
 
         bool containsAddress(Register* address) { return (lowAddress() <= address && address < highAddress()); }

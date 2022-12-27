@@ -67,7 +67,7 @@ static const MemoryCompactLookupOnlyRobinHoodHashMap<String, NavigationTimingFun
         { "unloadEventEnd"_s, &PerformanceTiming::unloadEventEnd },
         { "unloadEventStart"_s, &PerformanceTiming::unloadEventStart },
     });
-
+    
     return map;
 }
 
@@ -189,7 +189,7 @@ ExceptionOr<Ref<PerformanceMeasure>> PerformanceUserTiming::measure(const String
         startTime = start.returnValue();
     } else
         startTime = 0.0;
-
+        
     auto measure = PerformanceMeasure::create(measureName, startTime, endTime, SerializedScriptValue::nullValue());
     if (measure.hasException())
         return measure.releaseException();

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -37,7 +37,7 @@ bool ICEvent::operator<(const ICEvent& other) const
             return false;
         return strcmp(m_classInfo->className, other.m_classInfo->className) < 0;
     }
-
+    
     if (m_propertyName != other.m_propertyName)
         return codePointCompare(m_propertyName.string(), other.m_propertyName.string()) < 0;
 
@@ -72,7 +72,7 @@ ICStats::ICStats()
                     m_lock, Seconds(1), [this] () -> bool { return m_shouldStop; });
                 if (m_shouldStop)
                     break;
-
+                
                 dataLog("ICStats:\n");
                 auto list = m_spectrum.buildList();
                 for (unsigned i = list.size(); i--;)
@@ -88,7 +88,7 @@ ICStats::~ICStats()
         m_shouldStop = true;
         m_condition.notifyAll();
     }
-
+    
     m_thread->waitForCompletion();
 }
 
@@ -103,11 +103,11 @@ ICStats& ICStats::instance()
         ICStats* result = s_instance.load();
         if (result)
             return *result;
-
+        
         ICStats* newStats = new ICStats();
         if (s_instance.compareExchangeWeak(nullptr, newStats))
             return *newStats;
-
+        
         delete newStats;
     }
 }

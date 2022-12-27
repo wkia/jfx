@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -111,7 +111,7 @@ bool PolymorphicCallStubRoutine::hasEdges() const
 CallEdgeList PolymorphicCallStubRoutine::edges() const
 {
     RELEASE_ASSERT(m_fastCounts);
-
+    
     CallEdgeList result;
     for (size_t i = 0; i < m_variants.size(); ++i)
         result.append(CallEdge(CallVariant(m_variants[i].get()), m_fastCounts[i]));

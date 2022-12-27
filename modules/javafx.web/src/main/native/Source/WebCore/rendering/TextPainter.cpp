@@ -190,7 +190,7 @@ void TextPainter::paintTextAndEmphasisMarksIfNeeded(const TextRun& textRun, cons
             }
         }
     }
-
+    
     if (m_emphasisMark.isEmpty())
         return;
 

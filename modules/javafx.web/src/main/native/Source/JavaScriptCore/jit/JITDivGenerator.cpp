@@ -111,7 +111,7 @@ void JITDivGenerator::generateFastPath(CCallHelpers& jit)
     // propagated to a use site where it might cause damage (such as the index to an array
     // access). So if we are DFG compiling anything in the program, we want this code to
     // ensure that it produces integers whenever possible.
-
+    
     CCallHelpers::JumpList notInt32;
     jit.branchConvertDoubleToInt32(m_leftFPR, m_scratchGPR, notInt32, m_scratchFPR);
 

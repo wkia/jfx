@@ -297,7 +297,7 @@ void RenderTable::updateLogicalWidth()
     }
 
     // Ensure we aren't smaller than our min preferred width.
-    setLogicalWidth(std::max(logicalWidth(), minPreferredLogicalWidth()));
+    setLogicalWidth(std::max(logicalWidth(), minPreferredLogicalWidth()));    
 
     // Ensure we aren't smaller than our min-width style.
     Length styleMinLogicalWidth = style().logicalMinWidth();
@@ -499,7 +499,7 @@ void RenderTable::layout()
             updateLogicalHeight();
 
         LayoutUnit computedLogicalHeight;
-
+    
         Length logicalHeightLength = style().logicalHeight();
         if (logicalHeightLength.isIntrinsic() || (logicalHeightLength.isSpecified() && logicalHeightLength.isPositive()))
             computedLogicalHeight = convertStyleLogicalHeightToComputedHeight(logicalHeightLength);
@@ -598,7 +598,7 @@ void RenderTable::layout()
         } else
             ASSERT_NOT_REACHED();
     }
-
+    
     // FIXME: This value isn't the intrinsic content logical height, but we need
     // to update the value as its used by flexbox layout. crbug.com/367324
     if (shouldCacheIntrinsicContentLogicalHeightForFlexItem)
@@ -680,7 +680,7 @@ void RenderTable::addOverflowFromChildren()
     }
 
     // Add overflow from our caption.
-    for (unsigned i = 0; i < m_captions.size(); i++)
+    for (unsigned i = 0; i < m_captions.size(); i++) 
         addOverflowFromChild(m_captions[i].get());
 
     // Add overflow from our sections.
@@ -722,7 +722,7 @@ void RenderTable::paintObject(PaintInfo& paintInfo, const LayoutPoint& paintOffs
     // We're done.  We don't bother painting any children.
     if (paintPhase == PaintPhase::BlockBackground)
         return;
-
+    
     // We don't paint our own background, but we do let the kids paint their backgrounds.
     if (paintPhase == PaintPhase::ChildBlockBackgrounds)
         paintPhase = PaintPhase::ChildBlockBackground;
@@ -737,7 +737,7 @@ void RenderTable::paintObject(PaintInfo& paintInfo, const LayoutPoint& paintOffs
             box.paint(info, childPoint);
         }
     }
-
+    
     if (collapseBorders() && paintPhase == PaintPhase::ChildBlockBackground && style().visibility() == Visibility::Visible) {
         recalcCollapsedBorders();
         // Using our cached sorted styles, we then do individual passes,
@@ -774,7 +774,7 @@ void RenderTable::adjustBorderBoxRectForPainting(LayoutRect& rect)
                 rect.move(captionLogicalHeight, 0_lu);
         }
     }
-
+    
     RenderBlock::adjustBorderBoxRectForPainting(rect);
 }
 
@@ -785,7 +785,7 @@ void RenderTable::paintBoxDecorations(PaintInfo& paintInfo, const LayoutPoint& p
 
     LayoutRect rect(paintOffset, size());
     adjustBorderBoxRectForPainting(rect);
-
+    
     BackgroundBleedAvoidance bleedAvoidance = determineBackgroundBleedAvoidance(paintInfo.context());
     if (!boxShadowShouldBeAppliedToBackground(rect.location(), bleedAvoidance))
         paintBoxShadow(paintInfo, rect, style(), ShadowStyle::Normal);
@@ -1115,7 +1115,7 @@ void RenderTable::recalcSections() const
         if (sectionCols > maxCols)
             maxCols = sectionCols;
     }
-
+    
     m_columns.resize(maxCols);
     m_columnPos.resize(maxCols + 1);
 
@@ -1470,7 +1470,7 @@ RenderTableCell* RenderTable::cellBefore(const RenderTableCell* cell) const
     unsigned effCol = colToEffCol(cell->col());
     if (!effCol)
         return nullptr;
-
+    
     // If we hit a colspan back up to a real cell.
     RenderTableSection::CellStruct& prevCell = section->cellAt(cell->rowIndex(), effCol - 1);
     return prevCell.primaryCell();
@@ -1619,7 +1619,7 @@ void RenderTable::markForPaginationRelayoutIfNeeded()
     auto* layoutState = view().frameView().layoutContext().layoutState();
     if (!layoutState || !layoutState->isPaginated() || (!layoutState->pageLogicalHeightChanged() && (!layoutState->pageLogicalHeight() || layoutState->pageLogicalOffset(this, logicalTop()) == pageLogicalOffset())))
         return;
-
+    
     // When a table moves, we have to dirty all of the sections too.
     if (!needsLayout())
         setChildNeedsLayout(MarkOnlyThis);

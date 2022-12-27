@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -49,11 +49,11 @@ bool ExitProfile::add(CodeBlock* owner, const FrequentExitSite& site)
     ConcurrentJSLocker locker(owner->unlinkedCodeBlock()->m_lock);
 
     CODEBLOCK_LOG_EVENT(owner, "frequentExit", (site));
-
+    
     dataLogLnIf(Options::verboseExitProfile(), pointerDump(owner), ": Adding exit site: ", site);
 
     ExitProfile& profile = owner->unlinkedCodeBlock()->exitProfile();
-
+    
     // If we've never seen any frequent exits then create the list and put this site
     // into it.
     if (!profile.m_frequentExitSites) {
@@ -61,7 +61,7 @@ bool ExitProfile::add(CodeBlock* owner, const FrequentExitSite& site)
         profile.m_frequentExitSites->append(site);
         return true;
     }
-
+    
     // Don't add it if it's already there. This is O(n), but that's OK, because we
     // know that the total number of places where code exits tends to not be large,
     // and this code is only used when recompilation is triggered.
@@ -69,7 +69,7 @@ bool ExitProfile::add(CodeBlock* owner, const FrequentExitSite& site)
         if (profile.m_frequentExitSites->at(i) == site)
             return false;
     }
-
+    
     profile.m_frequentExitSites->append(site);
     return true;
 }
@@ -77,15 +77,15 @@ bool ExitProfile::add(CodeBlock* owner, const FrequentExitSite& site)
 Vector<FrequentExitSite> ExitProfile::exitSitesFor(BytecodeIndex bytecodeIndex)
 {
     Vector<FrequentExitSite> result;
-
+    
     if (!m_frequentExitSites)
         return result;
-
+    
     for (unsigned i = 0; i < m_frequentExitSites->size(); ++i) {
         if (m_frequentExitSites->at(i).bytecodeIndex() == bytecodeIndex)
             result.append(m_frequentExitSites->at(i));
     }
-
+    
     return result;
 }
 
@@ -93,7 +93,7 @@ bool ExitProfile::hasExitSite(const ConcurrentJSLocker&, const FrequentExitSite&
 {
     if (!m_frequentExitSites)
         return false;
-
+    
     for (unsigned i = m_frequentExitSites->size(); i--;) {
         if (site.subsumes(m_frequentExitSites->at(i)))
             return true;
@@ -110,7 +110,7 @@ void QueryableExitProfile::initialize(UnlinkedCodeBlock* unlinkedCodeBlock)
     const ExitProfile& profile = unlinkedCodeBlock->exitProfile();
     if (!profile.m_frequentExitSites)
         return;
-
+    
     for (unsigned i = 0; i < profile.m_frequentExitSites->size(); ++i)
         m_frequentExitSites.add(profile.m_frequentExitSites->at(i));
 }

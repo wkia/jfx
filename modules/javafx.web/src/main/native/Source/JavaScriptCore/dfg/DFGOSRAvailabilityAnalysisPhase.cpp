@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -46,11 +46,11 @@ public:
         , availabilityAtTail(availabilityAtTail)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == SSA);
-
+        
         for (BlockIndex blockIndex = m_graph.numBlocks(); blockIndex--;) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
@@ -58,7 +58,7 @@ public:
             availabilityAtHead(block).clear();
             availabilityAtTail(block).clear();
         }
-
+        
         BasicBlock* root = m_graph.block(0);
         availabilityAtHead(root).m_locals.fill(Availability::unavailable());
 
@@ -66,7 +66,7 @@ public:
             availabilityAtHead(root).m_locals.argument(argument) = Availability(FlushedAt(FlushedJSValue, virtualRegisterForArgumentIncludingThis(argument)));
 
         // This could be made more efficient by processing blocks in reverse postorder.
-
+        
         auto dumpAvailability = [&] (BasicBlock* block) {
             dataLogLn("Head: ", availabilityAtHead(block));
             dataLogLn("Tail: ", availabilityAtTail(block));
@@ -86,7 +86,7 @@ public:
         bool changed;
         do {
             changed = false;
-
+            
             for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
                 if (verbose) {
                     dataLogLn("Before changing Block #", block->index);
@@ -94,13 +94,13 @@ public:
                 }
 
                 calculator.m_availability = availabilityAtHead(block);
-
+                
                 for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex)
                     calculator.executeNode(block->at(nodeIndex));
-
+                
                 if (calculator.m_availability == availabilityAtTail(block))
                     continue;
-
+                
                 availabilityAtTail(block) = calculator.m_availability;
                 changed = true;
 
@@ -131,7 +131,7 @@ public:
 
             for (BasicBlock* block : m_graph.blocksInNaturalOrder()) {
                 calculator.m_availability = availabilityAtHead(block);
-
+                
                 for (unsigned nodeIndex = 0; nodeIndex < block->size(); ++nodeIndex) {
                     Node* node = block->at(nodeIndex);
                     if (node->origin.exitOK) {
@@ -188,7 +188,7 @@ public:
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -264,7 +264,7 @@ void LocalOSRAvailabilityCalculator::executeNode(Node* node)
         m_availability.m_locals.operand(data->operand).setFlush(data->flushedAt());
         break;
     }
-
+        
     case KillStack: {
         m_availability.m_locals.operand(node->unlinkedOperand()).setFlush(FlushedAt(ConflictingFlush));
         break;
@@ -299,7 +299,7 @@ void LocalOSRAvailabilityCalculator::executeNode(Node* node)
         }
         break;
     }
-
+    
     case PhantomCreateRest:
     case PhantomDirectArguments:
     case PhantomClonedArguments: {
@@ -313,30 +313,30 @@ void LocalOSRAvailabilityCalculator::executeNode(Node* node)
         unsigned numberOfArgumentsToSkip = 0;
         if (node->op() == PhantomCreateRest)
             numberOfArgumentsToSkip = node->numberOfArgumentsToSkip();
-
+        
         if (inlineCallFrame->isVarargs()) {
             // Record how to read each argument and the argument count.
             Availability argumentCount =
                 m_availability.m_locals.operand(VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::argumentCountIncludingThis));
-
+            
             m_availability.m_heap.set(PromotedHeapLocation(ArgumentCountPLoc, node), argumentCount);
         }
-
+        
         if (inlineCallFrame->isClosureCall) {
             Availability callee = m_availability.m_locals.operand(
                 VirtualRegister(inlineCallFrame->stackOffset + CallFrameSlot::callee));
             m_availability.m_heap.set(PromotedHeapLocation(ArgumentsCalleePLoc, node), callee);
         }
-
+        
         for (unsigned i = numberOfArgumentsToSkip; i < static_cast<unsigned>(inlineCallFrame->argumentCountIncludingThis - 1); ++i) {
             Availability argument = m_availability.m_locals.operand(
                 VirtualRegister(inlineCallFrame->stackOffset + CallFrame::argumentOffset(i)));
-
+            
             m_availability.m_heap.set(PromotedHeapLocation(ArgumentPLoc, node, i), argument);
         }
         break;
     }
-
+        
     case PutHint: {
         m_availability.m_heap.set(
             PromotedHeapLocation(node->child1().node(), node->promotedLocationDescriptor()),
@@ -358,7 +358,7 @@ void LocalOSRAvailabilityCalculator::executeNode(Node* node)
     case PhantomNewArrayBuffer:
         m_availability.m_heap.set(PromotedHeapLocation(NewArrayBufferPLoc, node), Availability(node->child1().node()));
         break;
-
+        
     default:
         break;
     }

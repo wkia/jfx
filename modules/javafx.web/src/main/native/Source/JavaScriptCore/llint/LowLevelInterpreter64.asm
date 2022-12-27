@@ -1976,7 +1976,7 @@ macro putByValOp(opcodeName, opcodeStruct, osrExitPoint)
         dispatch()
 
         osrExitPoint(size, dispatch)
-
+        
     end)
 end
 

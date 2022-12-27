@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -82,7 +82,7 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
 
     return readCharactersForParsing(manifestString, [&](auto buffer) -> std::optional<ApplicationCacheManifest> {
         using CharacterType = typename decltype(buffer)::CharacterType;
-
+    
         ApplicationCacheManifest manifest;
         auto mode = ApplicationCacheParserMode::Explicit;
 
@@ -91,7 +91,7 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
         // Example: "CACHE MANIFEST;V2" is not.
         if (!skipCharactersExactly(buffer, cacheManifestIdentifier<CharacterType>))
             return std::nullopt;
-
+    
         if (buffer.hasCharactersRemaining() && !isManifestWhitespaceOrNewline(*buffer))
             return std::nullopt;
 
@@ -101,19 +101,19 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
         while (1) {
             // Skip whitespace
             skipWhile<isManifestWhitespaceOrNewline>(buffer);
-
+            
             if (buffer.atEnd())
                 break;
-
+            
             auto lineStart = buffer.position();
-
+            
             // Find the end of the line
             skipUntil<isManifestNewline>(buffer);
-
+            
             // Line is a comment, skip to the next line.
             if (*lineStart == '#')
                 continue;
-
+            
             // Get rid of trailing whitespace
             auto lineEnd = buffer.position() - 1;
             while (lineEnd > lineStart && isManifestWhitespace(*lineEnd))
@@ -140,11 +140,11 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
                 mode = ApplicationCacheParserMode::Unknown;
                 continue;
             }
-
+    
             switch (mode) {
             case ApplicationCacheParserMode::Unknown:
                 continue;
-
+            
             case ApplicationCacheParserMode::Explicit: {
                 // Look for whitespace separating the URL from subsequent ignored tokens.
                 skipUntil<isManifestWhitespace>(lineBuffer);
@@ -152,13 +152,13 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
                 auto url = makeManifestURL(manifestURL, lineStart, lineBuffer.position());
                 if (!url.isValid())
                     continue;
-
+                
                 if (!equalIgnoringASCIICase(url.protocol(), manifestURL.protocol()))
                     continue;
-
+                
                 if (manifestURL.protocolIs("https") && !protocolHostAndPortAreEqual(manifestURL, url))
                     continue;
-
+                
                 manifest.explicitURLs.add(url.string());
                 continue;
             }
@@ -172,18 +172,18 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
                     manifest.allowAllNetworkRequests = true;
                     continue;
                 }
-
+                
                 auto url = makeManifestURL(manifestURL, lineStart, lineBuffer.position());
                 if (!url.isValid())
                     continue;
-
+                
                 if (!equalIgnoringASCIICase(url.protocol(), manifestURL.protocol()))
                     continue;
 
                 manifest.onlineAllowedURLs.append(url);
                 continue;
             }
-
+            
             case ApplicationCacheParserMode::Fallback: {
                 // Look for whitespace separating the two URLs
                 skipUntil<isManifestWhitespace>(lineBuffer);
@@ -225,7 +225,7 @@ std::optional<ApplicationCacheManifest> parseApplicationCacheManifest(const URL&
                 continue;
             }
             }
-
+            
             ASSERT_NOT_REACHED();
         }
 

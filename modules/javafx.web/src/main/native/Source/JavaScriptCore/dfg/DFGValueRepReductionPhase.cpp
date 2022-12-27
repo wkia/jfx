@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,14 +38,14 @@ namespace JSC { namespace DFG {
 
 class ValueRepReductionPhase : public Phase {
     static constexpr bool verbose = false;
-
+    
 public:
     ValueRepReductionPhase(Graph& graph)
         : Phase(graph, "ValueRep reduction")
         , m_insertionSet(graph)
     {
     }
-
+    
     bool run()
     {
         ASSERT(m_graph.m_form == SSA);
@@ -269,7 +269,7 @@ private:
                     doubleRepRealCheckLocations.add(user);
                     break;
                 }
-
+                    
                 case PutHint:
                     user->child2() = Edge(resultNode, DoubleRepUse);
                     break;
@@ -319,7 +319,7 @@ private:
 
     InsertionSet m_insertionSet;
 };
-
+    
 bool performValueRepReduction(Graph& graph)
 {
     return runPhase<ValueRepReductionPhase>(graph);

@@ -46,9 +46,9 @@ void JIT::emit_op_unsigned(const Instruction* currentInstruction)
     auto bytecode = currentInstruction->as<OpUnsigned>();
     VirtualRegister result = bytecode.m_dst;
     VirtualRegister op1 = bytecode.m_operand;
-
+    
     emitLoad(op1, regT1, regT0);
-
+    
     addSlowCase(branchIfNotInt32(regT1));
     addSlowCase(branch32(LessThan, regT0, TrustedImm32(0)));
     emitStoreInt32(result, regT0, result == op1);

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -48,7 +48,7 @@ public:
         , m_graphDumpBeforePhase(graphDumpBeforePhase)
     {
     }
-
+    
     #define VALIDATE(context, assertion) do { \
         if (!(assertion)) { \
             startCrashing(); \
@@ -60,7 +60,7 @@ public:
             CRASH(); \
         } \
     } while (0)
-
+    
     #define V_EQUAL(context, left, right) do { \
         if (left != right) { \
             startCrashing(); \
@@ -80,7 +80,7 @@ public:
     } while (0)
 
     #define notSet (static_cast<size_t>(-1))
-
+        
     void validate()
     {
         if (m_graph.m_isValidating)
@@ -102,7 +102,7 @@ public:
             for (unsigned i = 0; i < entrypoint->variablesAtHead.numberOfLocals(); ++i)
                 V_EQUAL((virtualRegisterForLocal(i), entrypoint), static_cast<Node*>(nullptr), entrypoint->variablesAtHead.local(i));
         }
-
+        
         // Validate ref counts and uses.
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
             BasicBlock* block = m_graph.block(blockIndex);
@@ -130,22 +130,22 @@ public:
                     // Phi children in LoadStore form are invalid.
                     if (m_graph.m_form == LoadStore && block->isPhiIndex(i))
                         continue;
-
+                    
                     Edge edge = m_graph.child(node, j);
                     if (!edge)
                         continue;
-
+                    
                     m_myRefCounts.find(edge.node())->value++;
 
                     validateEdgeWithDoubleResultIfNecessary(node, edge);
                     VALIDATE((node, edge), edge->hasInt52Result() == (edge.useKind() == Int52RepUse));
-
+                    
                     if (m_graph.m_form == SSA) {
                         // In SSA, all edges must hasResult().
                         VALIDATE((node, edge), edge->hasResult());
                         continue;
                     }
-
+                    
                     // Unless I'm a Flush, Phantom, GetLocal, or Phi, my children should hasResult().
                     switch (node->op()) {
                     case Flush:
@@ -171,7 +171,7 @@ public:
                 }
             }
         }
-
+        
         for (BlockIndex blockIndex = 0; blockIndex < m_graph.numBlocks(); ++blockIndex) {
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
@@ -181,7 +181,7 @@ public:
                 if (m_graph.m_refCountState == ExactRefCount)
                     V_EQUAL((node), m_myRefCounts.get(node), node->adjustedRefCount());
             }
-
+            
             bool foundTerminal = false;
             for (size_t i = 0 ; i < block->size(); ++i) {
                 Node* node = block->at(i);
@@ -200,7 +200,7 @@ public:
                 }
             }
             VALIDATE((block), foundTerminal);
-
+            
             for (size_t i = 0; i < block->size(); ++i) {
                 Node* node = block->at(i);
 
@@ -223,18 +223,18 @@ public:
                         || node->op() == ExitOK
                         || node->origin.forExit != previousNode->origin.forExit);
                 }
-
+                
                 VALIDATE((node), !node->hasStructure() || !!node->structure().get());
                 VALIDATE((node), !node->hasCellOperand() || node->cellOperand()->value().isCell());
                 VALIDATE((node), !node->hasCellOperand() || !!node->cellOperand()->value());
-
+                
                 if (!(node->flags() & NodeHasVarArgs)) {
                     if (!node->child2())
                         VALIDATE((node), !node->child3());
                     if (!node->child1())
                         VALIDATE((node), !node->child2());
                 }
-
+                 
                 switch (node->op()) {
                 case Identity:
                 case IdentityWithProfile:
@@ -387,7 +387,7 @@ public:
                     case Array::Int32:
                     case Array::Double:
                     case Array::Contiguous:
-                        // We rely on being an original array structure because we are SaneChain, and we need
+                        // We rely on being an original array structure because we are SaneChain, and we need 
                         // Array.prototype to be our prototype, so we can return undefined when we go OOB.
                         if (node->arrayMode().isOutOfBoundsSaneChain())
                             VALIDATE((node), node->arrayMode().isJSArrayWithOriginalStructure());
@@ -401,13 +401,13 @@ public:
                 }
             }
         }
-
+        
         switch (m_graph.m_form) {
         case LoadStore:
         case ThreadedCPS:
             validateCPS();
             break;
-
+            
         case SSA:
             validateSSA();
             break;
@@ -462,15 +462,15 @@ public:
             VALIDATE((block), predecessors.size() == block->predecessors.size());
         }
     }
-
+    
 private:
     Graph& m_graph;
     GraphDumpMode m_graphDumpMode;
     CString m_graphDumpBeforePhase;
-
+    
     HashMap<Node*, unsigned> m_myRefCounts;
     HashSet<Node*> m_acceptableNodes;
-
+    
     void validateCPS()
     {
         VALIDATE((), !m_graph.m_rootToArguments.isEmpty()); // We should have at least one root.
@@ -482,10 +482,10 @@ private:
             BasicBlock* block = m_graph.block(blockIndex);
             if (!block)
                 continue;
-
+            
             HashSet<Node*> phisInThisBlock;
             HashSet<Node*> nodesInThisBlock;
-
+            
             for (size_t i = 0; i < block->numNodes(); ++i) {
                 Node* node = block->node(i);
                 nodesInThisBlock.add(node);
@@ -510,7 +510,7 @@ private:
                     seenNodes.add(node);
                 }
             }
-
+            
             for (size_t i = 0; i < block->phis.size(); ++i) {
                 Node* node = block->phis[i];
                 ASSERT(phisInThisBlock.contains(node));
@@ -520,31 +520,31 @@ private:
                     // Phi children in LoadStore form are invalid.
                     if (m_graph.m_form == LoadStore && block->isPhiIndex(i))
                         continue;
-
+                    
                     Edge edge = m_graph.child(node, j);
                     if (!edge)
                         continue;
-
+                    
                     VALIDATE(
                         (node, edge),
                         edge->op() == SetLocal
                         || edge->op() == SetArgumentDefinitely
                         || edge->op() == SetArgumentMaybe
                         || edge->op() == Phi);
-
+                    
                     if (phisInThisBlock.contains(edge.node()))
                         continue;
-
+                    
                     if (nodesInThisBlock.contains(edge.node())) {
                         VALIDATE(
                             (node, edge),
                             edge->op() == SetLocal
                             || edge->op() == SetArgumentDefinitely
                             || edge->op() == SetArgumentMaybe);
-
+                        
                         continue;
                     }
-
+                    
                     // There must exist a predecessor block that has this node index in
                     // its tail variables.
                     bool found = false;
@@ -581,14 +581,14 @@ private:
                         // At this point it cannot refer into this block.
                         VALIDATE((operand, block->predecessors[k], prevNode), !prevBlock->isInBlock(edge.node()));
                     }
-
+                    
                     VALIDATE((node, edge), found);
                 }
             }
-
+            
             Operands<size_t> getLocalPositions(OperandsLike, block->variablesAtHead);
             Operands<size_t> setLocalPositions(OperandsLike, block->variablesAtHead);
-
+            
             for (size_t i = 0; i < block->variablesAtHead.numberOfTmps(); ++i) {
                 VALIDATE((Operand::tmp(i), block), !block->variablesAtHead.tmp(i) || block->variablesAtHead.tmp(i)->accessesStack(m_graph));
                 if (m_graph.m_form == ThreadedCPS)
@@ -601,7 +601,7 @@ private:
                 VALIDATE((virtualRegisterForArgumentIncludingThis(i), block), !block->variablesAtHead.argument(i) || block->variablesAtHead.argument(i)->accessesStack(m_graph));
                 if (m_graph.m_form == ThreadedCPS)
                     VALIDATE((virtualRegisterForArgumentIncludingThis(i), block), !block->variablesAtTail.argument(i) || block->variablesAtTail.argument(i)->accessesStack(m_graph));
-
+                
                 getLocalPositions.argument(i) = notSet;
                 setLocalPositions.argument(i) = notSet;
             }
@@ -613,7 +613,7 @@ private:
                 getLocalPositions.local(i) = notSet;
                 setLocalPositions.local(i) = notSet;
             }
-
+            
             for (size_t i = 0; i < block->size(); ++i) {
                 Node* node = block->at(i);
                 ASSERT(nodesInThisBlock.contains(node));
@@ -634,7 +634,7 @@ private:
                         break;
                     }
                 }
-
+                
                 switch (node->op()) {
                 case Phi:
                 case Upsilon:
@@ -695,7 +695,7 @@ private:
                 default:
                     break;
                 }
-
+                
                 if (!node->shouldGenerate())
                     continue;
                 switch (node->op()) {
@@ -729,7 +729,7 @@ private:
                 case Flush:
                 case PhantomLocal:
                     if (m_graph.m_form == ThreadedCPS) {
-                        VALIDATE((node, block),
+                        VALIDATE((node, block), 
                             node->child1()->op() == Phi
                             || node->child1()->op() == SetLocal
                             || node->child1()->op() == SetArgumentDefinitely
@@ -742,10 +742,10 @@ private:
                     break;
                 }
             }
-
+            
             if (m_graph.m_form == LoadStore)
                 continue;
-
+            
             for (size_t i = 0; i < block->variablesAtHead.numberOfTmps(); ++i) {
                 checkOperand(
                     block, getLocalPositions, setLocalPositions, Operand::tmp(i));
@@ -807,12 +807,12 @@ private:
             }
         }
     }
-
+    
     void validateSSA()
     {
         // FIXME: Add more things here.
         // https://bugs.webkit.org/show_bug.cgi?id=123471
-
+        
         VALIDATE((), m_graph.m_roots.size() == 1);
         VALIDATE((), m_graph.m_roots[0] == m_graph.block(0));
         VALIDATE((), !m_graph.m_argumentFormats.isEmpty()); // We always have at least one entrypoint.
@@ -832,7 +832,7 @@ private:
             VALIDATE((block), block->phis.isEmpty());
 
             bool isOSRExited = false;
-
+            
             HashSet<Node*> nodesInThisBlock;
 
             for (auto* node : *block) {
@@ -842,7 +842,7 @@ private:
                     // exit.
                     VALIDATE((node), !node->origin.exitOK);
                     break;
-
+                    
                 case GetLocal:
                 case SetLocal:
                 case SetArgumentDefinitely:
@@ -966,7 +966,7 @@ private:
 
         if (m_graph.m_planStage < PlanStage::AfterFixup)
             return;
-
+        
         VALIDATE((node, edge), edge.useKind() == DoubleRepUse || edge.useKind() == DoubleRepRealUse || edge.useKind() == DoubleRepAnyIntUse);
     }
 
@@ -978,31 +978,31 @@ private:
             return;
         if (setLocalPositions.operand(operand) == notSet)
             return;
-
+        
         VALIDATE(
             (block->at(getLocalPositions.operand(operand)),
              block->at(setLocalPositions.operand(operand)),
              block),
             getLocalPositions.operand(operand) < setLocalPositions.operand(operand));
     }
-
+    
     void reportValidationContext() { }
 
     void reportValidationContext(Node* node)
     {
         dataLogF("@%u", node->index());
     }
-
+    
     void reportValidationContext(BasicBlock* block)
     {
         dataLog("Block ", *block);
     }
-
+    
     void reportValidationContext(Node* node, Edge edge)
     {
         dataLog(node, " -> ", edge);
     }
-
+    
     void reportValidationContext(Operand operand, BasicBlock* block)
     {
         if (!block) {
@@ -1012,35 +1012,35 @@ private:
 
         dataLog(operand, " in Block ", *block);
     }
-
+    
     void reportValidationContext(
         Operand operand, BasicBlock* sourceBlock, BasicBlock* destinationBlock)
     {
         dataLog(operand, " in Block ", *sourceBlock, " -> ", *destinationBlock);
     }
-
+    
     void reportValidationContext(
         Operand operand, BasicBlock* sourceBlock, Node* prevNode)
     {
         dataLog(prevNode, " for ", operand, " in Block ", *sourceBlock);
     }
-
+    
     void reportValidationContext(Node* node, BasicBlock* block)
     {
         dataLog(node, " in Block ", *block);
     }
-
+    
     void reportValidationContext(Node* node, Node* node2, BasicBlock* block)
     {
         dataLog(node, " and ", node2, " in Block ", *block);
     }
-
+    
     void reportValidationContext(
         Node* node, BasicBlock* block, Node* expectedNode, Edge incomingEdge)
     {
         dataLog(node, " in Block ", *block, ", searching for ", expectedNode, " from ", incomingEdge);
     }
-
+    
     void dumpGraphIfAppropriate()
     {
         if (m_graphDumpMode == DontDumpGraph)

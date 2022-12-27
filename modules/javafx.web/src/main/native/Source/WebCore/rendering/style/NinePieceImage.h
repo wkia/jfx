@@ -135,7 +135,7 @@ public:
 
     NinePieceImageRule horizontalRule() const { return m_data->horizontalRule; }
     void setHorizontalRule(NinePieceImageRule rule) { m_data.access().horizontalRule = rule; }
-
+    
     NinePieceImageRule verticalRule() const { return m_data->verticalRule; }
     void setVerticalRule(NinePieceImageRule rule) { m_data.access().verticalRule = rule; }
 
@@ -149,7 +149,7 @@ public:
     {
         m_data.access().borderSlices = other.m_data->borderSlices;
     }
-
+    
     void copyOutsetFrom(const NinePieceImage& other)
     {
         m_data.access().outset = other.m_data->outset;

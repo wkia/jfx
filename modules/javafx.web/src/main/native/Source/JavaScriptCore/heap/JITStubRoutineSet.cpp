@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,14 +38,14 @@ JITStubRoutineSet::~JITStubRoutineSet()
     for (auto& entry : m_routines) {
         GCAwareJITStubRoutine* routine = entry.routine;
         routine->m_mayBeExecuting = false;
-
+        
         if (!routine->m_isJettisoned) {
             // Inform the deref() routine that it should delete this guy as soon
             // as the ref count reaches zero.
             routine->m_isJettisoned = true;
             continue;
         }
-
+        
         routine->deleteFromGC();
     }
 }
@@ -54,7 +54,7 @@ void JITStubRoutineSet::add(GCAwareJITStubRoutine* routine)
 {
     RELEASE_ASSERT(!isCompilationThread());
     ASSERT(!routine->m_isJettisoned);
-
+    
     m_routines.append(Routine {
         routine->startAddress(),
         routine
@@ -136,7 +136,7 @@ void JITStubRoutineSet::traceMarkedStubRoutines(Visitor& visitor)
         GCAwareJITStubRoutine* routine = entry.routine;
         if (!routine->m_mayBeExecuting)
             continue;
-
+        
         routine->markRequiredObjects(visitor);
     }
 }

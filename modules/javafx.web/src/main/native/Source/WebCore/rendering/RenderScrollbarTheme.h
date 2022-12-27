@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -36,7 +36,7 @@ class ScrollView;
 class RenderScrollbarTheme final : public ScrollbarThemeComposite {
 public:
     virtual ~RenderScrollbarTheme() = default;
-
+    
     int scrollbarThickness(ScrollbarControlSize controlSize, ScrollbarExpansionState expansionState = ScrollbarExpansionState::Expanded) override { return ScrollbarTheme::theme().scrollbarThickness(controlSize, expansionState); }
 
     ScrollbarButtonsPlacement buttonsPlacement() const override { return ScrollbarTheme::theme().buttonsPlacement(); }
@@ -56,7 +56,7 @@ public:
     int minimumThumbLength(Scrollbar&) override;
 
     void buttonSizesAlongTrackAxis(Scrollbar&, int& beforeSize, int& afterSize);
-
+    
     static RenderScrollbarTheme* renderScrollbarTheme();
 
 private:
@@ -69,7 +69,7 @@ private:
 
     void willPaintScrollbar(GraphicsContext&, Scrollbar&) override;
     void didPaintScrollbar(GraphicsContext&, Scrollbar&) override;
-
+    
     void paintScrollbarBackground(GraphicsContext&, Scrollbar&) override;
     void paintTrackBackground(GraphicsContext&, Scrollbar&, const IntRect&) override;
     void paintTrackPiece(GraphicsContext&, Scrollbar&, const IntRect&, ScrollbarPart) override;

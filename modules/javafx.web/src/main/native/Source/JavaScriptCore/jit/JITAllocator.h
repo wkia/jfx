@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -35,9 +35,9 @@ public:
         Constant,
         Variable
     };
-
+    
     JITAllocator() { }
-
+    
     static JITAllocator constant(Allocator allocator)
     {
         JITAllocator result;
@@ -45,40 +45,40 @@ public:
         result.m_allocator = allocator;
         return result;
     }
-
+    
     static JITAllocator variable()
     {
         JITAllocator result;
         result.m_kind = Variable;
         return result;
     }
-
+    
     bool operator==(const JITAllocator& other) const
     {
         return m_kind == other.m_kind
             && m_allocator == other.m_allocator;
     }
-
+    
     bool operator!=(const JITAllocator& other) const
     {
         return !(*this == other);
     }
-
+    
     explicit operator bool() const
     {
         return *this != JITAllocator();
     }
-
+    
     Kind kind() const { return m_kind; }
     bool isConstant() const { return m_kind == Constant; }
     bool isVariable() const { return m_kind == Variable; }
-
+    
     Allocator allocator() const
     {
         RELEASE_ASSERT(isConstant());
         return m_allocator;
     }
-
+    
 private:
     Kind m_kind { Constant };
     Allocator m_allocator;

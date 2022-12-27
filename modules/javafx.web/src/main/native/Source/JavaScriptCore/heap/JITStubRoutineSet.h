@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,15 +42,15 @@ class GCAwareJITStubRoutine;
 class JITStubRoutineSet {
     WTF_MAKE_NONCOPYABLE(JITStubRoutineSet);
     WTF_MAKE_FAST_ALLOCATED;
-
+    
 public:
     JITStubRoutineSet();
     ~JITStubRoutineSet();
-
+    
     void add(GCAwareJITStubRoutine*);
 
     void clearMarks();
-
+    
     void mark(void* candidateAddress)
     {
         uintptr_t address = removeCodePtrTag<uintptr_t>(candidateAddress);
@@ -60,14 +60,14 @@ public:
     }
 
     void prepareForConservativeScan();
-
+    
     void deleteUnmarkedJettisonedStubRoutines();
 
     template<typename Visitor> void traceMarkedStubRoutines(Visitor&);
-
+    
 private:
     void markSlow(uintptr_t address);
-
+    
     struct Routine {
         uintptr_t startAddress;
         GCAwareJITStubRoutine* routine;
@@ -81,7 +81,7 @@ private:
 class JITStubRoutineSet {
     WTF_MAKE_NONCOPYABLE(JITStubRoutineSet);
     WTF_MAKE_FAST_ALLOCATED;
-
+    
 public:
     JITStubRoutineSet() { }
     ~JITStubRoutineSet() { }

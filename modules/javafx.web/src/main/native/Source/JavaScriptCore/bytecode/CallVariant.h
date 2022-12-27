@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -67,14 +67,14 @@ public:
         : m_callee(callee)
     {
     }
-
+    
     CallVariant(WTF::HashTableDeletedValueType)
         : m_callee(deletedToken())
     {
     }
-
+    
     explicit operator bool() const { return !!m_callee; }
-
+    
     // If this variant refers to a function, change it to refer to its executable.
     ALWAYS_INLINE CallVariant despecifiedClosure() const
     {
@@ -82,41 +82,41 @@ public:
             return CallVariant(jsCast<JSFunction*>(m_callee)->executable());
         return *this;
     }
-
+    
     JSCell* rawCalleeCell() const { return m_callee; }
-
+    
     InternalFunction* internalFunction() const
     {
         return jsDynamicCast<InternalFunction*>(m_callee->vm(), m_callee);
     }
-
+    
     JSFunction* function() const
     {
         return jsDynamicCast<JSFunction*>(m_callee->vm(), m_callee);
     }
-
+    
     bool isClosureCall() const { return !!jsDynamicCast<ExecutableBase*>(m_callee->vm(), m_callee); }
-
+    
     ExecutableBase* executable() const
     {
         if (JSFunction* function = this->function())
             return function->executable();
         return jsDynamicCast<ExecutableBase*>(m_callee->vm(), m_callee);
     }
-
+    
     JSCell* nonExecutableCallee() const
     {
         RELEASE_ASSERT(!isClosureCall());
         return m_callee;
     }
-
+    
     Intrinsic intrinsicFor(CodeSpecializationKind kind) const
     {
         if (ExecutableBase* executable = this->executable())
             return executable->intrinsicFor(kind);
         return NoIntrinsic;
     }
-
+    
     FunctionExecutable* functionExecutable() const
     {
         if (ExecutableBase* executable = this->executable())
@@ -137,58 +137,58 @@ public:
             return nativeExecutable->signatureFor(kind);
         return nullptr;
     }
-
+    
     bool finalize(VM&);
-
+    
     bool merge(const CallVariant&);
-
+    
     void filter(VM&, JSValue);
-
+    
     void dump(PrintStream& out) const;
-
+    
     bool isHashTableDeletedValue() const
     {
         return m_callee == deletedToken();
     }
-
+    
     bool operator==(const CallVariant& other) const
     {
         return m_callee == other.m_callee;
     }
-
+    
     bool operator!=(const CallVariant& other) const
     {
         return !(*this == other);
     }
-
+    
     bool operator<(const CallVariant& other) const
     {
         return m_callee < other.m_callee;
     }
-
+    
     bool operator>(const CallVariant& other) const
     {
         return other < *this;
     }
-
+    
     bool operator<=(const CallVariant& other) const
     {
         return !(*this < other);
     }
-
+    
     bool operator>=(const CallVariant& other) const
     {
         return other <= *this;
     }
-
+    
     unsigned hash() const
     {
         return WTF::PtrHash<JSCell*>::hash(m_callee);
     }
-
+    
 private:
     static JSCell* deletedToken() { return bitwise_cast<JSCell*>(static_cast<uintptr_t>(1)); }
-
+    
     JSCell* m_callee;
 };
 

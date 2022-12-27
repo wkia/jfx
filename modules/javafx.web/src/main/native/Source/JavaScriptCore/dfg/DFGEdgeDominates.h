@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -33,7 +33,7 @@ namespace JSC { namespace DFG {
 
 class EdgeDominates {
     static constexpr bool verbose = false;
-
+    
 public:
     EdgeDominates(Graph& graph, BasicBlock* block)
         : m_graph(graph)
@@ -42,7 +42,7 @@ public:
     {
         ASSERT(graph.m_form == SSA);
     }
-
+    
     void operator()(Node*, Edge edge)
     {
         bool result = m_graph.m_ssaDominators->dominates(edge.node()->owner, m_block);
@@ -53,7 +53,7 @@ public:
         }
         m_result &= result;
     }
-
+    
     bool result() const { return m_result; }
 
 private:

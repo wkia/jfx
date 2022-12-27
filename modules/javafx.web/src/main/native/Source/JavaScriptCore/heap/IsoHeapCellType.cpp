@@ -50,3 +50,4 @@ void IsoHeapCellType::destroy(VM&, JSCell* cell)
 }
 
 } // namespace JSC
+

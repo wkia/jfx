@@ -99,19 +99,19 @@ bool HighlightData::setRenderRange(const HighlightRangeData& rangeData)
 {
     if (!rangeData.startPosition || !rangeData.endPosition)
         return false;
-
+    
     auto startPosition = rangeData.startPosition.value();
     auto endPosition = rangeData.endPosition.value();
-
+    
     if (!startPosition.containerNode() || !endPosition.containerNode())
         return false;
-
+    
     auto* startRenderer = startPosition.containerNode()->renderer();
     auto* endRenderer = endPosition.containerNode()->renderer();
-
+    
     if (!startRenderer || !endRenderer)
         return false;
-
+    
     unsigned startOffset = startPosition.computeOffsetInContainerNode();
     unsigned endOffset = endPosition.computeOffsetInContainerNode();
 
@@ -134,7 +134,7 @@ RenderObject::HighlightState HighlightData::highlightStateForRenderer(const Rend
         return RenderObject::HighlightState::End;
 
     auto* highlightEnd = rendererAfterOffset(*m_renderRange.end(), m_renderRange.endOffset());
-
+    
     RenderRangeIterator highlightIterator(m_renderRange.start());
     for (auto* currentRenderer = m_renderRange.start(); currentRenderer && currentRenderer != highlightEnd; currentRenderer = highlightIterator.next()) {
         if (currentRenderer == m_renderRange.start())

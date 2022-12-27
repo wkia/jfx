@@ -37,7 +37,7 @@ public:
         RELEASE_ASSERT(m_heap.m_mutatorState == MutatorState::Running);
         m_heap.m_mutatorState = MutatorState::Allocating;
     }
-
+    
     ~AllocatingScope()
     {
         RELEASE_ASSERT(m_heap.m_mutatorState == MutatorState::Allocating);

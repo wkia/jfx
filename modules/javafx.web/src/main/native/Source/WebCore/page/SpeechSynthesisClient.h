@@ -34,14 +34,14 @@ namespace WebCore {
 class PlatformSpeechSynthesisUtterance;
 class SpeechSynthesisClientObserver;
 class PlatformSpeechSynthesisVoice;
-
+    
 class SpeechSynthesisClient : public CanMakeWeakPtr<SpeechSynthesisClient> {
 public:
     virtual ~SpeechSynthesisClient() = default;
 
     virtual void setObserver(WeakPtr<SpeechSynthesisClientObserver>) = 0;
     virtual WeakPtr<SpeechSynthesisClientObserver> observer() const = 0;
-
+    
     virtual const Vector<RefPtr<PlatformSpeechSynthesisVoice>>& voiceList() = 0;
     virtual void speak(RefPtr<PlatformSpeechSynthesisUtterance>) = 0;
     virtual void cancel() = 0;

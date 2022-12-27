@@ -299,7 +299,7 @@ void Region::Shape::appendSpan(int y, SegmentIterator begin, SegmentIterator end
 {
     if (canCoalesce(begin, end))
         return;
-
+  
     appendSpan(y);
     m_segments.appendRange(begin, end);
 }
@@ -486,7 +486,7 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& sh
 
             if (flag == Operation::opCode || oldFlag == Operation::opCode)
                 segments.append(x);
-
+            
             oldFlag = flag;
         }
 
@@ -517,7 +517,7 @@ struct Region::Shape::UnionOperation {
             result = shape2;
             return true;
         }
-
+        
         return false;
     }
 
@@ -539,9 +539,9 @@ struct Region::Shape::IntersectOperation {
     {
         return false;
     }
-
+    
     static const int opCode = 3;
-
+    
     static const bool shouldAddRemainingSegmentsFromSpan1 = false;
     static const bool shouldAddRemainingSegmentsFromSpan2 = false;
     static const bool shouldAddRemainingSpansFromShape1 = false;
@@ -558,9 +558,9 @@ struct Region::Shape::SubtractOperation {
     {
         return false;
     }
-
+    
     static const int opCode = 1;
-
+    
     static const bool shouldAddRemainingSegmentsFromSpan1 = true;
     static const bool shouldAddRemainingSegmentsFromSpan2 = false;
     static const bool shouldAddRemainingSpansFromShape1 = true;

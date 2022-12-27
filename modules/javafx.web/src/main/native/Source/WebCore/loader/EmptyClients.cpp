@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -575,7 +575,7 @@ DisplayRefreshMonitorFactory* EmptyChromeClient::displayRefreshMonitorFactory() 
 void EmptyChromeClient::runOpenPanel(Frame&, FileChooser&)
 {
 }
-
+    
 void EmptyChromeClient::showShareSheet(ShareDataWithParsedURL&, CompletionHandler<void(bool)>&&)
 {
 }
@@ -1225,7 +1225,7 @@ PageConfiguration pageConfigurationWithEmptyClients(PAL::SessionID sessionID)
     pageConfiguration.pluginInfoProvider = adoptRef(*new EmptyPluginInfoProvider);
     pageConfiguration.storageNamespaceProvider = adoptRef(*new EmptyStorageNamespaceProvider);
     pageConfiguration.visitedLinkStore = adoptRef(*new EmptyVisitedLinkStore);
-
+    
     return pageConfiguration;
 }
 

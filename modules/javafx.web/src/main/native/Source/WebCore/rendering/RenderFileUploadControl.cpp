@@ -116,7 +116,7 @@ void RenderFileUploadControl::paintObject(PaintInfo& paintInfo, const LayoutPoin
 {
     if (style().visibility() != Visibility::Visible)
         return;
-
+    
     if (paintInfo.context().paintingDisabled())
         return;
 
@@ -164,10 +164,10 @@ void RenderFileUploadControl::paintObject(PaintInfo& paintInfo, const LayoutPoin
             textY = baselinePosition(AlphabeticBaseline, true, HorizontalLine, PositionOnContainingLine);
 
         paintInfo.context().setFillColor(style().visitedDependentColorWithColorFilter(CSSPropertyColor));
-
+        
         // Draw the filename
         paintInfo.context().drawBidiText(font, textRun, IntPoint(roundToInt(textX), roundToInt(textY)));
-
+        
         if (inputElement().icon()) {
             // Determine where the icon should be placed
             LayoutUnit iconY = paintOffset.y() + borderTop() + paddingTop() + (contentHeight() - iconHeight) / 2;
@@ -251,7 +251,7 @@ String RenderFileUploadControl::buttonValue()
 {
     if (HTMLInputElement* button = uploadButton())
         return button->value();
-
+    
     return String();
 }
 
@@ -263,5 +263,5 @@ String RenderFileUploadControl::fileTextValue() const
         return StringTruncator::rightTruncate(input.displayString(), maxFilenameWidth(), style().fontCascade());
     return theme().fileListNameForWidth(input.files(), style().fontCascade(), maxFilenameWidth(), input.multiple());
 }
-
+    
 } // namespace WebCore

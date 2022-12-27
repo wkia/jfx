@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -38,7 +38,7 @@ public:
     AbstractValueClobberEpoch()
     {
     }
-
+    
     static AbstractValueClobberEpoch first(StructureClobberState clobberState)
     {
         AbstractValueClobberEpoch result;
@@ -52,45 +52,45 @@ public:
         }
         return result;
     }
-
+    
     void clobber()
     {
         m_value += step;
         m_value &= ~watchedFlag;
     }
-
+    
     void observeInvalidationPoint()
     {
         m_value |= watchedFlag;
     }
-
+    
     bool operator==(const AbstractValueClobberEpoch& other) const
     {
         return m_value == other.m_value;
     }
-
+    
     bool operator!=(const AbstractValueClobberEpoch& other) const
     {
         return !(*this == other);
     }
-
+    
     StructureClobberState structureClobberState() const
     {
         return m_value & watchedFlag ? StructuresAreWatched : StructuresAreClobbered;
     }
-
+    
     Epoch clobberEpoch() const
     {
         return Epoch::fromUnsigned(m_value >> epochShift);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     static constexpr unsigned step = 2;
     static constexpr unsigned watchedFlag = 1;
     static constexpr unsigned epochShift = 1;
-
+    
     unsigned m_value { 0 };
 };
 

@@ -43,7 +43,7 @@ class LayerOverlapMap {
 public:
     LayerOverlapMap(const RenderLayer& rootLayer);
     ~LayerOverlapMap();
-
+    
     struct LayerAndBounds {
         RenderLayer& layer;
         LayoutRect bounds;

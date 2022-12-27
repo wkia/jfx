@@ -48,7 +48,7 @@ public:
 
     // The parent map's image.
     WEBCORE_EXPORT HTMLImageElement* imageElement() const;
-
+    
 private:
     HTMLAreaElement(const QualifiedName&, Document&);
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -138,14 +138,14 @@ private:
     // Finalized snapshots are not modified during building. So searching them
     // for an existing node can be done concurrently without a lock.
     bool previousSnapshotHasNodeForCell(JSCell*, NodeIdentifier&);
-
+    
     String descriptionForCell(JSCell*) const;
-
+    
     struct RootData {
         const char* reachabilityFromOpaqueRootReasons { nullptr };
         RootMarkReason markReason { RootMarkReason::None };
     };
-
+    
     HeapProfiler& m_profiler;
 
     // SlotVisitors run in parallel.

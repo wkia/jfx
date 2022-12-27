@@ -96,7 +96,7 @@ ImageDrawResult CrossfadeGeneratedImage::draw(GraphicsContext& context, const Fl
     if (dstRect.size() != srcRect.size())
         context.scale(dstRect.size() / srcRect.size());
     context.translate(-srcRect.location());
-
+    
     drawCrossfade(context);
     return ImageDrawResult::DidDraw;
 }

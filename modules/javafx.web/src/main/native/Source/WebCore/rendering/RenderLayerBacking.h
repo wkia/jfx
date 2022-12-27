@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -61,7 +61,7 @@ enum CompositingLayerType {
 // RenderLayerBacking controls the compositing behavior for a single RenderLayer.
 // It holds the various GraphicsLayers, and makes decisions about intra-layer rendering
 // optimizations.
-//
+// 
 // There is one RenderLayerBacking for each RenderLayer that is composited.
 
 class RenderLayerBacking final : public GraphicsLayerClient {
@@ -101,9 +101,9 @@ public:
 
     // Update contents and clipping structure.
     void updateDrawsContent();
-
+    
     void updateAfterLayout(bool needsClippingUpdate, bool needsFullRepaint);
-
+    
     GraphicsLayer* graphicsLayer() const { return m_graphicsLayer.get(); }
 
     // Layer to clip children
@@ -197,26 +197,26 @@ public:
     bool setCompositedBounds(const LayoutRect&);
     // Returns true if changed.
     bool updateCompositedBounds();
-
+    
     void updateAllowsBackingStoreDetaching(const LayoutRect& absoluteBounds);
 
 #if ENABLE(ASYNC_SCROLLING)
     bool maintainsEventRegion() const;
     void updateEventRegion();
-
+    
     bool needsEventRegionUpdate() const { return m_needsEventRegionUpdate; }
     void setNeedsEventRegionUpdate(bool needsUpdate = true) { m_needsEventRegionUpdate = needsUpdate; }
 #endif
 
     void updateAfterWidgetResize();
     void positionOverflowControlsLayers();
-
+    
     bool isFrameLayerWithTiledBacking() const { return m_isFrameLayerWithTiledBacking; }
 
     WEBCORE_EXPORT TiledBacking* tiledBacking() const;
     void adjustTiledBackingCoverage();
     void setTiledBackingHasMargins(bool hasExtendedBackgroundOnLeftAndRight, bool hasExtendedBackgroundOnTopAndBottom);
-
+    
     void updateDebugIndicators(bool showBorder, bool showRepaintCounter);
     bool paintsSubpixelAntialiasedText() const { return m_paintsSubpixelAntialiasedText; }
 
@@ -262,10 +262,10 @@ public:
 #endif
 
     WEBCORE_EXPORT LayoutRect contentsBox() const;
-
+    
     // For informative purposes only.
     WEBCORE_EXPORT CompositingLayerType compositingLayerType() const;
-
+    
     GraphicsLayer* layerForHorizontalScrollbar() const { return m_layerForHorizontalScrollbar.get(); }
     GraphicsLayer* layerForVerticalScrollbar() const { return m_layerForVerticalScrollbar.get(); }
     GraphicsLayer* layerForScrollCorner() const { return m_layerForScrollCorner.get(); }
@@ -280,7 +280,7 @@ public:
 
     // Return an estimate of the backing store area (in pixels) allocated by this object's GraphicsLayers.
     WEBCORE_EXPORT double backingStoreMemoryEstimate() const;
-
+    
     // For testing only.
     WEBCORE_EXPORT void setUsesDisplayListDrawing(bool);
     WEBCORE_EXPORT String displayListAsText(DisplayList::AsTextFlags) const;
@@ -295,11 +295,11 @@ private:
 
     void createPrimaryGraphicsLayer();
     void destroyGraphicsLayers();
-
+    
     void willDestroyLayer(const GraphicsLayer*);
 
     LayoutRect compositedBoundsIncludingMargin() const;
-
+    
     Ref<GraphicsLayer> createGraphicsLayer(const String&, GraphicsLayer::Type = GraphicsLayer::Type::Normal);
 
     RenderLayerModelObject& renderer() const { return m_owningLayer.renderer(); }
@@ -319,7 +319,7 @@ private:
     bool requiresVerticalScrollbarLayer() const;
     bool requiresScrollCornerLayer() const;
     bool updateScrollingLayers(bool scrollingLayers);
-
+    
     void updateScrollOffset(ScrollOffset);
     void setLocationOfScrolledContents(ScrollOffset, ScrollingLayerPositionAction);
 
@@ -335,7 +335,7 @@ private:
     FloatPoint3D computeTransformOriginForPainting(const LayoutRect& borderBox) const;
 
     LayoutSize offsetRelativeToRendererOriginForDescendantLayers() const;
-
+    
     void ensureClippingStackLayers(LayerAncestorClippingStack&);
     void removeClippingStackLayers(LayerAncestorClippingStack&);
 
@@ -361,7 +361,7 @@ private:
     Color rendererBackgroundColor() const;
 
     bool isMainFrameRenderViewLayer() const;
-
+    
     bool paintsBoxDecorations() const;
     bool paintsContent(RenderLayer::PaintedContentRequest&) const;
 
@@ -392,7 +392,7 @@ private:
 
     void paintIntoLayer(const GraphicsLayer*, GraphicsContext&, const IntRect& paintDirtyRect, OptionSet<PaintBehavior>, EventRegionContext* = nullptr);
     OptionSet<RenderLayer::PaintLayerFlag> paintFlagsForLayer(const GraphicsLayer&) const;
-
+    
     void paintDebugOverlays(const GraphicsLayer*, GraphicsContext&);
 
     static CSSPropertyID graphicsLayerToCSSProperty(AnimatedPropertyID);
@@ -406,7 +406,7 @@ private:
     uintptr_t m_owningLayerBearTrap { BEAR_TRAP_VALUE }; // webkit.org/b.206915
 #endif
     RenderLayer& m_owningLayer;
-
+    
     // A list other layers that paint into this backing store, later than m_owningLayer in paint order.
     Vector<WeakPtr<RenderLayer>> m_backingSharingLayers;
 

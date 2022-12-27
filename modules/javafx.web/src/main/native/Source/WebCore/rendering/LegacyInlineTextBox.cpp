@@ -161,7 +161,7 @@ bool LegacyInlineTextBox::isSelectable(unsigned startPosition, unsigned endPosit
 RenderObject::HighlightState LegacyInlineTextBox::selectionState()
 {
     auto state = renderer().view().selection().highlightStateForTextBox(renderer(), selectableRange());
-
+    
     // FIXME: this code mutates selection state, but it's used at a simple getter elsewhere
     // in this file. This code should likely live in HighlightData, or somewhere else.
     // <rdar://problem/58125978>
@@ -180,7 +180,7 @@ RenderObject::HighlightState LegacyInlineTextBox::selectionState()
         } else
             ellipsis->setSelectionState(RenderObject::HighlightState::None);
     }
-
+    
     return state;
 }
 
@@ -253,7 +253,7 @@ void LegacyInlineTextBox::attachLine()
 {
     if (!extracted())
         return;
-
+    
     renderer().attachTextBox(*this);
 }
 
@@ -266,7 +266,7 @@ float LegacyInlineTextBox::placeEllipsisBox(bool flowIsLTR, float visibleLeftEdg
 
     // For LTR this is the left edge of the box, for RTL, the right edge in parent coordinates.
     float ellipsisX = flowIsLTR ? visibleRightEdge - ellipsisWidth : visibleLeftEdge + ellipsisWidth;
-
+    
     // Criteria for full truncation:
     // LTR: the left edge of the ellipsis is to the left of our text run.
     // RTL: the right edge of the ellipsis is to the right of our text run.
@@ -424,17 +424,17 @@ void LegacyInlineTextBox::paint(PaintInfo& paintInfo, const LayoutPoint& paintOf
     LayoutUnit logicalRightSide = logicalRightVisualOverflow();
     LayoutUnit logicalStart = logicalLeftSide + (isHorizontal() ? paintOffset.x() : paintOffset.y());
     LayoutUnit logicalExtent = logicalRightSide - logicalLeftSide;
-
+    
     LayoutUnit paintEnd = isHorizontal() ? paintInfo.rect.maxX() : paintInfo.rect.maxY();
     LayoutUnit paintStart = isHorizontal() ? paintInfo.rect.x() : paintInfo.rect.y();
-
+    
     FloatPoint localPaintOffset(paintOffset);
-
+    
     if (logicalStart >= paintEnd || logicalStart + logicalExtent <= paintStart)
         return;
 
     bool isPrinting = renderer().document().printing();
-
+    
     // Determine whether or not we're selected.
     bool haveSelection = !isPrinting && paintInfo.phase != PaintPhase::TextClip && selectionState() != RenderObject::HighlightState::None;
     if (!haveSelection && paintInfo.phase == PaintPhase::Selection) {
@@ -462,7 +462,7 @@ void LegacyInlineTextBox::paint(PaintInfo& paintInfo, const LayoutPoint& paintOf
     GraphicsContext& context = paintInfo.context();
 
     const RenderStyle& lineStyle = this->lineStyle();
-
+    
     localPaintOffset.move(0, lineStyle.isHorizontalWritingMode() ? 0 : -logicalHeight());
 
     FloatPoint boxOrigin = locationIncludingFlipping();
@@ -530,7 +530,7 @@ void LegacyInlineTextBox::paint(PaintInfo& paintInfo, const LayoutPoint& paintOf
 
         // The marked texts for the gaps between document markers and selection are implicitly created by subdividing the entire line.
         markedTexts.append({ selectableRange.clamp(m_start), selectableRange.clamp(end()), MarkedText::Unmarked });
-
+        
         if (!isPrinting) {
             markedTexts.appendVector(MarkedText::collectForDocumentMarkers(renderer(), selectableRange, MarkedText::PaintPhase::Foreground));
             markedTexts.appendVector(MarkedText::collectForHighlights(renderer(), parent()->renderer(), selectableRange, MarkedText::PaintPhase::Foreground));
@@ -610,7 +610,7 @@ void LegacyInlineTextBox::paint(PaintInfo& paintInfo, const LayoutPoint& paintOf
     // 3. Paint fancy decorations, including composition underlines and platform-specific underlines for spelling errors, grammar errors, et cetera.
     if (paintInfo.phase == PaintPhase::Foreground && useCustomUnderlines)
         paintCompositionUnderlines(paintInfo, boxOrigin);
-
+    
     if (shouldRotate)
         context.concatCTM(rotation(boxRect, Counterclockwise));
 }
@@ -957,7 +957,7 @@ void LegacyInlineTextBox::paintCompositionUnderline(PaintInfo& paintInfo, const 
 {
     if (m_truncation == cFullTruncation)
         return;
-
+    
     float start = 0; // start of line to draw, relative to tx
     float width = logicalWidth(); // how much line to draw
     bool useWholeWidth = true;

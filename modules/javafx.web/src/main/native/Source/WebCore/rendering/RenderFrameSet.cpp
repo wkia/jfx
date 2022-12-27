@@ -76,13 +76,13 @@ void RenderFrameSet::paintColumnBorder(const PaintInfo& paintInfo, const IntRect
 {
     if (!paintInfo.rect.intersects(borderRect))
         return;
-
+        
     // FIXME: We should do something clever when borders from distinct framesets meet at a join.
-
+    
     // Fill first.
     GraphicsContext& context = paintInfo.context();
     context.fillRect(borderRect, frameSetElement().hasBorderColor() ? style().visitedDependentColorWithColorFilter(CSSPropertyBorderLeftColor) : borderFillColor);
-
+    
     // Now stroke the edges but only if we have enough room to paint both edges with a little
     // bit of the fill color showing through.
     if (borderRect.width() >= 3) {
@@ -97,7 +97,7 @@ void RenderFrameSet::paintRowBorder(const PaintInfo& paintInfo, const IntRect& b
         return;
 
     // FIXME: We should do something clever when borders from distinct framesets meet at a join.
-
+    
     // Fill first.
     GraphicsContext& context = paintInfo.context();
     context.fillRect(borderRect, frameSetElement().hasBorderColor() ? style().visitedDependentColorWithColorFilter(CSSPropertyBorderLeftColor) : borderFillColor);
@@ -114,7 +114,7 @@ void RenderFrameSet::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
     if (paintInfo.phase != PaintPhase::Foreground)
         return;
-
+    
     RenderObject* child = firstChild();
     if (!child)
         return;
@@ -124,7 +124,7 @@ void RenderFrameSet::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
     size_t rows = m_rows.m_sizes.size();
     size_t cols = m_cols.m_sizes.size();
     LayoutUnit borderThickness = frameSetElement().border();
-
+    
     LayoutUnit yPos;
     for (size_t r = 0; r < rows; r++) {
         LayoutUnit xPos;
@@ -152,7 +152,7 @@ void RenderFrameSet::GridAxis::resize(int size)
     m_sizes.resize(size);
     m_deltas.resize(size);
     m_deltas.fill(0);
-
+    
     // To track edges for resizability and borders, we need to be (size + 1). This is because a parent frameset
     // may ask us for information about our left/top/right/bottom edges in order to make its own decisions about
     // what to do. We are capable of tainting that parent frameset's borders, so we have to cache this info.
@@ -191,7 +191,7 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
             totalFixed += gridLayout[i];
             countFixed++;
         }
-
+        
         // Count the total percentage of all of the percentage columns/rows -> totalPercent
         // Count the number of columns/rows which are percentages -> countPercent
         if (grid[i].isPercentOrCalculated()) {
@@ -205,13 +205,13 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
         if (grid[i].isRelative()) {
             totalRelative += std::max(grid[i].intValue(), 1);
             countRelative++;
-        }
+        }            
     }
 
     int remainingLen = availableLen;
 
     // Fixed columns/rows are our first priority. If there is not enough space to fit all fixed
-    // columns/rows we need to proportionally adjust their size.
+    // columns/rows we need to proportionally adjust their size. 
     if (totalFixed > remainingLen) {
         int remainingFixed = remainingLen;
 
@@ -224,8 +224,8 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
     } else
         remainingLen -= totalFixed;
 
-    // Percentage columns/rows are our second priority. Divide the remaining space proportionally
-    // over all percentage columns/rows. IMPORTANT: the size of each column/row is not relative
+    // Percentage columns/rows are our second priority. Divide the remaining space proportionally 
+    // over all percentage columns/rows. IMPORTANT: the size of each column/row is not relative 
     // to 100%, but to the total percentage. For example, if there are three columns, each of 75%,
     // and the available space is 300px, each column will become 100px in width.
     if (totalPercent > remainingLen) {
@@ -253,8 +253,8 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
                 lastRelative = i;
             }
         }
-
-        // If we could not evenly distribute the available space of all of the relative
+        
+        // If we could not evenly distribute the available space of all of the relative  
         // columns/rows, the remainder will be added to the last column/row.
         // For example: if we have a space of 100px and three columns (*,*,*), the remainder will
         // be 1px and will be added to the last column: 33px, 33px, 34px.
@@ -268,9 +268,9 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
     // columns/rows
     if (remainingLen) {
         // Our first priority is to spread if over the percentage columns. The remaining
-        // space is spread evenly, for example: if we have a space of 100px, the columns
-        // definition of 25%,25% used to result in two columns of 25px. After this the
-        // columns will each be 50px in width.
+        // space is spread evenly, for example: if we have a space of 100px, the columns 
+        // definition of 25%,25% used to result in two columns of 25px. After this the 
+        // columns will each be 50px in width. 
         if (countPercent && totalPercent) {
             int remainingPercent = remainingLen;
             int changePercent = 0;
@@ -294,14 +294,14 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
                     changeFixed = (remainingFixed * gridLayout[i]) / totalFixed;
                     gridLayout[i] += changeFixed;
                     remainingLen -= changeFixed;
-                }
+                } 
             }
         }
     }
-
+    
     // If we still have some left over space we probably ended up with a remainder of
-    // a division. We cannot spread it evenly anymore. If we have any percentage
-    // columns/rows simply spread the remainder equally over all available percentage columns,
+    // a division. We cannot spread it evenly anymore. If we have any percentage 
+    // columns/rows simply spread the remainder equally over all available percentage columns, 
     // regardless of their size.
     if (remainingLen && countPercent) {
         int remainingPercent = remainingLen;
@@ -320,7 +320,7 @@ void RenderFrameSet::layOutAxis(GridAxis& axis, const Length* grid, int availabl
         // columns/rows.
         int remainingFixed = remainingLen;
         int changeFixed = 0;
-
+        
         for (int i = 0; i < gridLen; ++i) {
             if (grid[i].isFixed()) {
                 changeFixed = remainingFixed / countFixed;
@@ -370,7 +370,7 @@ void RenderFrameSet::fillFromEdgeInfo(const FrameEdgeInfo& edgeInfo, int r, int 
         m_cols.m_preventResize[c] = true;
     if (edgeInfo.preventResize(RightFrameEdge))
         m_cols.m_preventResize[c + 1] = true;
-
+    
     if (edgeInfo.allowBorder(TopFrameEdge))
         m_rows.m_allowBorder[r] = true;
     if (edgeInfo.allowBorder(BottomFrameEdge))
@@ -387,7 +387,7 @@ void RenderFrameSet::computeEdgeInfo()
     m_rows.m_allowBorder.fill(false);
     m_cols.m_preventResize.fill(frameSetElement().noResize());
     m_cols.m_allowBorder.fill(false);
-
+    
     RenderObject* child = firstChild();
     if (!child)
         return;
@@ -412,7 +412,7 @@ void RenderFrameSet::computeEdgeInfo()
 FrameEdgeInfo RenderFrameSet::edgeInfo() const
 {
     FrameEdgeInfo result(frameSetElement().noResize(), true);
-
+    
     int rows = frameSetElement().totalRows();
     int cols = frameSetElement().totalCols();
     if (rows && cols) {
@@ -425,7 +425,7 @@ FrameEdgeInfo RenderFrameSet::edgeInfo() const
         result.setPreventResize(BottomFrameEdge, m_rows.m_preventResize[rows]);
         result.setAllowBorder(BottomFrameEdge, m_rows.m_allowBorder[rows]);
     }
-
+    
     return result;
 }
 

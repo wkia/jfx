@@ -49,7 +49,7 @@ public:
 
     ScrollingNodeType nodeType() const { return m_nodeType; }
     ScrollingNodeID scrollingNodeID() const { return m_nodeID; }
-
+    
     bool isFixedNode() const { return nodeType() == ScrollingNodeType::Fixed; }
     bool isStickyNode() const { return nodeType() == ScrollingNodeType::Sticky; }
     bool isPositionedNode() const { return nodeType() == ScrollingNodeType::Positioned; }
@@ -62,12 +62,12 @@ public:
     virtual void commitStateBeforeChildren(const ScrollingStateNode&) = 0;
     virtual void commitStateAfterChildren(const ScrollingStateNode&) { }
     virtual void didCompleteCommitForNode() { }
-
+    
     virtual void willBeDestroyed() { }
 
     ScrollingTreeNode* parent() const { return m_parent; }
     void setParent(ScrollingTreeNode* parent) { m_parent = parent; }
-
+    
     WEBCORE_EXPORT bool isRootNode() const;
 
     const Vector<Ref<ScrollingTreeNode>>& children() const { return m_children; }

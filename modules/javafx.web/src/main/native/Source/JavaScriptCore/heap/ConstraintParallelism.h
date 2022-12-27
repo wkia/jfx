@@ -33,7 +33,7 @@ enum class ConstraintParallelism : uint8_t {
     Sequential,
     Parallel
 };
-
+    
 } // namespace JSC
 
 namespace WTF {

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -36,7 +36,7 @@ enum ValueStrength {
     // fact that we optimized the code to result in the GC keeping this value alive unnecessarily,
     // so we'd rather kill the code and recompile than keep the object alive longer.
     WeakValue,
-
+    
     // The code will keep this value alive. This is true of constants that were present in the
     // source. String constants tend to be strong.
     StrongValue

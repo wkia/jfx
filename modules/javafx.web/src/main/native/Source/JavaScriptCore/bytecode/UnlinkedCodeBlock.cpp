@@ -261,7 +261,7 @@ bool UnlinkedCodeBlock::typeProfilerExpressionInfoForBytecodeOffset(unsigned byt
         endDivot = UINT_MAX;
         return false;
     }
-
+    
     RareData::TypeProfilerExpressionRange& range = iter->value;
     startDivot = range.m_startDivot;
     endDivot = range.m_endDivot;
@@ -306,7 +306,7 @@ BytecodeLivenessAnalysis& UnlinkedCodeBlock::livenessAnalysisSlow(CodeBlock* cod
             m_liveness = makeUnique<BytecodeLivenessAnalysis>(codeBlock);
         }
     }
-
+    
     return *m_liveness;
 }
 

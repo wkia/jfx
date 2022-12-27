@@ -62,7 +62,7 @@ public:
     String decodeAndFlush(const uint8_t* data, size_t length) { return decodeAndFlush(reinterpret_cast<const char*>(data), length); }
 
     void setHintEncoding(const TextResourceDecoder* parentFrameDecoder);
-
+   
     void useLenientXMLDecoding() { m_useLenientXMLDecoding = true; }
     bool sawError() const { return m_sawError; }
 

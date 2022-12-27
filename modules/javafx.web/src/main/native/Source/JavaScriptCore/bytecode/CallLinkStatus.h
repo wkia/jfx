@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -47,27 +47,27 @@ public:
     CallLinkStatus()
     {
     }
-
+    
     static CallLinkStatus takesSlowPath()
     {
         CallLinkStatus result;
         result.m_couldTakeSlowPath = true;
         return result;
     }
-
+    
     explicit CallLinkStatus(JSValue);
-
+    
     CallLinkStatus(CallVariant variant)
         : m_variants(1, variant)
     {
     }
-
+    
     struct ExitSiteData {
         ExitFlag takesSlowPath;
         ExitFlag badFunction;
     };
     static ExitSiteData computeExitSiteData(CodeBlock*, BytecodeIndex);
-
+    
     static CallLinkStatus computeFor(CodeBlock*, BytecodeIndex, const ICStatusMap&, ExitSiteData);
     static CallLinkStatus computeFor(CodeBlock*, BytecodeIndex, const ICStatusMap&);
 
@@ -75,25 +75,25 @@ public:
     // Computes the status assuming that we never took slow path and never previously
     // exited.
     static CallLinkStatus computeFor(const ConcurrentJSLocker&, CodeBlock*, CallLinkInfo&);
-
+    
     // Computes the status accounting for exits.
     static CallLinkStatus computeFor(
         const ConcurrentJSLocker&, CodeBlock*, CallLinkInfo&, ExitSiteData, ExitingInlineKind = ExitFromAnyInlineKind);
 #endif
-
+    
     static CallLinkStatus computeFor(
         CodeBlock*, CodeOrigin, const ICStatusMap&, const ICStatusContextStack&);
-
+    
     void setProvenConstantCallee(CallVariant);
-
+    
     bool isSet() const { return !m_variants.isEmpty() || m_couldTakeSlowPath; }
-
+    
     explicit operator bool() const { return isSet(); }
-
+    
     bool couldTakeSlowPath() const { return m_couldTakeSlowPath; }
-
+    
     void setCouldTakeSlowPath(bool value) { m_couldTakeSlowPath = value; }
-
+    
     CallVariantList variants() const { return m_variants; }
     unsigned size() const { return m_variants.size(); }
     CallVariant at(unsigned i) const { return m_variants[i]; }
@@ -103,28 +103,28 @@ public:
     bool canOptimize() const { return !m_variants.isEmpty(); }
 
     bool isClosureCall() const; // Returns true if any callee is a closure call.
-
+    
     unsigned maxArgumentCountIncludingThis() const { return m_maxArgumentCountIncludingThis; }
-
+    
     bool finalize(VM&);
-
+    
     void merge(const CallLinkStatus&);
-
+    
     void filter(VM&, JSValue);
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     void makeClosureCall();
-
+    
     static CallLinkStatus computeFromLLInt(const ConcurrentJSLocker&, CodeBlock*, BytecodeIndex);
 #if ENABLE(JIT)
     static CallLinkStatus computeFromCallLinkInfo(
         const ConcurrentJSLocker&, CallLinkInfo&);
 #endif
-
+    
     void accountForExits(ExitSiteData, ExitingInlineKind);
-
+    
     CallVariantList m_variants;
     bool m_couldTakeSlowPath { false };
     bool m_isProved { false };

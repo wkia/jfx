@@ -41,9 +41,9 @@ public:
 
     HTMLOptionElement* item(unsigned offset) const final;
     HTMLOptionElement* namedItem(const AtomString& name) const final;
-
+    
     ExceptionOr<void> setItem(unsigned index, HTMLOptionElement*);
-
+    
     using OptionOrOptGroupElement = Variant<RefPtr<HTMLOptionElement>, RefPtr<HTMLOptGroupElement>>;
     using HTMLElementOrInt = Variant<RefPtr<HTMLElement>, int>;
     WEBCORE_EXPORT ExceptionOr<void> add(const OptionOrOptGroupElement&, const std::optional<HTMLElementOrInt>& before);
@@ -52,9 +52,6 @@ public:
     WEBCORE_EXPORT int selectedIndex() const;
     WEBCORE_EXPORT void setSelectedIndex(int);
 
-#if PLATFORM(JAVA)
-    bool isHTMLOptionsCollection() const override { return true; }
-#endif
     WEBCORE_EXPORT ExceptionOr<void> setLength(unsigned);
 
     // For CachedHTMLCollection.

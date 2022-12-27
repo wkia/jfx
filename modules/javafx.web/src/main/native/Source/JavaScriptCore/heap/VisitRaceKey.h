@@ -35,44 +35,44 @@ class JSCell;
 class VisitRaceKey {
 public:
     VisitRaceKey() { }
-
+    
     VisitRaceKey(JSCell* cell, const char* raceName)
         : m_cell(cell)
         , m_raceName(raceName)
     {
     }
-
+    
     VisitRaceKey(WTF::HashTableDeletedValueType)
         : m_raceName(m_deletedValueRaceName)
     {
     }
-
+    
     bool operator==(const VisitRaceKey& other) const
     {
         return m_cell == other.m_cell
             && m_raceName == other.m_raceName;
     }
-
+    
     bool operator!=(const VisitRaceKey& other) const
     {
         return !(*this == other);
     }
-
+    
     explicit operator bool() const
     {
         return *this != VisitRaceKey();
     }
-
+    
     void dump(PrintStream& out) const;
-
+    
     JSCell* cell() const { return m_cell; }
     const char* raceName() const { return m_raceName; }
-
+    
     bool isHashTableDeletedValue() const
     {
         return *this == VisitRaceKey(WTF::HashTableDeletedValue);
     }
-
+    
     unsigned hash() const
     {
         return WTF::PtrHash<JSCell*>::hash(m_cell) ^ WTF::PtrHash<const char*>::hash(m_raceName);
@@ -80,7 +80,7 @@ public:
 
 private:
     static const char* const m_deletedValueRaceName;
-
+    
     JSCell* m_cell { nullptr };
     const char* m_raceName { nullptr };
 };

@@ -121,7 +121,7 @@ public:
         ParserError&, SourceParseMode);
 
     static UnlinkedFunctionExecutable* fromGlobalCode(
-        const Identifier&, JSGlobalObject*, const SourceCode&, JSObject*& exception,
+        const Identifier&, JSGlobalObject*, const SourceCode&, JSObject*& exception, 
         int overrideLineNumber, std::optional<int> functionConstructorParametersEndPosition);
 
     SourceCode linkedSourceCode(const SourceCode&) const;
@@ -185,7 +185,7 @@ public:
             return nullptr;
         return &m_rareData->m_parentPrivateNameEnvironment;
     }
-
+    
     bool isArrowFunction() const { return isArrowFunctionParseMode(parseMode()); }
 
     JSC::DerivedContextType derivedContextType() const {return static_cast<JSC::DerivedContextType>(m_derivedContextType); }

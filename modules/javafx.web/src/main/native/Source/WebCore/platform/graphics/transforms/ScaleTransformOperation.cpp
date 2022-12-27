@@ -39,12 +39,12 @@ Ref<TransformOperation> ScaleTransformOperation::blend(const TransformOperation*
 {
     if (from && !from->isSameType(*this))
         return *this;
-
+    
     if (blendToIdentity)
         return ScaleTransformOperation::create(WebCore::blend(m_x, 1.0, context),
                                                WebCore::blend(m_y, 1.0, context),
                                                WebCore::blend(m_z, 1.0, context), type());
-
+    
     const ScaleTransformOperation* fromOp = downcast<ScaleTransformOperation>(from);
     double fromX = fromOp ? fromOp->m_x : 1.0;
     double fromY = fromOp ? fromOp->m_y : 1.0;

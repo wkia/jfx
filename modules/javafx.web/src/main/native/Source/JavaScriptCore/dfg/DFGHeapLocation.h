@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -35,7 +35,7 @@ namespace JSC { namespace DFG {
 
 enum LocationKind {
     InvalidLocationKind,
-
+    
     ArrayLengthLoc,
     ArrayMaskLoc,
     VectorLengthLoc,
@@ -102,12 +102,12 @@ public:
         : HeapLocation(kind, heap, base, LazyNode(index), descriptor)
     {
     }
-
+    
     HeapLocation(LocationKind kind, AbstractHeap heap, Edge base, Edge index = Edge(), Edge descriptor = Edge())
         : HeapLocation(kind, heap, base.node(), index.node(), descriptor.node())
     {
     }
-
+    
     HeapLocation(WTF::HashTableDeletedValueType)
         : m_kind(InvalidLocationKind)
         , m_heap(WTF::HashTableDeletedValue)
@@ -116,19 +116,19 @@ public:
         , m_descriptor(nullptr)
     {
     }
-
+    
     bool operator!() const { return !m_heap; }
-
+    
     LocationKind kind() const { return m_kind; }
     AbstractHeap heap() const { return m_heap; }
     Node* base() const { return m_base; }
     LazyNode index() const { return m_index; }
-
+    
     unsigned hash() const
     {
         return m_kind + m_heap.hash() + m_index.hash() + static_cast<unsigned>(bitwise_cast<uintptr_t>(m_base)) + static_cast<unsigned>(bitwise_cast<uintptr_t>(m_descriptor));
     }
-
+    
     bool operator==(const HeapLocation& other) const
     {
         return m_kind == other.m_kind
@@ -137,14 +137,14 @@ public:
             && m_index == other.m_index
             && m_descriptor == other.m_descriptor;
     }
-
+    
     bool isHashTableDeletedValue() const
     {
         return m_heap.isHashTableDeletedValue();
     }
-
+    
     void dump(PrintStream& out) const;
-
+    
 private:
     LocationKind m_kind;
     AbstractHeap m_heap;

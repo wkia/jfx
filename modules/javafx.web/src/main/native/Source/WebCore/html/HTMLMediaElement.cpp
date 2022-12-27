@@ -7251,7 +7251,7 @@ void HTMLMediaElement::mediaPlayerGetRawCookies(const URL& url, MediaPlayerClien
     auto* page = document().page();
     if (!page)
         completionHandler({ });
-
+    
     Vector<Cookie> cookies;
     page->cookieJar().getRawCookies(document(), url, cookies);
     completionHandler(WTFMove(cookies));

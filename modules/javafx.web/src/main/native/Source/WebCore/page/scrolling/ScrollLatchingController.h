@@ -95,3 +95,4 @@ WTF::TextStream& operator<<(WTF::TextStream&, const ScrollLatchingController&);
 } // namespace WebCore
 
 #endif // ENABLE(WHEEL_EVENT_LATCHING)
+

@@ -376,7 +376,7 @@ public:
             : m_layerList(layerList)
         {
         }
-
+        
         Vector<RenderLayer*>* m_layerList;
     };
 
@@ -485,7 +485,7 @@ public:
     bool isOpportunisticStackingContext() const { return m_isOpportunisticStackingContext; }
 
     RenderLayerCompositor& compositor() const;
-
+    
     // Notification from the renderer that its content changed (e.g. current frame of image changed).
     // Allows updates of layer content without repainting.
     void contentChanged(ContentChangeType);
@@ -505,7 +505,7 @@ public:
     }
 
     void updateTransform();
-
+    
 #if ENABLE(CSS_COMPOSITING)
     void updateBlendMode();
     void willRemoveChildWithBlendMode();
@@ -530,7 +530,7 @@ public:
 
     bool hasVisibleBoxDecorationsOrBackground() const;
     bool hasVisibleBoxDecorations() const;
-
+    
     bool behavesAsFixed() const { return m_behavesAsFixed; }
 
     struct PaintedContentRequest {
@@ -551,7 +551,7 @@ public:
 
         bool probablyHasPaintedContent() const { return hasPaintedContent == RequestState::True || hasPaintedContent == RequestState::Undetermined; }
         bool probablyHasSubpixelAntialiasedText() const { return hasSubpixelAntialiasedText == RequestState::True || hasSubpixelAntialiasedText == RequestState::Undetermined; }
-
+        
         bool isSatisfied() const { return hasPaintedContent != RequestState::Unknown && hasSubpixelAntialiasedText != RequestState::Unknown; }
 
         RequestState hasPaintedContent { RequestState::Unknown };
@@ -572,7 +572,7 @@ public:
     // Gets the nearest enclosing positioned ancestor layer (also includes
     // the <html> layer and the root layer).
     RenderLayer* enclosingAncestorForPosition(PositionType) const;
-
+    
     RenderLayer* enclosingLayerInContainingBlockOrder() const;
     RenderLayer* enclosingContainingBlockLayer(CrossFrameBoundaries) const;
     RenderLayer* enclosingFrameRenderLayer() const;
@@ -663,7 +663,7 @@ public:
         PaginationInclusionMode,
         ClipRectsType, OverlayScrollbarSizeRelevancy inOverlayScrollbarSizeRelevancy, ShouldRespectOverflowClip, const LayoutSize& offsetFromRoot,
         const LayoutRect* layerBoundingBox = nullptr, ShouldApplyRootOffsetToFragments = IgnoreRootOffsetForFragments);
-
+        
     LayoutRect childrenClipRect() const; // Returns the foreground clip rect of the layer in the document's coordinate space.
     LayoutRect selfClipRect() const; // Returns the background clip rect of the layer in the document's coordinate space.
     LayoutRect localClipRect(bool& clipExceedsBounds) const; // Returns the background clip rect of the layer in the local coordinate space.
@@ -697,7 +697,7 @@ public:
 
     // Bounds used for layer overlap testing in RenderLayerCompositor.
     LayoutRect overlapBounds() const;
-
+    
     // Takes transform animations into account, returning true if they could be cheaply computed.
     // Unlike overlapBounds, these bounds include descendant layers.
     bool getOverlapBoundsIncludingChildrenAccountingForTransformAnimations(LayoutRect&, OptionSet<CalculateLayerBoundsFlag> additionalFlags = { }) const;
@@ -708,7 +708,7 @@ public:
 
     // Can pass offsetFromRoot if known.
     LayoutRect calculateLayerBounds(const RenderLayer* ancestorLayer, const LayoutSize& offsetFromRoot, OptionSet<CalculateLayerBoundsFlag> = defaultCalculateLayerBoundsFlags()) const;
-
+    
     LayoutRect repaintRectIncludingNonCompositingDescendants() const;
 
     void setRepaintStatus(RepaintStatus status) { m_repaintStatus = status; }
@@ -716,7 +716,7 @@ public:
 
     LayoutUnit staticInlinePosition() const { return m_staticInlinePosition; }
     LayoutUnit staticBlockPosition() const { return m_staticBlockPosition; }
-
+   
     void setStaticInlinePosition(LayoutUnit position) { m_staticInlinePosition = position; }
     void setStaticBlockPosition(LayoutUnit position) { m_staticBlockPosition = position; }
 
@@ -728,7 +728,7 @@ public:
     // returns the identity matrix.
     TransformationMatrix currentTransform(OptionSet<RenderStyle::TransformOperationOption> = RenderStyle::allTransformOperations) const;
     TransformationMatrix renderableTransform(OptionSet<PaintBehavior>) const;
-
+    
     // Get the perspective transform, which is applied to transformed sublayers.
     // Returns true if the layer has a -webkit-perspective.
     // Note that this transform has the perspective-origin baked in.
@@ -762,7 +762,7 @@ public:
     }
 
     bool isolatesBlending() const { return hasNotIsolatedBlendingDescendants() && isCSSStackingContext(); }
-
+    
     // FIXME: We should ASSERT(!m_hasNotIsolatedBlendingDescendantsStatusDirty); here but we hit the same bugs as visible content above.
     bool hasNotIsolatedBlendingDescendants() const { return m_hasNotIsolatedBlendingDescendants; }
     bool hasNotIsolatedBlendingDescendantsStatusDirty() const { return m_hasNotIsolatedBlendingDescendantsStatusDirty; }
@@ -874,7 +874,7 @@ private:
 
     bool setIsOpportunisticStackingContext(bool);
     bool setIsCSSStackingContext(bool);
-
+    
     void isStackingContextChanged();
 
     bool isDirtyStackingContext() const { return m_zOrderListsDirty && isStackingContext(); }
@@ -1018,7 +1018,7 @@ private:
         const LayoutRect& hitTestRect, const HitTestLocation&,
         const HitTestingTransformState* containerTransformState,
         const LayoutSize& translationOffset = LayoutSize()) const;
-
+    
     bool hitTestContents(const HitTestRequest&, HitTestResult&, const LayoutRect& layerBounds, const HitTestLocation&, HitTestFilter) const;
     bool hitTestContentsForFragments(const LayerFragments&, const HitTestRequest&, HitTestResult&, const HitTestLocation&, HitTestFilter, bool& insideClipRect) const;
     RenderLayer* hitTestTransformedLayerInFragments(RenderLayer* rootLayer, RenderLayer* containerLayer, const HitTestRequest&, HitTestResult&,
@@ -1039,7 +1039,7 @@ private:
     void dirty3DTransformedDescendantStatus();
     // Both updates the status, and returns true if descendants of this have 3d.
     bool update3DTransformedDescendantStatus();
-
+    
     bool isInsideSVGForeignObject() const { return m_insideSVGForeignObject; }
 
     void createReflection();
@@ -1071,7 +1071,7 @@ private:
 
     void setHasCompositingDescendant(bool b)  { m_hasCompositingDescendant = b; }
     void setHasCompositedNonContainedDescendants(bool value) { m_hasCompositedNonContainedDescendants = value; }
-
+    
     void setIndirectCompositingReason(IndirectCompositingReason reason) { m_indirectCompositingReason = static_cast<unsigned>(reason); }
     bool mustCompositeForIndirectReasons() const { return m_indirectCompositingReason; }
 
@@ -1193,7 +1193,7 @@ private:
     LayoutUnit m_staticBlockPosition;
 
     std::unique_ptr<TransformationMatrix> m_transform;
-
+    
     // May ultimately be extended to many replicas (with their own paint order).
     RenderPtr<RenderReplica> m_reflection;
 
@@ -1246,7 +1246,7 @@ public:
     {
         m_layer.setLayerListMutationAllowed(false);
     }
-
+    
     ~LayerListMutationDetector()
     {
         m_layer.setLayerListMutationAllowed(m_previousMutationAllowedState);

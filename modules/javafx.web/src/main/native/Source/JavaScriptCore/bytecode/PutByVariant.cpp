@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -102,14 +102,14 @@ void PutByVariant::fixTransitionToReplaceIfNecessary()
 {
     if (kind() != Transition)
         return;
-
+    
     RELEASE_ASSERT(m_oldStructure.size() <= 2);
     for (unsigned i = m_oldStructure.size(); i--;) {
         Structure* structure = m_oldStructure[i];
         if (structure != m_newStructure)
             return;
     }
-
+    
     m_newStructure = nullptr;
     m_kind = Replace;
     m_conditionSet = ObjectPropertyConditionSet();
@@ -159,17 +159,17 @@ bool PutByVariant::attemptToMerge(const PutByVariant& other)
     case NotSet:
         RELEASE_ASSERT_NOT_REACHED();
         return false;
-
+        
     case Replace: {
         switch (other.m_kind) {
         case Replace: {
             ASSERT(m_conditionSet.isEmpty());
             ASSERT(other.m_conditionSet.isEmpty());
-
+            
             m_oldStructure.merge(other.m_oldStructure);
             return true;
         }
-
+            
         case Transition: {
             PutByVariant newVariant = other;
             if (newVariant.attemptToMergeTransitionWithReplace(*this)) {
@@ -178,24 +178,24 @@ bool PutByVariant::attemptToMerge(const PutByVariant& other)
             }
             return false;
         }
-
+            
         default:
             return false;
         }
     }
-
+        
     case Transition:
         switch (other.m_kind) {
         case Replace:
             return attemptToMergeTransitionWithReplace(other);
-
+            
         case Transition: {
             if (m_oldStructure != other.m_oldStructure)
                 return false;
-
+            
             if (m_newStructure != other.m_newStructure)
                 return false;
-
+            
             ObjectPropertyConditionSet mergedConditionSet;
             if (!m_conditionSet.isEmpty()) {
                 mergedConditionSet = m_conditionSet.mergedWith(other.m_conditionSet);
@@ -205,23 +205,23 @@ bool PutByVariant::attemptToMerge(const PutByVariant& other)
             m_conditionSet = mergedConditionSet;
             return true;
         }
-
+            
         default:
             return false;
         }
-
+        
     case Setter: {
         if (other.m_kind != Setter)
             return false;
-
+        
         if (m_callLinkStatus || other.m_callLinkStatus) {
             if (!(m_callLinkStatus && other.m_callLinkStatus))
                 return false;
         }
-
+        
         if (m_conditionSet.isEmpty() != other.m_conditionSet.isEmpty())
             return false;
-
+        
         ObjectPropertyConditionSet mergedConditionSet;
         if (!m_conditionSet.isEmpty()) {
             mergedConditionSet = m_conditionSet.mergedWith(other.m_conditionSet);
@@ -229,14 +229,14 @@ bool PutByVariant::attemptToMerge(const PutByVariant& other)
                 return false;
         }
         m_conditionSet = mergedConditionSet;
-
+        
         if (m_callLinkStatus)
             m_callLinkStatus->merge(*other.m_callLinkStatus);
-
+        
         m_oldStructure.merge(other.m_oldStructure);
         return true;
     } }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
     return false;
 }
@@ -249,17 +249,17 @@ bool PutByVariant::attemptToMergeTransitionWithReplace(const PutByVariant& repla
     ASSERT(!replace.writesStructures());
     ASSERT(!replace.reallocatesStorage());
     ASSERT(replace.conditionSet().isEmpty());
-
+    
     // This sort of merging only works when we have one path along which we add a new field which
     // transitions to structure S while the other path was already on structure S. This doesn't
     // work if we need to reallocate anything or if the replace path is polymorphic.
-
+    
     if (reallocatesStorage())
         return false;
-
+    
     if (replace.m_oldStructure.onlyStructure() != m_newStructure)
         return false;
-
+    
     m_oldStructure.merge(m_newStructure);
     return true;
 }
@@ -309,19 +309,19 @@ void PutByVariant::dumpInContext(PrintStream& out, DumpContext* context) const
     case NotSet:
         out.print("empty>");
         return;
-
+        
     case Replace:
         out.print(
             "Replace: ", inContext(structure(), context), ", offset = ", offset(), ", ", ">");
         return;
-
+        
     case Transition:
         out.print(
             "Transition: ", inContext(oldStructure(), context), " to ",
             pointerDumpInContext(newStructure(), context), ", [",
             inContext(m_conditionSet, context), "], offset = ", offset(), ", ", ">");
         return;
-
+        
     case Setter:
         out.print(
             "Setter: ", inContext(structure(), context), ", [",
@@ -331,7 +331,7 @@ void PutByVariant::dumpInContext(PrintStream& out, DumpContext* context) const
         out.print(">");
         return;
     }
-
+    
     RELEASE_ASSERT_NOT_REACHED();
 }
 

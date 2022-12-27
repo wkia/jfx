@@ -114,7 +114,7 @@ void RenderInline::updateFromStyle()
 
     // FIXME: Support transforms and reflections on inline flows someday.
     setHasTransformRelatedProperty(false);
-    setHasReflection(false);
+    setHasReflection(false);    
 }
 
 static RenderElement* inFlowPositionedInlineAncestor(RenderElement* p)
@@ -133,16 +133,16 @@ static void updateStyleOfAnonymousBlockContinuations(const RenderBlock& block, c
     for (RenderBox* box = block.nextSiblingBox(); box && box->isAnonymousBlock(); box = box->nextSiblingBox()) {
         if (box->style().position() == newStyle->position())
             continue;
-
+        
         if (!is<RenderBlock>(*box))
             continue;
 
         RenderBlock& block = downcast<RenderBlock>(*box);
         if (!block.isContinuation())
             continue;
-
+        
         // If we are no longer in-flow positioned but our descendant block(s) still have an in-flow positioned ancestor then
-        // their containing anonymous block should keep its in-flow positioning.
+        // their containing anonymous block should keep its in-flow positioning. 
         RenderInline* continuation = block.inlineContinuation();
         if (oldStyle->hasInFlowPosition() && inFlowPositionedInlineAncestor(continuation))
             continue;
@@ -608,7 +608,7 @@ VisiblePosition RenderInline::positionForPoint(const LayoutPoint& point, const R
             return continuation->positionForPoint(parentBlockPoint - currentBlock->locationOffset(), fragment);
         continuation = continuation->inlineContinuation();
     }
-
+    
     return RenderBoxModelObject::positionForPoint(point, fragment);
 }
 
@@ -644,7 +644,7 @@ IntRect RenderInline::linesBoundingBox() const
     }
 
     IntRect result;
-
+    
     // See <rdar://problem/5289721>, for an unknown reason the linked list here is sometimes inconsistent, first is non-zero and last is zero.  We have been
     // unable to reproduce this at all (and consequently unable to figure ot why this is happening).  The assert will hopefully catch the problem in debug
     // builds and help us someday figure out why.  We also put in a redundant check of lastLineBox() to avoid the crash for now.
@@ -659,9 +659,9 @@ IntRect RenderInline::linesBoundingBox() const
             if (curr == firstLineBox() || curr->logicalRight() > logicalRightSide)
                 logicalRightSide = curr->logicalRight();
         }
-
+        
         bool isHorizontal = style().isHorizontalWritingMode();
-
+        
         float x = isHorizontal ? logicalLeftSide : firstLineBox()->x();
         float y = isHorizontal ? firstLineBox()->y() : logicalLeftSide;
         float width = isHorizontal ? logicalRightSide - logicalLeftSide : lastLineBox()->logicalBottom() - x;
@@ -706,7 +706,7 @@ LegacyInlineBox* RenderInline::culledInlineLastLineBox() const
     for (RenderObject* current = lastChild(); current; current = current->previousSibling()) {
         if (current->isFloatingOrOutOfFlowPositioned())
             continue;
-
+            
         // We want to get the margin box in the inline direction, and then use our font ascent/descent in the block
         // direction (aligned to the root box's baseline).
         if (is<RenderBox>(*current)) {
@@ -794,11 +794,11 @@ LayoutRect RenderInline::linesVisualOverflowBoundingBox() const
 
     const LegacyRootInlineBox& firstRootBox = firstLineBox()->root();
     const LegacyRootInlineBox& lastRootBox = lastLineBox()->root();
-
+    
     LayoutUnit logicalTop = firstLineBox()->logicalTopVisualOverflow(firstRootBox.lineTop());
     LayoutUnit logicalWidth = logicalRightSide - logicalLeftSide;
     LayoutUnit logicalHeight = lastLineBox()->logicalBottomVisualOverflow(lastRootBox.lineBottom()) - logicalTop;
-
+    
     LayoutRect rect(logicalLeftSide, logicalTop, logicalWidth, logicalHeight);
     if (!style().isHorizontalWritingMode())
         rect = rect.transposedRect();
@@ -840,9 +840,9 @@ LayoutRect RenderInline::linesVisualOverflowBoundingBoxInFragment(const RenderFr
         return LayoutRect();
 
     logicalHeight = lastInlineInFragment->logicalBottomVisualOverflow(lastInlineInFragment->root().lineBottom()) - logicalTop;
-
+    
     LayoutUnit logicalWidth = logicalRightSide - logicalLeftSide;
-
+    
     LayoutRect rect(logicalLeftSide, logicalTop, logicalWidth, logicalHeight);
     if (!style().isHorizontalWritingMode())
         rect = rect.transposedRect();
@@ -953,7 +953,7 @@ std::optional<LayoutRect> RenderInline::computeVisibleRectInContainer(const Layo
         // flag on the RenderObject has been cleared, so use the one on the style().
         topLeft += layer()->offsetForInFlowPosition();
     }
-
+    
     // FIXME: We ignore the lightweight clipping rect that controls use, since if |o| is in mid-layout,
     // its controlClipRect will be wrong. For overflow clip we use the values cached by the layer.
     adjustedRect.setLocation(topLeft);
@@ -980,8 +980,8 @@ std::optional<LayoutRect> RenderInline::computeVisibleRectInContainer(const Layo
 LayoutSize RenderInline::offsetFromContainer(RenderElement& container, const LayoutPoint&, bool* offsetDependsOnPoint) const
 {
     ASSERT(&container == this->container());
-
-    LayoutSize offset;
+    
+    LayoutSize offset;    
     if (isInFlowPositioned())
         offset += offsetForInFlowPosition();
 
@@ -1071,7 +1071,7 @@ const RenderObject* RenderInline::pushMappingToContainer(const RenderLayerModelO
         containerOffset += adjustmentForSkippedAncestor;
         geometryMap.push(this, containerOffset, preserve3D, offsetDependsOnPoint);
     }
-
+    
     return ancestorSkipped ? ancestorToStopAt : container;
 }
 
@@ -1213,7 +1213,7 @@ void RenderInline::imageChanged(WrappedImagePtr, const IntRect*)
 {
     if (!parent())
         return;
-
+        
     // FIXME: We can do better.
     repaint();
 }
@@ -1313,7 +1313,7 @@ void RenderInline::paintOutlineForLine(GraphicsContext& graphicsContext, const L
     adjustedPreviousLine.moveBy(paintOffset);
     auto adjustedNextLine = nextLine;
     adjustedNextLine.moveBy(paintOffset);
-
+    
     float adjacentWidth1 = 0;
     float adjacentWidth2 = 0;
     // left edge
@@ -1334,7 +1334,7 @@ void RenderInline::paintOutlineForLine(GraphicsContext& graphicsContext, const L
         adjacentWidth2 = -outlineWidth;
     }
     drawLineForBoxSide(graphicsContext, FloatRect(topLeft, bottomRight), BoxSide::Left, outlineColor, outlineStyle, adjacentWidth1, adjacentWidth2, antialias);
-
+    
     // right edge
     topLeft = outlineBoxRect.maxXMinYCorner();
     if (previousLine.isEmpty() || previousLine.maxX() < thisLine.maxX() || thisLine.maxX() <= previousLine.x()) {
@@ -1368,7 +1368,7 @@ void RenderInline::paintOutlineForLine(GraphicsContext& graphicsContext, const L
             adjacentWidth2 = outlineWidth;
         drawLineForBoxSide(graphicsContext, FloatRect(topLeft, bottomRight), BoxSide::Top, outlineColor, outlineStyle, adjacentWidth1, adjacentWidth2, antialias);
     }
-
+    
     if (previousLine.maxX() < thisLine.maxX()) {
         topLeft = outlineBoxRect.minXMinYCorner();
         topLeft.move(-outlineWidth, -outlineWidth);
@@ -1407,7 +1407,7 @@ void RenderInline::paintOutlineForLine(GraphicsContext& graphicsContext, const L
             adjacentWidth2 = outlineWidth;
         drawLineForBoxSide(graphicsContext, FloatRect(topLeft, bottomRight), BoxSide::Bottom, outlineColor, outlineStyle, adjacentWidth1, adjacentWidth2, antialias);
     }
-
+    
     if (nextLine.maxX() < thisLine.maxX()) {
         topLeft = outlineBoxRect.minXMaxYCorner();
         topLeft.move(-outlineWidth, 0);

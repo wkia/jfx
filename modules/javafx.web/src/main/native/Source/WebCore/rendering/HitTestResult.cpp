@@ -149,7 +149,7 @@ void HitTestResult::setInnerNode(Node* node)
         node = downcast<PseudoElement>(*node).hostElement();
     m_innerNode = node;
 }
-
+    
 void HitTestResult::setInnerNonSharedNode(Node* node)
 {
     if (is<PseudoElement>(node))
@@ -157,9 +157,9 @@ void HitTestResult::setInnerNonSharedNode(Node* node)
     m_innerNonSharedNode = node;
 }
 
-void HitTestResult::setURLElement(Element* n)
-{
-    m_innerURLElement = n;
+void HitTestResult::setURLElement(Element* n) 
+{ 
+    m_innerURLElement = n; 
 }
 
 void HitTestResult::setScrollbar(Scrollbar* s)
@@ -231,7 +231,7 @@ String HitTestResult::spellingToolTip(TextDirection& dir) const
     // currently supply strings, but maybe someday markers associated with misspelled words will also.
     if (!m_innerNonSharedNode)
         return String();
-
+    
     DocumentMarker* marker = m_innerNonSharedNode->document().markers().markerContainingPoint(m_hitTestLocation.point(), DocumentMarker::Grammar);
     if (!marker)
         return String();
@@ -243,18 +243,18 @@ String HitTestResult::spellingToolTip(TextDirection& dir) const
 
 String HitTestResult::replacedString() const
 {
-    // Return the replaced string associated with this point, if any. This marker is created when a string is autocorrected,
+    // Return the replaced string associated with this point, if any. This marker is created when a string is autocorrected, 
     // and is used for generating a contextual menu item that allows it to easily be changed back if desired.
     if (!m_innerNonSharedNode)
         return String();
-
+    
     DocumentMarker* marker = m_innerNonSharedNode->document().markers().markerContainingPoint(m_hitTestLocation.point(), DocumentMarker::Replacement);
     if (!marker)
         return String();
-
+    
     return marker->description();
-}
-
+}    
+    
 String HitTestResult::title(TextDirection& dir) const
 {
     dir = TextDirection::LTR;
@@ -311,12 +311,12 @@ String HitTestResult::altDisplayString() const
 {
     if (!m_innerNonSharedNode)
         return String();
-
+    
     if (is<HTMLImageElement>(*m_innerNonSharedNode)) {
         HTMLImageElement& image = downcast<HTMLImageElement>(*m_innerNonSharedNode);
         return displayString(image.attributeWithoutSynchronization(altAttr), m_innerNonSharedNode.get());
     }
-
+    
     if (is<HTMLInputElement>(*m_innerNonSharedNode)) {
         HTMLInputElement& input = downcast<HTMLInputElement>(*m_innerNonSharedNode);
         return displayString(input.alt(), m_innerNonSharedNode.get());
@@ -609,7 +609,7 @@ String HitTestResult::titleDisplayString() const
 {
     if (!m_innerURLElement)
         return String();
-
+    
     return displayString(m_innerURLElement->title(), m_innerURLElement.get());
 }
 
@@ -622,8 +622,8 @@ String HitTestResult::textContent() const
 
 // FIXME: This function needs a better name and may belong in a different class. It's not
 // really isContentEditable(); it's more like needsEditingContextMenu(). In many ways, this
-// function would make more sense in the ContextMenu class, except that WebElementDictionary
-// hooks into it. Anyway, we should architect this better.
+// function would make more sense in the ContextMenu class, except that WebElementDictionary 
+// hooks into it. Anyway, we should architect this better. 
 bool HitTestResult::isContentEditable() const
 {
     if (!m_innerNonSharedNode)

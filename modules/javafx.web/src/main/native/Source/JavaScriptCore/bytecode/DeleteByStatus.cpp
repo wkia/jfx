@@ -121,7 +121,7 @@ DeleteByStatus DeleteByStatus::computeForStubInfoWithoutExitSiteFeedback(
                 Structure* newStructure = Structure::removePropertyTransitionFromExistingStructureConcurrently(structure, access.identifier().uid(), offset);
                 if (!newStructure)
                     return DeleteByStatus(JSC::slowVersion(summary), *stubInfo);
-                ASSERT_UNUSED(offset, offset == access.offset());
+                ASSERT_UNUSED(offset, offset == access.offset());                
                 DeleteByVariant variant(access.identifier(), true, structure, newStructure, access.offset());
 
                 if (!result.appendVariant(variant))

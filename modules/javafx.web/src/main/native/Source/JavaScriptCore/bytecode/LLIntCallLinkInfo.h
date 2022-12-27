@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -41,15 +41,15 @@ public:
     static constexpr uintptr_t unlinkedBit = 0x1;
 
     LLIntCallLinkInfo() = default;
-
+    
     ~LLIntCallLinkInfo()
     {
         if (isOnList())
             remove();
     }
-
+    
     bool isLinked() const { return !(m_calleeOrLastSeenCalleeWithLinkBit & unlinkedBit); }
-
+    
 
     void link(VM& vm, JSCell* owner, JSObject* callee, MacroAssemblerCodePtr<JSEntryPtrTag> codePtr)
     {

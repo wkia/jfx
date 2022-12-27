@@ -57,7 +57,7 @@ bool IntrinsicGetterAccessCase::canEmitIntrinsicGetter(JSFunction* getter, Struc
 
         if (!isTypedView(type))
             return false;
-
+        
         return true;
     }
     case UnderscoreProtoIntrinsic: {
@@ -121,12 +121,12 @@ void IntrinsicGetterAccessCase::emitIntrinsicGetter(AccessGenerationState& state
         jit.subPtr(scratchGPR, valueGPR);
 
         CCallHelpers::Jump done = jit.jump();
-
+        
         emptyByteOffset.link(&jit);
         jit.move(TrustedImmPtr(nullptr), valueGPR);
-
+        
         done.link(&jit);
-
+        
         jit.boxInt32(valueGPR, valueRegs);
         state.succeed();
         return;

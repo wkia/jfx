@@ -33,7 +33,7 @@ namespace WebCore {
 struct RectList {
     Vector<LayoutRect> rects;
     LayoutRect boundingRect;
-
+    
     void append(const LayoutRect& rect)
     {
         rects.append(rect);
@@ -45,7 +45,7 @@ struct RectList {
         rects.appendVector(rectList.rects);
         boundingRect.unite(rectList.boundingRect);
     }
-
+    
     bool intersects(const LayoutRect& rect) const
     {
         if (!rects.size() || !rect.intersects(boundingRect))
@@ -82,7 +82,7 @@ public:
     void add(const RenderLayer&, const LayoutRect& bounds, const Vector<LayerOverlapMap::LayerAndBounds>& enclosingClippingLayers);
     bool overlapsLayers(const RenderLayer&, const LayoutRect& bounds, const Vector<LayerOverlapMap::LayerAndBounds>& enclosingClippingLayers) const;
     void append(std::unique_ptr<OverlapMapContainer>&&);
-
+    
     String dump(unsigned) const;
 
 private:
@@ -148,7 +148,7 @@ private:
     {
         return clippingScopeContainingLayerChildRecursive(m_rootScope, layer);
     }
-
+    
     static void mergeClippingScopesRecursive(const ClippingScope& sourceScope, ClippingScope& destScope);
 
     ClippingScope* ensureClippingScopeForLayers(const Vector<LayerOverlapMap::LayerAndBounds>& enclosingClippingLayers);
@@ -286,7 +286,7 @@ void LayerOverlapMap::add(const RenderLayer& layer, const LayoutRect& bounds, co
     // recursively processed and popped off the stack.
     ASSERT(m_overlapStack.size() >= 2);
     m_overlapStack[m_overlapStack.size() - 2]->add(layer, bounds, enclosingClippingLayers);
-
+    
     m_isEmpty = false;
 }
 

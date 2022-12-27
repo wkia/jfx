@@ -134,7 +134,7 @@ RenderMathMLFraction::FractionParameters RenderMathMLFraction::stackParameters()
     ASSERT(isValid());
     FractionParameters parameters;
     LayoutUnit gapMin;
-
+    
     // We try and read constants to draw the stack from the OpenType MATH and use fallback values otherwise.
     const auto& primaryFont = style().fontCascade().primaryFont();
     const auto* mathData = style().fontCascade().primaryFont().mathData();

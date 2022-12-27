@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -42,25 +42,25 @@ public:
     enum State {
         // It's uncached so we have no information.
         NoInformation,
-
+        
         // It's cached in a simple way.
         Simple,
-
+        
         // It's known to often take slow path.
         TakesSlowPath
     };
-
+    
     InstanceOfStatus()
         : m_state(NoInformation)
     {
     }
-
+    
     InstanceOfStatus(State state)
         : m_state(state)
     {
         ASSERT(state == NoInformation || state == TakesSlowPath);
     }
-
+    
     explicit InstanceOfStatus(StubInfoSummary summary)
     {
         switch (summary) {
@@ -78,36 +78,36 @@ public:
         }
         RELEASE_ASSERT_NOT_REACHED();
     }
-
+    
     static InstanceOfStatus computeFor(CodeBlock*, ICStatusMap&, BytecodeIndex);
-
+    
 #if ENABLE(DFG_JIT)
     static InstanceOfStatus computeForStubInfo(const ConcurrentJSLocker&, VM&, StructureStubInfo*);
 #endif
-
+    
     State state() const { return m_state; }
-
+    
     bool isSet() const { return m_state != NoInformation; }
     explicit operator bool() const { return isSet(); }
-
+    
     bool isSimple() const { return m_state == Simple; }
     bool takesSlowPath() const { return m_state == TakesSlowPath; }
-
+    
     JSObject* commonPrototype() const;
-
+    
     size_t numVariants() const { return m_variants.size(); }
     const Vector<InstanceOfVariant, 2>& variants() const { return m_variants; }
     const InstanceOfVariant& at(size_t index) const { return m_variants[index]; }
     const InstanceOfVariant& operator[](size_t index) const { return at(index); }
 
     void filter(const StructureSet&);
-
+    
     void dump(PrintStream&) const;
 
 private:
     void appendVariant(const InstanceOfVariant&);
     void shrinkToFit();
-
+    
     State m_state;
     Vector<InstanceOfVariant, 2> m_variants;
 };

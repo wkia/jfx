@@ -85,7 +85,7 @@ public:
     static constexpr FPRegisterID firstFPRegister() { return MIPSRegisters::f0; }
     static constexpr FPRegisterID lastFPRegister() { return MIPSRegisters::f31; }
     static constexpr unsigned numberOfFPRegisters() { return lastFPRegister() - firstFPRegister() + 1; }
-
+    
     static const char* gprName(RegisterID id)
     {
         ASSERT(id >= firstRegister() && id <= lastRegister());
@@ -161,7 +161,7 @@ public:
     {
         emitInst(0x00000000);
     }
-
+    
     using CopyFunction = void*(&)(void*, const void*, size_t);
 
     template <CopyFunction copy>
@@ -176,7 +176,7 @@ public:
         for (size_t i = 0; i < num32s; i++)
             *ptr++ = insn;
     }
-
+    
     void sync()
     {
         // FIXME: https://bugs.webkit.org/show_bug.cgi?id=169984
@@ -280,7 +280,7 @@ public:
 
     void mul(RegisterID rd, RegisterID rs, RegisterID rt)
     {
-#if WTF_MIPS_ISA_AT_LEAST(32)
+#if WTF_MIPS_ISA_AT_LEAST(32) 
         emitInst(0x70000002 | (rd << OP_SH_RD) | (rs << OP_SH_RS) | (rt << OP_SH_RT));
 #else
         mult(rs, rt);
@@ -871,7 +871,7 @@ public:
         result |= *insn & 0x0000ffff;
         return result;
     }
-
+    
     static void repatchCompact(void* where, int32_t value)
     {
         repatchInt32(where, value);

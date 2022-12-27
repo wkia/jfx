@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -90,9 +90,9 @@ namespace JSC { namespace DFG {
 //         FIXME: Make it easier to do this, that doesn't involve rerunning GCSE.
 //         https://bugs.webkit.org/show_bug.cgi?id=136639
 //
-//    4.3) Insert Upsilons at the end of the current block for the corresponding Phis in each successor block.
-//         Use the available values table to decide the source value for each Phi's variable. Note that
-//         you could also use SSACalculator::reachingDefAtTail() instead of the available values table,
+//    4.3) Insert Upsilons at the end of the current block for the corresponding Phis in each successor block. 
+//         Use the available values table to decide the source value for each Phi's variable. Note that 
+//         you could also use SSACalculator::reachingDefAtTail() instead of the available values table, 
 //         though your local available values table is likely to be more efficient.
 //
 // The most obvious use of SSACalculator is for the CPS->SSA conversion itself, but it's meant to
@@ -103,24 +103,24 @@ class SSACalculator {
 public:
     SSACalculator(Graph&);
     ~SSACalculator();
-
+    
     void reset();
-
+    
     class Variable {
     public:
         unsigned index() const { return m_index; }
-
+        
         void dump(PrintStream&) const;
         void dumpVerbose(PrintStream&) const;
-
+        
     private:
         friend class SSACalculator;
-
+        
         Variable()
             : m_index(UINT_MAX)
         {
         }
-
+        
         Variable(unsigned index)
             : m_index(index)
         {
@@ -129,43 +129,43 @@ public:
         BlockList m_blocksWithDefs;
         unsigned m_index;
     };
-
+    
     class Def {
     public:
         Variable* variable() const { return m_variable; }
         BasicBlock* block() const { return m_block; }
-
+        
         Node* value() const { return m_value; }
-
+        
         void dump(PrintStream&) const;
-
+        
     private:
         friend class SSACalculator;
-
+        
         Def()
             : m_variable(nullptr)
             , m_block(nullptr)
             , m_value(nullptr)
         {
         }
-
+        
         Def(Variable* variable, BasicBlock* block, Node* value)
             : m_variable(variable)
             , m_block(block)
             , m_value(value)
         {
         }
-
+        
         Variable* m_variable;
         BasicBlock* m_block;
         Node* m_value;
     };
-
+    
     Variable* newVariable();
     Def* newDef(Variable*, BasicBlock*, Node*);
-
+    
     Variable* variable(unsigned index) { return &m_variables[index]; }
-
+    
     // The PhiInsertionFunctor takes a Variable and a BasicBlock and either inserts a Phi and
     // returns the Node for that Phi, or it decides that it's not worth it to insert a Phi at that
     // block because of some additional pruning condition (typically liveness) and returns
@@ -176,7 +176,7 @@ public:
     void computePhis(const PhiInsertionFunctor& functor)
     {
         DFG_ASSERT(m_graph, nullptr, m_graph.m_ssaDominators);
-
+        
         for (Variable& variable : m_variables) {
             m_graph.m_ssaDominators->forAllBlocksInPrunedIteratedDominanceFrontierOf(
                 variable.m_blocksWithDefs,
@@ -184,11 +184,11 @@ public:
                     Node* phiNode = functor(&variable, block);
                     if (!phiNode)
                         return false;
-
+                    
                     BlockData& data = m_data[block];
                     Def* phiDef = m_phis.add(Def(&variable, block, phiNode));
                     data.m_phis.append(phiDef);
-
+                    
                     // Note that it's possible to have a block that looks like this before SSA
                     // conversion:
                     //
@@ -219,12 +219,12 @@ public:
                 });
         }
     }
-
+    
     const Vector<Def*>& phisForBlock(BasicBlock* block)
     {
         return m_data[block].m_phis;
     }
-
+    
     // Ignores defs within the given block; it assumes that you've taken care of those
     // yourself.
     Def* nonLocalReachingDef(BasicBlock*, Variable*);
@@ -232,25 +232,25 @@ public:
     {
         return nonLocalReachingDef(block, variable);
     }
-
+    
     // Considers the def within the given block, but only works at the tail of the block.
     Def* reachingDefAtTail(BasicBlock*, Variable*);
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     SegmentedVector<Variable> m_variables;
     Bag<Def> m_defs;
-
+    
     Bag<Def> m_phis;
-
+    
     struct BlockData {
         HashMap<Variable*, Def*> m_defs;
         Vector<Def*> m_phis;
     };
-
+    
     BlockMap<BlockData> m_data;
-
+    
     Graph& m_graph;
 };
 

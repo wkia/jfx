@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -71,7 +71,7 @@ RefPtr<DisplayRefreshMonitor> DisplayRefreshMonitor::create(DisplayRefreshMonito
         if (monitor)
             return monitor;
     }
-
+    
     return createDefaultDisplayRefreshMonitor(displayID);
 }
 
@@ -139,7 +139,7 @@ void DisplayRefreshMonitor::clientPreferredFramesPerSecondChanged(DisplayRefresh
 bool DisplayRefreshMonitor::requestRefreshCallback()
 {
     Locker locker { m_lock };
-
+    
     if (isScheduled())
         return true;
 

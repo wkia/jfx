@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -37,12 +37,12 @@ class JITFinalizer final : public Finalizer {
 public:
     JITFinalizer(Plan&, Ref<JITCode>&&, std::unique_ptr<LinkBuffer>, MacroAssemblerCodePtr<JSEntryPtrTag> withArityCheck = MacroAssemblerCodePtr<JSEntryPtrTag>(MacroAssemblerCodePtr<JSEntryPtrTag>::EmptyValue));
     ~JITFinalizer() final;
-
+    
     size_t codeSize() final;
     bool finalize() final;
 
 private:
-
+    
     Ref<JITCode> m_jitCode;
     std::unique_ptr<LinkBuffer> m_linkBuffer;
     MacroAssemblerCodePtr<JSEntryPtrTag> m_withArityCheck;

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -60,11 +60,11 @@ public:
 
 private:
     friend class IsoCellSet;
-
+    
     void didResizeBits(unsigned newSize) override;
     void didRemoveBlock(unsigned blockIndex) override;
     void didBeginSweepingToFreeList(MarkedBlock::Handle*) override;
-
+    
     BlockDirectory m_directory;
     LocalAllocator m_localAllocator;
     std::unique_ptr<IsoAlignedMemoryAllocator> m_isoAlignedMemoryAllocator;

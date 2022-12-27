@@ -95,7 +95,7 @@ public:
     String decoding() const;
 
     DecodingMode decodingMode() const;
-
+    
     WEBCORE_EXPORT void decode(Ref<DeferredPromise>&&);
 
 #if PLATFORM(IOS_FAMILY)
@@ -114,7 +114,7 @@ public:
     bool canContainRangeEndPoint() const override { return false; }
 
     const AtomString& imageSourceURL() const override;
-
+    
     HTMLPictureElement* pictureElement() const;
     void setPictureElement(HTMLPictureElement*);
 

@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -142,12 +142,12 @@ public:
     {
         return m_transform[0] == 1 && m_transform[1] == 0 && m_transform[2] == 0 && m_transform[3] == 1;
     }
-
+    
     bool isIdentityOrTranslationOrFlipped() const
     {
         return m_transform[0] == 1 && m_transform[1] == 0 && m_transform[2] == 0 && (m_transform[3] == 1 || m_transform[3] == -1);
     }
-
+    
     bool isRotateOrShear() const
     {
         return m_transform[1] || m_transform[2];
@@ -175,7 +175,7 @@ public:
     {
         return multiply(t);
     }
-
+    
     // result = *this * t (i.e., a multRight)
     AffineTransform operator*(const AffineTransform& t) const
     {
@@ -204,7 +204,7 @@ public:
         double remainderA, remainderB, remainderC, remainderD;
         double translateX, translateY;
     } DecomposedType;
-
+    
     bool decompose(DecomposedType&) const;
     void recompose(const DecomposedType&);
 

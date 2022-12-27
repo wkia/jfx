@@ -83,7 +83,7 @@ void LegacyInlineBox::invalidateParentChildList()
 #endif
 
 void LegacyInlineBox::removeFromParent()
-{
+{ 
     if (parent())
         parent()->removeChild(this);
 }
@@ -160,12 +160,12 @@ LayoutUnit LegacyInlineBox::lineHeight() const
 }
 
 int LegacyInlineBox::caretMinOffset() const
-{
+{ 
     return renderer().caretMinOffset();
 }
 
 int LegacyInlineBox::caretMaxOffset() const
-{
+{ 
     return renderer().caretMaxOffset();
 }
 
@@ -188,14 +188,14 @@ void LegacyInlineBox::adjustPosition(float dx, float dy)
 }
 
 const LegacyRootInlineBox& LegacyInlineBox::root() const
-{
+{ 
     if (parent())
         return parent()->root();
     return downcast<LegacyRootInlineBox>(*this);
 }
 
 LegacyRootInlineBox& LegacyInlineBox::root()
-{
+{ 
     if (parent())
         return parent()->root();
     return downcast<LegacyRootInlineBox>(*this);
@@ -234,7 +234,7 @@ LegacyInlineBox* LegacyInlineBox::nextLeafOnLine() const
         leaf = parent()->nextLeafOnLine();
     return leaf;
 }
-
+    
 LegacyInlineBox* LegacyInlineBox::previousLeafOnLine() const
 {
     LegacyInlineBox* leaf = nullptr;
@@ -255,7 +255,7 @@ bool LegacyInlineBox::canAccommodateEllipsis(bool ltr, int blockEdge, int ellips
     // Non-replaced elements can always accommodate an ellipsis.
     if (!renderer().isReplaced())
         return true;
-
+    
     IntRect boxRect(left(), 0, m_logicalWidth, 10);
     IntRect ellipsisRect(ltr ? blockEdge - ellipsisWidth : blockEdge, 0, ellipsisWidth, 10);
     return !(boxRect.intersects(ellipsisRect));
@@ -269,7 +269,7 @@ float LegacyInlineBox::placeEllipsisBox(bool, float, float, float, float& trunca
 }
 
 void LegacyInlineBox::clearKnownToHaveNoOverflow()
-{
+{ 
     m_bitfields.setKnownToHaveNoOverflow(false);
     if (parent() && parent()->knownToHaveNoOverflow())
         parent()->clearKnownToHaveNoOverflow();

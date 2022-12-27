@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -37,7 +37,7 @@ void dumpNodeFlags(PrintStream& actualOut, NodeFlags flags)
 {
     StringPrintStream out;
     CommaPrinter comma("|");
-
+    
     if (flags & NodeResultMask) {
         switch (flags & NodeResultMask) {
         case NodeResultJS:
@@ -66,13 +66,13 @@ void dumpNodeFlags(PrintStream& actualOut, NodeFlags flags)
             break;
         }
     }
-
+    
     if (flags & NodeMustGenerate)
         out.print(comma, "MustGen");
-
+    
     if (flags & NodeHasVarArgs)
         out.print(comma, "VarArgs");
-
+    
     if (flags & NodeResultMask) {
         if (!(flags & NodeBytecodeUsesAsNumber) && !(flags & NodeBytecodeNeedsNegZero))
             out.print(comma, "PureInt");
@@ -107,19 +107,19 @@ void dumpNodeFlags(PrintStream& actualOut, NodeFlags flags)
 
     if (flags & NodeMayNegZeroInBaseline)
         out.print(comma, "MayNegZeroInBaseline");
-
+    
     if (flags & NodeMayNegZeroInDFG)
         out.print(comma, "MayNegZeroInDFG");
-
+    
     if (flags & NodeBytecodeUsesAsInt)
         out.print(comma, "UseAsInt");
 
     if (flags & NodeBytecodeUsesAsArrayIndex)
         out.print(comma, "ReallyWantsInt");
-
+    
     if (flags & NodeIsFlushed)
         out.print(comma, "IsFlushed");
-
+    
     CString string = out.toCString();
     if (!string.length())
         actualOut.print("<empty>");

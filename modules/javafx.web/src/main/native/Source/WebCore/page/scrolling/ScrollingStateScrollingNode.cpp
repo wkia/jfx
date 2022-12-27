@@ -165,7 +165,7 @@ void ScrollingStateScrollingNode::setCurrentHorizontalSnapPointIndex(std::option
 {
     if (m_currentHorizontalSnapPointIndex == index)
         return;
-
+    
     m_currentHorizontalSnapPointIndex = index;
     setPropertyChanged(Property::CurrentHorizontalSnapOffsetIndex);
 }
@@ -174,7 +174,7 @@ void ScrollingStateScrollingNode::setCurrentVerticalSnapPointIndex(std::optional
 {
     if (m_currentVerticalSnapPointIndex == index)
         return;
-
+    
     m_currentVerticalSnapPointIndex = index;
     setPropertyChanged(Property::CurrentVerticalSnapOffsetIndex);
 }
@@ -260,7 +260,7 @@ void ScrollingStateScrollingNode::setScrollerImpsFromScrollbars(Scrollbar*, Scro
 void ScrollingStateScrollingNode::dumpProperties(TextStream& ts, ScrollingStateTreeAsTextBehavior behavior) const
 {
     ScrollingStateNode::dumpProperties(ts, behavior);
-
+    
     if (m_scrollPosition != FloatPoint()) {
         TextStream::GroupScope scope(ts);
         ts << "scroll position "

@@ -50,7 +50,7 @@ public:
 
 private:
     UserMessageHandler(Frame&, UserMessageHandlerDescriptor&);
-
+    
     RefPtr<UserMessageHandlerDescriptor> m_descriptor;
 };
 

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -56,7 +56,7 @@ class Plan;
 
 struct WeakReferenceTransition {
     WeakReferenceTransition() { }
-
+    
     WeakReferenceTransition(VM& vm, JSCell* owner, JSCell* codeOrigin, JSCell* from, JSCell* to)
         : m_from(vm, owner, from)
         , m_to(vm, owner, to)
@@ -64,12 +64,12 @@ struct WeakReferenceTransition {
         if (!!codeOrigin)
             m_codeOrigin.set(vm, owner, codeOrigin);
     }
-
+    
     WriteBarrier<JSCell> m_codeOrigin;
     WriteBarrier<JSCell> m_from;
     WriteBarrier<JSCell> m_to;
 };
-
+        
 class CommonData {
     WTF_MAKE_NONCOPYABLE(CommonData);
 public:
@@ -77,9 +77,9 @@ public:
         : codeOrigins(CodeOriginPool::create())
     { }
     ~CommonData();
-
+    
     void shrinkToFit();
-
+    
     bool invalidate(); // Returns true if we did invalidate, or false if the code block was already invalidated.
     bool hasInstalledVMTrapsBreakpoints() const { return isStillValid && hasVMTrapsBreakpointsInstalled; }
     void installVMTrapBreakpoints(CodeBlock* owner);
@@ -98,16 +98,16 @@ public:
     {
         return std::max(frameRegisterCount, requiredRegisterCountForExit);
     }
-
+    
     void validateReferences(const TrackedReferences&);
 
     static ptrdiff_t frameRegisterCountOffset() { return OBJECT_OFFSETOF(CommonData, frameRegisterCount); }
-
+    
     void clearWatchpoints();
 
     RefPtr<InlineCallFrameSet> inlineCallFrames;
     Ref<CodeOriginPool> codeOrigins;
-
+    
     FixedVector<Identifier> m_dfgIdentifiers;
     FixedVector<WeakReferenceTransition> m_transitions;
     FixedVector<WriteBarrier<JSCell>> m_weakReferences;
@@ -118,16 +118,16 @@ public:
     FixedVector<AdaptiveInferredPropertyValueWatchpoint> m_adaptiveInferredPropertyValueWatchpoints;
     RecordedStatuses recordedStatuses;
     Vector<JumpReplacement> m_jumpReplacements;
-
+    
     ScratchBuffer* catchOSREntryBuffer;
     RefPtr<Profiler::Compilation> compilation;
     bool isStillValid { true };
     bool hasVMTrapsBreakpointsInstalled { false };
-
+    
 #if USE(JSVALUE32_64)
     std::unique_ptr<Bag<double>> doubleConstants;
 #endif
-
+    
     unsigned frameRegisterCount { std::numeric_limits<unsigned>::max() };
     unsigned requiredRegisterCountForExit { std::numeric_limits<unsigned>::max() };
 };

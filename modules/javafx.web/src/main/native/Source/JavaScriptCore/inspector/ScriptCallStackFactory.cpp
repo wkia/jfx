@@ -127,7 +127,7 @@ static bool extractSourceInformationFromException(JSC::JSGlobalObject* globalObj
     JSValue lineValue = exceptionObject->getDirect(vm, Identifier::fromString(vm, "line"));
     JSValue columnValue = exceptionObject->getDirect(vm, Identifier::fromString(vm, "column"));
     JSValue sourceURLValue = exceptionObject->getDirect(vm, Identifier::fromString(vm, "sourceURL"));
-
+    
     bool result = false;
     if (lineValue && lineValue.isNumber()
         && sourceURLValue && sourceURLValue.isString()) {
@@ -142,10 +142,10 @@ static bool extractSourceInformationFromException(JSC::JSGlobalObject* globalObj
         *lineNumber = static_cast<int>(unsignedLine);
         *columnNumber = static_cast<int>(unsignedColumn);
     }
-
+    
     if (sourceURL->isEmpty())
         *sourceURL = "undefined"_s;
-
+    
     scope.clearException();
     return result;
 }

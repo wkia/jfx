@@ -37,14 +37,14 @@ class StyleMultiColData : public RefCounted<StyleMultiColData> {
 public:
     static Ref<StyleMultiColData> create() { return adoptRef(*new StyleMultiColData); }
     Ref<StyleMultiColData> copy() const;
-
+    
     bool operator==(const StyleMultiColData&) const;
     bool operator!=(const StyleMultiColData& other) const { return !(*this == other); }
 
     unsigned short ruleWidth() const
     {
         if (rule.style() == BorderStyle::None || rule.style() == BorderStyle::Hidden)
-            return 0;
+            return 0; 
         return rule.width();
     }
 

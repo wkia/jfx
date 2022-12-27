@@ -79,7 +79,7 @@ public:
     {
         return m_glyphRunMap.size();
     }
-
+    
     size_t sizeInBytes() const
     {
         size_t sizeInBytes = 0;
@@ -87,10 +87,10 @@ public:
             sizeInBytes += entry.value->sizeInBytes();
         return sizeInBytes;
     }
-
+    
 private:
     using GlyphRunMap = HashMap<const LayoutRun*, std::unique_ptr<DisplayList::InMemoryDisplayList>>;
     GlyphRunMap m_glyphRunMap;
 };
-
+    
 }

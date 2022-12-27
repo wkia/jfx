@@ -55,7 +55,7 @@ public:
     LayoutRect(const FloatPoint& location, const FloatSize& size)
         : m_location(location), m_size(size) { }
     LayoutRect(const IntRect& rect) : m_location(rect.location()), m_size(rect.size()) { }
-
+    
     WEBCORE_EXPORT explicit LayoutRect(const FloatRect&); // don't do this implicitly since it's lossy
 
     template<class Encoder>
@@ -104,7 +104,7 @@ public:
     // center point.
     LayoutPoint center() const { return LayoutPoint(x() + width() / 2, y() + height() / 2); }
 
-    void move(const LayoutSize& size) { m_location += size; }
+    void move(const LayoutSize& size) { m_location += size; } 
     void moveBy(const LayoutPoint& offset) { m_location.move(offset.x(), offset.y()); }
     template<typename T, typename U> void move(T dx, U dy) { m_location.move(dx, dy); }
 
@@ -177,7 +177,7 @@ public:
         float maxY = rect.maxY();
         return maxX > LayoutUnit::nearlyMin() && maxX < LayoutUnit::nearlyMax() && maxY > LayoutUnit::nearlyMin() && maxY < LayoutUnit::nearlyMax();
     }
-
+    
     bool intersects(const LayoutRect&) const;
     WEBCORE_EXPORT bool contains(const LayoutRect&) const;
 
@@ -220,7 +220,7 @@ public:
         // Return a rect that is slightly smaller than the true max rect to allow pixelSnapping to round up to the nearest IntRect without overflowing.
         return LayoutRect(LayoutUnit::nearlyMin() / 2, LayoutUnit::nearlyMin() / 2, LayoutUnit::nearlyMax(), LayoutUnit::nearlyMax());
     }
-
+    
     operator FloatRect() const { return FloatRect(m_location, m_size); }
 
 private:

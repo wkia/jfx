@@ -132,7 +132,7 @@ public:
     InlineIterator lineBreak() { return m_lineBreak; }
     LineWidth& lineWidth() { return m_width; }
     bool atEnd() { return m_atEnd; }
-
+    
     bool fitsOnLineOrHangsAtEnd() const { return m_width.fitsOnLine() || m_hangsAtEnd; }
 
     void initializeForCurrentObject();
@@ -149,7 +149,7 @@ public:
     bool canBreakAtThisPosition();
     void commitAndUpdateLineBreakIfNeeded();
     InlineIterator handleEndOfLine();
-
+    
     float computeAdditionalBetweenWordsWidth(RenderText&, TextLayout*, UChar, WordTrailingSpace&, HashSet<const Font*>& fallbackFonts, WordMeasurements&, const FontCascade&, bool isFixedPitch, unsigned lastSpace, float lastSpaceWordSpacing, float wordSpacingForWordMeasurement, unsigned offset);
 
     void clearLineBreakIfFitsOnLine(bool ignoringTrailingSpace = false)
@@ -224,7 +224,7 @@ private:
     bool m_allowImagesToBreak;
     bool m_atEnd;
     bool m_hadUncommittedWidthBeforeCurrent;
-
+    
     bool m_hangsAtEnd { false };
 
     LineWhitespaceCollapsingState& m_lineWhitespaceCollapsingState;
@@ -449,7 +449,7 @@ inline void BreakingContext::handleEmptyInline()
         } else
             m_trailingObjects.appendBoxIfNeeded(flowBox);
     }
-
+    
     float inlineWidth = inlineLogicalWidth(*m_current.renderer()) + borderPaddingMarginStart(flowBox) + borderPaddingMarginEnd(flowBox);
     m_width.addUncommittedWidth(inlineWidth);
     if (m_hangsAtEnd && inlineWidth)
@@ -503,7 +503,7 @@ inline void BreakingContext::handleReplaced()
     } else {
         // Update prior line break context characters, using U+FFFD (OBJECT REPLACEMENT CHARACTER) for replaced element.
         m_renderTextInfo.lineBreakIterator.updatePriorContext(replacementCharacter);
-    }
+    }    
 }
 
 inline float firstPositiveWidth(const WordMeasurements& wordMeasurements)
@@ -635,11 +635,11 @@ inline float BreakingContext::computeAdditionalBetweenWordsWidth(RenderText& ren
 {
     wordMeasurements.grow(wordMeasurements.size() + 1);
     WordMeasurement& wordMeasurement = wordMeasurements.last();
-
+    
     wordMeasurement.renderer = &renderText;
     wordMeasurement.endOffset = offset;
     wordMeasurement.startOffset = lastSpace;
-
+    
     float additionalTempWidth = 0;
     std::optional<float> wordTrailingSpaceWidth;
     if (currentCharacter == ' ')
@@ -648,11 +648,11 @@ inline float BreakingContext::computeAdditionalBetweenWordsWidth(RenderText& ren
         additionalTempWidth = textWidth(renderText, lastSpace, offset + 1 - lastSpace, font, m_width.currentWidth(), isFixedPitch, m_collapseWhiteSpace, wordMeasurement.fallbackFonts, textLayout) - wordTrailingSpaceWidth.value();
     else
         additionalTempWidth = textWidth(renderText, lastSpace, offset - lastSpace, font, m_width.currentWidth(), isFixedPitch, m_collapseWhiteSpace, wordMeasurement.fallbackFonts, textLayout);
-
+    
     if (wordMeasurement.fallbackFonts.isEmpty() && !fallbackFonts.isEmpty())
         wordMeasurement.fallbackFonts.swap(fallbackFonts);
     fallbackFonts.clear();
-
+    
     wordMeasurement.width = additionalTempWidth + wordSpacingForWordMeasurement;
     additionalTempWidth += lastSpaceWordSpacing;
     return additionalTempWidth;
@@ -757,7 +757,7 @@ inline bool BreakingContext::handleText(WordMeasurements& wordMeasurements, bool
             m_width.addUncommittedWidth(-renderer.hangablePunctuationStartWidth(m_current.offset()));
             canHangPunctuationAtStart = false;
         }
-
+        
         if (canHangPunctuationAtEnd && !m_nextObject && (int)m_current.offset() == endPunctuationIndex && !inlineLogicalWidth(renderer, false, true)) {
             m_width.addUncommittedWidth(-renderer.hangablePunctuationEndWidth(endPunctuationIndex));
             canHangPunctuationAtEnd = false;
@@ -789,7 +789,7 @@ inline bool BreakingContext::handleText(WordMeasurements& wordMeasurements, bool
         bool betweenWords = c == newlineCharacter || (m_currWS != WhiteSpace::Pre && !m_atStart && isBreakable(m_renderTextInfo.lineBreakIterator, m_current.offset(), nextBreakablePosition, breakNBSP, canUseLineBreakShortcut, keepAllWords, breakAnywhere)
             && (style.hyphens() != Hyphens::None || (m_current.previousInSameNode() != softHyphen)));
         m_current.setNextBreakablePosition(nextBreakablePosition);
-
+        
         if (canHangStopOrCommaAtLineEnd && renderer.isHangableStopOrComma(c) && m_width.fitsOnLine()) {
             // We need to see if a measurement that excludes the stop would fit. If so, then we should hang
             // the stop/comma at the end. First measure including the comma.
@@ -806,7 +806,7 @@ inline bool BreakingContext::handleText(WordMeasurements& wordMeasurements, bool
             } else
                 m_width.addUncommittedWidth(-widthIncludingComma);
         }
-
+        
         if (betweenWords || midWordBreak) {
             bool stoppedIgnoringSpaces = false;
             if (m_ignoringSpaces) {
@@ -824,10 +824,10 @@ inline bool BreakingContext::handleText(WordMeasurements& wordMeasurements, bool
                     continue;
                 }
             }
-
+            
             float additionalTempWidth = computeAdditionalBetweenWordsWidth(renderer, textLayout, c, wordTrailingSpace, fallbackFonts, wordMeasurements, font, isFixedPitch, lastSpace, lastSpaceWordSpacing, wordSpacingForWordMeasurement, m_current.offset());
             m_width.addUncommittedWidth(additionalTempWidth);
-
+            
             WordMeasurement& wordMeasurement = wordMeasurements.last();
 
             if (m_collapseWhiteSpace && previousCharacterIsSpace && m_currentCharacterIsSpace && additionalTempWidth)

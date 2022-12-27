@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -39,84 +39,84 @@ public:
         : m_epoch(s_none)
     {
     }
-
+    
     static Epoch fromUnsigned(unsigned value)
     {
         Epoch result;
         result.m_epoch = value;
         return result;
     }
-
+    
     unsigned toUnsigned() const
     {
         return m_epoch;
     }
-
+    
     static Epoch first()
     {
         Epoch result;
         result.m_epoch = s_first;
         return result;
     }
-
+    
     bool operator!() const
     {
         return m_epoch == s_none;
     }
-
+    
     explicit operator bool() const
     {
         return !!*this;
     }
-
+    
     Epoch next() const
     {
         Epoch result;
         result.m_epoch = m_epoch + 1;
         return result;
     }
-
+    
     void bump()
     {
         *this = next();
     }
-
+    
     bool operator==(const Epoch& other) const
     {
         return m_epoch == other.m_epoch;
     }
-
+    
     bool operator!=(const Epoch& other) const
     {
         return !(*this == other);
     }
-
+    
     bool operator<(const Epoch& other) const
     {
         return m_epoch < other.m_epoch;
     }
-
+    
     bool operator>(const Epoch& other) const
     {
         return other < *this;
     }
-
+    
     bool operator<=(const Epoch& other) const
     {
         return !(*this > other);
     }
-
+    
     bool operator>=(const Epoch& other) const
     {
         return !(*this < other);
     }
-
+    
     void dump(PrintStream&) const;
-
+    
 private:
     static constexpr unsigned s_none = 0;
     static constexpr unsigned s_first = 1;
-
+    
     unsigned m_epoch;
 };
 

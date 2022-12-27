@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -38,7 +38,7 @@ void StructureAbstractValue::assertIsRegistered(Graph& graph) const
 {
     if (isTop())
         return;
-
+    
     for (unsigned i = size(); i--;)
         graph.assertIsRegistered(at(i).get());
 }
@@ -49,12 +49,12 @@ void StructureAbstractValue::clobber()
     // The premise of this approach to clobbering is that anytime we introduce
     // a watchable structure into an abstract value, we watchpoint it. You can assert
     // that this holds by calling assertIsWatched().
-
+        
     if (isTop())
         return;
 
     setClobbered(true);
-
+        
     if (m_set.isThin()) {
         if (!m_set.singleEntry())
             return;
@@ -62,7 +62,7 @@ void StructureAbstractValue::clobber()
             makeTopWhenThin();
         return;
     }
-
+    
     RegisteredStructureSet::OutOfLineList* list = m_set.list();
     for (unsigned i = list->m_length; i--;) {
         if (!list->list()[i]->dfgShouldWatch()) {
@@ -78,13 +78,13 @@ void StructureAbstractValue::observeTransition(RegisteredStructure from, Registe
 
     if (isTop())
         return;
-
+    
     if (!m_set.contains(from))
         return;
-
+    
     if (!m_set.add(to))
         return;
-
+    
     if (m_set.size() > polymorphismLimit)
         makeTop();
 }
@@ -93,20 +93,20 @@ void StructureAbstractValue::observeTransitions(const TransitionVector& vector)
 {
     if (isTop())
         return;
-
+    
     RegisteredStructureSet newStructures;
     for (unsigned i = vector.size(); i--;) {
         ASSERT(!vector[i].previous->dfgShouldWatch());
 
         if (!m_set.contains(vector[i].previous))
             continue;
-
+        
         newStructures.add(vector[i].next);
     }
-
+    
     if (!m_set.merge(newStructures))
         return;
-
+    
     if (m_set.size() > polymorphismLimit)
         makeTop();
 }
@@ -115,13 +115,13 @@ bool StructureAbstractValue::add(RegisteredStructure structure)
 {
     if (isTop())
         return false;
-
+    
     if (!m_set.add(structure))
         return false;
-
+    
     if (m_set.size() > polymorphismLimit)
         makeTop();
-
+    
     return true;
 }
 
@@ -129,7 +129,7 @@ bool StructureAbstractValue::merge(const RegisteredStructureSet& other)
 {
     if (isTop())
         return false;
-
+    
     return mergeNotTop(other);
 }
 
@@ -163,16 +163,16 @@ bool StructureAbstractValue::mergeSlow(const StructureAbstractValue& other)
     //
     // This not clobbered, other clobbered: This is just the converse of the previous case. We
     // want to merge other into this and set the clobbered bit.
-
+    
     bool changed = false;
-
+    
     if (!isClobbered() && other.isClobbered()) {
         setClobbered(true);
         changed = true;
     }
-
+    
     changed |= mergeNotTop(other.m_set);
-
+    
     return changed;
 }
 
@@ -180,10 +180,10 @@ bool StructureAbstractValue::mergeNotTop(const RegisteredStructureSet& other)
 {
     if (!m_set.merge(other))
         return false;
-
+    
     if (m_set.size() > polymorphismLimit)
         makeTop();
-
+    
     return true;
 }
 
@@ -193,7 +193,7 @@ void StructureAbstractValue::filter(const RegisteredStructureSet& other)
         m_set = other;
         return;
     }
-
+    
     if (isClobbered()) {
         // We have two choices here:
         //
@@ -208,15 +208,15 @@ void StructureAbstractValue::filter(const RegisteredStructureSet& other)
         //
         // This scenario should come up rarely. We usually don't do anything to an abstract value
         // after it is clobbered. But we apply some heuristics.
-
+        
         if (other.size() > m_set.size() + clobberedSupremacyThreshold)
             return; // Keep the clobbered set.
-
+        
         m_set = other;
         setClobbered(false);
         return;
     }
-
+    
     m_set.filter(other);
 }
 
@@ -224,11 +224,11 @@ void StructureAbstractValue::filter(const StructureAbstractValue& other)
 {
     if (other.isTop())
         return;
-
+    
     if (other.isClobbered()) {
         if (isTop())
             return;
-
+        
         if (!isClobbered()) {
             // See justification in filter(const RegisteredStructureSet&), above. An unclobbered set is
             // almost always better.
@@ -240,7 +240,7 @@ void StructureAbstractValue::filter(const StructureAbstractValue& other)
         m_set.filter(other.m_set);
         return;
     }
-
+    
     filter(other.m_set);
 }
 
@@ -250,9 +250,9 @@ void StructureAbstractValue::filterSlow(SpeculatedType type)
         clear();
         return;
     }
-
+    
     ASSERT(!isTop());
-
+    
     m_set.genericFilter(
         [&] (RegisteredStructure structure) {
             return !!(speculationFromStructure(structure.get()) & type);
@@ -272,7 +272,7 @@ bool StructureAbstractValue::contains(RegisteredStructure structure) const
 {
     if (isInfinite())
         return true;
-
+    
     return m_set.contains(structure);
 }
 
@@ -280,7 +280,7 @@ bool StructureAbstractValue::contains(Structure* structure) const
 {
     if (isInfinite())
         return true;
-
+    
     return m_set.toStructureSet().contains(structure);
 }
 
@@ -288,7 +288,7 @@ bool StructureAbstractValue::isSubsetOf(const RegisteredStructureSet& other) con
 {
     if (isInfinite())
         return false;
-
+    
     return m_set.isSubsetOf(other);
 }
 
@@ -296,18 +296,18 @@ bool StructureAbstractValue::isSubsetOf(const StructureAbstractValue& other) con
 {
     if (isTop())
         return false;
-
+    
     if (other.isTop())
         return true;
-
+    
     if (isClobbered() == other.isClobbered())
         return m_set.isSubsetOf(other.m_set);
-
+    
     // Here it gets tricky. If in doubt, return false!
-
+    
     if (isClobbered())
         return false; // A clobbered set is never a subset of an unclobbered set.
-
+    
     // An unclobbered set is currently a subset of a clobbered set, but it may not be so after
     // invalidation.
     return m_set.isSubsetOf(other.m_set);
@@ -317,7 +317,7 @@ bool StructureAbstractValue::isSupersetOf(const RegisteredStructureSet& other) c
 {
     if (isInfinite())
         return true;
-
+    
     return m_set.isSupersetOf(other);
 }
 
@@ -325,7 +325,7 @@ bool StructureAbstractValue::overlaps(const RegisteredStructureSet& other) const
 {
     if (isInfinite())
         return true;
-
+    
     return m_set.overlaps(other);
 }
 
@@ -333,7 +333,7 @@ bool StructureAbstractValue::overlaps(const StructureAbstractValue& other) const
 {
     if (other.isInfinite())
         return true;
-
+    
     return overlaps(other.m_set);
 }
 
@@ -368,7 +368,7 @@ bool StructureAbstractValue::equalsSlow(const StructureAbstractValue& other) con
     ASSERT(m_set.m_pointer != other.m_set.m_pointer);
     ASSERT(!isTop());
     ASSERT(!other.isTop());
-
+    
     return m_set == other.m_set
         && isClobbered() == other.isClobbered();
 }
@@ -377,7 +377,7 @@ void StructureAbstractValue::dumpInContext(PrintStream& out, DumpContext* contex
 {
     if (isClobbered())
         out.print("Clobbered:");
-
+    
     if (isTop())
         out.print("TOP");
     else

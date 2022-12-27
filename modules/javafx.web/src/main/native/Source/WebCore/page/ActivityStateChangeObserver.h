@@ -35,7 +35,7 @@ public:
     virtual ~ActivityStateChangeObserver()
     {
     }
-
+    
     virtual void activityStateDidChange(OptionSet<ActivityState::Flag> oldActivityState, OptionSet<ActivityState::Flag> newActivityState) = 0;
 };
 

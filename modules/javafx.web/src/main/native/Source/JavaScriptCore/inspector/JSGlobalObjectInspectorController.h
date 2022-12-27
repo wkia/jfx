@@ -93,7 +93,7 @@ public:
     JSC::VM& vm() final;
 
 #if ENABLE(INSPECTOR_ALTERNATE_DISPATCHERS)
-    AugmentableInspectorControllerClient* augmentableInspectorControllerClient() const final { return m_augmentingClient; }
+    AugmentableInspectorControllerClient* augmentableInspectorControllerClient() const final { return m_augmentingClient; } 
     void setAugmentableInspectorControllerClient(AugmentableInspectorControllerClient* client) final { m_augmentingClient = client; }
 
     const FrontendRouter& frontendRouter() const final { return m_frontendRouter.get(); }

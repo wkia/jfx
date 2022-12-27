@@ -320,9 +320,9 @@ inline void WidthIterator::advanceInternal(TextIterator& textIterator, GlyphBuff
         if (FontCascade::treatAsSpace(character)) {
             charactersTreatedAsSpace.constructAndAppend(
                 currentCharacterIndex,
-                character == space,
+                character == ' ',
                 previousWidth,
-                character == tabCharacter ? width : font.spaceWidth());
+                width);
         }
 
         if (m_accountForGlyphBounds) {

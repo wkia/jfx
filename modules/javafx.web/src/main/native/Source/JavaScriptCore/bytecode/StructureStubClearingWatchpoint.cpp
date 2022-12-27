@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -80,7 +80,7 @@ void WatchpointsOnStructureStubInfo::ensureReferenceAndInstallWatchpoint(
         ASSERT(holderRef->m_codeBlock == codeBlock);
         ASSERT(holderRef->m_stubInfo == stubInfo);
     }
-
+    
     ASSERT(!!key);
     auto& watchpointVariant = holderRef->addWatchpoint(key);
     if (key.kind() == PropertyCondition::Equivalence) {
@@ -102,7 +102,7 @@ Watchpoint* WatchpointsOnStructureStubInfo::ensureReferenceAndAddWatchpoint(
         ASSERT(holderRef->m_codeBlock == codeBlock);
         ASSERT(holderRef->m_stubInfo == stubInfo);
     }
-
+    
     return &WTF::get<StructureTransitionStructureStubClearingWatchpoint>(holderRef->addWatchpoint(ObjectPropertyCondition()));
 }
 

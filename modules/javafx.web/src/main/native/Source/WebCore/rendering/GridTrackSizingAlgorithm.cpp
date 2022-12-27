@@ -842,7 +842,7 @@ bool GridTrackSizingAlgorithm::canParticipateInBaselineAlignment(const RenderBox
         return true;
 
     // Baseline cyclic dependencies only happen in grid areas with
-    // intrinsically-sized tracks.
+    // intrinsically-sized tracks. 
     if (!isIntrinsicSizedGridArea(child, baselineAxis))
         return true;
 

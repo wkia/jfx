@@ -39,7 +39,7 @@ public:
     virtual ~ScrollingTreeFrameScrollingNode();
 
     void commitStateBeforeChildren(const ScrollingStateNode&) override;
-
+    
     bool fixedElementsLayoutRelativeToFrame() const { return m_fixedElementsLayoutRelativeToFrame; }
     bool visualViewportIsSmallerThanLayoutViewport() const { return m_visualViewportIsSmallerThanLayoutViewport; }
 
@@ -75,15 +75,15 @@ private:
     FloatPoint m_minLayoutViewportOrigin;
     FloatPoint m_maxLayoutViewportOrigin;
     std::optional<FloatSize> m_overrideVisualViewportSize;
-
+    
     float m_frameScaleFactor { 1 };
     float m_topContentInset { 0 };
 
     int m_headerHeight { 0 };
     int m_footerHeight { 0 };
-
+    
     ScrollBehaviorForFixedElements m_behaviorForFixed { StickToDocumentBounds };
-
+    
     bool m_fixedElementsLayoutRelativeToFrame { false };
     bool m_visualViewportIsSmallerThanLayoutViewport { false };
 };

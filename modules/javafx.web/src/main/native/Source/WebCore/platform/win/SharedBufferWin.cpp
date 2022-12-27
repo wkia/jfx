@@ -12,7 +12,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3.  Neither the name of Apple Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *     from this software without specific prior written permission. 
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -50,7 +50,7 @@ RefPtr<SharedBuffer> SharedBuffer::createFromReadingFile(const String& filePath)
     DWORD lastError = GetLastError();
 
     if (bytesToRead != INVALID_FILE_SIZE || lastError == NO_ERROR) {
-        Vector<char> buffer(bytesToRead);
+        Vector<uint8_t> buffer(bytesToRead);
         DWORD bytesRead;
         if (ReadFile(fileHandle, buffer.data(), bytesToRead, &bytesRead, 0) && bytesToRead == bytesRead)
             result = SharedBuffer::create(WTFMove(buffer));

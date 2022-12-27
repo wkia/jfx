@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #pragma once
@@ -51,7 +51,7 @@ public:
         : m_kind(None)
     {
     }
-
+    
     MethodOfGettingAValueProfile(ValueProfile* profile)
     {
         if (profile) {
@@ -78,10 +78,10 @@ public:
         } else
             m_kind = None;
     }
-
+    
     static MethodOfGettingAValueProfile fromLazyOperand(
         CodeBlock*, const LazyOperandValueProfileKey&);
-
+    
     explicit operator bool() const { return m_kind != None; }
 
     // The temporary register is only needed on 64-bits builds (for testing BigInt32).
@@ -96,7 +96,7 @@ private:
         BinaryArithProfileReady,
         LazyOperand
     };
-
+    
     Kind m_kind;
     union Data {
         Data()

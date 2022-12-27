@@ -236,7 +236,7 @@ bool HTMLTextAreaElement::appendFormData(DOMFormData& formData, bool)
     if (!dirnameAttrValue.isNull())
         formData.append(dirnameAttrValue, directionForFormData());
 
-    return true;
+    return true;    
 }
 
 void HTMLTextAreaElement::reset()
@@ -270,7 +270,7 @@ void HTMLTextAreaElement::updateFocusAppearance(SelectionRestorationMode restora
     if (restorationMode == SelectionRestorationMode::RestoreOrSelectAll && hasCachedSelection())
         restoreCachedSelection(revealMode, Element::defaultFocusTextStateChangeIntent());
     else {
-        // If this is the first focus, set a caret at the beginning of the text.
+        // If this is the first focus, set a caret at the beginning of the text.  
         // This matches some browsers' behavior; see bug 11746 Comment #15.
         // http://bugs.webkit.org/show_bug.cgi?id=11746#c15
         setSelectionRange(0, 0, SelectionHasNoDirection, revealMode, Element::defaultFocusTextStateChangeIntent());
@@ -341,7 +341,7 @@ RefPtr<TextControlInnerTextElement> HTMLTextAreaElement::innerTextElement() cons
     RefPtr<ShadowRoot> root = userAgentShadowRoot();
     if (!root)
         return nullptr;
-
+    
     return childrenOfType<TextControlInnerTextElement>(*root).first();
 }
 

@@ -276,7 +276,7 @@ public:
 #endif
 
     std::unique_ptr<FontPlatformData> createFontPlatformDataForTesting(const FontDescription&, const AtomString& family);
-
+    
     bool shouldMockBoldSystemFontForAccessibility() const { return m_shouldMockBoldSystemFontForAccessibility; }
     void setShouldMockBoldSystemFontForAccessibility(bool shouldMockBoldSystemFontForAccessibility) { m_shouldMockBoldSystemFontForAccessibility = shouldMockBoldSystemFontForAccessibility; }
 
@@ -306,12 +306,12 @@ private:
 
     // These functions are implemented by each platform (unclear which functions this comment applies to).
     WEBCORE_EXPORT std::unique_ptr<FontPlatformData> createFontPlatformData(const FontDescription&, const AtomString& family, const FontFeatureSettings*, FontSelectionSpecifiedCapabilities);
-
+    
     static std::optional<ASCIILiteral> alternateFamilyName(const String&);
     static std::optional<ASCIILiteral> platformAlternateFamilyName(const String&);
 
     Timer m_purgeTimer;
-
+    
     bool m_shouldMockBoldSystemFontForAccessibility { false };
 
     HashSet<FontSelector*> m_clients;

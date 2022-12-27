@@ -94,7 +94,7 @@ TextPaintStyle computeTextPaintStyle(const Frame& frame, const RenderStyle& line
     paintStyle.lineJoin = lineStyle.joinStyle();
     paintStyle.lineCap = lineStyle.capStyle();
     paintStyle.miterLimit = lineStyle.strokeMiterLimit();
-
+    
     if (paintInfo.forceTextColor()) {
         paintStyle.fillColor = paintInfo.forcedTextColor();
         paintStyle.strokeColor = paintInfo.forcedTextColor();

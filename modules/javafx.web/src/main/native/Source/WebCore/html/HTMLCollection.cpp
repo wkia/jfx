@@ -190,7 +190,7 @@ bool HTMLCollection::isSupportedPropertyName(const String& name)
 {
     updateNamedElementCache();
     ASSERT(m_namedElementCache);
-
+    
     if (m_namedElementCache->findElementsWithId(name))
         return true;
     if (m_namedElementCache->findElementsWithName(name))

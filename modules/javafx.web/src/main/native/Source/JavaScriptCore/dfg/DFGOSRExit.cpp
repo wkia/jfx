@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
 #include "config.h"
@@ -169,7 +169,7 @@ JSC_DEFINE_JIT_OPERATION(operationCompileOSRExit, void, (CallFrame* callFrame, v
 
     ASSERT(!vm.callFrameForCatch || exit.m_kind == GenericUnwind);
     EXCEPTION_ASSERT_UNUSED(scope, !!scope.exception() || !exit.isExceptionHandler());
-
+    
     // Compute the value recoveries.
     Operands<ValueRecovery> operands;
     codeBlock->jitCode()->dfg()->variableEventStream.reconstruct(codeBlock, exit.m_codeOrigin, codeBlock->jitCode()->dfg()->minifiedDFG, exit.m_streamIndex, operands);
@@ -443,10 +443,10 @@ void OSRExit::compileExit(CCallHelpers& jit, VM& vm, const OSRExit& exit, const 
                 jit.pushToSave(scratchTag);
 
                 JSValueRegs scratch(scratchTag, scratchPayload);
-
+                
                 jit.loadValue(exit.m_jsValueSource.asAddress(), scratch);
                 profile.emitReportValue(jit, scratch, InvalidGPRReg);
-
+                
                 jit.popToRestore(scratchTag);
                 jit.popToRestore(scratchPayload);
             } else if (exit.m_jsValueSource.hasKnownTag()) {
@@ -521,7 +521,7 @@ void OSRExit::compileExit(CCallHelpers& jit, VM& vm, const OSRExit& exit, const 
                 recovery.gpr(),
                 &bitwise_cast<EncodedValueDescriptor*>(scratch + index)->asBits.payload);
             break;
-
+            
         case InPair:
             jit.store32(
                 recovery.tagGPR(),
@@ -745,18 +745,18 @@ void OSRExit::compileExit(CCallHelpers& jit, VM& vm, const OSRExit& exit, const 
 
     if constexpr (validateDFGDoesGC) {
         if (Options::validateDoesGC()) {
-        // We're about to exit optimized code. So, there's no longer any optimized
-        // code running that expects no GC. We need to set this before arguments
-        // materialization below (see emitRestoreArguments()).
+            // We're about to exit optimized code. So, there's no longer any optimized
+            // code running that expects no GC. We need to set this before arguments
+            // materialization below (see emitRestoreArguments()).
 
             // Even though we set Heap::m_doesGC in compileOSRExit(), we also need
-        // to set it here because compileOSRExit() is only called on the first time
-        // we exit from this site, but all subsequent exits will take this compiled
-        // ramp without calling compileOSRExit() first.
+            // to set it here because compileOSRExit() is only called on the first time
+            // we exit from this site, but all subsequent exits will take this compiled
+            // ramp without calling compileOSRExit() first.
             jit.store32(CCallHelpers::TrustedImm32(DoesGCCheck::encode(true, DoesGCCheck::Special::DFGOSRExit)), vm.heap.addressOfDoesGC());
         }
     }
-
+    
     // Need to ensure that the stack pointer accounts for the worst-case stack usage at exit. This
     // could toast some stack that the DFG used. We need to do it before storing to stack offsets
     // used by baseline.

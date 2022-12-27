@@ -44,7 +44,7 @@ WebGLExtension::ExtensionName EXTFragDepth::getName() const
 {
     return EXTFragDepthName;
 }
-
+    
 } // namespace WebCore
 
 #endif // ENABLE(WEBGL)
